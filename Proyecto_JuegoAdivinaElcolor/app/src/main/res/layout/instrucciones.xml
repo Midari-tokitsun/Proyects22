@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:gravity=""
+    android:background="#1e3c72"
+
+    tools:context="com.example.AdivColor.Instrucciones">
+
+    <TextView
+        android:id="@+id/preguntatxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="INSTRUCCIONES"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="493dp"
+        android:gravity="center"
+        android:text="Juego de Adivinar colores, Usted como jugador debera adivinar el color que se mostrara en pantalla si adivina correctamente el color ganara un punto de lo contrario perdera ese punto tiene un total de 10 preguntas cada pregunta cuesta 1 punto.    Buena suerte :D"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnRegresar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="REGRESAR"
+        android:textSize="16dp"
+        android:textStyle="bold"/>
+
+
+</LinearLayout>

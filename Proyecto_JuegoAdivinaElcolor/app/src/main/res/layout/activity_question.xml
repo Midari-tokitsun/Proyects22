@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:gravity="center"
+    android:background="@drawable/fondo"
+
+    tools:context="com.example.AdivColor.Preguntas">
+
+    <TextView
+        android:id="@+id/preguntatxt"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="PREGUNTA"
+        android:background="@drawable/question_option"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pregunta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/question_option"
+        android:textColor="@color/teal_700"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Tu Eleccion"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/opt_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/question_option"
+        android:backgroundTint="@color/red"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text=""
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/opt_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/purple"
+        android:background="@drawable/question_option"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text=""
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/opt_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:background="@drawable/question_option"
+        android:backgroundTint="@color/black"
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="@color/red"
+        />
+    <TextView
+        android:id="@+id/opt_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:backgroundTint="@color/green"
+        android:background="@drawable/question_option"
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/enviar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="CONFIRMAR"
+        android:textSize="16dp"
+        android:textStyle="bold"/>
+
+</LinearLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/intro"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="6dp"
+tools:context="com.example.AdivColor.MainActivity"
+    >
+
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="160dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="200dp"
+        android:background="@drawable/ujcv"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Juego De Adivina el Color"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="¿Que deseas hacer?"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Jugar"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:backgroundTint="@color/green"/>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text=" Ver Instrucciones"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:backgroundTint="@color/purple"/>
+
+        </LinearLayout>
+
