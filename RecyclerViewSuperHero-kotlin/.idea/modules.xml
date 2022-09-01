@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/p3dispomov.iml" filepath="$PROJECT_DIR$/.idea/modules/p3dispomov.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/p3dispomov.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/p3dispomov.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/p3dispomov.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/p3dispomov.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/p3dispomov.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/p3dispomov.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/p3dispomov.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/p3dispomov.app.unitTest.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.example.p3dispomov.app-mergeDebugResources-26:/layout/activity_introduccion_superhero.xml",
+        "source": "com.example.p3dispomov.app-main-29:/layout/activity_introduccion_superhero.xml"
+    },
+    {
+        "merged": "com.example.p3dispomov.app-mergeDebugResources-26:/layout/activity_super_hero_detail.xml",
+        "source": "com.example.p3dispomov.app-main-29:/layout/activity_super_hero_detail.xml"
+    },
+    {
+        "merged": "com.example.p3dispomov.app-mergeDebugResources-26:/layout/item_superhero.xml",
+        "source": "com.example.p3dispomov.app-main-29:/layout/item_superhero.xml"
+    },
+    {
+        "merged": "com.example.p3dispomov.app-mergeDebugResources-26:/layout/activity_main.xml",
+        "source": "com.example.p3dispomov.app-main-29:/layout/activity_main.xml"
+    }
+]
