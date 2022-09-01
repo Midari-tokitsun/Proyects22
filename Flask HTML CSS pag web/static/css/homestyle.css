@@ -1,0 +1,129 @@
+
+
+#home{
+    background: #200122;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #6f0000, #200122);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #6f0000, #200122); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+    
+}
+
+
+
+
+    #parrafo1{
+    
+        background: #16222A;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #3A6073, #16222A);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #3A6073, #16222A); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        
+    width: 30%;
+    height: 100%;
+    height: auto;
+    float: left;
+    margin-right: 0px;
+    margin-top: 50px;
+    color: whitesmoke;
+    margin-left: 25px;
+   
+    
+    }
+
+    #linkbar{
+       align-items: flex-end;
+      display: flex;
+      justify-content: right;
+      background: #C33764;  /* fallback for old browsers */
+      background: -webkit-linear-gradient(to right, #1D2671, #C33764);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to right, #1D2671, #C33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      
+        width: 23%;
+        height: auto;
+        float: right;
+        margin-left: 30px;
+        margin-top: 50px;
+
+        margin-bottom: 35px;
+        margin-right: 22px;
+        color: whitesmoke;
+        
+        height: 100%;
+
+        }
+
+
+        #parrafo3{
+           
+
+            height: 100%;
+            background: #536976;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #292E49, #536976);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #292E49, #536976); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+            width: 30%;
+            height: auto;
+            float: left;
+            margin-left: 30px;
+            margin-top: 50px;
+    
+            margin-bottom: 35px;
+            margin-right: 15px;
+            color: whitesmoke;
+            
+
+            }
+
+
+            #cont{
+                
+                height: 100%;
+                margin-top: 30px;
+                background: #536976;  /* fallback for old browsers */
+                background: -webkit-linear-gradient(to right, #292E49, #536976);  /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to right, #292E49, #536976); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                
+                width: 70%;
+                height: auto;
+                float: left;
+                margin-right: 0px;
+                margin-top: 30px;
+                margin-left: 10px;
+                color: whitesmoke;
+                
+            }
+
+
+
+            #footer{
+
+                margin-top: 2%;
+            }
+
+            @media all and (max-width: 400px){
+            
+                #cont{
+                 overscroll-behavior: contain;
+                    background-color: green;
+                    min-height: 400px;
+                }
+
+
+                #parrafo1{
+                    min-height: 400px;
+                    overscroll-behavior: contain;
+                }
+
+                #párrafo3{
+                    background-color: blue;
+                    overscroll-behavior: contain;
+                    min-height: 400px;
+                }
+
+                #linkbar{
+                    overscroll-behavior: contain;
+                    background-color: black;
+                    
+                    min-height: 250px;
+                }
+
+            }
