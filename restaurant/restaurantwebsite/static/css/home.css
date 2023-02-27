@@ -1,0 +1,59 @@
+body{
+
+background-color: green;
+
+    background-size: cover;
+}
+
+
+
+
+#logoitem{
+
+    background-color: red;
+    float: right;
+    margin-top: 50px;
+    margin-right: 150px;
+    
+}
+
+
+
+
+#logoitem2{
+
+margin-top: 10px;
+  
+ 
+    
+}
+
+#logoimg{
+
+box-sizing: content-box;
+ 
+
+height: 500px;
+width: fit-content;
+
+overflow: hidden;
+box-shadow: inset;
+
+border-radius: 100px;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 30px;
+padding-bottom: 30px;  
+
+
+
+
+}
+
+#pizzal{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+    padding-bottom: 30px;  
+}
+
