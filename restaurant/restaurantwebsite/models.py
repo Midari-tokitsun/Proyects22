@@ -45,6 +45,7 @@ class documentoemp(models.Model):
     apellido=models.CharField(max_length=50)
     tipo_identificacion = models.CharField(max_length=20)
     numero_identificacion = models.CharField(max_length=20)
+    licencia_conducir = models.CharField(max_length=50)
 
     class Meta:
         db_table='tipodocumentosemp'

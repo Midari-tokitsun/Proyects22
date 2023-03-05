@@ -275,6 +275,35 @@ def borrarcargo(request , id):
 
 
 
+
+
+def buscarcargosemp(request):
+    if request.method == 'GET' :
+        query = request.GET.get('buscarcargosemp')
+
+        if query:
+            car = cargo.objects.filter(
+            
+            Q(nombre__icontains=query) |
+            Q(empleado__icontains=query) ).distinct
+
+            return render(request, 'cargoregister.html' , {'car':car})
+        
+         
+        else:
+            car=cargo.objects.all()
+
+
+            
+
+            query = request.GET.get('buscarcargosemp')
+            print("NO HAY INFORMACION POAARA MOSTRAR")
+            return render(request, 'cargoregister.html',{'car':car})
+    
+    return render(request,"cargoregister.html")    
+    
+
+
 # ver Editar,eliminar,añadir,enlistar y Buscar ----------------VISTA de TIPODOCUMENTO EMPLEAADOS
 
 
@@ -294,14 +323,16 @@ def tipodocumentoemp(request):
 def añadirdocumentoemp(request):
 
     if request.method=='POST':
-        if request.POST.get('id') and request.POST.get('nombre') and request.POST.get('apellido') and request.POST.get('tipo_identificacion') and request.POST.get('numero_identificacion'):
+        if request.POST.get('id') and request.POST.get('nombre') and request.POST.get('apellido') and request.POST.get('tipo_identificacion') and request.POST.get('numero_identificacion') and request.POST.get('licencia_conducir'):
          documentoemp1=documentoemp()
          documentoemp1.id=request.POST.get('id')
          documentoemp1.nombre=request.POST.get('nombre')
          documentoemp1.apellido=request.POST.get('apellido')
          documentoemp1.tipo_identificacion=request.POST.get('tipo_identificacion')
          documentoemp1.numero_identificacion=request.POST.get('numero_identificacion')
+         documentoemp1.licencia_conducir=request.POST.get('licencia_conducir')
          
+
          documentoemp1.save()
          
          messages.success(request, 'registro Creado Exitosamente!!')
@@ -332,6 +363,7 @@ def actualizartipodedocumento(request , id ):
     apellido=request.POST.get('apellido')
     tipo_identificacion=request.POST.get('tipo_identificacion')
     numero_identificacion=request.POST.get('numero_identificacion')
+    licencia_conducir=request.POST.get('licencia_conducir')
 
 
     docs.nombre=nombre
@@ -339,6 +371,7 @@ def actualizartipodedocumento(request , id ):
     docs.id=id
     docs.numero_identificacion=numero_identificacion
     docs.tipo_identificacion=tipo_identificacion
+    docs.licencia_conducir=licencia_conducir
 
 
     docs.save()
@@ -346,3 +379,30 @@ def actualizartipodedocumento(request , id ):
 
     messages.info(request,"ITEM ACTUALIZADO EXITOSAMENTE")
     return redirect("tipodocumentoemp")
+
+
+def buscardocuemntoemp(request):
+    if request.method == 'GET' :
+        query = request.GET.get('buscardocuemntoemp')
+
+        if query:
+            docs = documentoemp.objects.filter(
+            
+            Q(nombre__icontains=query) |
+            Q(apellido__icontains=query) ).distinct
+
+            return render(request, 'tipodocumentoemp.html' , {'docs':docs})
+        
+         
+        else:
+            docs=documentoemp.objects.all()
+
+
+            
+
+            query = request.GET.get('buscardocuemntoemp')
+            print("NO HAY INFORMACION POAARA MOSTRAR")
+            return render(request, 'tipodocumentoemp.html',{'docs':docs})
+    
+    return render(request,"tipodocumentoemp.html")    
+    

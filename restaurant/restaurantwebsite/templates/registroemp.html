@@ -32,7 +32,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Insert tienda o restaurant</a>
+          <a class="navbar-brand" href="#">Pizza Wave</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -42,8 +42,7 @@
                 <a class="nav-link active" aria-current="page" href="/homeemp">Inicio</a>
               </li>
     
-
-                
+            
               <li class="nav-item">
                 <a class="nav-link" href="/cargoregister">Cargos</a>
               </li>
@@ -52,6 +51,10 @@
                 <a class="nav-link" href="/registroemp">registro</a>
               </li>
     
+              <li class="nav-item">
+                <a class="nav-link" href="/tipodocumentoemp">tipodocumento</a>
+              </li>
+        
         
     
     
@@ -99,7 +102,7 @@
                         <div class="col-md-6 mb-4 ">
                           
                         <select class="form-select" id="tipo_identificacion" name="tipo_identificacion" required>
-                          <option selected disabled value="addemp" required>tipo identificacion</option>
+                          <option required selected disabled value="" required>Tipo Identificacion</option>
                           <option>RTN</option>
                           <option>Pasaporte</option>
                           <option>Residencia</option>
@@ -147,7 +150,7 @@
                         <div class="col-md-6 mb-4 ">
                           
                           <select class="form-select" id="jornada" name="jornada" required>
-                            <option selected disabled value="">Jornada</option>
+                            <option required selected disabled value="">Jornada</option>
                             <option>Matutino</option>
                             <option>Vespertino</option>
                             <option>Nocturno</option>
@@ -312,7 +315,7 @@
                       <div class="col-md-6 mb-4 ">
                         
                       <select class="form-select" id="tipo_identificacion" name="tipo_identificacion" required>
-                        <option selected disabled value=" {{ empleado.tipo_identificacion }} ">{{ empleado.tipo_identificacion }} </option>
+                        <option value=" {{ empleado.tipo_identificacion }} ">{{ empleado.tipo_identificacion }} </option>
                         <option>RTN</option>
                         <option>Pasaporte</option>
                         <option>Residencia</option>
@@ -344,13 +347,15 @@
 
 
                       <div class="col-md-6 mb-4 ">
-                        <input value="{{ empleado.fecha_nacimiento }}" required type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" />
+                       
+                        <input value="{{ empleado.fecha_nacimiento }}" required type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" /> <i>{{ empleado.fecha_nacimiento }}</i>
+    
                         <label class="form-label" for="form3Example1q">Fecha de Nacimiento</label>
                       </div>
 
                       <div class="col-md-6 mb-4 ">
                         <p id="inputerrordate"></p>
-                        <input required type="date" value="{{ empleado.fecha_contratacion }}" id="fecha_contratacion" name="fecha_contratacion" class="form-control" />
+                        <input required type="date" value="{{ empleado.fecha_contratacion }}" id="fecha_contratacion" name="fecha_contratacion" class="form-control" /><i>{{ empleado.fecha_contratacion }}</i>
                         <label class="form-label" for="form3Example1q">Fecha de Contratacion</label>
                       </div>
   
@@ -359,8 +364,8 @@
    
                       <div class="col-md-6 mb-4 ">
                         
-                        <select  class="form-select" id="jornada" name="jornada" required>
-                          <option selected disabled value="{{ empleado.jornada }}">{{ empleado.jornada }}</option>
+                        <select class="form-select" id="jornada" name="jornada" required>
+                          <option value="{{ empleado.jornada }}">{{ empleado.jornada }}</option>
                           <option>Matutino</option>
                           <option>Vespertino</option>
                           <option>Nocturno</option>
@@ -378,7 +383,7 @@
 
               </table>
               <div class="modal-footer">
-                <button type="submit" value="update">
+                <button type="submit" class="btn btn-success" value="update">
                       Editar
                   </button>
 
@@ -415,159 +420,88 @@
               <table>
                 <div class="row">
                   
-                  <tr>
-                      
-                      <td>
-                       
-                        
-                        <div class="col-md-6 mb-2">
-                        <label>ID del empleado</label>
-                        <fieldset disabled>  <input name="id" required value="{{empleado.id}}"></fieldset>
-                      </div>
-
+                  <div class="col-md-6 mb-4 ">
+                  <input required disabled value="{{ empleado.nombre }}" pattern="[a-zA-z]+" type="text" class="form-control" id="exampleDatepicker1" name="nombre" id="nombre" />
+                  <label for="exampleDatepicker1" class="form-label">Nombre</label>
        
-                      </td>
-                  </tr>
-                  
-                   <tr>
-                    
-                    
-                      <td>
-                        <div class="col-md-6 mb-2">
-                        <label>Nombre del empleado</label>
-                        <fieldset disabled>
-                        <input name="nombre" required value="{{empleado.nombre}}">
-                        </fieldset>
-                      </div>
-                      </td>
 
-                  </tr>
-                   <tr>
-                    
-                      <td>
-                        <div class="col-md-6 mb-2">
-                        <label>Apellido del Empleado</label>
-                        <fieldset disabled>
-                         <input name="apellido" required value="{{empleado.apellido}}">
-                        </fieldset>
-                        </div>
-                        </td>
-                  </tr>
-                   <tr>
-                    
-                      <td> 
-                        <div class="col-md-6 mb-2">
-                        <label>Tipo de Identificacion</label>
-                        <fieldset disabled>
-                        <input name="tipo_identificacion" required value="{{empleado.tipo_identificacion}}">
-                      </fieldset>
-                      </div>
-                      </td>
-                  </tr>
-          
-                  <tr>
-                    
-                    <td> 
-                      <div class="col-md-6 mb-2">
-                      <label >Doocumento de identificacion</label>
-                      <fieldset disabled>
-                      <input name="documento_identificacion" required value="{{empleado.documento_identificacion}}">
-                    </fieldset>
+              </div>
+              
+               
+                <div class="col-md-6 mb-4 ">
+                    <input disabled required value="{{ empleado.apellido }}" pattern="[a-zA-z]+" type="text" id="apellido" class="form-control" name="apellido"/>
+                    <label class="form-label" for="form3Example1q">Apellido</label>
+                  </div>
 
-                    </div>
-                    </td>
-                </tr>
 
-                <tr>
-                  
-                  <td>
-                    <div class="col-md-6 mb-2">
-                    <label>Direccion</label>
-                    <fieldset disabled>
-                    <input name="direccion" required value="{{empleado.direccion}}">
-                  </fieldset>
-                  </td>
+
+                  <div class="col-md-6 mb-4 ">
+                    
+                  <select disabled class="form-select" id="tipo_identificacion" name="tipo_identificacion" required>
+                    <option value=" {{ empleado.tipo_identificacion }} ">{{ empleado.tipo_identificacion }} </option>
+                    <option>RTN</option>
+                    <option>Pasaporte</option>
+                    <option>Residencia</option>
+                  </select>
+                  <label class="form-label" for="form3Example1q">Tipo Identificacion</label>
                 </div>
-              </tr>
 
-              <tr>
-                
-                <td>
-                  <div class="col-md-6 mb-2">
+                  <div class="col-md-6 mb-4 ">
+                    <input disabled value="{{ empleado.documento_identificacion }}" required type="text" id="documento_identificacion" name="documento_identificacion" class="form-control" />
+                    <label class="form-label" for="form3Example1q">Documento de identificacion</label>
+                  </div>
+
+                  <div class="col-md-6 mb-4 ">
+                    <input disabled value="{{ empleado.telefono }}" required minlength="8" maxlength="8"  pattern="[0-9]+" type="text"  id="telefono" name="telefono" class="form-control" />
+                    <label class="form-label" for="form3Example1q">Telefono</label>
+                  </div>
+
+                  <div class="col-md-6 mb-4 ">
+                    <input disabled value="{{ empleado.direccion }}" required type="text" id="direccion" name="direccion" class="form-control" />
+                    <label class="form-label" for="form3Example1q">Direccion</label>
+                  </div>
+
+
+                  <div class="col-md-6 mb-4 ">
+                    <input disabled value="{{ empleado.departamento }}" required type="text" pattern="[a-zA-z]+" id="departamento" name="departamento" class="form-control" />
+                    <label class="form-label" for="form3Example1q">Departamento</label>
+                  </div>
+
+
+
+                  <div class="col-md-6 mb-4 ">
+                   
+                    <input disabled value="{{ empleado.fecha_nacimiento }}" required type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" /> <i>{{ empleado.fecha_nacimiento }}</i>
+
+                    <label class="form-label" for="form3Example1q">Fecha de Nacimiento</label>
+                  </div>
+
+                  <div class="col-md-6 mb-4 ">
+                    <p id="inputerrordate"></p>
+                    <input disabled required type="date" value="{{ empleado.fecha_contratacion }}" id="fecha_contratacion" name="fecha_contratacion" class="form-control" /><i>{{ empleado.fecha_contratacion }}</i>
+                    <label class="form-label" for="form3Example1q">Fecha de Contratacion</label>
+                  </div>
+
+
+
+
+                  <div class="col-md-6 mb-4 ">
                     
-                  <label>Telefono</label>
-         
-                <fieldset disabled>
-                  <input name="telefono" required value="{{empleado.telefono}}">
-                </fieldset>
-                </td>
-              </div>
-            </tr>
-            
-            <tr>
-              
-              <td> 
-                <div class="col-md-6 mb-2">
-                 
-                <label>Departamento</label>
-                <fieldset disabled>
-                <input name="departamento" required value="{{empleado.departamento}}">
-              </fieldset>
-              </div>
-              </td>
-          </tr>
+                    <select disabled class="form-select" id="jornada" name="jornada" required>
+                      <option value="{{ empleado.jornada }}">{{ empleado.jornada }}</option>
+                      <option>Matutino</option>
+                      <option>Vespertino</option>
+                      <option>Nocturno</option>
+                    </select>
+                    <label class="form-label" for="form3Example1q">Jornada</label>
+                  </div>
 
-          <tr>
-            
-            <td>
-              <div class="col-md-6 mb-2">
-              
-              <label>Encargo</label>
-                <fieldset disabled>
-              <input name="puesto" required value="{{empleado.puesto}}">
-            </fieldset>
-            </div>
-            </td>
-        </tr>
 
-        <tr>
-          
-          <td> 
-            <div class="col-md-6 mb-2">
-              
-            <label>Jornada</label>
-            <fieldset disabled>
-            <input name="jornada" required value="{{empleado.jornada}}">
-          </fieldset>
-          </div>
-          </td>
-      </tr>
+                  <div class="col-md-6 mb-4 ">
+                    <input disabled value="{{ empleado.puesto }}" required pattern="[a-zA-z]+" type="text" id="puesto" name="puesto" class="form-control" />
+                    <label class="form-label" for="form3Example1q">puesto</label>
+                  </div>
 
-      <tr>
-        
-        <td> 
-          <div class="col-md-6 mb-2">
-          <label>Fecha de Cotratacion</label>
-          <fieldset disabled>
-          <input name="fecha_contratacion" required value="{{empleado.fecha_contratacion}}">
-        </fieldset>
-        </div>
-        </td>
-    </tr>
-
-  
-    <tr>
-    
-      
-      <td>
-        <div class="col-md-6 mb-2">
-        <label>Fecha de Naciemiento</label>
-        <fieldset disabled>
-        <input name="fecha_nacimiento" required value="{{empleado.fecha_nacimiento}}">
-      </fieldset>
-      </div>
-      </td>
-  </tr>
 
 
 

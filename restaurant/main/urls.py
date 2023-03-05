@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from restaurantwebsite import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
 
@@ -38,11 +40,8 @@ urlpatterns = [
     path("homeemp/",views.homeemp, name="homeemp"), # HomePAGE
     path("registroemp/",views.registroemp, name="registroemp"),# Registro Empleado
     path('addemp', views.addemp , name="addemp"),# añadir Registro EMP
-    path('delete/<int:id>', views.destroy , name="destroy"),# BOrrar Registro EMP
-    
-    path('edit/<int:id>', views.edit , name="edit"),# enlista los datos de El EMPLEADO
-    
-
+    path('delete/<int:id>', views.destroy , name="destroy"),# BOrrar Registro EMP    
+    path('edit/<int:id>', views.edit , name="edit"),# enlista los datos de El EMPLEADO    
     path('update/<int:id>', views.updateemp , name="updateemp"),# Actualizar una vez editados El EMPLEADO
     path('buscar/', views.buscaremp , name="buscaremp"),# ver EMpleado
 
@@ -55,6 +54,7 @@ urlpatterns = [
     path('actializarcargo/<int:id>', views.actializarcargo , name="actializarcargo"),
     path('borrarcargo/<int:id>', views.borrarcargo , name="borrarcargo"),
     path('visualizarcargo/<int:id>', views.visualizarcargo , name="visualizarcargo"),
+    path('buscarcargosemp/', views.buscarcargosemp , name="buscarcargosemp"),# ver EMpleado
 
 
 
@@ -65,13 +65,16 @@ urlpatterns = [
 
 
     path('tipodocumentoemp/', views.tipodocumentoemp , name="tipodocumentoemp"),
-
     path('añadirdocumentoemp', views.añadirdocumentoemp , name="añadirdocumentoemp"),
     path('borrartipodocumentoemp/<int:id>', views.borrartipodocumentoemp , name="borrartipodocumentoemp"),
     path('editartipodedocumento/<int:id>', views.editartipodedocumento , name="editartipodedocumento"),
     path('actualizartipodedocumento/<int:id>', views.actualizartipodedocumento , name="actializartipodedocumento"),
+    path('buscardocuemntoemp/', views.buscardocuemntoemp , name="buscardocuemntoemp"),# ver EMpleado
  
 
 
 
 ] 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

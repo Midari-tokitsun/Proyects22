@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tipo de Documento Empleado</title>
+    <link rel="stylesheet" href="{% static 'css/tipodocumentoempstyle.css' %}">
 
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
@@ -22,31 +24,74 @@
 </head>
 <body>
     
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Pizza Wave</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/homeemp">Inicio</a>
+          </li>
 
 
-    <h1>
+            
+          <li class="nav-item">
+            <a class="nav-link" href="/cargoregister">Cargos</a>
+          </li>
 
-        Tipo de Documento
+          <li class="nav-item">
+            <a class="nav-link" href="/registroemp">registro</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/tipodocumentoemp">tipodocumento</a>
+          </li>
+    
+
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+   <br>
       
-      </h1>
       
       
-      
-      
+      <div class="container">
+        <form action="{% url 'buscardocuemntoemp' %}" class="form-inline my-2 my-lg-0 mr-4" method="GET"  >
+         
+          <input value="{{ request.GET.buscardocuemntoemp }}" name="buscardocuemntoemp" class="form-control mr-sm-2s" type="search" placeholder="Buscar el Empleado" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Buscar Empleado</button>
+        </form>
+      </div>
+
       
    
       
-      
+      <div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+            <h2>Control <b>Tipo Documento</b></h2>
+          </div> 
       
       
       <table class="table table-striped table-hover">
         <thead>
           <tr>
+         
+
             <th scope="col">ID</th>
             <th scope="col">Nombre</th>
             <th scope="col">Apellido</th>
             <th scope="col">Tipo de Identificacion</th>
             <th scope="col">Numero de Identificacion</th>
+            <th>Licencia de Conducir</th>
             <th scope="col">Editar</th>
             <th scope="col">Eliminar</th>
             <th scope="col">Ver Datos</th>
@@ -58,6 +103,7 @@
         
           {% for doc in docs %}
           <tr>
+            
             <td>{{ doc.id }}</td>
       
             <td>{{ doc.nombre }}</td>
@@ -65,8 +111,11 @@
            
             <td>{{ doc.tipo_identificacion }}</td>
             <td>{{ doc.numero_identificacion }}</td>
-            
+            <td>{{ doc.licencia_conducir }}</td>
       
+      
+
+
             <td>
             <a href="/editartipodedocumento/{{ doc.id }}" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModaldeEditarTipoDocumento-{{forloop.counter}}"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
           </td> 
@@ -109,7 +158,7 @@
     Tipo de Documento
   </button>
   
-  <!-- Modal AÑADIR CARGO -->
+  <!-- Modal AÑADIR DOCUMENTO AL EMPLEADO -->
   <div class="modal fade" id="TipoModalDocumento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -140,39 +189,56 @@
           </div>
   
   
-
-          <div class="col-md-6 mb-4 ">
-                        
-            <select class="form-select" id="tipo_identificacion" name="tipo_identificacion" required>
-              <option selected disabled value=" {{ doc.tipo_identificacion }} ">Selecciona Tu Identificacion </option>
-              <option>RTN</option>
-              <option>Pasaporte</option>
-              <option>Tarjeta de Residencia</option>
-            </select>
+          <div class="col-md-6 mb-4">
             <label class="form-label" for="form3Example1q">Tipo Identificacion</label>
-          </div>
+          <select class="form-select" id="tipo_identificacion" name="tipo_identificacion" required>
+            <option required selected disabled value="" required>Tipo Identificacion</option>
+            <option>RTN</option>
+            <option>Pasaporte</option>
+            <option>DNI</option>
+            <option>Tarjeta de Residencia</option>
+            <option>NIF-NIE</option>
+          
+          </select>
+          
+        </div>
   
   
           <div class="col-md-6 mb-4">
             <p>Numero Identificacion</p>
-            <input type="number" min="1" max="10000" step="1" name="numero_identificacion" placeholder="Numero de identificacion" required  class="form-control" pattern="[0-9]{10}+">
+            <input type="number"  min="1" max="" step="1"  name="numero_identificacion" placeholder="Numero de identificacion" required  class="form-control" pattern="[0-9]{10}+">
           </div>
   
   
-          </div>
-  
+          <div class="col-md-6 mb-4">
+            <label class="form-label" for="form3Example1q">Licencia de Conducir</label>
+          <select class="form-select" id="licencia_conducir" name="licencia_conducir" required>
+            <option required selected disabled value="" required>licencia de Conducir?</option>
+            <option>
+              SI
+            </option>
+            <option>
+              NO
+            </option>
+
+          
+          </select>
+          
+        </div>
           
           
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
   
   
   
+    
       </form>
-      </div>
+    </div>
+    </div>
     </div>
   </div>
   
@@ -198,7 +264,7 @@
                   <div class="col-md-6 mb-4">
   
                     
-                        <input required value="{{ doc.id }}" pattern="[0-9]+" type="text" class="form-control" id="exampleDatepicker1" name="id" id="id" />
+                        <input  required value="{{ doc.id }}" pattern="[0-9]+" type="text" class="form-control" id="exampleDatepicker1" name="id" id="id" />
                         <label for="exampleDatepicker1" class="form-label">ID</label>
                       </div>  
                          
@@ -221,10 +287,12 @@
                       <div class="col-md-6 mb-4 ">
                         
                       <select class="form-select" id="tipo_identificacion" name="tipo_identificacion" required>
-                        <option selected disabled value=" {{ doc.tipo_identificacion }} ">{{ doc.tipo_identificacion }} </option>
+                        <option  value=" {{ doc.tipo_identificacion }} ">{{ doc.tipo_identificacion }} </option>
                         <option>RTN</option>
                         <option>Pasaporte</option>
-                        <option>Residencia</option>
+                        <option>DNI</option>
+                        <option>Tarjeta de Residencia</option>
+                        <option>NIF-NIE</option>
                       </select>
                       <label class="form-label" for="form3Example1q">Tipo Identificacion</label>
                     </div>
@@ -237,6 +305,36 @@
                       </div>
 
                
+
+
+
+                    </div>
+
+                    
+                    <div class="col-md-6 mb-4">
+                      <label class="form-label" for="form3Example1q">Licencia de Conducir</label>
+                    <select class="form-select" id="licencia_conducir" name="licencia_conducir" required>
+                      <option required selected value="{{ doc.licencia_conducir }}" required>{{ doc.licencia_conducir }}</option>
+                      <option>
+                        SI
+                      </option>
+                      <option>
+                        NO
+                      </option>
+          
+                    
+                    </select>
+                    
+                  </div>
+
+
+
+
+
+
+
+
+
                       </div>
   
 
@@ -246,7 +344,7 @@
 
               </table>
               <div class="modal-footer">
-                <button type="submit" value="update">
+                <button type="submit" class=" btn btn-primary" value="update">
                       Editar
                   </button>
 
@@ -303,17 +401,16 @@
                       </div>
 
 
-
-                      <div class="col-md-6 mb-4 ">
-
-                      <select class="form-select" id="tipo_identificacion" name="tipo_identificacion" required>
+                    <div class="col-md-6 mb-4 ">
+                      <select class="form-select" id="tipo_identificacion" disabled name="tipo_identificacion" required>
                         <option selected disabled value=" {{ doc.tipo_identificacion }} ">{{ doc.tipo_identificacion }} </option>
-                        <option selected disabled>RTN</option>
-                        <option selected disabled>Pasaporte</option>
-                        <option selected disabled>Residencia</option>
+                        <option>RTN</option>
+                        <option>Pasaporte</option>
+                        <option>DNI</option>
+                        <option>Tarjeta de Residencia</option>
+                        <option>NIF-NIE</option>
                       </select>
                       <label class="form-label" for="form3Example1q">Tipo Identificacion</label>
-                      
                     </div>
 
                       <div class="col-md-6 mb-4 ">
@@ -333,7 +430,7 @@
 
 
               </table>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
 
                 </div>
           </form>
