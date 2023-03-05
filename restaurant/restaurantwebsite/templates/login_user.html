@@ -38,10 +38,6 @@
             <a class="nav-link" href="/pedidos">Realizar Pedidos</a>
           </li>
  
-          <li class="nav-item">
-            <a class="nav-link" href="/listadepedidos">Listar Pedidos</a>
-          </li>
-   
 
           {% else %}
           
@@ -75,9 +71,11 @@
 
     <form class="formcontent" method="POST" id="formcontent1" >
       {% csrf_token %}
-      <div class="row" id="formcontent1">
-        <img src="{% static 'images/usericon.jpg' %}" class="" id="userlogo" style="width: 18rem;" />
-
+      
+      
+      <div id="formcontent1">
+          <img src="{% static 'images/usericon.jpg' %}" class="" id="userlogo" style="width: 18rem;" />
+          
         <div class="row-cols-2" style="text-align: center;">
           <label for="exampleInputName1" class="form-label" >Nombre de Usuario</label>
           <input type="name" class="form-control" id="exampleInputName1" aria-describedby="userHelp" name="username">
@@ -88,17 +86,20 @@
           <label for="exampleInputPassword1" class="form-label">Password</label>
           <input type="password" class="form-control" id="exampleInputPassword1" name="password">
         </div>
-
-        <div style="text-align: center ;" id="emailHelp" class="form-text">You will have the best experience in food for all types</div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
+      
+     
+        <div id="btnS2">
+          <input type="submit" class="btn btn-primary " id="btnS2"  >Submit</input>
+        </div>
+          
         <A href="/signup" style="text-align: center ;"> No Tienes Cuenta Dame click </A>
-        
-      <div/>
-        
+       
+      </div>
+ 
+     
   </form>
 
-
+  <hr>
     <section class="">
       <!-- Footer -->
       <footer class="text-center text-white" style="background-color: #0a4275;">

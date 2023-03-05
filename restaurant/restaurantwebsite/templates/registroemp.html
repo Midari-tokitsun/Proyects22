@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/registroempstyle.css' %}">
+    
+    <title>Registro Empleados</title>
+
+
+    
+</head>
+<body>
+   
+
+
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Insert tienda o restaurant</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/homeemp">Inicio</a>
+              </li>
+    
+
+                
+              <li class="nav-item">
+                <a class="nav-link" href="/cargoregister">Cargos</a>
+              </li>
+    
+              <li class="nav-item">
+                <a class="nav-link" href="/registroemp">registro</a>
+              </li>
+    
+        
+    
+    
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+
+      
+
+
+      
+              <!-- Modal EMPLEADO Añadir -->
+              <div class="modal fade" id="addempMODAL" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Registrar empleado</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form class="px-md-2" method="POST" action="{% url 'addemp' %}">
+                  {% csrf_token %}
+
+    
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+    
+                     
+                        <input class="form-control" required  pattern="[a-zA-z]+" type="text"  id="exampleDatepicker1" name="nombre" id="nombre" />
+                        <label for="exampleDatepicker1" class="form-label">Nombre</label>
+             
+    
+                    </div>
+                    
+                     
+                      <div class="col-md-6 mb-4 ">
+                          <input required pattern="[a-zA-z]+" type="text" id="apellido" class="form-control" name="apellido"/>
+                          <label class="form-label" for="form3Example1q">Apellido</label>
+                        </div>
+
+
+
+                        <div class="col-md-6 mb-4 ">
+                          
+                        <select class="form-select" id="tipo_identificacion" name="tipo_identificacion" required>
+                          <option selected disabled value="addemp" required>tipo identificacion</option>
+                          <option>RTN</option>
+                          <option>Pasaporte</option>
+                          <option>Residencia</option>
+                        </select>
+                        <label class="form-label" for="form3Example1q">Tipo Identificacion</label>
+                      </div>
+
+                        <div class="col-md-6 mb-4 ">
+                          <input required type="text" id="documento_identificacion" name="documento_identificacion" class="form-control" />
+                          <label class="form-label" for="form3Example1q">Documento de identificacion</label>
+                        </div>
+
+                        <div class="col-md-6 mb-4 ">
+                          <input required minlength="8" maxlength="8"  pattern="[0-9]+" type="text"  id="telefono" name="telefono" class="form-control" />
+                          <label class="form-label" for="form3Example1q">Telefono</label>
+                        </div>
+
+                        <div class="col-md-6 mb-4 ">
+                          <input required type="text" id="direccion" name="direccion" class="form-control" />
+                          <label class="form-label" for="form3Example1q">Direccion</label>
+                        </div>
+
+
+                        <div class="col-md-6 mb-4 ">
+                          <input required type="text" pattern="[a-zA-z]+" id="departamento" name="departamento" class="form-control" />
+                          <label class="form-label" for="form3Example1q">Departamento</label>
+                        </div>
+
+
+
+                        <div class="col-md-6 mb-4 ">
+                          <input required type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" />
+                          <label class="form-label" for="form3Example1q">Fecha de Nacimiento</label>
+                        </div>
+
+                        <div class="col-md-6 mb-4 ">
+                          <p id="inputerrordate"></p>
+                          <input required type="date" id="fecha_contratacion" name="fecha_contratacion" class="form-control" />
+                          <label class="form-label" for="form3Example1q">Fecha de Contratacion</label>
+                        </div>
+    
+
+
+     
+                        <div class="col-md-6 mb-4 ">
+                          
+                          <select class="form-select" id="jornada" name="jornada" required>
+                            <option selected disabled value="">Jornada</option>
+                            <option>Matutino</option>
+                            <option>Vespertino</option>
+                            <option>Nocturno</option>
+                          </select>
+                          <label class="form-label" for="form3Example1q">Jornada</label>
+                        </div>
+
+    
+                        <div class="col-md-6 mb-4 ">
+                          <input required pattern="[a-zA-z]+" type="text" id="puesto" name="puesto" class="form-control" />
+                          <label class="form-label" for="form3Example1q">puesto</label>
+                        </div>
+
+              </div>
+              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button id="datec" type="submit" class="btn btn-primary" >Save changes</button>
+            </div>
+          </div>
+        </div>
+              </div>
+
+            </form>
+              
+
+       
+     
+        <br>
+
+        <div class="container">
+        <form action="{% url 'buscaremp' %}" class="form-inline my-2 my-lg-0 mr-4" method="GET"  >
+         
+          <input value="{{ request.GET.buscaremp }}" name="buscaremp" class="form-control mr-sm-2s" type="search" placeholder="Buscar el Empleado" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Buscar Empleado</button>
+        </form>
+      </div>
+
+
+
+        <br>
+        
+        
+
+        <div class="container">
+          <div class="table-wrapper">
+              <div class="table-title">
+                  <div class="row">
+                      <div class="col-sm-6">
+              <h2>Control <b>Empleados</b></h2>
+            </div>
+
+            <div class="col-sm-8">
+              <!-- Button trigger modal -->
+              <a type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addempMODAL">
+                <i class="material-icons">&#xE147;</i> <span>Nuevo Empleado</span></a>
+              </a>
+            
+      </div>   
+          <table class="table table-striped table-hover">
+    
+            <thead>
+              
+                <th><input type="checkbox" id="checkall" name="options[]" value="1"/></th>
+                <th>ID</th>
+                <th>Nombre del Empleado</th>
+                <th>Apellido del Empleado</th>
+                <th>Telefono del Empleado</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+                <th>Ver Datos</th>
+             </thead>
+   <tbody>
+   {% for empleado in empleados %}  
+    <tr>  
+     <td><input type="checkbox" class="checkthis" /></td>
+     <td>{{ empleado.id }}</td>  
+     <td>{{ empleado.nombre }}</td>  
+     <td>{{ empleado.apellido }}</td>  
+     <td>{{ empleado.telefono }}</td>
+     <td>
+      <!-- Button trigger modal -->
+        <a href="/edit/{{ empleado.id }}" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{forloop.counter}}"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+      </td> 
+      <td>
+        <p data-placement="top" data-toggle="tooltip" title="Delete"><a href="/delete/{{ empleado.id }}"  class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a></p>
+    </td>
+    
+    <td>
+
+      <!-- Button trigger modal -->
+    <a type="button" class="btn btn-primary" data-bs-toggle="modal"  data-bs-target="#ModalParaVisualizarDatosEmp-{{forloop.counter}}">
+      <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+    </a>
+
+
+    </td>
+
+    </tr>  
+    {% endfor %}
+   </tbody>
+         
+  </table>
+  <div class="clearfix">
+    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+    <ul class="pagination">
+        <li class="page-item disabled"><a href="#">Previous</a></li>
+        <li class="page-item"><a href="#" class="page-link">1</a></li>
+        <li class="page-item"><a href="#" class="page-link">2</a></li>
+        <li class="page-item active"><a href="#" class="page-link">3</a></li>
+        <li class="page-item"><a href="#" class="page-link">4</a></li>
+        <li class="page-item"><a href="#" class="page-link">5</a></li>
+        <li class="page-item"><a href="#" class="page-link">Next</a></li>
+    </ul>
+</div>
+</div>    
+</div>
+</div>
+
+
+
+
+
+
+
+
+     
+
+
+<!-- Modal EDI EMPLEADO -->
+{% for empleado in empleados %}  
+
+<div class="modal fade" id="exampleModal-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Empleado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="/update/{{empleado.id}}">
+          {%csrf_token %}
+              <table>
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+  
+                   
+                      <input required value="{{ empleado.nombre }}" pattern="[a-zA-z]+" type="text" class="form-control" id="exampleDatepicker1" name="nombre" id="nombre" />
+                      <label for="exampleDatepicker1" class="form-label">Nombre</label>
+           
+  
+                  </div>
+                  
+                   
+                    <div class="col-md-6 mb-4 ">
+                        <input required value="{{ empleado.apellido }}" pattern="[a-zA-z]+" type="text" id="apellido" class="form-control" name="apellido"/>
+                        <label class="form-label" for="form3Example1q">Apellido</label>
+                      </div>
+
+
+
+                      <div class="col-md-6 mb-4 ">
+                        
+                      <select class="form-select" id="tipo_identificacion" name="tipo_identificacion" required>
+                        <option selected disabled value=" {{ empleado.tipo_identificacion }} ">{{ empleado.tipo_identificacion }} </option>
+                        <option>RTN</option>
+                        <option>Pasaporte</option>
+                        <option>Residencia</option>
+                      </select>
+                      <label class="form-label" for="form3Example1q">Tipo Identificacion</label>
+                    </div>
+
+                      <div class="col-md-6 mb-4 ">
+                        <input value="{{ empleado.documento_identificacion }}" required type="text" id="documento_identificacion" name="documento_identificacion" class="form-control" />
+                        <label class="form-label" for="form3Example1q">Documento de identificacion</label>
+                      </div>
+
+                      <div class="col-md-6 mb-4 ">
+                        <input value="{{ empleado.telefono }}" required minlength="8" maxlength="8"  pattern="[0-9]+" type="text"  id="telefono" name="telefono" class="form-control" />
+                        <label class="form-label" for="form3Example1q">Telefono</label>
+                      </div>
+
+                      <div class="col-md-6 mb-4 ">
+                        <input value="{{ empleado.direccion }}" required type="text" id="direccion" name="direccion" class="form-control" />
+                        <label class="form-label" for="form3Example1q">Direccion</label>
+                      </div>
+
+
+                      <div class="col-md-6 mb-4 ">
+                        <input value="{{ empleado.departamento }}" required type="text" pattern="[a-zA-z]+" id="departamento" name="departamento" class="form-control" />
+                        <label class="form-label" for="form3Example1q">Departamento</label>
+                      </div>
+
+
+
+                      <div class="col-md-6 mb-4 ">
+                        <input value="{{ empleado.fecha_nacimiento }}" required type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" />
+                        <label class="form-label" for="form3Example1q">Fecha de Nacimiento</label>
+                      </div>
+
+                      <div class="col-md-6 mb-4 ">
+                        <p id="inputerrordate"></p>
+                        <input required type="date" value="{{ empleado.fecha_contratacion }}" id="fecha_contratacion" name="fecha_contratacion" class="form-control" />
+                        <label class="form-label" for="form3Example1q">Fecha de Contratacion</label>
+                      </div>
+  
+
+
+   
+                      <div class="col-md-6 mb-4 ">
+                        
+                        <select  class="form-select" id="jornada" name="jornada" required>
+                          <option selected disabled value="{{ empleado.jornada }}">{{ empleado.jornada }}</option>
+                          <option>Matutino</option>
+                          <option>Vespertino</option>
+                          <option>Nocturno</option>
+                        </select>
+                        <label class="form-label" for="form3Example1q">Jornada</label>
+                      </div>
+
+  
+                      <div class="col-md-6 mb-4 ">
+                        <input value="{{ empleado.puesto }}" required pattern="[a-zA-z]+" type="text" id="puesto" name="puesto" class="form-control" />
+                        <label class="form-label" for="form3Example1q">puesto</label>
+                      </div>
+
+
+
+              </table>
+              <div class="modal-footer">
+                <button type="submit" value="update">
+                      Editar
+                  </button>
+
+                </div>
+          </form>
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+            
+       <!-- END OF EDIT DE EMPLEADOS -->
+
+
+
+
+<!-- Modal para visualizar DAtos Empleados -->
+{% for empleado in empleados %}  
+<div class="modal fade" id="ModalParaVisualizarDatosEmp-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Datos del Empleado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+
+        <form method="post" action="/update/{{empleado.id}}">
+     
+              <table>
+                <div class="row">
+                  
+                  <tr>
+                      
+                      <td>
+                       
+                        
+                        <div class="col-md-6 mb-2">
+                        <label>ID del empleado</label>
+                        <fieldset disabled>  <input name="id" required value="{{empleado.id}}"></fieldset>
+                      </div>
+
+       
+                      </td>
+                  </tr>
+                  
+                   <tr>
+                    
+                    
+                      <td>
+                        <div class="col-md-6 mb-2">
+                        <label>Nombre del empleado</label>
+                        <fieldset disabled>
+                        <input name="nombre" required value="{{empleado.nombre}}">
+                        </fieldset>
+                      </div>
+                      </td>
+
+                  </tr>
+                   <tr>
+                    
+                      <td>
+                        <div class="col-md-6 mb-2">
+                        <label>Apellido del Empleado</label>
+                        <fieldset disabled>
+                         <input name="apellido" required value="{{empleado.apellido}}">
+                        </fieldset>
+                        </div>
+                        </td>
+                  </tr>
+                   <tr>
+                    
+                      <td> 
+                        <div class="col-md-6 mb-2">
+                        <label>Tipo de Identificacion</label>
+                        <fieldset disabled>
+                        <input name="tipo_identificacion" required value="{{empleado.tipo_identificacion}}">
+                      </fieldset>
+                      </div>
+                      </td>
+                  </tr>
+          
+                  <tr>
+                    
+                    <td> 
+                      <div class="col-md-6 mb-2">
+                      <label >Doocumento de identificacion</label>
+                      <fieldset disabled>
+                      <input name="documento_identificacion" required value="{{empleado.documento_identificacion}}">
+                    </fieldset>
+
+                    </div>
+                    </td>
+                </tr>
+
+                <tr>
+                  
+                  <td>
+                    <div class="col-md-6 mb-2">
+                    <label>Direccion</label>
+                    <fieldset disabled>
+                    <input name="direccion" required value="{{empleado.direccion}}">
+                  </fieldset>
+                  </td>
+                </div>
+              </tr>
+
+              <tr>
+                
+                <td>
+                  <div class="col-md-6 mb-2">
+                    
+                  <label>Telefono</label>
+         
+                <fieldset disabled>
+                  <input name="telefono" required value="{{empleado.telefono}}">
+                </fieldset>
+                </td>
+              </div>
+            </tr>
+            
+            <tr>
+              
+              <td> 
+                <div class="col-md-6 mb-2">
+                 
+                <label>Departamento</label>
+                <fieldset disabled>
+                <input name="departamento" required value="{{empleado.departamento}}">
+              </fieldset>
+              </div>
+              </td>
+          </tr>
+
+          <tr>
+            
+            <td>
+              <div class="col-md-6 mb-2">
+              
+              <label>Encargo</label>
+                <fieldset disabled>
+              <input name="puesto" required value="{{empleado.puesto}}">
+            </fieldset>
+            </div>
+            </td>
+        </tr>
+
+        <tr>
+          
+          <td> 
+            <div class="col-md-6 mb-2">
+              
+            <label>Jornada</label>
+            <fieldset disabled>
+            <input name="jornada" required value="{{empleado.jornada}}">
+          </fieldset>
+          </div>
+          </td>
+      </tr>
+
+      <tr>
+        
+        <td> 
+          <div class="col-md-6 mb-2">
+          <label>Fecha de Cotratacion</label>
+          <fieldset disabled>
+          <input name="fecha_contratacion" required value="{{empleado.fecha_contratacion}}">
+        </fieldset>
+        </div>
+        </td>
+    </tr>
+
+  
+    <tr>
+    
+      
+      <td>
+        <div class="col-md-6 mb-2">
+        <label>Fecha de Naciemiento</label>
+        <fieldset disabled>
+        <input name="fecha_nacimiento" required value="{{empleado.fecha_nacimiento}}">
+      </fieldset>
+      </div>
+      </td>
+  </tr>
+
+
+
+</div>
+              </table>
+
+          </form>
+
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="{% static 'js/registroemp.js' %}"></script>
+  
+
+</body>
+</html>

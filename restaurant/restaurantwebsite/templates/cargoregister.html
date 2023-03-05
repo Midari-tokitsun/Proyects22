@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Cargos</title>
+</head>
+<body>
+    
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Insert tienda o restaurant</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/homeemp">Inicio</a>
+          </li>
+
+
+            
+          <li class="nav-item">
+            <a class="nav-link" href="/cargoregister">Cargos</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/registroemp">registro</a>
+          </li>
+
+    
+
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+    
+  
+  
+<form class="d-flex">
+  <input name="search" class="form-control me-2" type="search" placeholder="Buscar Empleado" aria-label="Search">
+  <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+<div class="container">
+  <div class="table-wrapper">
+      <div class="table-title">
+          <div class="row">
+              <div class="col-sm-6">
+      <h2>Control <b>Cargos Empleados</b></h2>
+    </div>
+
+    <table class="table table-striped table-hover">
+
+
+
+        <thead>
+          
+          <th><input type="checkbox" id="checkall" name="options[]" value="1"/></th>
+            <th>ID CARGO</th>
+            <th>Nombre del Empleado</th>
+            <th>Nombre del Cargo</th>
+            <th>DEscripcion del Cargo</th>
+            <th>Salario</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+            <th>Visualizar</th>
+         </thead>
+<tbody>
+{% for carg in car %} 
+<tr>  
+ <td><input type="checkbox" class="checkthis" /></td>
+ <td>{{ carg.id }}</td>  
+ <td>{{ carg.empleado }}</td>
+ <td>{{ carg.nombre}}</td>  
+ <td>{{ carg.descripcion }}</td>  
+ <td>{{ carg.salario }}</td>
+ <td>
+
+   <!-- Button trigger modal EDIT CARGO -->
+   <a href="/editarcargo/{{ carg.id }}" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditarCARGOMODAL-{{forloop.counter}}"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+</td>
+
+
+  <td>
+    <p data-placement="top" data-toggle="tooltip" title="Delete"><a href="/borrarcargo/{{ carg.id}}"  class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></span></a></p>
+</td>   
+
+<td>
+<!-- Button trigger modal -->
+<a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#VisualizarDatosCargos-{{forloop.counter}}">
+  <i class="fa fa-eye" aria-hidden="true"></i>
+</a>
+</td>
+
+</tr>  
+{% endfor %}
+</tbody>
+     
+</table>
+</div>
+</div>
+
+
+
+<!-- Button trigger modal AÑADIR CARGO -->
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AñadirCargoModal">
+  <i class="material-icons">&#xE147;</i> <span>Nuevo Empleado</span>
+</button>
+
+<!-- Modal AÑADIR CARGO -->
+<div class="modal fade" id="AñadirCargoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Añadir Nuevo Cargo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'añadircargo' %}" method="POST">
+          {% csrf_token %}
+          <div class="row">
+        
+        
+        <div class="col-md-6 mb-4">
+          <p>ID</p>
+          <input type="number" name="id" placeholder="ID" required class="form-control">
+        </div>
+
+
+        <div class="col-md-6 mb-4">
+          <p>Nombre del Empleado</p>
+          <input type="text"   name="empleado" required placeholder="Nombre del Empleado"  class="form-control" pattern="[a-zA-z]+" >
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <p>Nombre del Cargo</p>
+          <input type="text"  name="nombre" required placeholder="Introduce el Nombre del Cargo" pattern="[a-zA-z]+"  class="form-control">
+        </div>
+
+
+        <div class="col-md-6 mb-4">
+          <p>Descripcion</p>
+          <input type="textarea" name="descripcion" required placeholder="Descripcion del Cargo"   class="form-control">
+        </div>
+
+
+
+        <div class="col-md-6 mb-4">
+          <p>Salario</p>
+          <input type="number" min="1" max="10000" step="1" name="salario" placeholder="salario" required  class="form-control" pattern="[0-9]{10}+">
+        </div>
+
+
+        </div>
+
+        
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+
+
+
+    </form>
+    </div>
+  </div>
+</div>
+
+
+     
+      NOOOO ME VOY A ELIMINAR
+        
+
+
+
+
+<!-- Modal EDI car -->
+{% for carg in car %}  
+
+<div class="modal fade" id="EditarCARGOMODAL-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Cargo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="/actializarcargo/{{carg.id}}">
+          {%csrf_token %}
+      
+              <table>
+                
+                
+                <div class="row">
+        
+        
+                  <div class="col-md-6 mb-4">
+                    <p>ID</p>
+                    <input type="number" value="{{carg.id}}" name="id" placeholder="ID" required class="form-control">
+                  </div>
+          
+          
+                  <div class="col-md-6 mb-4">
+                    <p>Nombre del Empleado</p>
+                    <input type="text" value="{{ carg.empleado }}"  name="empleado" required placeholder="Nombre del Empleado"  class="form-control" pattern="[a-zA-z]+" >
+                  </div>
+          
+                  <div class="col-md-6 mb-4">
+                    <p>Nombre del Cargo</p>
+                    <input type="text" value="{{ carg.nombre }}" pattern="[a-zA-z]+"  name="nombre"  placeholder="Introduce el Nombre del Cargo"   class="form-control">
+                  </div>
+          
+          
+                  <div class="col-md-6 mb-4">
+                    <p>Descripcion</p>
+                    <input type="text" value="{{ carg.descripcion }}" name="descripcion" required placeholder="Descripcion del Cargo"  class="form-control">
+                  </div>
+          
+          
+          
+                  <div class="col-md-6 mb-4">
+                    <p>Salario</p>
+                    <input type="number" value="{{ carg.salario }}" min="1" max="10000" step="1" name="salario" placeholder="salario" required  class="form-control" pattern="[0-9]{10}+">
+                  </div>
+          
+          
+                  </div>
+          
+                
+   
+              </table>
+              <div class="modal-footer">
+                <button type="submit" value="update">
+                      Editar
+                  </button>
+                </div>
+          </form>
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+
+
+
+
+<!-- Modal  PARA VISUALIZAR DATOS DEL cARGO-->
+{% for carg in car %}
+<div class="modal fade" id="VisualizarDatosCargos-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Datos del Cargo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="modal-body">
+          <form method="post" action="/actializarcargo/{{carg.id}}">
+
+                <table>
+                
+                  
+                    
+                  <tr>
+                      
+                        
+                        <td>
+                          <div class="row">
+                          <label>ID </label> 
+                          <fieldset disabled>
+                          <input name="id" required value="{{carg.id}}"  class="form-control">
+                        </fieldset>
+                        </div>
+                        </td>
+                    </tr>
+                  
+
+                    <td>
+                      <div class="row">
+                      <label>Nombre del Empleado</label> 
+                      <fieldset disabled>
+                      <input name="empleado" required value="{{carg.empleado}}"  class="form-control">
+                    </fieldset>
+                    </div>
+                    </td>
+                </tr>
+  
+                     <tr>
+  
+                      <td>
+                        <div class="row">
+  
+                          <label>Nombre del Cargo</label>
+                          <input disabled name="nombre" required value="{{carg.nombre}}"  class="form-control">
+                        </div>
+  
+                           
+                       </td>
+  
+                      </tr>
+  
+                    <tr>
+  
+                        <td>
+                          <div class="row">
+  
+                          <label>Descripcion</label>
+                          <input disabled name="descripcion" required value="{{carg.descripcion}}"  class="form-control">
+                        </div>
+                          
+                        </td>
+                    
+                      </tr>
+                    
+  
+                 
+                    <tr>
+                        <td>
+                          <div class="col-md-6 mb-2">
+  
+                          <label >Salario</label>
+                          <input disabled type="number" name="salario" required value="{{carg.salario}}"  class="form-control">
+                        </div>
+                        </td>
+  
+                    </tr>
+                  
+     
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                
+              </div>
+            </form>
+  
+        </div>
+
+
+
+
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

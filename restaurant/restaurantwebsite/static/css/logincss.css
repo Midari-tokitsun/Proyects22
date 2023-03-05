@@ -11,10 +11,10 @@ body{
 background-color:white;
 
 
-margin-top: 50px;
+margin-top: 40px;
 margin-left: 150px;
 margin-right: 180px;
-
+padding-bottom: 50px;
 
 
 
@@ -22,6 +22,13 @@ margin-right: 180px;
 
 #userlogo{
     border-radius: 150px;
-    margin-left: 180px;
+    margin-left: 350px;
    
 }
+
+
+#btnS2{
+
+    margin-right: 110px;
+
+    }
