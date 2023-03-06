@@ -28,9 +28,20 @@ class insertempl(models.Model):
 class cargo(models.Model):
     id=models.CharField(primary_key=True, max_length=20)
     empleado=models.TextField(max_length=50)
+    apellido_empleado=models.CharField(max_length=50)
     nombre=models.CharField(max_length=50)
+    sucursal_asignado=models.CharField(max_length=50)
+    estado=models.CharField(max_length=50)
     descripcion=models.TextField(max_length=100)
     salario	=models.CharField(max_length=50)
+
+    
+    traslado=models.CharField(max_length=50)
+    departamento=models.CharField(max_length=20)
+    duracion_cargo=models.CharField(max_length=40)
+
+
+
     class Meta:
         db_table='cargos'
 

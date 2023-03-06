@@ -71,22 +71,26 @@ def empleado(request):
 def homeemp(request):
     return render(request, 'homeemp.html')
 
+
+from django.core.paginator import Paginator
 def registroemp(request):
 
 
     empleados=insertempl.objects.all()
     
     docs=  documentoemp.objects.all()
-    
+
+ 
+
     context={
         
         
         'empleados':empleados,
-        
+       
     }
 
     
-    
+ 
 
     return render(request,"registroemp.html",context) 
 
@@ -213,13 +217,22 @@ def cargoregister(request):
 
 def añadircargo(request):
     if request.method=='POST':
-     if request.POST.get('id') and request.POST.get('empleado') and request.POST.get('nombre') and request.POST.get('descripcion') and request.POST.get('salario'):
+     if request.POST.get('id') and request.POST.get('empleado') and request.POST.get('nombre') and request.POST.get('descripcion') and request.POST.get('salario') and request.POST.get('apellido_empleado') and request.POST.get('sucursal_asignado') and request.POST.get('estado')and request.POST.get('departamento')and request.POST.get('traslado')and request.POST.get('duracion_cargo'):
          addcargo=cargo()
          addcargo.empleado=request.POST.get('empleado')
          addcargo.id=request.POST.get('id')
          addcargo.nombre=request.POST.get('nombre')
          addcargo.descripcion=request.POST.get('descripcion')
          addcargo.salario=request.POST.get('salario')
+
+         addcargo.apellido_empleado=request.POST.get('apellido_empleado')
+         addcargo.estado=request.POST.get('estado')
+         addcargo.sucursal_asignado=request.POST.get('sucursal_asignado')
+
+         addcargo.departamento=request.POST.get('departamento')
+         addcargo.duracion_cargo=request.POST.get('duracion_cargo')
+         addcargo.traslado=request.POST.get('traslado')
+         
          
          addcargo.save()
          
@@ -241,7 +254,23 @@ def actializarcargo(request , id ):
     nombre=request.POST.get('nombre')
     descripcion=request.POST.get('descripcion')
     salario=request.POST.get('salario')
+    apellido_empleado=request.POST.get('apellido_empleado')
+    sucursal_asignado=request.POST.get('sucursal_asignado')
+    estado=request.POST.get('estado')
 
+    duracion_cargo=request.POST.get('duracion_cargo')
+    traslado=request.POST.get('traslado')
+    departamento=request.POST.get('departamento')
+
+    car.duracion_cargo=duracion_cargo
+    car.traslado=traslado
+    car.departamento=departamento
+
+    car.apellido_empleado=apellido_empleado
+    car.sucursal_asignado=sucursal_asignado
+    car.estado=estado
+
+    
 
     car.nombre=nombre
     car.empleado=empleado

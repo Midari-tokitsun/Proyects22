@@ -167,8 +167,8 @@
               </div>
               </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button id="datec" type="submit" class="btn btn-primary" >Save changes</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button onclick="validarFechaNA()" type="submit" class="btn btn-primary" >Guardar Cambios</button>
             </div>
           </div>
         </div>
@@ -255,15 +255,16 @@
          
   </table>
   <div class="clearfix">
-    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+    <div class="hint-text">Mostrando <b>5</b> de <b>25</b> Paginas</div>
     <ul class="pagination">
-        <li class="page-item disabled"><a href="#">Previous</a></li>
+   
+      <li class="page-item"><a href="#" class="page-link">Anterior</a></li>
         <li class="page-item"><a href="#" class="page-link">1</a></li>
         <li class="page-item"><a href="#" class="page-link">2</a></li>
         <li class="page-item active"><a href="#" class="page-link">3</a></li>
         <li class="page-item"><a href="#" class="page-link">4</a></li>
         <li class="page-item"><a href="#" class="page-link">5</a></li>
-        <li class="page-item"><a href="#" class="page-link">Next</a></li>
+        <li class="page-item"><a href="#" class="page-link">Siguiente</a></li>
     </ul>
 </div>
 </div>    
@@ -559,7 +560,44 @@
 
 
 
-<script src="{% static 'js/registroemp.js' %}"></script>
+<script >
+
+
+function validarFechaNA() {
+  
+  let fecha_nacimiento= "2023-03-06 "
+  let fecha1 = new Date( fecha_nacimiento.split("-").join("/"))
+  let fechahoy = new Date()
+
+  if(fecha1>fechahoy){
+    alert("la fecha es Adelnatada ")
+    
+    return false
+
+  }else if(fecha1.getTime()==fechahoy){
+    alert("la fecha es corecta")
+    return true
+
+  }else if(fecha1<fechahoy){
+    alert("la fecha es Atrasada")
+    return false
+  }
+
+
+
+  }
+function validarFechaCO() {
+  
+    var fechaStr = document.getElementById('fecha_contratacion').value;
+    var fecha = Date.parse(fechaStr);
+    if (isNaN(fecha)) {
+        alert('Fecha no válida');
+    }
+}
+
+
+
+</script>
   
 
 </body>

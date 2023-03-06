@@ -84,8 +84,14 @@
           <th><input type="checkbox" id="checkall" name="options[]" value="1"/></th>
             <th>ID CARGO</th>
             <th>Nombre del Empleado</th>
+            <th>Apellido del Empleado</th>
+            <th>Departamento</th>
             <th>Nombre del Cargo</th>
-            <th>DEscripcion del Cargo</th>
+            <th>Sucursal Asignado</th>
+            <th>Estado</th>
+            <th>traslado</th>
+            <th>duracion del cargo</th>
+            <th>Descripcion del Cargo</th>
             <th>Salario</th>
             <th>Editar</th>
             <th>Eliminar</th>
@@ -97,7 +103,13 @@
  <td><input type="checkbox" class="checkthis" /></td>
  <td>{{ carg.id }}</td>  
  <td>{{ carg.empleado }}</td>
- <td>{{ carg.nombre}}</td>  
+ <td>{{ carg.apellido_empleado }}</td>
+ <td>{{ carg.departamento }}</td>
+ <td>{{ carg.nombre}}</td> 
+ <td>{{ carg.sucursal_asignado }}</td> 
+ <td>{{ carg.estado }}</td>
+ <td>{{ carg.traslado }}</td>
+ <td> {{ carg.duracion_cargo }} </td>
  <td>{{ carg.descripcion }}</td>  
  <td>{{ carg.salario }}</td>
  <td>
@@ -172,9 +184,69 @@
           <input type="text"   name="empleado" required placeholder="Nombre del Empleado"  class="form-control" pattern="[a-zA-z]+" >
         </div>
 
+
+        <div class="col-md-6 mb-4">
+          <p>Apellido del Empleado</p>
+          <input type="text"   name="apellido_empleado" required placeholder="Apellido del Empleado"  class="form-control" pattern="[a-zA-z]+" >
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <p>Departamento</p>
+          <input type="text"   name="departamento" required placeholder="departamento"  class="form-control" pattern="[a-zA-z]+" >
+        </div>
+
+
+
+
         <div class="col-md-6 mb-4">
           <p>Nombre del Cargo</p>
           <input type="text"  name="nombre" required placeholder="Introduce el Nombre del Cargo" pattern="[a-zA-z]+"  class="form-control">
+        </div>
+
+
+        
+        <div class="col-md-6 mb-4">
+          <p>Sucursal Asignado</p>
+          <input type="text"   name="sucursal_asignado" required placeholder="Sucursal"  class="form-control" pattern="[a-zA-z]+" >
+        </div>
+
+
+
+        <div class="col-md-6 mb-4 ">
+          <label class="form-label" for="form3Example1q">Estado </label>   
+          <select class="form-select" id="estado" name="estado" required>
+            <option selected disabled value="" required>Estado</option>
+            <option>Cancelado</option>
+            <option>Pendiente</option>
+            <option>Realizado</option>
+            <option>PosPuesto</option>
+          
+          </select>
+
+        </div>
+
+
+
+        <div class="col-md-6 mb-4 ">
+          <label class="form-label" for="form3Example1q">Traslado </label>   
+          <select class="form-select" id="traslado" name="traslado" required>
+            <option selected disabled value="" required>Traslado</option>
+            <option>SI</option>
+            <option>NO</option>
+
+          </select>
+        </div>
+
+
+
+        <div class="col-md-6 mb-4 ">
+          <label class="form-label" for="form3Example1q">Duracion Del Cargo </label>   
+          <select class="form-select" id="duracion_cargo" name="duracion_cargo" required>
+            <option selected disabled value="" required>Duracion del Cargo</option>
+            <option>Temporal</option>
+            <option>Permanente</option>
+          </select>
+
         </div>
 
 
@@ -246,12 +318,72 @@
                     <p>Nombre del Empleado</p>
                     <input type="text" value="{{ carg.empleado }}"  name="empleado" required placeholder="Nombre del Empleado"  class="form-control" pattern="[a-zA-z]+" >
                   </div>
+
+
+                  <div class="col-md-6 mb-4">
+                    <p>Apellido del Empleado</p>
+                    <input type="text" value="{{ carg.apellido_empleado }}"  name="apellido_empleado" required placeholder="Apellido del Empleado"  class="form-control" pattern="[a-zA-z]+" >
+                  </div>   
+          
+
+
           
                   <div class="col-md-6 mb-4">
                     <p>Nombre del Cargo</p>
                     <input type="text" value="{{ carg.nombre }}" pattern="[a-zA-z]+"  name="nombre"  placeholder="Introduce el Nombre del Cargo"   class="form-control">
                   </div>
           
+
+                  <div class="col-md-6 mb-4">
+                    <p>Departamento</p>
+                    <input type="text" value="{{ carg.departamento }}" pattern="[a-zA-z]+"  name="departamento"  placeholder="Introduce el Nombre del Departamento"   class="form-control">
+                  </div>   
+                    
+                     
+     <div class="col-md-6 mb-4">
+      <p>Sucursal Asignado</p>
+      <input type="text" value="{{ carg.sucursal_asignado }}"   name="sucursal_asignado" required placeholder="Sucursal"  class="form-control" pattern="[a-zA-z]+" >
+    </div>
+
+
+    
+    <div class="col-md-6 mb-4 ">
+      <label class="form-label" for="form3Example1q">Traslado </label>   
+      <select class="form-select" id="traslado" name="traslado" required>
+        <option selected value="{{carg.traslado}}" required>{{carg.traslado}}</option>
+        <option>SI</option>
+        <option>NO</option>
+
+      </select>
+    </div>
+
+
+
+    <div class="col-md-6 mb-4 ">
+      <label class="form-label" for="form3Example1q">Duracion Del Cargo </label>   
+      <select class="form-select" id="duracion_cargo" name="duracion_cargo" required>
+        <option selected value="{{carg.duracion_cargo}}" required>{{carg.duracion_cargo}}</option>
+        <option>Temporal</option>
+        <option>Permanente</option>
+      </select>
+
+    </div>
+
+
+    
+    <div class="col-md-6 mb-4 ">
+      <label class="form-label" for="form3Example1q">Estado </label>   
+      <select class="form-select" id="estado" name="estado" required>
+        <option selected value="{{ carg.estado }}" required>{{ carg.estado }}</option>
+        <option>Cancelado</option>
+        <option>Pendiente</option>
+        <option>Realizado</option>
+        <option>PosPuesto</option>
+      
+      </select>
+
+    </div>
+
           
                   <div class="col-md-6 mb-4">
                     <p>Descripcion</p>
@@ -306,71 +438,105 @@
 
                 <table>
                 
-                  
-                    
-                  <tr>
-                      
-                        
-                        <td>
-                          <div class="row">
-                          <label>ID </label> 
-                          <fieldset disabled>
-                          <input name="id" required value="{{carg.id}}"  class="form-control">
-                        </fieldset>
-                        </div>
-                        </td>
-                    </tr>
-                  
-
-                    <td>
-                      <div class="row">
-                      <label>Nombre del Empleado</label> 
-                      <fieldset disabled>
-                      <input name="empleado" required value="{{carg.empleado}}"  class="form-control">
-                    </fieldset>
+                  <div class="row">
+        
+        
+                    <div class="col-md-6 mb-4">
+                      <p>ID</p>
+                      <input disabled  type="number" value="{{carg.id}}" name="id" placeholder="ID" required class="form-control">
                     </div>
-                    </td>
-                </tr>
-  
-                     <tr>
-  
-                      <td>
-                        <div class="row">
-  
-                          <label>Nombre del Cargo</label>
-                          <input disabled name="nombre" required value="{{carg.nombre}}"  class="form-control">
-                        </div>
-  
-                           
-                       </td>
-  
-                      </tr>
-  
-                    <tr>
-  
-                        <td>
-                          <div class="row">
-  
-                          <label>Descripcion</label>
-                          <input disabled name="descripcion" required value="{{carg.descripcion}}"  class="form-control">
-                        </div>
-                          
-                        </td>
+            
+            
+                    <div class="col-md-6 mb-4">
+                      <p>Nombre del Empleado</p>
+                      <input disabled type="text" value="{{ carg.empleado }}"  name="empleado" required placeholder="Nombre del Empleado"  class="form-control" pattern="[a-zA-z]+" >
+                    </div>
+
+
+
+                    <div class="col-md-6 mb-4">
+                      <p>Departamento</p>
+                       <input disabled type="text" value="{{ carg.departamento }}" pattern="[a-zA-z]+"  name="nombre"  placeholder="Introduce el Nombre del Cargo"   class="form-control">
+                     </div>   
+             
+                 <div class="col-md-6 mb-4 ">
+                   <label class="form-label" for="form3Example1q">Traslado </label>   
+                   <select disabled class="form-select" id="traslado" name="traslado" required>
+                     <option selected disabled value="{{carg.traslado}}" required>{{carg.traslado}}</option>
+                     <option>SI</option>
+                     <option>NO</option>
+             
+                   </select>
+                 </div>
+             
+             
+                 <div class="col-md-6 mb-4 ">
+                   <label class="form-label" for="form3Example1q">Duracion Del Cargo </label>   
+                   <select disabled class="form-select" id="duracion_cargo" name="duracion_cargo" required>
+                     <option selected disabled value="{{carg.duracion_cargo}}" required>{{carg.duracion_cargo}}</option>
+                     <option>Temporal</option>
+                     <option>Permanente</option>
+                   </select>
+             
+                 </div>
+             
+
                     
-                      </tr>
+    
+  
+                    <div class="col-md-6 mb-4">
+                      <p>Apellido del Empleado</p>
+                      <input disabled type="text" value="{{ carg.apellido_empleado }}"  name="apellido_empleado" required placeholder="Apellido del Empleado"  class="form-control" pattern="[a-zA-z]+" >
+                    </div>   
+            
+  
+  
+            
+                    <div class="col-md-6 mb-4">
+                      <p>Nombre del Cargo</p>
+                      <input  disabled type="text" value="{{ carg.nombre }}" pattern="[a-zA-z]+"  name="nombre"  placeholder="Introduce el Nombre del Cargo"   class="form-control">
+                    </div>
+            
+  
                     
+                      
+                       
+       <div class="col-md-6 mb-4">
+        <p>Sucursal Asignado</p>
+        <input disabled type="text" value="{{ carg.sucursal_asignado }}"   name="sucursal_asignado" required placeholder="Sucursal"  class="form-control" pattern="[a-zA-z]+" >
+      </div>
   
-                 
-                    <tr>
-                        <td>
-                          <div class="col-md-6 mb-2">
   
-                          <label >Salario</label>
-                          <input disabled type="number" name="salario" required value="{{carg.salario}}"  class="form-control">
-                        </div>
-                        </td>
+      
+      <div class="col-md-6 mb-4 ">
+        <label  class="form-label" for="form3Example1q">Estado </label>   
+        <select disabled class="form-select" id="estado" name="estado" required>
+          <option selected disabled value="{{ carg.estado }}" required>{{ carg.estado }}</option>
+          <option>Cancelado</option>
+          <option>Pendiente</option>
+          <option>Realizado</option>
+          <option>PosPuesto</option>
+        
+        </select>
   
-                    </tr>
+      </div>
+  
+            
+                    <div class="col-md-6 mb-4">
+                      <p>Descripcion</p>
+                      <input type="text" disabled value="{{ carg.descripcion }}" name="descripcion" required placeholder="Descripcion del Cargo"  class="form-control">
+                    </div>
+            
+            
+            
+                    <div class="col-md-6 mb-4">
+                      <p>Salario</p>
+                      <input disabled type="number" value="{{ carg.salario }}" min="1" max="10000" step="1" name="salario" placeholder="salario" required  class="form-control" pattern="[0-9]{10}+">
+                    </div>
+            
+            
+                    </div>
+            
                   
      
                 </table>
