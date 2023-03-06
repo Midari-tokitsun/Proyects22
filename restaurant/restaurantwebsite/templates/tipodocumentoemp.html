@@ -62,7 +62,7 @@
       
       
       <div class="container">
-        <form action="{% url 'buscardocuemntoemp' %}" class="form-inline my-2 my-lg-0 mr-4" method="GET"  >
+        <form action="{% url 'tipodocumentoemp' %}" class="form-inline my-2 my-lg-0 mr-4" method="GET"  >
          
           <input value="{{ request.GET.buscardocuemntoemp }}" name="buscardocuemntoemp" class="form-control mr-sm-2s" type="search" placeholder="Buscar el Empleado" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Buscar Empleado</button>
@@ -138,17 +138,21 @@
       
       </table>
       <div class="clearfix">
-        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+        <div class="hint-text">paginacion</div>
         <ul class="pagination">
-            <li class="page-item disabled"><a href="#">Previous</a></li>
-            <li class="page-item"><a href="#" class="page-link">1</a></li>
-            <li class="page-item"><a href="#" class="page-link">2</a></li>
-            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-            <li class="page-item"><a href="#" class="page-link">4</a></li>
-            <li class="page-item"><a href="#" class="page-link">5</a></li>
-            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+       {% if docs.has_previous %} 
+          <li class="page-item"><a href="?page={{ docs.previous_page_number }}{% if request.GET.buscardocuemntoemp %}&q={{ request.GET.buscardocuemntoemp }}{% endif %}" class="page-link">Anterior</a></li>
+          {% endif %}
+      
+      
+      
+      
+            {% if docs.has_next %} 
+            <li class="page-item"><a href="?page={{ docs.next_page_number }}{% if request.GET.buscardocuemntoemp %}&q={{ request.GET.buscarcbuscardocuemntoemp }}{% endif %}"  class="page-link">Siguiente</a></li>
+            {% endif %}
         </ul>
-    </div>
+      
+      </div>
 </div>    
       <!-- Modal -->
       
@@ -204,11 +208,10 @@
         </div>
   
   
-          <div class="col-md-6 mb-4">
-            <p>Numero Identificacion</p>
-            <input type="number"  min="1" max="" step="1"  name="numero_identificacion" placeholder="Numero de identificacion" required  class="form-control" pattern="[0-9]{10}+">
-          </div>
-  
+        <div class="col-md-6 mb-4 ">
+          <input required type="text" maxlength="13" min="9" pattern="[A-Za-z0-9_-]{9,15}" id="numero_identificacion" name="numero_identificacion" class="form-control" />
+          <label class="form-label" for="form3Example1q">Numero del Documento de identificacion</label>
+        </div>
   
           <div class="col-md-6 mb-4">
             <label class="form-label" for="form3Example1q">Licencia de Conducir</label>
@@ -297,14 +300,11 @@
                       <label class="form-label" for="form3Example1q">Tipo Identificacion</label>
                     </div>
 
-                      <div class="col-md-6 mb-4 ">
-                        <input value="{{ doc.numero_identificacion }}" required type="text" 
-                        required minlength="8" maxlength="8"  pattern="[0-9]+"
-                        id="documento_identificacion" name="numero_identificacion" class="form-control" />
-                        <label class="form-label" for="form3Example1q">Numero de identificacion</label>
-                      </div>
-
                
+                      <div class="col-md-6 mb-4 ">
+                        <input value="{{ doc.numero_identificacion }}" required type="text" maxlength="13" min="9" pattern="[A-Za-z0-9_-]{9,15}" id="numero_identificacion" name="numero_identificacion" class="form-control" />
+                        <label class="form-label" for="form3Example1q">Numero del Documento de identificacion</label>
+                      </div>
 
 
 

@@ -43,7 +43,7 @@ urlpatterns = [
     path('delete/<int:id>', views.destroy , name="destroy"),# BOrrar Registro EMP    
     path('edit/<int:id>', views.edit , name="edit"),# enlista los datos de El EMPLEADO    
     path('update/<int:id>', views.updateemp , name="updateemp"),# Actualizar una vez editados El EMPLEADO
-    path('buscar/', views.buscaremp , name="buscaremp"),# ver EMpleado
+    path('buscar/', views.registroemp , name="registroemp"),# ver EMpleado
 
 
 # ver Editar,eliminar,añadir,enlistar y Buscar Cargo
@@ -54,7 +54,7 @@ urlpatterns = [
     path('actializarcargo/<int:id>', views.actializarcargo , name="actializarcargo"),
     path('borrarcargo/<int:id>', views.borrarcargo , name="borrarcargo"),
     path('visualizarcargo/<int:id>', views.visualizarcargo , name="visualizarcargo"),
-    path('buscarcargosemp/', views.buscarcargosemp , name="buscarcargosemp"),# ver EMpleado
+    path('buscarcargosemp/', views.cargoregister , name="cargoregister"),# ver EMpleado
 
 
 
@@ -69,7 +69,7 @@ urlpatterns = [
     path('borrartipodocumentoemp/<int:id>', views.borrartipodocumentoemp , name="borrartipodocumentoemp"),
     path('editartipodedocumento/<int:id>', views.editartipodedocumento , name="editartipodedocumento"),
     path('actualizartipodedocumento/<int:id>', views.actualizartipodedocumento , name="actializartipodedocumento"),
-    path('buscardocuemntoemp/', views.buscardocuemntoemp , name="buscardocuemntoemp"),# ver EMpleado
+    path('buscardocuemntoemp/', views.tipodocumentoemp , name="tipodocumentoemp"),# ver EMpleado
  
 
 

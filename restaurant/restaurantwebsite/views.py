@@ -4,6 +4,7 @@ from django.contrib.auth import logout,login,authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.views.generic import ListView
 
 from django.db.models import Q
 
@@ -80,7 +81,53 @@ def registroemp(request):
     
     docs=  documentoemp.objects.all()
 
+    paginator = Paginator(empleados,2)
+    page=request.GET.get('page')
+    empleados=paginator.get_page(page)
+
+
+    
+    if request.method == 'GET' :
+        query = request.GET.get('buscaremp')
+
+
+        paginator = Paginator(empleados,2)
+        page=request.GET.get('page')
+        empleados=paginator.get_page(page)
+        
+        
+
+        if query:
+   
+
+
+
+            empleados = insertempl.objects.filter(
+
+
+
+            Q(nombre__icontains=query) |
+            Q(apellido__icontains=query) ).distinct
+
+            print("lo encontre!!!!")
+
  
+
+
+        else:
+            empleados=insertempl.objects.all()
+
+
+            paginator = Paginator(empleados,2)
+            page=request.GET.get('page')
+            empleados=paginator.get_page(page)
+
+
+
+            query = request.GET.get('buscaremp')
+            print("Enlistando Todos los REgistros ")
+
+            
 
     context={
         
@@ -89,34 +136,14 @@ def registroemp(request):
        
     }
 
-    
+
  
 
     return render(request,"registroemp.html",context) 
 
 
 
-def buscaremp(request):
-    if request.method == 'GET' :
-        query = request.GET.get('buscaremp')
-
-        if query:
-            empleados = insertempl.objects.filter(
-            
-            Q(nombre__icontains=query) |
-            Q(apellido__icontains=query) ).distinct
-
-            return render(request, 'registroemp.html' , {'empleados':empleados})
-        
-         
-        else:
-            empleados=insertempl.objects.all()
-
-            query = request.GET.get('buscaremp')
-            print("NO HAY INFORMACION POAARA MOSTRAR")
-            return render(request, 'registroemp.html',{'empleados':empleados})
-    
-    return render(request,"registroemp.html")    
+  
     
    
 
@@ -206,7 +233,50 @@ def destroy(request, id):
 
 def cargoregister(request):
 
+
+
     car=cargo.objects.all()
+
+    paginator = Paginator(car,2)
+    page=request.GET.get('page')
+    car=paginator.get_page(page)
+
+
+
+    if request.method == 'GET' :
+        query = request.GET.get('buscarcargosemp')
+
+        paginator = Paginator(car,2)
+        page=request.GET.get('page')
+        car=paginator.get_page(page)
+    
+
+        if query:
+            car = cargo.objects.filter(
+
+
+
+
+            Q(apellido_empleado__icontains=query) |
+            Q(empleado__icontains=query) ).distinct
+            print("Lo encontre EL CARGO ES!!!")    
+         
+        else:
+            car=cargo.objects.all()
+
+
+            paginator = Paginator(car,2)
+            page=request.GET.get('page')
+            car=paginator.get_page(page)    
+
+            query = request.GET.get('buscarcargosemp')
+            print("REtornando de vuelta a la vista principal de CARGOS")
+
+
+
+
+
+
     context={
         'car':car
     }
@@ -306,30 +376,6 @@ def borrarcargo(request , id):
 
 
 
-def buscarcargosemp(request):
-    if request.method == 'GET' :
-        query = request.GET.get('buscarcargosemp')
-
-        if query:
-            car = cargo.objects.filter(
-            
-            Q(nombre__icontains=query) |
-            Q(empleado__icontains=query) ).distinct
-
-            return render(request, 'cargoregister.html' , {'car':car})
-        
-         
-        else:
-            car=cargo.objects.all()
-
-
-            
-
-            query = request.GET.get('buscarcargosemp')
-            print("NO HAY INFORMACION POAARA MOSTRAR")
-            return render(request, 'cargoregister.html',{'car':car})
-    
-    return render(request,"cargoregister.html")    
     
 
 
@@ -339,7 +385,47 @@ def buscarcargosemp(request):
 def tipodocumentoemp(request):
 
     docs=  documentoemp.objects.all()
-    
+
+    paginator = Paginator(docs,2)
+    page=request.GET.get('page')
+    docs=paginator.get_page(page)
+
+
+    if request.method == 'GET' :
+        query = request.GET.get('buscardocuemntoemp')
+
+
+        paginator = Paginator(docs,2)
+        page=request.GET.get('page')
+        docs=paginator.get_page(page)
+
+
+
+        if query:
+            docs = documentoemp.objects.filter(
+            
+            Q(nombre__icontains=query) |
+            Q(apellido__icontains=query) ).distinct
+
+            print("LO ENCONTRE Y TE ENLISTOS SUS REFERENCIAS!!")
+        
+         
+        else:
+            docs=documentoemp.objects.all()
+
+
+            paginator = Paginator(docs,2)
+            page=request.GET.get('page')
+            docs=paginator.get_page(page)
+
+
+            
+
+            query = request.GET.get('buscardocuemntoemp')
+            print("Retornando a Todos los registros")
+ 
+
+
     context={
         
         'docs':docs
@@ -409,29 +495,3 @@ def actualizartipodedocumento(request , id ):
     messages.info(request,"ITEM ACTUALIZADO EXITOSAMENTE")
     return redirect("tipodocumentoemp")
 
-
-def buscardocuemntoemp(request):
-    if request.method == 'GET' :
-        query = request.GET.get('buscardocuemntoemp')
-
-        if query:
-            docs = documentoemp.objects.filter(
-            
-            Q(nombre__icontains=query) |
-            Q(apellido__icontains=query) ).distinct
-
-            return render(request, 'tipodocumentoemp.html' , {'docs':docs})
-        
-         
-        else:
-            docs=documentoemp.objects.all()
-
-
-            
-
-            query = request.GET.get('buscardocuemntoemp')
-            print("NO HAY INFORMACION POAARA MOSTRAR")
-            return render(request, 'tipodocumentoemp.html',{'docs':docs})
-    
-    return render(request,"tipodocumentoemp.html")    
-    

@@ -111,8 +111,8 @@
                       </div>
 
                         <div class="col-md-6 mb-4 ">
-                          <input required type="text" id="documento_identificacion" name="documento_identificacion" class="form-control" />
-                          <label class="form-label" for="form3Example1q">Documento de identificacion</label>
+                          <input required type="text" maxlength="13" min="9" pattern="[A-Za-z0-9_-]{9,15}" id="documento_identificacion" name="documento_identificacion" class="form-control" />
+                          <label class="form-label" for="form3Example1q">Numero del Documento de identificacion</label>
                         </div>
 
                         <div class="col-md-6 mb-4 ">
@@ -134,13 +134,13 @@
 
 
                         <div class="col-md-6 mb-4 ">
-                          <input required type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" />
+                          <input required type="date"min="2005-03-0" max="1995-01-01"  id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" />
                           <label class="form-label" for="form3Example1q">Fecha de Nacimiento</label>
                         </div>
 
                         <div class="col-md-6 mb-4 ">
                           <p id="inputerrordate"></p>
-                          <input required type="date" id="fecha_contratacion" name="fecha_contratacion" class="form-control" />
+                          <input required type="date" min="2023-03-06" max="2023-03-06" id="fecha_contratacion" name="fecha_contratacion" class="form-control" />
                           <label class="form-label" for="form3Example1q">Fecha de Contratacion</label>
                         </div>
     
@@ -168,7 +168,7 @@
               </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button onclick="validarFechaNA()" type="submit" class="btn btn-primary" >Guardar Cambios</button>
+              <button onclick="" type="submit" class="btn btn-primary" >Guardar Cambios</button>
             </div>
           </div>
         </div>
@@ -182,9 +182,9 @@
         <br>
 
         <div class="container">
-        <form action="{% url 'buscaremp' %}" class="form-inline my-2 my-lg-0 mr-4" method="GET"  >
+        <form action="{% url 'registroemp' %}" class="form-inline my-2 my-lg-0 mr-4" method="GET"  >
          
-          <input value="{{ request.GET.buscaremp }}" name="buscaremp" class="form-control mr-sm-2s" type="search" placeholder="Buscar el Empleado" aria-label="Search">
+          <input value="{{ request.GET.registroemp }}" name="buscaremp" class="form-control mr-sm-2s" type="search" placeholder="Buscar el Empleado" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Buscar Empleado</button>
         </form>
       </div>
@@ -255,17 +255,20 @@
          
   </table>
   <div class="clearfix">
-    <div class="hint-text">Mostrando <b>5</b> de <b>25</b> Paginas</div>
+    <div class="hint-text">paginacion</div>
     <ul class="pagination">
-   
-      <li class="page-item"><a href="#" class="page-link">Anterior</a></li>
-        <li class="page-item"><a href="#" class="page-link">1</a></li>
-        <li class="page-item"><a href="#" class="page-link">2</a></li>
-        <li class="page-item active"><a href="#" class="page-link">3</a></li>
-        <li class="page-item"><a href="#" class="page-link">4</a></li>
-        <li class="page-item"><a href="#" class="page-link">5</a></li>
-        <li class="page-item"><a href="#" class="page-link">Siguiente</a></li>
+   {% if empleados.has_previous %} 
+      <li class="page-item"><a href="?page={{ empleados.previous_page_number }}{% if request.GET.buscaremp %}&q={{ request.GET.buscaremp }}{% endif %}" class="page-link">Anterior</a></li>
+      {% endif %}
+
+
+
+
+        {% if empleados.has_next %} 
+        <li class="page-item"><a href="?page={{ empleados.next_page_number }}{% if request.GET.buscaremp %}&q={{ request.GET.buscaremp }}{% endif %}"  class="page-link">Siguiente</a></li>
+        {% endif %}
     </ul>
+    
 </div>
 </div>    
 </div>
@@ -325,7 +328,7 @@
                     </div>
 
                       <div class="col-md-6 mb-4 ">
-                        <input value="{{ empleado.documento_identificacion }}" required type="text" id="documento_identificacion" name="documento_identificacion" class="form-control" />
+                        <input  maxlength="13" min="9" pattern="[A-Za-z0-9_-]{9,15}" value="{{ empleado.documento_identificacion }}" required type="text" id="documento_identificacion" name="documento_identificacion" class="form-control" />
                         <label class="form-label" for="form3Example1q">Documento de identificacion</label>
                       </div>
 
@@ -356,7 +359,7 @@
 
                       <div class="col-md-6 mb-4 ">
                         <p id="inputerrordate"></p>
-                        <input required type="date" value="{{ empleado.fecha_contratacion }}" id="fecha_contratacion" name="fecha_contratacion" class="form-control" /><i>{{ empleado.fecha_contratacion }}</i>
+                        <input required type="date"  min="2023-03-06" max="2023-03-06" value="{{ empleado.fecha_contratacion }}" id="fecha_contratacion" name="fecha_contratacion" class="form-control" /><i>{{ empleado.fecha_contratacion }}</i>
                         <label class="form-label" for="form3Example1q">Fecha de Contratacion</label>
                       </div>
   
@@ -472,14 +475,14 @@
 
                   <div class="col-md-6 mb-4 ">
                    
-                    <input disabled value="{{ empleado.fecha_nacimiento }}" required type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" /> <i>{{ empleado.fecha_nacimiento }}</i>
+                    <input disabled value="{{ empleado.fecha_nacimiento }}" required type="text" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" /> 
 
                     <label class="form-label" for="form3Example1q">Fecha de Nacimiento</label>
                   </div>
 
                   <div class="col-md-6 mb-4 ">
                     <p id="inputerrordate"></p>
-                    <input disabled required type="date" value="{{ empleado.fecha_contratacion }}" id="fecha_contratacion" name="fecha_contratacion" class="form-control" /><i>{{ empleado.fecha_contratacion }}</i>
+                    <input disabled required type="text" value="{{ empleado.fecha_contratacion }}" id="fecha_contratacion" name="fecha_contratacion" class="form-control" />
                     <label class="form-label" for="form3Example1q">Fecha de Contratacion</label>
                   </div>
 
@@ -514,7 +517,7 @@
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CERRAR</button>
       </div>
     </div>
   </div>
@@ -561,6 +564,22 @@
 
 
 <script >
+
+
+
+function añadir(){
+
+alert("Su Registro Se ha Añadido Con exito!! Vamos a Retornar a la Principal")
+
+}
+
+
+function editar(){
+alert("Su Edicion ha Sido Añadido Con Exito")
+
+}
+
+
 
 
 function validarFechaNA() {
