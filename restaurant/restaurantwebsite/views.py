@@ -12,7 +12,73 @@ from django.db.models import Q
 # VISTA USUARIO
 
 
+def tableuser(request):
+    user=insertuser.objects.all()
+
+    context={
+        'user':user
+    }
+
+    return render(request,"usuarios.html",context)
+
+
+
+def registrarentablausuario(request):
+    if request.method=='POST':
+        if request.POST.get('username') and request.POST.get('password'):
+         saverecord = insertuser()
+         saverecord.username=request.POST.get('username')
+         saverecord.nombre=request.POST.get('nombre')
+         saverecord.email=request.POST.get('email')
+         saverecord.password=request.POST.get('password')
+         
+         saverecord.save()
+         
+        print("USUARIO CREADO EXITOSAMENTE")
+        return redirect("tableuser")
+    else: 
+        return redirect("tableuser") 
+
+
+def editarusuario(request):
+    user=insertuser.objects.all()
+
+    context={
+        'user':user
+    }
+
+    return render(request,'usuarios.html', context)
+
+
+def actualizarusuario(request,id):
+
+    user= insertuser.objects.get(id_usuario=id)
+    id=request.POST.get('id_usuario')
+
+    username=request.POST.get('username')
+    password=request.POST.get('password')
+
+    nombre=request.POST.get('nombre')
+
+    email=request.POST.get('email')
+
+    user.id_usuario=id
+    user.username=username
+    user.password=password
+    user.nombre=nombre
+    user.email=email
+
+    user.save()
   
+    print("SU USUARIO HA SIDO MODIFICADO CON EXITO")
+    return redirect("tableuser")
+
+
+def eliminarusuario(request,id):
+
+    return redirect("tableuser")
+
+
 
 def signup(request):
     if request.method=='POST':
@@ -25,7 +91,7 @@ def signup(request):
          
          saverecord.save()
          
-         messages.success(request, 'Usuario Creado Exitosamente!!')
+        print("USUARIO CREADO EXITOSAMENTE")
         return render(request, 'signup.html')
     else: 
         return render(request, 'signup.html') 

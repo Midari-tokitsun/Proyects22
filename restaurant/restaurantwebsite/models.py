@@ -1,6 +1,7 @@
 from django.db import models
 
 class insertuser(models.Model):
+    id_usuario=models.CharField(primary_key=True,max_length=40)
     username = models.CharField(max_length=100)
     nombre = models.CharField(max_length=100)
     email = models.CharField(max_length=100)

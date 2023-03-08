@@ -27,6 +27,20 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
 # VISTA DE CLIENTE
+    path("registrousuarios/",views.tableuser, name="tableuser"),# REgistro y tabla de clientes Cliente
+    path("registrartablausuario/",views.registrarentablausuario, name="registrarentablausuario"),# REgistro Cliente EN LA TABLA
+
+    path("eliminarusuario/<int:id>",views.eliminarusuario, name="eliminarusuario"),# REgistro Cliente EN LA TABLA
+
+
+    path("actualizarusuario/<int:id>",views.actualizarusuario, name="actualizarusuario"),# REgistro Cliente EN LA TABLA
+
+    path("editarusuario/<int:id>",views.editarusuario, name="editarusuario"),# REgistro Cliente EN LA TABLA
+
+
+
+
+
     path("signup/",views.signup, name="signup"),# REgistro Cliente
     path("usuario/",views.home, name="home"),# HomePAge Usuario
     path("login_user/",views.login_user, name="login_user"),# Log in USuario

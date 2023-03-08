@@ -19,12 +19,12 @@ body{
 
 }
 .container{
-  max-width: 700px;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.137);
-  padding: 25px 30px;
-  border-radius: 5px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.247);
+    max-width: 700px;
+    width: 100%;
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15)
   
 }
 .container .title{
