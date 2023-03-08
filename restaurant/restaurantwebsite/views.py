@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from restaurantwebsite.models import insertuser,insertempl,cargo,documentoemp,departamento,puesto
+from restaurantwebsite.models import insertuser,insertempl,cargo,documentoemp,departamento,puesto,sucursal
 from django.contrib.auth import logout,login,authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -673,3 +673,59 @@ def actualizarpuesto(request ,id):
     return redirect("puestohome")
 
 
+#Fin de la Vista de Puestos
+
+#VISTA DE SUCURSALES
+
+def sucursalhome(request):
+    sucu=sucursal.objects.all()
+    context={
+        'sucu':sucu
+    }
+
+    return render(request,"sucursal.html",context)
+
+def añadirsucursal(request):
+        if request.method=='POST':
+         if request.POST.get('id_sucursal') and request.POST.get('direccion_sucursal') and request.POST.get('descripcion'):
+
+          sucu=sucursal()
+          sucu.id_sucursal=request.POST.get('id_sucursal')
+          sucu.direccion_sucursal=request.POST.get('direccion_sucursal')
+          sucu.descripcion=request.POST.get('descripcion')  
+
+          sucu.save()
+         print("Se ha registrado su Registro a la Pagina de SUUCRSAL")
+        return redirect('sucursalhome')
+
+
+def eliminarsucurusal(request , id):
+    sucu = sucursal.objects.get(id_sucursal=id)  
+    sucu.delete()  
+    return redirect("sucursalhome")
+
+def editarsucursal(request):
+    sucu=sucursal.objects.all()
+
+    context={
+        'sucu':sucu
+
+
+    }
+
+    return render(request,"sucursal.html",context)
+
+
+def actualizarsucursal(request ,id):
+    sucu= sucursal.objects.get(id_sucursal=id)
+    sucu.id_sucursal=request.POST.get('id_sucursal')
+    sucu.direccion_sucursal=request.POST.get('direccion_sucursal')
+    sucu.descripcion=request.POST.get('descripcion')
+     
+
+
+    sucu.save()
+    print("su registro se ha actualizado EN LA PANTALLA DE Sucursal")
+
+    messages.info(request,"ITEM ACTUALIZADO EXITOSAMENTE")
+    return redirect("sucursalhome")

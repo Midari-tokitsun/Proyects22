@@ -9,6 +9,14 @@ class insertuser(models.Model):
         db_table = 'users'
 
 
+class sucursal(models.Model):
+    id_sucursal=models.CharField(primary_key=True,max_length=20)
+    direccion_sucursal=models.CharField(max_length=50)
+    descripcion=models.CharField(max_length=50)
+    class Meta:
+        db_table='sucursal'
+
+
 class departamento(models.Model):
     id_departamento=models.CharField(primary_key=True,max_length=50)
     departamento=models.CharField(max_length=50)

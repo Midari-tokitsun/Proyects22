@@ -80,14 +80,6 @@ urlpatterns = [
     path('actualizarpuesto/<int:id>', views.actualizarpuesto , name="actualizarpuesto"),# buscar
 
 
-
-
-
-
-
-
-
-
 # VISTA TipodeDOCUMENTO EMPLEADOS
 
 
@@ -98,6 +90,27 @@ urlpatterns = [
     path('actualizartipodedocumento/<int:id>', views.actualizartipodedocumento , name="actializartipodedocumento"),
     path('buscardocuemntoemp/', views.tipodocumentoemp , name="buscardocuemntoemp"),# ver EMpleado
  
+
+# VISTA DE Sucursal
+ # Editar,Eliminar,Añadir,Enlistar,Buscar Sucursal
+
+    path('sucursal/', views.sucursalhome , name="sucursalhome"),#pantalla principal del table
+    path('añadirsucursal', views.añadirsucursal , name="añadirsucursal"),#añadir sucursal
+
+
+    path('eliminarsucurusal/<int:id>', views.eliminarsucurusal , name="eliminarsucurusal"),#eliminar sucursal
+
+
+    path('editarsucursal/<int:id>', views.editarsucursal , name="editarsucursal"),#editar sucursal
+
+    path('actualizarsucursal/<int:id>', views.actualizarsucursal , name="actualizarsucursal"),#actualizar sucursal
+
+
+
+
+
+
+
 
 
 
