@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Puestos Tabla</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+  
+  <body>
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
+		<div class="container-fluid">
+		  <a class="navbar-brand" href="#">Insert tienda o restaurant</a>
+		  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+		  <div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+			  <li class="nav-item">
+				<a class="nav-link active" aria-current="page" href="/usuario">Inicio</a>
+			  </li>
+	
+	
+			  {% if request.session.username %}
+	
+			  <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+				<ul class="navbar-nav">
+				  <li class="nav-item dropdown">
+			  
+			  <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				Vista Empleados
+			  </a>
+			  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+				<li class="nav-item">
+				  <a class="nav-link" href="/cargoregister">Registros de Cargos del Empleado</a>
+				</li>
+			
+				<li class="nav-item">
+				  <a class="nav-link" href="/registroemp">Registro de Empleados</a>
+				</li>
+			
+				<li class="nav-item">
+				  <a class="nav-link" href="/tipodocumentoemp">Registro de Tipo De Documento</a>
+				</li>
+
+
+				<li class="nav-item">
+					<a class="nav-link" href="/departamentohome">Registro de Departamento</a>
+				</li>
+
+                <li class="nav-item">
+					<a class="nav-link" href="/puestos">Control de Puestos</a>
+				</li>
+
+			  </ul>
+	
+			</li>
+		  </ul>
+		</div>
+			
+	
+	
+			  <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+				<ul class="navbar-nav">
+				  <li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					  Vista Pedidos
+					</a>
+					<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+			
+					  <li class="nav-item">
+						<a class="nav-link" href="/pedidos">Realizar Pedidos</a>
+					  </li>
+	  
+			
+			
+			
+					</ul>
+				  </li>
+				</ul>
+			  </div>
+			
+	
+	
+	
+	
+			  <li class="nav-item">
+				<a class="nav-link" href="/signout">Cerrar Sesion</a>
+			  </li>
+	
+	
+	
+	 
+			  {% else %}
+			  
+			  <li class="nav-item">
+				<a class="nav-link" href="/login_user">Iniciar Sesion</a>
+			  </li>
+			   
+	
+					   <li class="nav-item">
+				<a class="nav-link" href="/signup">Registrarse</a>
+			  </li>
+	
+	
+			  
+			  {% endif %}
+			  
+			  
+	
+	
+	
+			
+	
+					   <li class="nav-item">
+				<a class="nav-link" href="/menu">Menu</a>
+			  </li>
+	
+			  
+	
+			  <div class="collapse navbar-collapse" id="navbarNav">
+				<li class="nav-item">
+				  <a class="nav-link desactivated">{{request.session.username}}</a>
+				</li>
+				</div>
+	
+	
+			</ul>
+		  </div>
+		</div>
+	  </nav>
+	
+	
+
+
+
+
+
+<br>
+
+    <div class="container">
+        <form action="{% url 'puestohome' %}" class="form-inline my-2 my-lg-0 mr-4" method="GET"  >
+         
+         
+  
+          <input value="{{ request.GET.buscarpuest }}" name="buscarpuest" class="form-control mr-sm-2s" type="search" placeholder="Buscar puesto" aria-label="Search">
+          <button class="btn btn-success" type="submit">Buscar Puesto</button>
+        </form>
+  
+        
+      </div>
+  
+
+
+
+
+    <div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+						<h2>Registro de <b>Puestos</b></h2>
+					</div>
+					<div class="col-sm-6">
+						<a href="#addpuestoModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Añadir nuevo Puesto</span></a>
+												
+					</div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover table-dark">
+                <thead>
+                    <tr>
+						<th>
+							<span class="custom-checkbox">
+								<input type="checkbox" id="selectAll">
+								<label for="selectAll"></label>
+							</span>
+						</th>
+                        <th>ID puesto</th>
+                        <th>Nombre del puesto</th>
+						<th>Descripcion</th>
+              
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pu in puestos %}
+                    <tr>
+						<td>
+							<span class="custom-checkbox">
+								<input type="checkbox" id="checkbox1" name="options[]" value="1">
+								<label for="checkbox1"></label>
+							</span>
+						</td>
+                        <td>{{pu.puesto_id}}</td>
+                        <td>{{pu.puesto}}</td>
+						<td>{{pu.descripcion}}</td>
+                       
+                        <td>
+                            <a href="#editPuestoModal-{{forloop.counter}}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="/eliminarpuesto/{{ pu.puesto_id }}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}  
+                </tbody>
+            </table>
+			<div class="clearfix">
+                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                <ul class="pagination">
+                    <li class="page-item disabled"><a href="#">Previous</a></li>
+                    <li class="page-item"><a href="#" class="page-link">1</a></li>
+                    <li class="page-item"><a href="#" class="page-link">2</a></li>
+                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                    <li class="page-item"><a href="#" class="page-link">4</a></li>
+                    <li class="page-item"><a href="#" class="page-link">5</a></li>
+                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+	<!-- add Modal puesto HTML -->
+	<div id="addpuestoModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form method="POST" action="{% url 'añadirpuesto' %}">
+                    {% csrf_token %}
+					<div class="modal-header">						
+						<h4 class="modal-title">Añadir nuevo Puesto</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<div class="form-group">
+							<label>ID </label>
+							<input name="puesto_id" type="text" class="form-control" required>
+						</div>
+						<div class="form-group">
+							<label>Nombre Del Puesto</label>
+							<input name="puesto" type="text" class="form-control" required>
+						</div>
+						<div class="form-group">
+							<label>Descripcion</label>
+							<textarea name="descripcion" class="form-control" required></textarea>
+						</div>
+				
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="submit" class="btn btn-success" value="Add">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- Edit Modal puestos HTML -->
+    {% for pu in puestos %}
+	<div id="editPuestoModal-{{forloop.counter}}" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form method="POST" action="/actualizarpuesto/{{ pu.puesto_id }}">
+                    {% csrf_token %}
+					<div class="modal-header">						
+						<h4 class="modal-title">Editar Puesto</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+                    <div class="modal-body">					
+						<div class="form-group">
+							<label>ID </label>
+							<input value="{{pu.puesto_id}}" name="puesto_id" type="text" class="form-control" required>
+						</div>
+						<div class="form-group">
+							<label>Nombre Del Puesto</label>
+							<input value="{{pu.puesto}}" name="puesto" type="text" class="form-control" required>
+						</div>
+						<div class="form-group">
+							<label>Descripcion</label>
+							<textarea value="{{pu.descripcion}}" name="descripcion" class="form-control" required>{{pu.descripcion}}</textarea>
+						</div>		
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="submit" class="btn btn-info" value="actualizarpuesto">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+    {% endfor %}  
+</body>
+</html>

@@ -22,6 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
 
 
+
+
     path('admin/', admin.site.urls),
 
 # VISTA DE CLIENTE
@@ -36,8 +38,8 @@ urlpatterns = [
 
 # VISTA DE EMPLEADO
  # Editar,Eliminar,Añadir,Enlistar,Buscar Empleado
-    path("",views.empleado, name="empleado"),# log in EMpleado
-    path("homeemp/",views.homeemp, name="homeemp"), # HomePAGE
+
+
     path("registroemp/",views.registroemp, name="registroemp"),# Registro Empleado
     path('addemp', views.addemp , name="addemp"),# añadir Registro EMP
     path('delete/<int:id>', views.destroy , name="destroy"),# BOrrar Registro EMP    
@@ -57,6 +59,31 @@ urlpatterns = [
     path('buscarcargosemp/', views.cargoregister , name="cargoregister"),# ver EMpleado
 
 
+# ver Editar,eliminar,añadir,enlistar y Buscar Departamento
+
+    path('departamentohome/', views.departamentohome , name="departamentohome"),# ver tabla de Departamentos
+    path('departamentoeliminar/<int:id>', views.departamentoeliminar , name="departamentoeliminar"),
+    path('añadirdepartamento', views.añadirdepartamento , name="añadirdepartamento"),
+    path('departamentoeditar/<int:id>', views.departamentoeditar , name="departamentoeditar"),
+    path('actualizardepartamentos/<int:id>', views.actualizardepartamentos , name="actualizardepartamentos"),
+
+
+# VISTA Puesto EMPLEADOS
+    path('puestos/', views.puestohome , name="puestohome"),# ver tabla de puesto
+    path('añadirpuesto', views.añadirpuesto , name="añadirpuesto"),# Agregar
+    path('eliminarpuesto/<int:id>', views.eliminarpuesto , name="eliminarpuesto"),# Eliminar
+    
+    path('editarpuesto/<int:id>', views.editarpuesto , name="editarpuesto"),# editar
+    
+    path('actualizarpuesto/<int:id>', views.actualizarpuesto , name="actualizarpuesto"),# actualizar
+   
+    path('actualizarpuesto/<int:id>', views.actualizarpuesto , name="actualizarpuesto"),# buscar
+
+
+
+
+
+
 
 
 
@@ -69,7 +96,7 @@ urlpatterns = [
     path('borrartipodocumentoemp/<int:id>', views.borrartipodocumentoemp , name="borrartipodocumentoemp"),
     path('editartipodedocumento/<int:id>', views.editartipodedocumento , name="editartipodedocumento"),
     path('actualizartipodedocumento/<int:id>', views.actualizartipodedocumento , name="actializartipodedocumento"),
-    path('buscardocuemntoemp/', views.tipodocumentoemp , name="tipodocumentoemp"),# ver EMpleado
+    path('buscardocuemntoemp/', views.tipodocumentoemp , name="buscardocuemntoemp"),# ver EMpleado
  
 
 

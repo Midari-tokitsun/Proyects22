@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from restaurantwebsite.models import insertuser,insertempl,cargo,documentoemp
+from restaurantwebsite.models import insertuser,insertempl,cargo,documentoemp,departamento,puesto
 from django.contrib.auth import logout,login,authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -10,6 +10,9 @@ from django.db.models import Q
 
 
 # VISTA USUARIO
+
+
+  
 
 def signup(request):
     if request.method=='POST':
@@ -47,13 +50,13 @@ def login_user(request):
         except insertuser.DoesNotExist:
             messages.success(request, 'Usuario No Existente!!')
             
-    return render(request, 'login_user.html')
+    return render(request, 'empleadologin.html')
         
 
 def signout(request):
     logout(request)
     messages.info(request, 'Adios Usuario')
-    return redirect('/')
+    return redirect('/usuario')
 
 
 def menu(request):
@@ -67,7 +70,7 @@ def pedidos(request):
 # ver Editar,eliminar,añadir,enlistar y Buscar Cargo  VISTA EMPLEADO
 
 def empleado(request):
-    return render(request, 'empleadologin.html')
+    return render(request, 'home.html')
 
 def homeemp(request):
     return render(request, 'homeemp.html')
@@ -156,12 +159,10 @@ def addemp(request):
        
          insertempl1.nombre=request.POST.get('nombre')
          insertempl1.apellido=request.POST.get('apellido')
-         insertempl1.tipo_identificacion=request.POST.get('tipo_identificacion')
-         insertempl1.documento_identificacion=request.POST.get('documento_identificacion')
+
          insertempl1.direccion=request.POST.get('direccion')   
          insertempl1.telefono=request.POST.get('telefono')
-         insertempl1.departamento=request.POST.get('departamento')
-         insertempl1.puesto=request.POST.get('puesto')
+ 
          insertempl1.jornada=request.POST.get('jornada')
          insertempl1.fecha_contratacion=request.POST.get('fecha_contratacion')
          insertempl1.fecha_nacimiento=request.POST.get('fecha_nacimiento')
@@ -189,8 +190,7 @@ def updateemp(request , id ):
     documento_identificacion=request.POST.get('documento_identificacion')
     direccion=request.POST.get('direccion')
     telefono=request.POST.get('telefono')
-    departamento=request.POST.get('departamento')
-    puesto=request.POST.get('puesto')
+
     jornada=request.POST.get('jornada')
     fecha_contratacion=request.POST.get('fecha_contratacion')
     fecha_nacimiento=request.POST.get('fecha_nacimiento')
@@ -198,12 +198,10 @@ def updateemp(request , id ):
 
     emp.nombre=nombre
     emp.apellido=apellido
-    emp.tipo_identificacion=tipo_identificacion
-    emp.documento_identificacion=documento_identificacion
+
     emp.direccion=direccion
     emp.telefono=telefono
-    emp.departamento=departamento
-    emp.puesto=puesto
+
     emp.jornada=jornada
     emp.fecha_contratacion=fecha_contratacion
     emp.fecha_nacimiento=fecha_nacimiento
@@ -257,8 +255,9 @@ def cargoregister(request):
 
 
 
-            Q(apellido_empleado__icontains=query) |
-            Q(empleado__icontains=query) ).distinct
+            
+            Q(nombre_cargo__icontains=query) |
+            Q(id__icontains=query) ).distinct
             print("Lo encontre EL CARGO ES!!!")    
          
         else:
@@ -287,21 +286,15 @@ def cargoregister(request):
 
 def añadircargo(request):
     if request.method=='POST':
-     if request.POST.get('id') and request.POST.get('empleado') and request.POST.get('nombre') and request.POST.get('descripcion') and request.POST.get('salario') and request.POST.get('apellido_empleado') and request.POST.get('sucursal_asignado') and request.POST.get('estado')and request.POST.get('departamento')and request.POST.get('traslado')and request.POST.get('duracion_cargo'):
+     if request.POST.get('id') and request.POST.get('nombre_cargo') and request.POST.get('descripcion'): 
          addcargo=cargo()
-         addcargo.empleado=request.POST.get('empleado')
+    
          addcargo.id=request.POST.get('id')
-         addcargo.nombre=request.POST.get('nombre')
+         addcargo.nombre_cargo=request.POST.get('nombre_cargo')
          addcargo.descripcion=request.POST.get('descripcion')
-         addcargo.salario=request.POST.get('salario')
 
-         addcargo.apellido_empleado=request.POST.get('apellido_empleado')
-         addcargo.estado=request.POST.get('estado')
-         addcargo.sucursal_asignado=request.POST.get('sucursal_asignado')
 
-         addcargo.departamento=request.POST.get('departamento')
-         addcargo.duracion_cargo=request.POST.get('duracion_cargo')
-         addcargo.traslado=request.POST.get('traslado')
+
          
          
          addcargo.save()
@@ -320,33 +313,13 @@ def actializarcargo(request , id ):
     
     car= cargo.objects.get(id=id)
     id=request.POST.get('id')
-    empleado=request.POST.get('empleado')
-    nombre=request.POST.get('nombre')
+
+    nombre_cargo=request.POST.get('nombre_cargo')
     descripcion=request.POST.get('descripcion')
-    salario=request.POST.get('salario')
-    apellido_empleado=request.POST.get('apellido_empleado')
-    sucursal_asignado=request.POST.get('sucursal_asignado')
-    estado=request.POST.get('estado')
 
-    duracion_cargo=request.POST.get('duracion_cargo')
-    traslado=request.POST.get('traslado')
-    departamento=request.POST.get('departamento')
-
-    car.duracion_cargo=duracion_cargo
-    car.traslado=traslado
-    car.departamento=departamento
-
-    car.apellido_empleado=apellido_empleado
-    car.sucursal_asignado=sucursal_asignado
-    car.estado=estado
-
-    
-
-    car.nombre=nombre
-    car.empleado=empleado
     car.id=id
+    car.nombre_cargo=nombre_cargo
     car.descripcion=descripcion
-    car.salario=salario
 
 
     car.save()
@@ -403,9 +376,9 @@ def tipodocumentoemp(request):
 
         if query:
             docs = documentoemp.objects.filter(
-            
-            Q(nombre__icontains=query) |
-            Q(apellido__icontains=query) ).distinct
+            Q(tipo_identificacion__icontains=query) |
+            Q(id__icontains=query) |
+            Q(numero_identificacion__icontains=query) ).distinct
 
             print("LO ENCONTRE Y TE ENLISTOS SUS REFERENCIAS!!")
         
@@ -438,14 +411,13 @@ def tipodocumentoemp(request):
 def añadirdocumentoemp(request):
 
     if request.method=='POST':
-        if request.POST.get('id') and request.POST.get('nombre') and request.POST.get('apellido') and request.POST.get('tipo_identificacion') and request.POST.get('numero_identificacion') and request.POST.get('licencia_conducir'):
+        if request.POST.get('id') and request.POST.get('tipo_identificacion') and request.POST.get('numero_identificacion'):
          documentoemp1=documentoemp()
          documentoemp1.id=request.POST.get('id')
-         documentoemp1.nombre=request.POST.get('nombre')
-         documentoemp1.apellido=request.POST.get('apellido')
+
          documentoemp1.tipo_identificacion=request.POST.get('tipo_identificacion')
          documentoemp1.numero_identificacion=request.POST.get('numero_identificacion')
-         documentoemp1.licencia_conducir=request.POST.get('licencia_conducir')
+   
          
 
          documentoemp1.save()
@@ -474,19 +446,17 @@ def actualizartipodedocumento(request , id ):
     
     docs= documentoemp.objects.get(id=id)
     id=request.POST.get('id')
-    nombre=request.POST.get('nombre')
-    apellido=request.POST.get('apellido')
+
     tipo_identificacion=request.POST.get('tipo_identificacion')
     numero_identificacion=request.POST.get('numero_identificacion')
-    licencia_conducir=request.POST.get('licencia_conducir')
+    
 
 
-    docs.nombre=nombre
-    docs.apellido=apellido
+
     docs.id=id
     docs.numero_identificacion=numero_identificacion
     docs.tipo_identificacion=tipo_identificacion
-    docs.licencia_conducir=licencia_conducir
+    
 
 
     docs.save()
@@ -494,4 +464,212 @@ def actualizartipodedocumento(request , id ):
 
     messages.info(request,"ITEM ACTUALIZADO EXITOSAMENTE")
     return redirect("tipodocumentoemp")
+
+
+
+# ver Editar,eliminar,añadir,enlistar y Buscar ----------------VISTA de departamentos 
+
+def departamentohome(request):
+
+    dep=departamento.objects.all()
+
+
+
+    paginator = Paginator(dep,2)
+    page=request.GET.get('page')
+    dep=paginator.get_page(page)
+
+
+    if request.method == 'GET' :
+        query = request.GET.get('buscardept')
+
+
+        paginator = Paginator(dep,2)
+        page=request.GET.get('page')
+        dep=paginator.get_page(page)
+
+
+
+        if query:
+            dep = departamento.objects.filter(
+            Q(departamento__icontains=query) |
+            Q(codigo_postal__icontains=query) |
+            Q(id_departamento__icontains=query) ).distinct
+
+            print("LO ENCONTRE Y TE ENLISTOS SUS REFERENCIAS!!")
+        
+         
+        else:
+            dep=departamento.objects.all()
+
+
+            paginator = Paginator(dep,2)
+            page=request.GET.get('page')
+            dep=paginator.get_page(page)
+
+
+            
+
+            query = request.GET.get('buscardept')
+            print("Retornando a Todos los registros")
+
+    context={
+        'dep':dep
+
+    }
+
+    return render(request, "departamento.html",context)
+
+
+
+
+def departamentoeliminar(request , id):
+    dept = departamento.objects.get(id_departamento=id)  
+    dept.delete()  
+    return redirect("departamentohome")
+
+
+def departamentoeditar(request, id):
+   dep=departamento.objects.all()
+
+   context={
+
+        'dep':dep
+    }
+
+   return render(request,'departamento.html', context)
+
+def añadirdepartamento(request):
+    if request.method=='POST':
+        if request.POST.get('id_departamento') and request.POST.get('departamento') and request.POST.get('codigo_postal'):
+
+         dept=departamento()
+         dept.id_departamento=request.POST.get('id_departamento')
+         dept.departamento=request.POST.get('departamento')
+         dept.codigo_postal=request.POST.get('codigo_postal')  
+
+         dept.save()
+         print("Se ha registrado su Registro a la Pagina de Departamento")
+    return redirect('departamentohome')
+
+   
+
+
+
+def actualizardepartamentos(request , id ):
+    
+    dep= departamento.objects.get(id_departamento=id)
+    dep.id_departamento=request.POST.get('id_departamento')
+    dep.departamento=request.POST.get('departamento')
+    dep.codigo_postal=request.POST.get('codigo_postal')
+     
+
+
+    dep.save()
+    print("su registro se ha actualizado")
+
+    messages.info(request,"ITEM ACTUALIZADO EXITOSAMENTE")
+    return redirect("departamentohome")
+
+# FIN dE LA VISTA DEPARTAMENTO 
+
+
+# ver Editar,eliminar,añadir,enlistar y Buscar ----------------VISTA de puestos para los empleados
+
+def puestohome(request):
+    puestos=puesto.objects.all()
+
+
+    
+    paginator = Paginator(puestos,2)
+    page=request.GET.get('page')
+    puestos=paginator.get_page(page)
+
+
+    if request.method == 'GET' :
+        query = request.GET.get('buscarpuest')
+
+
+ 
+
+
+        if query:
+            puestos = puesto.objects.filter(
+            Q(puesto_id__icontains=query) |
+            Q(puesto__icontains=query) |
+            Q(descripcion__icontains=query) ).distinct
+
+            print("LO ENCONTRE Y TE ENLISTOS SUS REFERENCIAS!!")
+        
+         
+        else:
+            puestos=puesto.objects.all()
+
+
+         
+
+
+            
+
+            query = request.GET.get('buscarpuest')
+            print("Retornando a Todos los registros")
+
+    context={
+        'puestos':puestos
+
+
+    }
+
+    return render(request,"puesto.html",context)
+
+
+
+def añadirpuesto(request):
+    if request.method=='POST':
+        if request.POST.get('puesto_id') and request.POST.get('puesto') and request.POST.get('descripcion'):
+
+         puestos=puesto()
+         puestos.puesto_id=request.POST.get('puesto_id')
+         puestos.puesto=request.POST.get('puesto')
+         puestos.descripcion=request.POST.get('descripcion')  
+
+         puestos.save()
+         print("Se ha registrado su Registro a la Pagina de PUESTOS")
+    return redirect('puestohome')
+
+
+
+def eliminarpuesto(request, id):
+    puest = puesto.objects.get(puesto_id=id)  
+    puest.delete()  
+    return redirect("puestohome")
+
+
+
+def editarpuesto(request):
+    puestos=puesto.objects.all()
+
+    context={
+        'puestos':puestos
+
+
+    }
+
+    return render(request,"puesto.html",context)
+
+
+def actualizarpuesto(request ,id):
+    puestos= puesto.objects.get(puesto_id=id)
+    puestos.puesto_id=request.POST.get('puesto_id')
+    puestos.puesto=request.POST.get('puesto')
+    puestos.descripcion=request.POST.get('descripcion')
+     
+
+
+    puestos.save()
+    print("su registro se ha actualizado EN LA PANTALLA DE PUESTOS")
+
+    messages.info(request,"ITEM ACTUALIZADO EXITOSAMENTE")
+    return redirect("puestohome")
+
 
