@@ -159,12 +159,19 @@ def empleado(request):
     pu=puesto.objects.all()
     sucu=sucursal.objects.all()
 
+    car=cargo.objects.all()
+    docs=  documentoemp.objects.all()
+
+
     context={
 
         'emp':emp,
         'dep':dep,
         'pu':pu,
         'sucu':sucu,
+
+        'car':car,
+        'docs':docs,
 
     
     
@@ -187,6 +194,9 @@ def addempleado(request):
         sucursal_asignado=request.POST.get("sucursal_asignado")
         departamento_asignado=request.POST.get("departamento_asignado")
         puesto_asignado=request.POST.get("puesto_asignado")
+
+        cargo_asignado=request.POST.get("cargo_asignado")
+        tipodedocumentos=request.POST.get("tipodedocumentos")
 
 
      #   id_sucursal = request.POST.get("departamento")
@@ -213,6 +223,11 @@ def addempleado(request):
             sucursal_asignado=sucursal_asignado,
             puesto_asignado=puesto_asignado,
             departamento_asignado=departamento_asignado,
+
+            cargo_asignado=cargo_asignado,
+            tipodedocumentos=tipodedocumentos,
+
+
 
 
         )

@@ -64,6 +64,12 @@ class empleados(models.Model):
     departamento_asignado=models.CharField(max_length=50)
     puesto_asignado=models.CharField(max_length=50)
 
+
+    cargo_asignado=models.CharField(max_length=30)
+    tipodedocumentos=models.CharField(max_length=30)
+    
+
+
 # RElaciones De otras TAblas
 
 #    departamento = models.ForeignKey(departamento, related_name='dep', on_delete=models.CASCADE)

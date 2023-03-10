@@ -214,6 +214,24 @@
 </select>
 
 
+<label for="form-label">Cargo Asignado</label>
+
+<select class="form-select" name="cargo_asignado" id="">
+{% for c in car %}
+<option value="{{ c.id }}">{{ c.nombre_cargo }}</option>
+{% endfor %}
+</select>
+
+
+<label for="form-label">Tipo de Documento</label>
+
+<select class="form-select" name="tipodedocumentos" id="">
+{% for d in docs %}
+<option value="{{ d.id }}">{{ d.tipo_identificacion }}</option>
+{% endfor %}
+</select>
+
+
 <button type="submit">GUARDAR</button>
 <button type="reset">LIMpiar CAMPOS</button>
 
