@@ -231,11 +231,106 @@ def addempleado(request):
 
 
         )
+        print("SALVADO EMPLEADO RETORNANDO OTRA VEZ")
+    else:
+        print("LA LLAVE A LA QUE ESTAS GUARDANDO ESTA DUPLICADA")
 
 
 
-    print("SALVADO EMPLEADO RETORNANDO OTRA VEZ")
+        
     return redirect("empleados")
+
+
+
+def eliminarempleado(request,id):
+    emp = empleados.objects.get(id_empleado=id)  
+    emp.delete()  
+    return redirect("empleados")
+
+
+
+def editarempleado(request , id):
+
+    emp=empleados.objects.get(id_empleado=id)
+    id_empleado=request.POST.get('id_empleado')
+    nombre=request.POST.get('nombre')
+    apellido=request.POST.get('apellido')
+    jornada=request.POST.get('jornada')
+    telefono=request.POST.get('telefono')
+    sucursal_asignado=request.POST.get('sucursal_asignado')
+    departamento_asignado=request.POST.get('departamento_asignado')
+    puesto_asignado=request.POST.get('puesto_asignado')
+    cargo_asignado=request.POST.get('cargo_asignado')
+    tipodedocumentos=request.POST.get('tipodedocumentos')
+
+    emp.id_empleado=id_empleado
+    emp.nombre=nombre
+    emp.apellido=apellido
+    emp.jornada=jornada
+    emp.telefono=telefono
+    emp.sucursal_asignado=sucursal_asignado
+    emp.departamento_asignado=departamento_asignado
+    emp.puesto_asignado=puesto_asignado
+    emp.cargo_asignado=cargo_asignado
+    emp.tipodedocumentos=tipodedocumentos
+
+    emp.save()
+
+    #if request.method=='POST':
+
+       # nombre=request.POST.get("nombre")
+        #apellido=request.POST.get("apellido")
+        #jornada=request.POST.get("jornada")
+        #telefono=request.POST.get("telefono")
+        #id_empleado=request.POST.get("id_empleado")
+       # sucursal_asignado=request.POST.get("sucursal_asignado")
+      #  departamento_asignado=request.POST.get#("departamento_asignado")
+       # puesto_asignado=request.POST.get("puesto_asignado")
+
+      #  cargo_asignado=request.POST.get("cargo_asignado")
+     #   tipodedocumentos=request.POST.get("tipodedocumentos")
+
+
+     #   id_sucursal = request.POST.get("departamento")
+      #  sucursal.objects.get(id=id_sucursal)
+       # print(id_sucursal)
+
+       # id_departamento = request.POST.get("sucursal")
+       # departamento.objects.get(id=id_departamento)
+
+       # puesto_id = request.POST.get("puesto")
+      #  puesto.objects.get(id=puesto_id)
+
+     #   empleados.objects.create(
+        #    sucursal=sucursal,
+         #   departamento=departamento,
+          #  puesto=puesto,
+
+      #      nombre=nombre,
+       #     apellido=apellido,
+        #    jornada=jornada,
+         #   telefono=telefono,
+          #  id_empleado=id_empleado,
+
+         #   sucursal_asignado=sucursal_asignado,
+         #   puesto_asignado=puesto_asignado,
+          #  departamento_asignado=departamento_asignado,
+
+          #  cargo_asignado=cargo_asignado,
+          #  tipodedocumentos=tipodedocumentos,
+
+
+
+
+     #   )
+    print("SALVADO EdICION DE EMPLEADO RETORNANDO OTRA VEZ")
+    #else:
+     #   print("LA LLAVE A LA QUE ESTAS GUARDANDO ESTA DUPLICADA")
+
+
+
+
+    return redirect('empleados')
 
 
 

@@ -56,6 +56,9 @@ urlpatterns = [
 
     path("empleado/",views.empleado, name="empleados"),# Registro Empleado
     path("addempleado",views.addempleado, name="addempleado"),# Registro Empleado
+    
+    path("editarempleado/<int:id>",views.editarempleado, name="editarempleado"),# Registro Empleado
+    path("eliminarempleado/<int:id>",views.eliminarempleado, name="eliminarempleado"),# Registro Empleado
 
 
 # ver Editar,eliminar,añadir,enlistar y Buscar Cargo
