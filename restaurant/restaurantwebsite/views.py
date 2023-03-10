@@ -1,5 +1,10 @@
 from django.shortcuts import render,redirect
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados
+
+
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto
+
+
+
 from django.contrib.auth import logout,login,authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -836,3 +841,182 @@ def actualizarsucursal(request ,id):
 
     messages.info(request,"ITEM ACTUALIZADO EXITOSAMENTE")
     return redirect("sucursalhome")
+
+
+
+    #VISTA DE CATEGORIA
+
+def categoriatabla(request):
+        cat=categoria.objects.all()
+
+        context={
+            'cat':cat
+
+        }
+
+        return render(request,"categoria.html",context)
+   
+
+
+
+    #FIN DE LA VISTA DE CATEGORIA
+
+
+def añadircategoria(request):
+
+    if request.method=='POST':
+
+        categoria_id=request.POST.get("categoria_id")
+        nombre_categoria=request.POST.get("nombre_categoria")
+        descripcion_categoria=request.POST.get("descripcion_categoria")
+
+
+
+
+
+        categoria.objects.create(
+   
+            categoria_id=categoria_id,
+            nombre_categoria=nombre_categoria,
+            descripcion_categoria=descripcion_categoria,
+
+
+        )
+        print("SALVADO CAtegoria RETORNANDO OTRA VEZ")
+    else:
+        print("LA LLAVE A LA QUE ESTAS GUARDANDO ESTA DUPLICADA")
+
+
+
+        
+    return redirect("categoriatabla")
+
+
+def editarcategoria(request , id):
+
+    if request.method=='POST':
+
+        cat= categoria.objects.get(categoria_id=id)
+     
+
+
+        categoria_id=request.POST.get("categoria_id")
+        nombre_categoria=request.POST.get("nombre_categoria")
+        descripcion_categoria=request.POST.get("descripcion_categoria")
+
+
+
+        cat.categoria_id=categoria_id
+        cat.nombre_categoria=nombre_categoria
+        cat.descripcion_categoria=descripcion_categoria
+
+        cat.save()
+
+
+        print("SALVANDO EDICION DE CAtegoria RETORNANDO OTRA VEZ")
+    else:
+        print("LA LLAVE A LA QUE ESTAS GUARDANDO ESTA DUPLICADA")
+
+
+
+        
+    return redirect("categoriatabla")
+
+
+
+
+def eliminarcategoria(request,id):
+
+    cat=categoria.objects.get(categoria_id=id)
+
+    cat.delete()
+
+
+    return redirect('categoriatabla')
+    #VISTA DE Familia_producto
+
+
+
+
+def familiaproductotabla(request):
+    fam=familia_producto.objects.all()
+
+    context={
+
+        'fam':fam
+    }
+
+
+    return render(request,"familiaproducto.html", context)
+
+    
+def añadirfamiliaproducto(request):
+
+    if request.method=='POST':
+
+        id_familia_producto=request.POST.get("id_familia_producto")
+        nombre_familia=request.POST.get("nombre_familia")
+        descripcion_familia=request.POST.get("descripcion_familia")
+
+
+
+
+
+        familia_producto.objects.create(
+   
+            id_familia_producto=id_familia_producto,
+            nombre_familia=nombre_familia,
+            descripcion_familia=descripcion_familia,
+
+        )
+        print("SALVADO CAtegoria RETORNANDO OTRA VEZ")
+    else:
+        print("LA LLAVE A LA QUE ESTAS GUARDANDO ESTA DUPLICADA")
+
+
+
+
+
+
+    return redirect('familiaproductotabla')
+    
+    
+
+def editarfamiliaproducto(request,id):
+    
+
+    if request.method=='POST':
+
+        fam=familia_producto.objects.get(id_familia_producto=id)
+     
+
+        id_familia_producto=request.POST.get("id_familia_producto")
+        nombre_familia=request.POST.get("nombre_familia")
+        descripcion_familia=request.POST.get("descripcion_familia")
+
+
+        fam.id_familia_producto=id_familia_producto
+        fam.nombre_familia=nombre_familia
+        fam.descripcion_familia=descripcion_familia
+
+
+        fam.save()
+
+
+        print("SALVANDO EDICION DE LA FAMILIA DE PRODUCTOS RETORNANDO OTRA VEZ")
+    else:
+        print("LA LLAVE A LA QUE ESTAS GUARDANDO ESTA DUPLICADA")
+
+    return redirect('familiaproductotabla')
+
+
+
+def eliminarfamilia(request, id):
+    fam=familia_producto.objects.get(id_familia_producto=id)
+    fam.delete()
+
+    return redirect('familiaproductotabla')
+
+
+
+    #FIN DE LA VISTA DE Familia_producto

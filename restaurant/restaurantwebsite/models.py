@@ -112,3 +112,25 @@ class documentoemp(models.Model):
 
     class Meta:
         db_table='tipodocumentosemp'
+
+
+class categoria(models.Model):
+    categoria_id=models.CharField(primary_key=True, max_length=20) 
+    nombre_categoria=models.CharField(max_length=50)
+    descripcion_categoria=models.CharField(max_length=50)
+
+
+    class Meta:
+        db_table='categoria'
+
+
+class familia_producto(models.Model):
+    id_familia_producto=models.CharField(primary_key=True, max_length=30)
+    nombre_familia=models.CharField(max_length=50)
+    descripcion_familia=models.CharField(max_length=100)
+
+
+    class Meta:
+        db_table='familia_producto'
+
+

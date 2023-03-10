@@ -120,8 +120,37 @@ urlpatterns = [
 
 
 
+# VISTA DE categoria
+ # Editar,Eliminar,Añadir,Enlistar,Buscar Sucursal
+    path('categoria/', views.categoriatabla , name="categoriatabla"),#pantalla principal del table
+   
+    path('añadircategoria', views.añadircategoria , name="añadircategoria"),#pantalla de guardado registros
+   
+    path('editarcategoria/<int:id>', views.editarcategoria , name="editarcategoria"),#pantalla de guardado registros
+
+    path('eliminarcategoria/<int:id>', views.eliminarcategoria , name="eliminarcategoria"),#pantalla de guardado registros
+
+# FIN DE LA VISTA DE CATEGORIA
 
 
+
+
+# VISTA DE familiaproducto
+ # Editar,Eliminar,Añadir,Enlistar,Buscar Sucursal
+    path('familiaproducto/', views.familiaproductotabla , name="familiaproductotabla"),#pantalla principal del table
+
+    path('añadirfamiliaproducto', views.añadirfamiliaproducto , name="añadirfamiliaproducto"),#pantalla principal del table
+
+    path('editarfamiliaproducto/<int:id>', views.editarfamiliaproducto , name="editarfamiliaproducto"),#pantalla principal del table
+
+    path('editarfamiliaproducto/<int:id>', views.editarfamiliaproducto , name="editarfamiliaproducto"),
+    
+    path('eliminarfamilia/<int:id>', views.eliminarfamilia , name="eliminarfamilia"),
+    
+    
+    
+    
+    #FIN DE LA VISTA fAMILIA PRODUCTOS
 
 
 
