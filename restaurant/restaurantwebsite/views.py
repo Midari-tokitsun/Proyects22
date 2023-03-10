@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect
-from restaurantwebsite.models import insertuser,insertempl,cargo,documentoemp,departamento,puesto,sucursal
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados
 from django.contrib.auth import logout,login,authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import ListView
+from django.core.paginator import Paginator
 
 from django.db.models import Q
 
@@ -27,11 +28,14 @@ def registrarentablausuario(request):
     if request.method=='POST':
         if request.POST.get('username') and request.POST.get('password'):
          saverecord = insertuser()
+         saverecord.id_usuario=request.POST.get('id_usuario')
          saverecord.username=request.POST.get('username')
          saverecord.nombre=request.POST.get('nombre')
          saverecord.email=request.POST.get('email')
          saverecord.password=request.POST.get('password')
-         
+         saverecord.estado=request.POST.get('estado')
+         saverecord.apellido=request.POST.get('apellido')
+
          saverecord.save()
          
         print("USUARIO CREADO EXITOSAMENTE")
@@ -59,8 +63,15 @@ def actualizarusuario(request,id):
     password=request.POST.get('password')
 
     nombre=request.POST.get('nombre')
+    apellido=request.POST.get('apellido')
+    estado=request.POST.get('estado')
+
 
     email=request.POST.get('email')
+
+    user.apellido=apellido
+    user.estado=estado
+    
 
     user.id_usuario=id
     user.username=username
@@ -75,8 +86,14 @@ def actualizarusuario(request,id):
 
 
 def eliminarusuario(request,id):
-
+    user = insertuser.objects.get(id_usuario=id)  
+    user.delete()  
+    print("registro borrado retornando a la tabla principal de usuarios")
     return redirect("tableuser")
+
+
+
+
 
 
 
@@ -84,6 +101,7 @@ def signup(request):
     if request.method=='POST':
         if request.POST.get('username') and request.POST.get('password'):
          saverecord = insertuser()
+
          saverecord.username=request.POST.get('username')
          saverecord.nombre=request.POST.get('nombre')
          saverecord.email=request.POST.get('email')
@@ -136,160 +154,73 @@ def pedidos(request):
 # ver Editar,eliminar,añadir,enlistar y Buscar Cargo  VISTA EMPLEADO
 
 def empleado(request):
-    return render(request, 'home.html')
-
-def homeemp(request):
-    return render(request, 'homeemp.html')
-
-
-from django.core.paginator import Paginator
-def registroemp(request):
-
-
-    empleados=insertempl.objects.all()
-    
-    docs=  documentoemp.objects.all()
-
-    paginator = Paginator(empleados,2)
-    page=request.GET.get('page')
-    empleados=paginator.get_page(page)
-
-
-    
-    if request.method == 'GET' :
-        query = request.GET.get('buscaremp')
-
-
-        paginator = Paginator(empleados,2)
-        page=request.GET.get('page')
-        empleados=paginator.get_page(page)
-        
-        
-
-        if query:
-   
-
-
-
-            empleados = insertempl.objects.filter(
-
-
-
-            Q(nombre__icontains=query) |
-            Q(apellido__icontains=query) ).distinct
-
-            print("lo encontre!!!!")
-
- 
-
-
-        else:
-            empleados=insertempl.objects.all()
-
-
-            paginator = Paginator(empleados,2)
-            page=request.GET.get('page')
-            empleados=paginator.get_page(page)
-
-
-
-            query = request.GET.get('buscaremp')
-            print("Enlistando Todos los REgistros ")
-
-            
+    emp=empleados.objects.all()
+    dep=departamento.objects.all()
+    pu=puesto.objects.all()
+    sucu=sucursal.objects.all()
 
     context={
-        
-        
-        'empleados':empleados,
-       
+
+        'emp':emp,
+        'dep':dep,
+        'pu':pu,
+        'sucu':sucu,
+
+    
+    
     }
 
 
- 
-
-    return render(request,"registroemp.html",context) 
 
 
-
-  
-    
-   
+    return render(request, 'registroemp.html' , context)
 
 
-def addemp(request):
+def addempleado(request):
     if request.method=='POST':
-        if request.POST.get('nombre') and request.POST.get('apellido') and request.POST.get('tipo_identificacion') and request.POST.get('documento_identificacion') and request.POST.get('direccion') and request.POST.get('telefono') and request.POST.get('departamento')and request.POST.get('puesto') and request.POST.get('jornada') and request.POST.get('fecha_contratacion') and request.POST.get('fecha_nacimiento'):
-         insertempl1 = insertempl()
 
-       
-         insertempl1.nombre=request.POST.get('nombre')
-         insertempl1.apellido=request.POST.get('apellido')
-
-         insertempl1.direccion=request.POST.get('direccion')   
-         insertempl1.telefono=request.POST.get('telefono')
- 
-         insertempl1.jornada=request.POST.get('jornada')
-         insertempl1.fecha_contratacion=request.POST.get('fecha_contratacion')
-         insertempl1.fecha_nacimiento=request.POST.get('fecha_nacimiento')
-         insertempl1.save()
+        nombre=request.POST.get("nombre")
+        apellido=request.POST.get("apellido")
+        jornada=request.POST.get("jornada")
+        telefono=request.POST.get("telefono")
+        id_empleado=request.POST.get("id_empleado")
+        sucursal_asignado=request.POST.get("sucursal_asignado")
+        departamento_asignado=request.POST.get("departamento_asignado")
+        puesto_asignado=request.POST.get("puesto_asignado")
 
 
+     #   id_sucursal = request.POST.get("departamento")
+      #  sucursal.objects.get(id=id_sucursal)
+       # print(id_sucursal)
+
+       # id_departamento = request.POST.get("sucursal")
+       # departamento.objects.get(id=id_departamento)
+
+       # puesto_id = request.POST.get("puesto")
+      #  puesto.objects.get(id=puesto_id)
+
+        empleados.objects.create(
+        #    sucursal=sucursal,
+         #   departamento=departamento,
+          #  puesto=puesto,
+
+            nombre=nombre,
+            apellido=apellido,
+            jornada=jornada,
+            telefono=telefono,
+            id_empleado=id_empleado,
+
+            sucursal_asignado=sucursal_asignado,
+            puesto_asignado=puesto_asignado,
+            departamento_asignado=departamento_asignado,
 
 
-
-    return redirect("registroemp") 
-
-
-def edit(request, id):
-    employee =insertempl.objects.get(id=id)
-    return render(request,'edit.html',{'employee':employee})
-
-   
-
-def updateemp(request , id ):
-    
-    emp= insertempl.objects.get(id=id)
-    nombre=request.POST.get('nombre')
-    apellido=request.POST.get('apellido')
-    tipo_identificacion=request.POST.get('tipo_identificacion')
-    documento_identificacion=request.POST.get('documento_identificacion')
-    direccion=request.POST.get('direccion')
-    telefono=request.POST.get('telefono')
-
-    jornada=request.POST.get('jornada')
-    fecha_contratacion=request.POST.get('fecha_contratacion')
-    fecha_nacimiento=request.POST.get('fecha_nacimiento')
-     
-
-    emp.nombre=nombre
-    emp.apellido=apellido
-
-    emp.direccion=direccion
-    emp.telefono=telefono
-
-    emp.jornada=jornada
-    emp.fecha_contratacion=fecha_contratacion
-    emp.fecha_nacimiento=fecha_nacimiento
-     
-
-
-    emp.save()
-  
-
-    messages.info(request,"ITEM ACTUALIZADO EXITOSAMENTE")
-    return redirect("registroemp")
+        )
 
 
 
-
-def destroy(request, id):  
-    employee = insertempl.objects.get(id=id)  
-    employee.delete()  
-    return redirect("registroemp")
-
-
-
+    print("SALVADO EMPLEADO RETORNANDO OTRA VEZ")
+    return redirect("empleados")
 
 
 

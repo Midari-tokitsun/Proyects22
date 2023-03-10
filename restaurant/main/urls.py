@@ -54,12 +54,8 @@ urlpatterns = [
  # Editar,Eliminar,Añadir,Enlistar,Buscar Empleado
 
 
-    path("registroemp/",views.registroemp, name="registroemp"),# Registro Empleado
-    path('addemp', views.addemp , name="addemp"),# añadir Registro EMP
-    path('delete/<int:id>', views.destroy , name="destroy"),# BOrrar Registro EMP    
-    path('edit/<int:id>', views.edit , name="edit"),# enlista los datos de El EMPLEADO    
-    path('update/<int:id>', views.updateemp , name="updateemp"),# Actualizar una vez editados El EMPLEADO
-    path('buscar/', views.registroemp , name="registroemp"),# ver EMpleado
+    path("empleado/",views.empleado, name="empleados"),# Registro Empleado
+    path("addempleado",views.addempleado, name="addempleado"),# Registro Empleado
 
 
 # ver Editar,eliminar,añadir,enlistar y Buscar Cargo
