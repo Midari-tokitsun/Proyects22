@@ -149,12 +149,44 @@ urlpatterns = [
 
     path('editarfamiliaproducto/<int:id>', views.editarfamiliaproducto , name="editarfamiliaproducto"),
     
-    path('eliminarfamilia/<int:id>', views.eliminarfamilia , name="eliminarfamilia"),
-    
-    
-    
-    
+    path('eliminarfamilia/<int:id>', views.eliminarfamilia , name="eliminarfamilia"),    
     #FIN DE LA VISTA fAMILIA PRODUCTOS
+
+
+
+
+
+    #Incio DE LA VISTA almacen
+    path('almacen/', views.almacentabla , name="almacentabla"),    
+
+    path('añadiralmacen', views.añadiralmacen , name="añadiralmacen"),    
+
+    path('editaralmacen/<int:id>', views.editaralmacen , name="editaralmacen"),    
+
+    path('eliminaralmacen/<int:id>', views.eliminaralmacen , name="eliminaralmacen"),    
+
+
+
+
+#FIN DE LA VISTA almacen
+
+
+    #Inicio de la Vista de Elaboracion
+
+    path('elaboracion/', views.elaboraciontable , name="elaboraciontable"),    
+
+
+    path('añadirelaboracion', views.añadirelaboracion , name="añadirelaboracion"),    
+
+
+    path('editarelaboracio/<int:id>', views.editarelaboracio , name="editarelaboracio"),#pantalla principal del table
+
+    path('eliminarelaboracion/<int:id>', views.eliminarelaboracion , name="eliminarelaboracion"),#pantalla principal del table
+    #FIN DE LA VISTA de Elaboracion
+
+
+    
+
 
 
 

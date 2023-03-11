@@ -134,3 +134,18 @@ class familia_producto(models.Model):
         db_table='familia_producto'
 
 
+class elaboracion(models.Model):
+    id_elaboracion=models.CharField(primary_key=True,max_length=20)
+    descripcion_elaboracion=models.TextField(max_length=254)
+
+    class Meta:
+        db_table='elaboracion'
+
+class almacen(models.Model):
+    id_almacen=models.CharField(primary_key=True,max_length=30)
+    tipo_almacen=models.CharField(max_length=30)
+    descripcion_almacen=models.CharField(max_length=50)
+    estado_almacen=models.CharField(max_length=20)
+
+    class Meta:
+        db_table='almacen'

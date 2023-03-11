@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen
 
 
 
@@ -366,10 +366,8 @@ def editarempleado(request , id):
     #else:
      #   print("LA LLAVE A LA QUE ESTAS GUARDANDO ESTA DUPLICADA")
 
-
-
-
     return redirect('empleados')
+#Fin de la Vista de Empleado
 
 
 
@@ -1054,3 +1052,144 @@ def eliminarfamilia(request, id):
 
 
     #FIN DE LA VISTA DE Familia_producto
+
+
+# Inicio de la Vista de Elaboracion
+
+def elaboraciontable(request):
+    ela=elaboracion.objects.all()
+    context={
+        'ela':ela
+
+    }
+
+    return render(request,"elaboracion.html", context)
+
+
+def añadirelaboracion(request):
+    if request.method=='POST':
+
+        id_elaboracion=request.POST.get("id_elaboracion")
+        descripcion_elaboracion=request.POST.get("descripcion_elaboracion")
+
+        elaboracion.objects.create(
+        id_elaboracion=id_elaboracion,
+        descripcion_elaboracion=descripcion_elaboracion,
+
+
+
+
+        )
+
+        print("SALVADO Elaboracion RETORNANDO OTRA VEZ")
+        return redirect('elaboraciontable')
+    else:
+        print("LA LLAVE A LA QUE ESTAS GUARDANDO ESTA DUPLICADA")
+    return redirect(request,'elaboraciontable')
+
+    
+def editarelaboracio(request, id):
+
+
+    ela=elaboracion.objects.get(id_elaboracion=id)
+    id_elaboracion=request.POST.get('id_elaboracion')
+    descripcion_elaboracion=request.POST.get('descripcion_elaboracion')
+
+
+
+    ela.id_elaboracion=id_elaboracion
+    ela.descripcion_elaboracion=descripcion_elaboracion
+
+    ela.save()
+
+    print("Se han guardado los CAMBIOS RETORNANDO A LA VISTA PRINCIPAL DE ELABORACION")
+
+
+
+
+    return redirect('elaboraciontable')
+
+
+def eliminarelaboracion(request,id):
+    ela = elaboracion.objects.get(id_elaboracion=id)  
+    ela.delete()  
+    return redirect("elaboraciontable")
+
+
+
+
+#Fin de la Vista de Elaboracion
+
+
+#Inicio de la Vista de Almacen
+def almacentabla(request):
+    alma=almacen.objects.all()
+    context={
+        'alma':alma
+
+    }
+
+    return render(request,"almacen.html" , context)
+
+def añadiralmacen(request):
+    if request.method=='POST':
+
+        id_almacen=request.POST.get("id_almacen")
+        tipo_almacen=request.POST.get("tipo_almacen")
+        descripcion_almacen=request.POST.get("descripcion_almacen")
+        estado_almacen=request.POST.get("estado_almacen")
+
+
+        almacen.objects.create(
+            id_almacen=id_almacen,
+            tipo_almacen=tipo_almacen,
+            descripcion_almacen=descripcion_almacen,
+            estado_almacen=estado_almacen,
+
+
+
+
+
+        )
+
+        print("SALVADO en almacentabla RETORNANDO OTRA VEZ")
+        return redirect('almacentabla')
+    else:
+        print("LA LLAVE A LA QUE ESTAS GUARDANDO ESTA DUPLICADA")
+    return redirect(request,'almacentabla')
+
+
+def editaralmacen(request,id):
+    alma=almacen.objects.get(id_almacen=id)
+    
+    id_almacen=request.POST.get('id_almacen')
+    tipo_almacen=request.POST.get('tipo_almacen')
+    descripcion_almacen=request.POST.get('descripcion_almacen')
+    estado_almacen=request.POST.get('estado_almacen')
+
+    alma.id_almacen=id_almacen
+    alma.tipo_almacen=tipo_almacen
+    alma.descripcion_almacen=descripcion_almacen
+    alma.estado_almacen=estado_almacen
+
+
+    alma.save()
+
+    print("Se han guardado los CAMBIOS RETORNANDO A LA VISTA PRINCIPAL DE ALMACEN RETORNANDO NUEVAMENTE")
+
+
+
+
+    return redirect('almacentabla')
+
+def eliminaralmacen(request,id):
+    alma=almacen.objects.get(id_almacen=id)
+    alma.delete()
+    return redirect('almacentabla')
+     
+
+
+
+
+
+#Fin de la Vista de Almacen
