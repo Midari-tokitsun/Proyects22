@@ -430,21 +430,47 @@ def cargoregister(request):
 
 def añadircargo(request):
     if request.method=='POST':
-     if request.POST.get('id') and request.POST.get('nombre_cargo') and request.POST.get('descripcion'): 
-         addcargo=cargo()
+#     if request.POST.get('id') and request.POST.get('nombre_cargo') and request.POST.get('descripcion'): 
+#         addcargo=cargo()
     
-         addcargo.id=request.POST.get('id')
-         addcargo.nombre_cargo=request.POST.get('nombre_cargo')
-         addcargo.descripcion=request.POST.get('descripcion')
+#         addcargo.id=request.POST.get('id')
+#         addcargo.nombre_cargo=request.POST.get('nombre_cargo')
+#         addcargo.descripcion=request.POST.get('descripcion')
 
 
 
          
          
-         addcargo.save()
+#         addcargo.save()
          
-         messages.success(request, 'registro Creado Exitosamente!!')
+#         messages.success(request, 'registro Creado Exitosamente!!')
+#    return redirect('cargoregister')
+
+        id=request.POST.get("id")
+        nombre_cargo=request.POST.get("nombre_cargo")
+      
+        descripcion=request.POST.get("descripcion")
+
+
+        cargo.objects.create(
+            id=id,
+            nombre_cargo=nombre_cargo,
+            descripcion=descripcion,
+
+
+
+
+
+        )
+        print("Se ha Guardado Exitosamente tu CArgo RETORNANDO NUEVAMENTE A LA VISTA PRINCIPAL DE CARGOS")
     return redirect('cargoregister')
+
+
+
+
+
+
+
 
 
 def editarcargo(request, id):
@@ -555,21 +581,44 @@ def tipodocumentoemp(request):
 def añadirdocumentoemp(request):
 
     if request.method=='POST':
-        if request.POST.get('id') and request.POST.get('tipo_identificacion') and request.POST.get('numero_identificacion'):
-         documentoemp1=documentoemp()
-         documentoemp1.id=request.POST.get('id')
+#        if request.POST.get('id') and request.POST.get('tipo_identificacion') and request.POST.get('numero_identificacion'):
+#         documentoemp1=documentoemp()
+#         documentoemp1.id=request.POST.get('id')
 
-         documentoemp1.tipo_identificacion=request.POST.get('tipo_identificacion')
-         documentoemp1.numero_identificacion=request.POST.get('numero_identificacion')
+#         documentoemp1.tipo_identificacion=request.POST.get('tipo_identificacion')
+#         documentoemp1.numero_identificacion=request.POST.get('numero_identificacion')
    
          
 
-         documentoemp1.save()
+#         documentoemp1.save()
          
-         messages.success(request, 'registro Creado Exitosamente!!')
+#         messages.success(request, 'registro Creado Exitosamente!!')
 
 
+#    return redirect('tipodocumentoemp')
+
+        id=request.POST.get("id")
+        tipo_identificacion=request.POST.get("tipo_identificacion")
+        numero_identificacion=request.POST.get("numero_identificacion")
+
+        
+        documentoemp.objects.create(
+            id=id,
+            tipo_identificacion=tipo_identificacion,
+            numero_identificacion=numero_identificacion,
+
+
+
+
+
+
+        )
+        print("tipo de documentos ha sido añadido con exito Retornando a la Vista principal de TIPO DE DOCUMENTO")
     return redirect('tipodocumentoemp')
+
+
+
+
 
 
 
@@ -685,18 +734,36 @@ def departamentoeditar(request, id):
 
 def añadirdepartamento(request):
     if request.method=='POST':
-        if request.POST.get('id_departamento') and request.POST.get('departamento') and request.POST.get('codigo_postal'):
+#        if request.POST.get('id_departamento') and request.POST.get('departamento') and request.POST.get('codigo_postal'):
 
-         dept=departamento()
-         dept.id_departamento=request.POST.get('id_departamento')
-         dept.departamento=request.POST.get('departamento')
-         dept.codigo_postal=request.POST.get('codigo_postal')  
+#         dept=departamento()
+#         dept.id_departamento=request.POST.get('id_departamento')
+#         dept.departamento=request.POST.get('departamento')
+#         dept.codigo_postal=request.POST.get('codigo_postal')  
 
-         dept.save()
-         print("Se ha registrado su Registro a la Pagina de Departamento")
+#         dept.save()
+#         print("Se ha registrado su Registro a la Pagina de Departamento")
+#    return redirect('departamentohome')
+        dept=departamento()
+        dept.id_departamento=request.POST.get("id_departamento")
+        dept.departamento=request.POST.get("departamento")
+        dept.codigo_postal=request.POST.get("codigo_postal")
+
+
+
+        departamento.objects.create(
+            id_departamento=dept.id_departamento,
+            departamento=dept.departamento,
+            codigo_postal=dept.codigo_postal,
+
+
+
+
+
+        )
     return redirect('departamentohome')
 
-   
+  
 
 
 
@@ -770,16 +837,39 @@ def puestohome(request):
 
 def añadirpuesto(request):
     if request.method=='POST':
-        if request.POST.get('puesto_id') and request.POST.get('puesto') and request.POST.get('descripcion'):
+#        if request.POST.get('puesto_id') and request.POST.get('puesto') and request.POST.get('descripcion'):
 
-         puestos=puesto()
-         puestos.puesto_id=request.POST.get('puesto_id')
-         puestos.puesto=request.POST.get('puesto')
-         puestos.descripcion=request.POST.get('descripcion')  
+#         puestos=puesto()
+#         puestos.puesto_id=request.POST.get('puesto_id')
+#         puestos.puesto=request.POST.get('puesto')
+#         puestos.descripcion=request.POST.get('descripcion')  
 
-         puestos.save()
-         print("Se ha registrado su Registro a la Pagina de PUESTOS")
+#         puestos.save()
+#         print("Se ha registrado su Registro a la Pagina de PUESTOS")
+#    return redirect('puestohome')
+
+        pu=puesto()
+        pu.puesto_id=request.POST.get("puesto_id")
+        pu.puesto=request.POST.get("puesto")
+       
+        pu.descripcion=request.POST.get("descripcion")
+
+        
+        puesto.objects.create(
+            puesto_id=pu.puesto_id,
+            puesto=pu.puesto,
+            descripcion=pu.descripcion,
+
+
+
+
+
+        )
     return redirect('puestohome')
+
+
+
+
 
 
 
@@ -831,16 +921,37 @@ def sucursalhome(request):
 
 def añadirsucursal(request):
         if request.method=='POST':
-         if request.POST.get('id_sucursal') and request.POST.get('direccion_sucursal') and request.POST.get('descripcion'):
+#         if request.POST.get('id_sucursal') and request.POST.get('direccion_sucursal') and request.POST.get('descripcion'):
 
-          sucu=sucursal()
-          sucu.id_sucursal=request.POST.get('id_sucursal')
-          sucu.direccion_sucursal=request.POST.get('direccion_sucursal')
-          sucu.descripcion=request.POST.get('descripcion')  
+#          sucu=sucursal()
+#          sucu.id_sucursal=request.POST.get('id_sucursal')
+#          sucu.direccion_sucursal=request.POST.get('direccion_sucursal')
+#          sucu.descripcion=request.POST.get('descripcion')  
 
-          sucu.save()
-         print("Se ha registrado su Registro a la Pagina de SUUCRSAL")
+#          sucu.save()
+#         print("Se ha registrado su Registro a la Pagina de SUUCRSAL")
+#        return redirect('sucursalhome')
+
+            id_sucursal=request.POST.get("id_sucursal")
+            
+            direccion_sucursal=request.POST.get("direccion_sucursal")
+            descripcion=request.POST.get("descripcion")
+
+
+            sucursal.objects.create(
+            id_sucursal=id_sucursal,
+            direccion_sucursal=direccion_sucursal,
+            descripcion=descripcion,
+
+
+
+
+
+        )
+        print("guardando Registro a la tabla de SUCURSAL RETORNANDO NUEVAMENTE A LA TABLA PRINCIPAL DE SUCURSAL")
         return redirect('sucursalhome')
+
+
 
 
 def eliminarsucurusal(request , id):
