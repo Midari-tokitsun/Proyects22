@@ -27,6 +27,39 @@ def tableuser(request):
 
     return render(request,"usuarios.html",context)
 
+from django.contrib.auth.hashers import make_password
+def registrarusuarioenellogin(request):
+
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        apellido = request.POST['apellido']
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+
+
+        if password != confirm_password:
+            context = {'error': 'Passwords do not match'}
+            return render(request, 'signup.html', context)
+
+        # Encriptar la contraseña
+        password_encrypted = make_password(password)
+
+        user = insertuser.objects.create(
+        nombre=nombre,
+        apellido=apellido,
+        username=username,
+        email=email,
+        password=password_encrypted,
+          
+          
+          
+          )
+        user.save()
+        return redirect('home')
+    return render(request, 'signup.html')
+
 
 
 def registrarentablausuario(request):
@@ -40,6 +73,7 @@ def registrarentablausuario(request):
          saverecord.password=request.POST.get('password')
          saverecord.estado=request.POST.get('estado')
          saverecord.apellido=request.POST.get('apellido')
+         
 
          saverecord.save()
          

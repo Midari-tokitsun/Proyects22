@@ -68,63 +68,50 @@
   </nav>
 
   <div class="container">
-    <div class="title">Registration</div>
+    <div class="title">Registrarse</div>
     <div class="content">
-      <form action="#">
+      <form action="{% url 'registrarusuarioenellogin' %}" method="POST">
+        {% csrf_token %}
         <div class="user-details">
           <div class="input-box">
-            <span class="details">Full Name</span>
-            <input type="text" placeholder="Enter your name" required>
+            <span class="details">Nombre</span>
+            <input name="nombre" type="text" placeholder="Escribe tu Nombre" required>
           </div>
           <div class="input-box">
-            <span class="details">Username</span>
-            <input type="text" placeholder="Enter your username" required>
+            <span class="details">Apellido</span>
+            <input name="apellido" type="text" placeholder="Escribe tu Apellido" required>
           </div>
           <div class="input-box">
-            <span class="details">Email</span>
-            <input type="text" placeholder="Enter your email" required>
+            <span class="details">Correo Electronico</span>
+            <input name="email" type="email" placeholder="Escribe tu Correo Electronico" required>
           </div>
           <div class="input-box">
-            <span class="details">Phone Number</span>
-            <input type="text" placeholder="Enter your number" required>
+            <span class="details">Nombre de Usuario</span>
+            <input name="username" type="text" placeholder="Escribe tu Nombre de usuario" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Numero de telefono</span>
+            <input type="text" placeholder="Escribe tu Numero de Telefono" required>
           </div>
           <div class="input-box">
             <span class="details">Password</span>
-            <input type="text" placeholder="Enter your password" required>
+            <input name="password" type="text" placeholder="Escribe tu Contraseña" required>
           </div>
           <div class="input-box">
             <span class="details">Confirm Password</span>
-            <input type="text" placeholder="Confirm your password" required>
+            <input name="confirm_password" type="text" placeholder="Confirma tu Contraseña" required>
           </div>
         </div>
-        <div class="gender-details">
-          <input type="radio" name="gender" id="dot-1">
-          <input type="radio" name="gender" id="dot-2">
-          <input type="radio" name="gender" id="dot-3">
-          <span class="gender-title">Gender</span>
-          <div class="category">
-            <label for="dot-1">
-            <span class="dot one"></span>
-            <span class="gender">Male</span>
-          </label>
-          <label for="dot-2">
-            <span class="dot two"></span>
-            <span class="gender">Female</span>
-          </label>
-          <label for="dot-3">
-            <span class="dot three"></span>
-            <span class="gender">Prefer not to say</span>
-            </label>
-          </div>
-        </div>
+
+        
         <div class="button">
-          <input type="submit" value="Register">
+          <input type="submit" value="Registrarse">
         </div>
       </form>
     </div>
   </div>
-<hr>
 
+<br>
   
 </body>
 </html>

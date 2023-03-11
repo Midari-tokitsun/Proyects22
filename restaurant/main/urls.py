@@ -27,6 +27,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
 # VISTA DE CLIENTE
+    path("registrarusuarioenellogin",views.registrarusuarioenellogin, name="registrarusuarioenellogin"),# REgistro de usuario en EL SIGNUP
+
+
+
     path("registrousuarios/",views.tableuser, name="tableuser"),# REgistro y tabla de clientes Cliente
     path("registrartablausuario/",views.registrarentablausuario, name="registrarentablausuario"),# REgistro Cliente EN LA TABLA
 
