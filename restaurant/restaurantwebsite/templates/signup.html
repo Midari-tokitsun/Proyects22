@@ -75,19 +75,19 @@
         <div class="user-details">
           <div class="input-box">
             <span class="details">Nombre</span>
-            <input name="nombre" type="text" placeholder="Escribe tu Nombre" required>
+            <input name="nombre" title="Ejemplo: Pedro,Ana,Noe SIN CARACTERES REPETIDOS" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" maxlength="20" minlength="3" type="text" placeholder="Escribe tu Nombre" required>
           </div>
           <div class="input-box">
             <span class="details">Apellido</span>
-            <input name="apellido" type="text" placeholder="Escribe tu Apellido" required>
+            <input name="apellido"  pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="Ejemplo: Josue,Funez,Castro" maxlength="20" minlength="5" type="text" placeholder="Escribe tu Apellido" required>
           </div>
           <div class="input-box">
             <span class="details">Correo Electronico</span>
-            <input name="email" type="email" placeholder="Escribe tu Correo Electronico" required>
+            <input name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Por favor introduce un email válido Ejemplo:usuario@gmail.com" type="email" placeholder="Escribe tu Correo Electronico" required>
           </div>
           <div class="input-box">
             <span class="details">Nombre de Usuario</span>
-            <input name="username" type="text" placeholder="Escribe tu Nombre de usuario" required>
+            <input name="username" title="Ejemplo:usuario21,ethan12,nier2 pero sin caracteres repetidos ni espacios" maxlength="16" minlength="4" pattern="^(?!.*(.).*\1)[a-zA-Z0-9]+$" type="text" placeholder="Escribe tu Nombre de usuario" required>
           </div>
           <div class="input-box">
             <span class="details">Numero de telefono</span>
@@ -95,7 +95,7 @@
           </div>
           <div class="input-box">
             <span class="details">Password</span>
-            <input name="password" type="text" placeholder="Escribe tu Contraseña" required>
+            <input title="La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula y un número."pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" maxlength="12" minlength="8" name="password" type="text" placeholder="Escribe tu Contraseña" required>
           </div>
           <div class="input-box">
             <span class="details">Confirm Password</span>

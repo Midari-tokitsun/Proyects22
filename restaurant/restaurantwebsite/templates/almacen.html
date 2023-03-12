@@ -93,11 +93,11 @@
 						</div>
 						<div class="form-group">
 							<label>Tipo de almacen</label>
-							<input name="tipo_almacen" type="text" class="form-control" required>
+							<input pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="El nombre del tipo de almacen debe contener solo letras Ejemplo:Carnes,Secos,Lacteos,Verduras" name="tipo_almacen" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>descripcion del almacen</label>
-							<textarea name="descripcion_almacen" class="form-control" required></textarea>
+							<textarea  maxlength="250" minlength="10" name="descripcion_almacen" class="form-control" required></textarea>
 						</div>
 						<div class="form-group">
 							<label>Estado del Almacen</label>

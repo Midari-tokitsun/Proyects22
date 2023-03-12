@@ -64,23 +64,45 @@ def registrarusuarioenellogin(request):
 
 def registrarentablausuario(request):
     if request.method=='POST':
-        if request.POST.get('username') and request.POST.get('password'):
-         saverecord = insertuser()
-         saverecord.id_usuario=request.POST.get('id_usuario')
-         saverecord.username=request.POST.get('username')
-         saverecord.nombre=request.POST.get('nombre')
-         saverecord.email=request.POST.get('email')
-         saverecord.password=request.POST.get('password')
-         saverecord.estado=request.POST.get('estado')
-         saverecord.apellido=request.POST.get('apellido')
+#         if request.POST.get('username') and request.POST.get('password'):
+#          saverecord = insertuser()
+#          saverecord.id_usuario=request.POST.get('id_usuario')
+#          saverecord.username=request.POST.get('username')
+#          saverecord.nombre=request.POST.get('nombre')
+#          saverecord.email=request.POST.get('email')
+#          saverecord.password=request.POST.get('password')
+#          saverecord.estado=request.POST.get('estado')
+#          saverecord.apellido=request.POST.get('apellido')
          
 
-         saverecord.save()
-         
-        print("USUARIO CREADO EXITOSAMENTE")
-        return redirect("tableuser")
-    else: 
-        return redirect("tableuser") 
+#          saverecord.save()
+
+            id_usuario=request.POST.get("id_usuario")
+            username=request.POST.get("username")
+            nombre=request.POST.get("nombre")
+            email=request.POST.get("email")
+            password=request.POST.get("password")
+            estado=request.POST.get("estado")
+            apellido=request.POST.get("apellido")
+  
+
+
+
+            insertuser.objects.create(
+                id_usuario=id_usuario,
+                username=username,
+                nombre=nombre,
+                email=email,
+                password=password,
+                estado=estado,
+                apellido=apellido,
+
+
+        )
+
+    print("USUARIO CREADO EXITOSAMENTE")
+    return redirect("tableuser")
+
 
 
 def editarusuario(request):

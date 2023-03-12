@@ -13,11 +13,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="{% static 'css/registroempstyle.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     
     <title>Registro Empleados</title>
 
@@ -35,7 +34,7 @@
   
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Insert tienda o restaurant</a>
+        <a class="navbar-brand" href="#">Pizza Wave</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -185,7 +184,7 @@
       </div>
       </nav>
 
-<h1>EMP tabla</h1>
+<h1>Control de Empleados</h1>
 
       <table class="table">
         <thead>
@@ -244,39 +243,53 @@
 
 <!-- Modal Añadir Empleado-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg ">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Añadir Empleado</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
     
 
 
-        <form action="{% url 'addempleado' %}" method="POST">
+        <form action="{% url 'addempleado' %}" method="POST" class="row g-2 ">
           {% csrf_token %} 
-        
+          
+          
+     
+
+          <div class="col-md">
           <label for="form-label">ID-EMPLEADO</label>
         
-          <input type="number" name="id_empleado">
-        
+          
+          <input class="form-control" type="number" name="id_empleado">
+        </div>
+          <div class="col-md-5">
           <label for="form-label">Nombre</label>
         
-          <input type="text" name="nombre">
-          
+          <input  pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="Ejemplo: Pedro,Ana,Noe"maxlength="20" minlength="3" class="form-control" type="text" name="nombre" required>
+        </div>
+
+        <div class="col-md-5">
           <label for="form-label">Apellido</label>
         
-          <input type="text" name="apellido">
-        
+          <input pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="Ejemplo: Peres,Funez,Castro" maxlength="20" minlength="5"  class="form-control" type="text" name="apellido" required>
+        </div>
+
+        <div class="col-md-5">
           <label for="form-label">Jornada</label>
         
-          <input type="text" name="jornada">
-        
+          <input  class="form-control" type="text" name="jornada" required>
+        </div>
+
+        <div class="col-md-5">
           <label for="form-label">Telefono</label>
         
-          <input type="number" name="telefono">
-        
+          <input class="form-control" type="number" name="telefono" pattern="^\+504\s\d{4}-\d{4}$" title="Ejemplo:+50488446955 o +50432470678" required>
+        </div>
+
+        <div class="col-md-5">
           <label for="form-label">PUESTO</label>
         
           <select class="form-select" name="puesto_asignado" id="">
@@ -284,8 +297,9 @@
         <option value="{{ p.puesto_id }}">{{ p.puesto }}</option>
           {% endfor %}
         </select>
+      </div>
         
-        
+      <div class="col-md">
         <label for="form-label">DEPARTAMENTO</label>
         
         <select class="form-select" name="departamento_asignado" id="">
@@ -293,7 +307,9 @@
         <option value="{{ deps.id_departamento }}">{{ deps.departamento }}</option>
         {% endfor %}
         </select>
-        
+      </div>
+
+      <div class="col-md">
         <label for="form-label">SUCURSAL</label>
         
         <select class="form-select" name="sucursal_asignado" id="">
@@ -301,8 +317,9 @@
         <option value="{{ s.id_sucursal }}">{{ s.direccion_sucursal }}</option>
         {% endfor %}
         </select>
+      </div>
         
-        
+      <div class="col-md-5">
         <label for="form-label">Cargo Asignado</label>
         
         <select class="form-select" name="cargo_asignado" id="">
@@ -310,7 +327,9 @@
         <option value="{{ c.id }}">{{ c.nombre_cargo }}</option>
         {% endfor %}
         </select>
-        
+      </div>
+
+      <div class="col-md-5">
         
         <label for="form-label">Tipo de Documento</label>
         
@@ -320,7 +339,7 @@
         {% endfor %}
         </select>
         
-        
+      </div>
 
         
        
@@ -328,7 +347,7 @@
 
 
 
-
+      
 
       </div>
       <div class="modal-footer">
@@ -361,7 +380,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Editar Empleado</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -481,14 +500,6 @@
   </div>
 </div>
 {% endfor %}
-
-
-
-
-
-
-
-
 
 
 

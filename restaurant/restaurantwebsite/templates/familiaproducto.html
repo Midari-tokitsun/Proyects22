@@ -26,7 +26,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
 		<div class="container-fluid">
-		  <a class="navbar-brand" href="#">Insert tienda o restaurant</a>
+		  <a class="navbar-brand" href="#">Pizza Wave</a>
 		  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		  <span class="navbar-toggler-icon"></span>
 		  </button>
@@ -258,11 +258,11 @@
 						</div>
 						<div class="form-group">
 							<label>Nombre de la Familia</label>
-							<input name="nombre_familia" type="text" class="form-control" required>
+							<input pattern="^(Carnes y aves|Pescados y mariscos|Frutas y verduras frescas|Lácteos y productos frescos|Panadería y pastelería|Bebidas alcohólicas y no alcohólicas|Suministros de limpieza y desechables|Condimentos y especias|Harinas y cereales|Aceites y grasas|Salsas y aderezos|Menaje y utensilios de cocina|Postres y helados|Bebidas calientes|Snacks y aperitivos)$" title="EJEMPLO:Carnes y aves|Pescados y mariscos|Frutas y verduras frescas|Lácteos y productos frescos|Panadería y pastelería|Bebidas alcohólicas y no alcohólicas|Suministros de limpieza y desechables|Condimentos y especias|Harinas y cereales|Aceites y grasas|Salsas y aderezos|Menaje y utensilios de cocina|Postres y helados|Bebidas calientes|Snacks y aperitivos" name="nombre_familia" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Descripcion de la Familia</label>
-							<textarea name="descripcion_familia" class="form-control" required></textarea>
+							<textarea maxlength="250" minlength="10" name="descripcion_familia" class="form-control" required></textarea>
 						</div>
 				
 					</div>
