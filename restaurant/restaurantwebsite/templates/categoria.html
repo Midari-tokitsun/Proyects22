@@ -261,11 +261,11 @@
 						</div>
 						<div class="form-group">
 							<label>Nombre de la Categoria</label>
-							<input name="nombre_categoria" type="text" class="form-control" required>
+							<input pattern="^(?!.*(.).*\1)[a-zA-Z]+$" name="nombre_categoria" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Descripcion de la Categoria</label>
-							<textarea name="descripcion_categoria" class="form-control" required></textarea>
+							<textarea maxlength="250" minlength="10" name="descripcion_categoria" class="form-control" required></textarea>
 						</div>
 					
 					</div>

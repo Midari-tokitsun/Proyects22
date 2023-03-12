@@ -271,11 +271,11 @@
 						</div>
 						<div class="form-group">
 							<label>Departamento</label>
-							<input type="text" name="departamento" class="form-control" required>
+							<input minlength="4" maxlength="30" type="text" pattern="^(?!.*(\S)\1)[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+(\s[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+)*$" title="Ejemplo: Yoro,Copan,Francisco Morazan" name="departamento" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Codigo Postal</label>
-							<input name="codigo_postal" class="form-control" required>
+							<input  minlength="5" maxlength="5" pattern="^[0-9]{5}$" type="number" title="Introduzca un codigo POstal Valido" name="codigo_postal" class="form-control" required>
 						</div>
 				
 					</div>

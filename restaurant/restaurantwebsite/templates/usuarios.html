@@ -268,12 +268,12 @@
 
                         <div class="form-group">
 							<label>Nombre</label>
-							<input name="nombre" type="text" class="form-control" required>
+							<input name="nombre" title="Ejemplo: Pedro,ana,Noe" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" maxlength="20" minlength="3" type="text" class="form-control" required>
 						</div>
 
                         <div class="form-group">
 							<label>Apellido</label>
-							<input name="apellido" type="text" class="form-control" required>
+							<input name="apellido" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="Ejemplo: Fu,Peres,Funez,Castro" maxlength="20" minlength="5" type="text" class="form-control" required>
 						</div>
 
 
@@ -282,15 +282,16 @@
 
 						<div class="form-group">
 							<label>Correo Electronico</label>
-							<input name="email" type="email" class="form-control" required>
+							<input name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Por favor introduce un email válido Ejemplo:usuario@gmail.com" type="email" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Nombre de Usuario</label>
-							<input name="username" class="form-control" required>
+							<input name="username" title="Ejemplo:usuario21,ethan12,nier2 pero sin caracteres repetidos ni espacios" maxlength="16" minlength="4" pattern="^(?!.*(.).*\1)[a-zA-Z0-9]+$" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Contraseña</label>
-							<input name="password" type="text" class="form-control" required>
+							<input name="password" title="La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula y un número."pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" maxlength="12" minlength="8" type="text" class="form-control" required>
+              <span class="password-info">La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula y un número.</span>
 						</div>			
                         
                         <label class="form-label"> Estado de la Cuenta</label>

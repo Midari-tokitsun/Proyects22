@@ -303,13 +303,13 @@
 
         <div class="col-md-6 mb-4">
           <p>Nombre del Cargo</p>
-          <input type="text"   name="nombre_cargo" required placeholder="Nombre del cargo"  class="form-control" pattern="[a-zA-z]+" >
+          <input type="text"  maxlength="15" minlength="5" pattern="^(?!.*(.).*\1)[A-Za-z]+$" name="nombre_cargo" title="Ejemplo: Mesero,Administrador,Secretario,Gerente" required placeholder="Nombre del cargo"  class="form-control" pattern="[a-zA-z]+" >
         </div>
 
 
         <div class="col-md-6 mb-4">
           <p>Descripcion</p>
-          <input type="text" name="descripcion" required placeholder="Descripcion del Cargo"   class="form-control" >
+          <textarea type="text" maxlength="250" minlength="10" name="descripcion" required placeholder="Descripcion del Cargo"   class="form-control" ></textarea>
         </div>
 
 

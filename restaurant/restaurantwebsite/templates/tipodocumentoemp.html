@@ -326,7 +326,7 @@
   
   
         <div class="col-md-6 mb-4 ">
-          <input required type="text" maxlength="13" min="9" pattern="[A-Za-z0-9_-]{9,15}" id="numero_identificacion" name="numero_identificacion" class="form-control" />
+          <input required type="text"  pattern="(?!.*(\d).*\1)^(?!0{12})\d{13}$|^(?!0{9})\d{9}$|^[a-zA-Z]{2}\d{7}$"  id="numero_identificacion" name="numero_identificacion" title="Ejemplo: pasaporte: AB1234567 DNI: 123456789 RTN:0801200315744" class="form-control" />
           <label class="form-label" for="form3Example1q">Numero del Documento de identificacion</label>
         </div>
   
