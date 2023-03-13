@@ -196,6 +196,17 @@ urlpatterns = [
 
 # FIN de VISTA MEnu
 
+# VISTA receta
+
+    path('recetatablaregistros/', views.recetatablaregistros , name="recetatablaregistros"),#pantalla principal del table
+    path('agregarreceta', views.agregarreceta , name="agregarreceta"),#pantalla principal del table
+    path('editarreceta/<int:id>', views.editarreceta , name="editarreceta"),#pantalla principal del table
+    path('eliminarreceta/<int:id>', views.eliminarreceta , name="eliminarreceta"),#pantalla principal del table
+
+
+
+# VISTA Fin de la Vista REceta
+
 
 
 ] 

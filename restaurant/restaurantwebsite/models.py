@@ -162,3 +162,14 @@ class menutabla(models.Model):
     class Meta:
         db_table='menu'
 
+class recetatabla(models.Model):
+    id_receta=models.CharField(primary_key=True, max_length=20)  
+    nombre_receta=models.CharField( max_length=100) 
+    menu_id=models.CharField(max_length=50) 
+    descripcion_receta=models.TextField() 
+    porciones_receta=models.CharField( max_length=20)
+
+    class Meta:
+        db_table='receta' 
+
+

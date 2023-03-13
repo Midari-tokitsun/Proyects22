@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla
 
 
 
@@ -1402,3 +1402,73 @@ def eliminarmenutabla(request,id):
 
 
 # FIN DE VISTA Menu
+
+
+
+def recetatablaregistros(request):
+    rec=recetatabla.objects.all()
+    men=menutabla.objects.all()
+    context={
+        'rec':rec,
+        'men':men,
+    }
+
+
+    return render(request,"receta.html",context)
+
+
+def agregarreceta(request):
+    if request.method=='POST':
+
+        id_receta=request.POST.get("id_receta")
+        nombre_receta=request.POST.get("nombre_receta")
+        menu_id=request.POST.get("menu_id")
+        descripcion_receta=request.POST.get("descripcion_receta")
+        porciones_receta=request.POST.get("porciones_receta")
+
+
+        recetatabla.objects.create(
+            id_receta=id_receta,
+            nombre_receta=nombre_receta,
+            menu_id=menu_id,
+            descripcion_receta=descripcion_receta,
+            porciones_receta=porciones_receta,
+
+
+        )
+        print("SALVADO en RECETATABLA RETORNANDO OTRA VEZ A LOS REGISTROS PRINCIPALS")
+
+        return redirect("recetatablaregistros")
+
+    return redirect(request,'recetatablaregistros')
+
+
+def editarreceta(request,id):
+    rec=recetatabla.objects.get(id_receta=id)
+    
+    id_receta=request.POST.get('id_receta')
+    nombre_receta=request.POST.get('nombre_receta')
+    menu_id=request.POST.get('menu_id')
+    descripcion_receta=request.POST.get('descripcion_receta')
+    porciones_receta=request.POST.get('porciones_receta')
+
+    rec.id_receta=id_receta
+    rec.nombre_receta=nombre_receta
+    rec.menu_id=menu_id
+    rec.descripcion_receta=descripcion_receta
+    rec.porciones_receta=porciones_receta
+
+    rec.save()
+
+    print("Se han guardado los CAMBIOS RETORNANDO A LA VISTA PRINCIPAL DE RECETA RETORNANDO NUEVAMENTE")
+
+
+
+
+    return redirect('recetatablaregistros')
+
+
+def eliminarreceta(request,id):
+    rec=recetatabla.objects.get(id_receta=id)
+    rec.delete()
+    return redirect('recetatablaregistros')
