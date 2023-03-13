@@ -64,15 +64,10 @@
                 </tbody>
             </table>
 			<div class="clearfix">
-                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+
                 <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    <li class="page-item"><a href="#" class="page-link">Anterior</a></li>
+                    <li class="page-item"><a href="#" class="page-link">Siguiente</a></li>
                 </ul>
             </div>
         </div>
@@ -93,11 +88,11 @@
 						</div>
 						<div class="form-group">
 							<label>Tipo de almacen</label>
-							<input pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="El nombre del tipo de almacen debe contener solo letras Ejemplo:Carnes,Secos,Lacteos,Verduras" name="tipo_almacen" type="text" class="form-control" required>
+							<input pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" title="El nombre del tipo de almacen debe ser Ejemplo:Carnes,Secos,Lacteos,Verduras" name="tipo_almacen" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>descripcion del almacen</label>
-							<textarea  maxlength="250" minlength="10" name="descripcion_almacen" class="form-control" required></textarea>
+							<textarea title="Debes escribir una minima descripcion y breve del almacen" maxlength="250" minlength="10" name="descripcion_almacen" class="form-control" required></textarea>
 						</div>
 						<div class="form-group">
 							<label>Estado del Almacen</label>

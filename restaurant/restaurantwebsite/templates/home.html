@@ -17,7 +17,10 @@
 
 {% else %}
 {% endif %}
-<body>
+<body style="background-color:  #C33764;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #1D2671, #C33764);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #1D2671, #C33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+ ;">
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
     <div class="container-fluid">
@@ -180,13 +183,13 @@
 
 
       <!-- Masthead-->
-      <header class="masthead" style="height: 750px ;" id="header1">
+      <header class="masthead" style="height: 950px ;" id="header1">
         <div class="container px-4 px-lg-5 d-flex h-50 align-items-center justify-content-center">
-            <div class="d-flex justify-content-center">
-                <div class="text-center">
-                    <h1 class="mx-auto my-0 text-uppercase">Pizza Wave</h1>
-                    <h2 class="text-white-50 mx-auto mt-2 mb-5">Bienvenido a Pizza Wave donde el Sabor y la frescura se disfrutan al lado de una computadora macintosh o windows 98 .</h2>
-                    <a class="btn btn-primary" href="/menu">Visita Nuestro menu</a>
+            <div id="divdelheader1" class="d-flex justify-content-center" >
+                <div class="text-center" >
+                    <h1 style="font-size: xx-larger  ;" class="mx-auto my-0 text-uppercase">Pizza Wave</h1>
+                    <h2 style="font-size: xx-larger  ;" class="text-dark-100 mx-auto mt-2 mb-5">Bienvenido a Pizza Wave donde el Sabor y la frescura se disfrutan al lado de una computadora macintosh o windows 98 .</h2>
+                    <a class="btn btn-danger" href="/menu">Visita Nuestro menu</a>
                 </div>
             </div>
         </div>
@@ -240,7 +243,7 @@
   <div class="card" style="width: 18rem;" >
     <img src="{% static 'images/pizza1.jpg' %}" class="card-img-top" alt="...">
     <div class="card-body">
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <p class="card-text">Tenemos la version de Peperoni Picante con toque picoso con ingredientes nunca antes vistos</p>
     </div>
   </div>
 
@@ -248,7 +251,7 @@
     <div class="card " style="width: 18rem;" >
       <img src="{% static 'images/pizza1.jpg' %}" class="card-img-top" alt="...">
       <div class="card-body">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <p class="card-text">Tenemos la tradicional pizza de peperoni que habitualmente es comprada y esta a un super precio</p>
       </div>
     </div>
   </div>
@@ -262,11 +265,11 @@
     <div class="card h-100">
       <img src="{% static 'images/pizza1.jpg' %}" class="card-img-top" alt="...">
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <h5 class="card-title">Pizza Picante de Peperoni</h5>
+        <p class="card-text">Esta pizza es de tamaño familiar y cuenta de dos sabores picante y tradicional</p>
       </div>
       <div class="card-footer">
-        <small class="text-muted">Last updated 3 mins ago</small>
+        <small class="text-muted">ultima vez actualizado hace 3 min</small>
       </div>
     </div>
   </div>
@@ -274,11 +277,11 @@
     <div class="card h-100">
       <img src="{% static 'images/pizza2.jpg' %}"class="card-img-top" alt="...">
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+        <h5 class="card-title">Pizza Vegetariana Especial</h5>
+        <p class="card-text">Tenemos la pizza vegetariana para esas personas que no le gusta comer animales tambien contamos con su alternativa hecha de carne vegetal y quesillo</p>
       </div>
       <div class="card-footer">
-        <small class="text-muted">Last updated 3 mins ago</small>
+        <small class="text-muted">ultima vez actualizado hace 3 min</small>
       </div>
     </div>
   </div>
@@ -286,11 +289,11 @@
     <div class="card h-100">
       <img src="{% static 'images/pizza3.jpg' %}" class="card-img-top" alt="...">
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+        <h5 class="card-title">Pizza Hiperpicante modo diablo</h5>
+        <p class="card-text">Esta pizza esta a base de los chiles mas picante de la ciudad sumado a que el chile esta disperso lo cual no sabras si estas comiendo un chile</p>
       </div>
       <div class="card-footer">
-        <small class="text-muted">Last updated 3 mins ago</small>
+        <small class="text-muted">ultima vez actualizado hace 3 min</small>
       </div>
     </div>
   </div> 
@@ -299,27 +302,35 @@
 
 
         <!-- Projects-->
-        <section class="projects-section bg-light" id="projects">
+        <section class="projects-section bg-light" id="projects" style="background-color: #5C258D;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #4389A2, #5C258D);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #4389A2, #5C258D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+         ;">
           <div class="container px-4 px-lg-5">
               <!-- Featured Project Row-->
-              <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
-                  <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="{% static 'images/pizza1.jpg' %}" alt="..." /></div>
-                  <div class="col-xl-4 col-lg-5">
-                      <div class="featured-text text-center text-lg-left">
-                          <h4>Shoreline</h4>
-                          <p class="text-black-50 mb-0">Grayscale is open source and MIT licensed. This means you can use it for any project - even commercial projects! Download it, customize it, and publish your website!</p>
+              <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
+                  <div class="col-lg-6"><img class="img-fluid " src="{% static 'images/pizza2.jpg' %}" alt="..." /></div>
+                  <div class="col-lg-6">
+                    <div class="bg-black text-center h-100 project">
+                      <div class="d-flex h-100">
+                      <div class="project-text w-100 my-auto text-center text-lg-left">
+                          <h4 class="text-white">Definicion de nuestros Ingredientes</h4>
+                          <p class="mb-0 text-white-50">Nuestras Recetas se basan en lo tradicional lo cual no conllevan aditivos perjudicales para la salud y contamos con diversas variedades para aquellas personas que no les apetece lo que mata pero complace</p>
+                          <hr class="d-none d-lg-block mb-0 ms-0" />
                       </div>
+                    </div>
+                    </div>
                   </div>
               </div>
               <!-- Project One Row-->
               <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-                  <div class="col-lg-6"><img class="img-fluid" src="{% static 'images/pizza1.jpg' %}" alt="..." /></div>
+                  <div class="col-lg-6"><img class="img-fluid" src="{% static 'images/pizza5.jpg' %}" alt="..." /></div>
                   <div class="col-lg-6">
                       <div class="bg-black text-center h-100 project">
                           <div class="d-flex h-100">
                               <div class="project-text w-100 my-auto text-center text-lg-left">
-                                  <h4 class="text-white">Misty</h4>
-                                  <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                                  <h4 class="text-white">Contamos con Variedades de Tamaño</h4>
+                                  <p class="mb-0 text-white-50">Tenemos variedades de tamaños y estilos para personas que les gusta disfrutar individual o en grupo y en pareja</p>
                                   <hr class="d-none d-lg-block mb-0 ms-0" />
                               </div>
                           </div>
@@ -328,13 +339,13 @@
               </div>
               <!-- Project Two Row-->
               <div class="row gx-0 justify-content-center">
-                  <div class="col-lg-6"><img class="img-fluid" src="{% static 'images/pizza1.jpg' %}" alt="..." /></div>
+                  <div class="col-lg-6"><img class="img-fluid" src="{% static 'images/pizza6.jpg' %}" alt="..." /></div>
                   <div class="col-lg-6 order-lg-first">
                       <div class="bg-black text-center h-100 project">
                           <div class="d-flex h-100">
                               <div class="project-text w-100 my-auto text-center text-lg-right">
-                                  <h4 class="text-white">Mountains</h4>
-                                  <p class="mb-0 text-white-50">Another example of a project with its respective description. These sections work well responsively as well, try this theme on a small screen!</p>
+                                  <h4 class="text-white">Ubicacion</h4>
+                                  <p class="mb-0 text-white-50">Calle Poseidon enfrente de la Universidad Jose Cecilio del Valle Visitanos y no te arrepentiras</p>
                                   <hr class="d-none d-lg-block mb-0 me-0" />
                               </div>
                           </div>
@@ -347,24 +358,35 @@
 
 
 
+      <div class="card mb-3">
+        <img class="card-img-top" src="{% static 'images/bakingpizza.gif' %}" alt="..." />
+  
+      <div class="card-img-overlay">
 
-  <div class="container px-4 px-lg-5">
       <div class="row gx-4 gx-lg-5 justify-content-center">
           <div class="col-lg-8">
-              <h2 class="text-white mb-4">About Us</h2>
-              <p class="text-white-50">
-                  Grayscale is a free Bootstrap theme created by Start Bootstrap. It can be yours right now, simply download the template on
-                  <a href="https://startbootstrap.com/theme/grayscale/">the preview page.</a>
-                  The theme is open source, and you can use it for any purpose, personal or commercial.
+              <br>
+              <br>
+              <br>
+            <h2  style="font-size: 50px ; text-align: center;"class="text-white mb-4">Sobre Nosotros</h2>
+              <p style="font-size: 50px ; text-align: center;" class="text-white">
+                  Somos una empresa Recien entrando en el ambito lo cual nos llevara un gran camino por delante y con tu acompañamiento seria el mejor modo para progresar en este ambito y ser exitosos!
               </p>
           </div>
       </div>
-      <img class="img-fluid" src="{% static 'images/pizza1.jpg' %}" alt="..." />
+    </div>
   </div>
 
 
 
+<footer>
 
+<div>
+
+  <h1 style="text-align: center ;">GRUPO N3</h1>
+</div>
+
+</footer>
 
 
 

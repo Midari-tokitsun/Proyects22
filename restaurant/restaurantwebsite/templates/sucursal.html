@@ -15,7 +15,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   
-  <body>
+  <body style="background-color:  #FF0099;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #493240, #FF0099);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #493240, #FF0099); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+   ;">
 
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
@@ -186,7 +189,7 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
-						<h2>Registro  de<b>Sucursal</b></h2>
+						<h2>Registro de<b> Sucursal</b></h2>
 					</div>
 					<div class="col-sm-6">
 						<a href="#addsucuModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Añadir nueva Sucursal</span></a>
@@ -234,15 +237,11 @@
                
             </table>
 			<div class="clearfix">
-                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+
                 <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    <li class="page-item"><a href="#" class="page-link">Anterior</a></li>
+
+                    <li class="page-item"><a href="#" class="page-link">Siguiente</a></li>
                 </ul>
             </div>
         </div>
@@ -264,11 +263,11 @@
 						</div>
 						<div class="form-group">
 							<label>direccion de la sucursal</label>
-							<input name="direccion_sucursal" type="text" class="form-control" required>
+							<input pattern="	" id="direccion_sucursal" oninput="validarFormulario()" title="Calle 1, Colonia ABC, Tegucigalpa, Francisco Morazán" name="direccion_sucursal" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Descripcion</label>
-							<textarea name="descripcion" class="form-control" required></textarea>
+							<textarea  maxlength="250" minlength="10" name="descripcion" class="form-control" required></textarea>
 						</div>
 	
 					</div>
@@ -315,6 +314,17 @@
 		</div>
 	</div>
     {% endfor %}
+
+
+	<script>
+
+
+
+
+
+
+	</script>
+	
 	
 </body>
 </html>
