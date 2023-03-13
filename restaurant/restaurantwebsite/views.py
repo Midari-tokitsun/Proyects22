@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla
 
 
 
@@ -1326,3 +1326,79 @@ def eliminaralmacen(request,id):
 
 
 #Fin de la Vista de Almacen
+
+
+# VISTA DE Menu
+
+def menutablaregistros(request):
+    ela=elaboracion.objects.all()
+    men=menutabla.objects.all()
+    context={
+        'ela':ela,        
+        'men':men,
+    }
+
+
+    return render(request,"menutabla.html",context)
+
+def agregarmenu(request):
+
+    if request.method=='POST':
+
+        id_menu=request.POST.get("id_menu")
+        nombre_menu=request.POST.get("nombre_menu")
+        precio_menu=request.POST.get("precio_menu")
+        descripcion_menu=request.POST.get("descripcion_menu")
+        modo_elaboracion=request.POST.get("modo_elaboracion")
+
+
+        menutabla.objects.create(
+            id_menu=id_menu,
+            nombre_menu=nombre_menu,
+            precio_menu=precio_menu,
+            descripcion_menu=descripcion_menu,
+            modo_elaboracion=modo_elaboracion,
+
+
+
+
+        )
+        print("SALVADO en MENUTABLA RETORNANDO OTRA VEZ A LOS REGISTROS PRINCIPALS")
+
+        return redirect("menutablaregistros")
+
+    return redirect(request,'menutablaregistros')
+
+def editarmenutabla(request,id):
+    men=menutabla.objects.get(id_menu=id)
+    
+    id_menu=request.POST.get('id_menu')
+    nombre_menu=request.POST.get('nombre_menu')
+    precio_menu=request.POST.get('precio_menu')
+    descripcion_menu=request.POST.get('descripcion_menu')
+    modo_elaboracion=request.POST.get('modo_elaboracion')
+
+    men.id_menu=id_menu
+    men.nombre_menu=nombre_menu
+    men.precio_menu=precio_menu
+    men.descripcion_menu=descripcion_menu
+    men.modo_elaboracion=modo_elaboracion
+
+    men.save()
+
+    print("Se han guardado los CAMBIOS RETORNANDO A LA VISTA PRINCIPAL DE MENU RETORNANDO NUEVAMENTE")
+
+
+
+
+    return redirect('menutablaregistros')
+
+def eliminarmenutabla(request,id):
+    men=menutabla.objects.get(id_menu=id)
+    men.delete()
+
+
+    return redirect('menutablaregistros')
+
+
+# FIN DE VISTA Menu

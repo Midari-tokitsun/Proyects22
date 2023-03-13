@@ -186,9 +186,15 @@ urlpatterns = [
 
 
     
+# VISTA Menu
+
+    path('menutabla/', views.menutablaregistros , name="menutablaregistros"),#pantalla principal del table
+    path('agregarmenu', views.agregarmenu , name="agregarmenu"),#pantalla principal del table
+    path('editarmenutabla/<int:id>', views.editarmenutabla , name="editarmenutabla"),#pantalla principal del table
+    path('eliminarmenutabla/<int:id>', views.eliminarmenutabla , name="eliminarmenutabla"),#pantalla principal del table
 
 
-
+# FIN de VISTA MEnu
 
 
 

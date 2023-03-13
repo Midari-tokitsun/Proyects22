@@ -149,3 +149,16 @@ class almacen(models.Model):
 
     class Meta:
         db_table='almacen'
+
+class menutabla(models.Model):
+    id_menu=models.CharField(primary_key=True, max_length=20) 
+    nombre_menu=models.CharField(max_length=50)
+    precio_menu=models.CharField(max_length=50)
+    descripcion_menu=models.TextField()
+    modo_elaboracion=models.CharField(max_length=30)
+
+
+
+    class Meta:
+        db_table='menu'
+
