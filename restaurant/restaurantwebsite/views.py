@@ -28,6 +28,9 @@ def tableuser(request):
     return render(request,"usuarios.html",context)
 
 from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.contrib.auth.password_validation import validate_password
 def registrarusuarioenellogin(request):
 
     if request.method == 'POST':
@@ -37,27 +40,40 @@ def registrarusuarioenellogin(request):
         email = request.POST['email']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
-
+        registro_exitoso = False  # Inicialmente, el registro no es exitoso
 
         if password != confirm_password:
-            messages.error(request,"Escribe bien tu Contraseña")
+            messages.error(request,"Las contraseñas no coinciden")
+            context = {
+            'nombre': nombre,
+            'apellido': apellido,
+            'username': username,
+            'email': email,
+            }
+            return render(request, 'signup.html', context)
+        else:
+            # Encriptar la contraseña
+            password_encrypted = make_password(password)
 
-        # Encriptar la contraseña
-        password_encrypted = make_password(password)
+            user = insertuser.objects.create(
+                nombre=nombre,
+                apellido=apellido,
+                username=username,
+                email=email,
+                password=password_encrypted,
+            )
+            user.save()
+            registro_exitoso = True  # El registro es exitoso ahora
 
-        user = insertuser.objects.create(
-        nombre=nombre,
-        apellido=apellido,
-        username=username,
-        email=email,
-        password=password_encrypted,
-          
-          
-          
-          )
-        user.save()
-        return redirect('home')
-    return render(request, 'signup.html')
+        if registro_exitoso:
+            messages.success(request,"USUARIO REGISTRADO CON EXITO!!!!")
+            return redirect("signup")
+        else:
+            # renderizar el formulario de registro con los datos previos
+            return render(request, 'signup.html', {'registro_exitoso': registro_exitoso})
+
+    else:
+        return render(request, 'signup.html')
 
 
 
@@ -171,7 +187,31 @@ def home(request):
 from django.contrib.auth.hashers import check_password
 
 def login_user(request):
-   
+
+
+
+
+
+
+    
+
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('usuarios')
+        else:
+            messages.error(request, 'Credenciales inválidas')
+    
+    return render(request, 'empleadologin.html')
+
+
+
+'''   
     if request.method=='POST':
 
 
@@ -189,7 +229,7 @@ def login_user(request):
             messages.success(request, 'Usuario No Existente!!')
             
     return render(request, 'empleadologin.html')
-    
+'''    
 
 def signout(request):
     logout(request)

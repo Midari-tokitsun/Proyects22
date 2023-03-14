@@ -69,6 +69,11 @@
 
 
 
+
+  <div class="container">
+
+
+    
   {% if messages %}
   <ul class="messages">
     {% for message in messages %}
@@ -76,42 +81,42 @@
       <script>
       setTimeout(function() {
         $('.messages').fadeOut('slow');
-      }, 3000);
+      }, 2000);
       </script>
     </li>
     {% endfor %}
   </ul>
   {% endif %}
 
-  <div class="container">
+
     <div class="title">Registrarse</div>
     <div class="content">
-      <form action="{% url 'registrarusuarioenellogin' %}" method="POST">
+      <form  method="POST">
         {% csrf_token %}
         <div class="user-details">
           <div class="input-box">
             <span class="details">Nombre</span>
-            <input name="nombre" title="Ejemplo: Pedro,Ana,Noe SIN CARACTERES REPETIDOS" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" maxlength="20" minlength="3" type="text" placeholder="Escribe tu Nombre" required>
+            <input  value="{{ nombre }}" name="nombre" title="Ejemplo: Pedro,Ana,Noe SIN CARACTERES REPETIDOS" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" maxlength="20" minlength="3" type="text" placeholder="Escribe tu Nombre" required>
           </div>
           <div class="input-box">
             <span class="details">Apellido</span>
-            <input name="apellido"  pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="Ejemplo: Josue,Funez,Castro" maxlength="20" minlength="5" type="text" placeholder="Escribe tu Apellido" required>
+            <input value="{{ apellido }}" name="apellido"  pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="Ejemplo: Josue,Funez,Castro" maxlength="20" minlength="5" type="text" placeholder="Escribe tu Apellido" required>
           </div>
           <div class="input-box">
             <span class="details">Correo Electronico</span>
-            <input name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Por favor introduce un email válido Ejemplo:usuario@gmail.com" type="email" placeholder="Escribe tu Correo Electronico" required>
+            <input value="{{ email }}" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Por favor introduce un email válido Ejemplo:usuario@gmail.com" type="email" placeholder="Escribe tu Correo Electronico" required>
           </div>
           <div class="input-box">
             <span class="details">Nombre de Usuario</span>
-            <input name="username" title="Ejemplo:usuario21,ethan12,nier2 pero sin caracteres repetidos ni espacios" maxlength="16" minlength="4" pattern="^(?!.*(.).*\1)[a-zA-Z0-9]+$" type="text" placeholder="Escribe tu Nombre de usuario" required>
+            <input value="{{ username }}" name="username" title="Ejemplo:usuario21,ethan12,nier2 pero sin caracteres repetidos ni espacios" maxlength="16" minlength="4" pattern="^(?!.*(.).*\1)[a-zA-Z0-9]+$" type="text" placeholder="Escribe tu Nombre de usuario" required>
           </div>
           <div class="input-box">
             <span class="details">Numero de telefono</span>
-            <input type="text" placeholder="Escribe tu Numero de Telefono" required>
+            <input  type="text" placeholder="Escribe tu Numero de Telefono" required>
           </div>
           <div class="input-box">
             <span class="details">Contraseña</span>
-            <input title="La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula y un número."pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" maxlength="12" minlength="8" name="password" type="password" placeholder="Escribe tu Contraseña" required>
+            <input  title="La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula y un número." maxlength="12" minlength="8" name="password" type="password" placeholder="Escribe tu Contraseña" required>
           </div>
           <div class="input-box">
             <span class="details">Confirma tu Contraseña</span>
@@ -120,6 +125,13 @@
         </div>
 
         
+        {% if registro_exitoso %}
+        <div class="alert alert-success">
+            El registro se realizó correctamente.
+        </div>
+        {% endif %}
+
+
         <div class="button">
           <input type="submit" value="Registrarse">
         </div>
