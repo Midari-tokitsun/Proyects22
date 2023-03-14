@@ -173,3 +173,5 @@ class recetatabla(models.Model):
         db_table='receta' 
 
 
+class MyException(Exception):
+    pass

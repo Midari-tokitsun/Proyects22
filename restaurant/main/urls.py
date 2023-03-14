@@ -45,7 +45,7 @@ urlpatterns = [
 
 
 
-    path("signup/",views.signup, name="signup"),# REgistro Cliente
+    path("signup/",views.registrarusuarioenellogin, name="signup"),# REgistro Cliente
     path("usuario/",views.home, name="home"),# HomePAge Usuario
     path("login_user/",views.login_user, name="login_user"),# Log in USuario
     path('signout/',views.signout, name='signout'),# Cerrar Sesion Usuario
