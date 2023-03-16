@@ -16,6 +16,15 @@
     
     
     
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
     
     
     <title>Receta</title>
@@ -295,32 +304,32 @@
           <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Nueva Receta</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="{% url 'agregarreceta' %}" method="POST">
+        <form id="myform" action="{% url 'agregarreceta' %}" method="POST">
         <div class="modal-body">
             {% csrf_token %}
 
 
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">ID-Receta</label>
-                <input name="id_receta" type="text" class="form-control" id="exampleFormControlInput1" placeholder="ID RECETA">
+                <input  name="id_receta" type="text" class="form-control" id="id_receta" placeholder="ID RECETA" required>
               </div>
 
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Nombre de la Receta</label>
-                <input name="nombre_receta" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Nombre de la Receta">
+                <input name="nombre_receta" type="text" class="form-control noSpace noRepetidos sololetrasyconmayusculas" id="nombre_receta" placeholder="Nombre de la Receta" required>
               </div>
 
 
 
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Porciones </label>
-                <input name="porciones_receta" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Porciones totales que da la realizacion de la receta">
+                <input min="4" max="12" name="porciones_receta" type="number" class="form-control noSpace" id="porciones_receta" placeholder="Porciones totales que da la realizacion de la receta 4,8,12" required>
               </div>
 
 
               <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Descripcion de la Receta</label>
-                <textarea name="descripcion_receta" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea minlength="10" maxlength="250" placeholder="Breve Descripcion de l a Receta" name="descripcion_receta" class="form-control descripcioncontrol" id="descripcion_receta" rows="3" required></textarea>
               </div>
 
               <select name="menu_id" class="form-select" aria-label="Default select example">
@@ -411,6 +420,139 @@
 
 
 
+
+
+  <script>
+
+
+$(document).ready(function() {
+
+
+		$("#myform").validate({
+			rules: {
+				id_receta: {
+				required: true,
+				noSpace: true,
+			  },
+			  nombre_receta: {
+				required: true, 
+				minlength: 5,
+				maxlength:16,
+				noRepetidos: true,
+		
+				noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
+				sololetrasyconmayusculas:true,
+			  },
+		
+		
+		
+			  porciones_receta: {
+				required: true,
+		
+				min:4,
+				max: 12,
+			  },
+		
+			
+
+        descripcion_receta: {
+				required: true,
+        descripcioncontrol:true,
+        minlength:10,
+        maxlength:250,
+
+			  },
+
+
+
+		
+			},
+
+
+
+
+
+			messages: {
+				id_receta: {
+				noSpace:"No se puede Espacios Estimado",
+				required: "Debes Poner un ID en la Receta"
+		
+			  },
+			  nombre_receta: {
+				required:"Debes Ingresar Una Receta",
+				sololetrasyconmayusculas: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
+				minlength: "Debes ingresar al menos 5 caracteres.", 
+				maxlength: "No puedes ingresar más de 16 caracteres.",
+				noRepetidos: "No se permiten caracteres repetidos la Receta",
+		
+			  noespacios: "El Nombre de una Receta No Puede Contener Espacios"
+			  },
+		
+		
+			  descripcion_receta: {
+				required:"Debes poner Una Descripcion Breve en la Receta",
+        decripcioncontrol:"Escribe una breve descripción del cargo. como Minimo 10 Letras",
+
+				minlength: "Debes ingresar al menos 10 Letras en la Descripcion de la Receta.",
+			  maxlength: "No puedes ingresar más de 250 Letras en la Descripcion de la Receta",
+	
+			  },
+
+			  porciones_receta: {
+				required:"Ingresa Cuantas porciones Sacas de Esa Receta",
+        min:"las porciones minimas deben ser mayores de  4",
+          max:" Las porciones Maximas deben ser menores de 12",
+
+			  },
+		
+			},
+		
+		
+		    errorPlacement: function(error, element) {
+      error.fadeIn().delay(3000).fadeOut();
+      error.insertAfter(element);
+    },
+		
+		
+			submitHandler: function(form) {
+			  $("#mensaje-confirmacion").show();
+			  form.submit();
+			}
+		  });
+		
+		
+
+});
+
+		
+		// Regla personalizada para validar el campo de nombre_cargo
+		$.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
+		  return this.optional(element) || /^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$/.test(value) && !/\s/.test(value);
+		}, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
+		
+		
+
+		
+		
+		// Regla personalizada para validar el campo de nombre_cargo
+		jQuery.validator.addMethod("noSpace", function(value, element) { 
+			return value == '' || value.trim().length != 0;  
+		}, "No espacios Porfavor Eso no se Hace Aqui");
+		
+		// Regla personalizada para validar el campo de nombre_cargo
+		$.validator.addMethod("noRepetidos", function(value, element) {
+		  return this.optional(element) || !/(.)\1+/.test(value);
+		}, "No se permiten caracteres repetidos en este campo");
+		
+    $.validator.addMethod("descripcioncontrol", function(value, element) {
+  return this.optional(element) || /^\S.{8,248}\S$/.test(value.trim());
+}, "Escribe una breve descripción de la receta. Debe contener al menos 10 caracteres y no puede consistir solo en espacios en blanco.");
+
+		
+
+		
+
+  </script>
 
 
 

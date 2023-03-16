@@ -11,6 +11,17 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
     
     <title>Menu</title>
 
@@ -212,40 +223,43 @@
           <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Nuevo Menu</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="{% url 'agregarmenu' %}" method="POST">
+        <form id="myform" action="{% url 'agregarmenu' %}" method="POST">
             {% csrf_token %}
         <div class="modal-body">
          
-            <div class="mb-3">
+          <div class="form-group">
                 <label for="exampleFormControlInput1" class="form-label">ID del Menu</label>
-                <input name="id_menu" type="text" class="form-control" id="exampleFormControlInput1" placeholder="ID del Menu">
+                <input name="id_menu" type="text" class="form-control" id="id_menu" placeholder="ID del Menu">
               </div>
 
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Nombre del Menu</label>
-                <input name="nombre_menu" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Nombre del menu">
-              </div>
-
-              <div class="input-group">
-                <input name="precio_menu" type="text" class="form-control" aria-label="">
-                <span class="input-group-text">LPS</span>
-                <span class="input-group-text">Precio del Menu</span>
+              <div class="form-group">
+                <label>Nombre del Menu</label>
+                <input name="nombre_menu" type="text" class="form-control noRepetidos noSpace sololetrasyconmayusculas" id="nombre_menu" placeholder="Nombre del menu" required>
               </div>
 
 
+              <div class="form-group">
+                <label for="exampleFormControlInput1" class="form-label">Precio del Menu</label>
+                <input max="500" min="10" name="precio_menu" type="number" class="form-control SoloNumeros" id="precio_menu" required>
+
+   
+
+              </div>
 
 
 
-            <div class="mb-3">
+
+
+              <div class="form-group">
                 <label for="exampleFormControlTextarea1" class="form-label">Descripcion del Menu</label>
-                <textarea name="descripcion_menu" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea name="descripcion_menu" class="form-control decripcioncontrol" id="descripcion_menu" rows="3" required></textarea>
               </div>
 
 
 
-              <div class="input-group mb-1">
+              <div class="form-group">
                 <label class="input-group-text" for="inputGroupSelect01">ID-Elaboracion</label>
-                <select name="modo_elaboracion" class="form-select" id="inputGroupSelect01">
+                <select name="modo_elaboracion" class="form-select" id="inputGroupSelect01" required>
                     {% for e in ela %}
                   <option value="{{e.id_elaboracion}}">{{e.descripcion_elaboracion}}</option>
                   {% endfor %}
@@ -416,6 +430,146 @@
 </div>
 {% endfor %}
 
+
+
+<script>
+
+
+$(document).ready(function() {
+  $('form').submit(function(event) {
+    var opcionSeleccionada = $('#estado_almacen').val();
+    if (opcionSeleccionada == '') {
+		$('#error-select').text('Por favor selecciona una opción antes de enviar el formulario').fadeIn().delay(3000).fadeOut();
+
+      event.preventDefault();
+    }
+  });
+
+		$("#myform").validate({
+			rules: {
+				id_menu: {
+				required: true,
+				noSpace: true,
+			  },
+			  nombre_menu: {
+				required: true, 
+				minlength: 5,
+				maxlength:30,
+        
+				noRepetidos: true,
+		
+				noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
+				sololetrasyconmayusculas:true,
+			  },
+		
+		
+		
+			  precio_menu: {
+				required: true,
+				SoloNumeros:true,
+        min: 10,
+      max: 1000,
+
+			  },
+		
+			
+
+        descripcion_menu: {
+				required: true,
+        decripcioncontrol:true,
+
+
+			  },
+
+        modo_elaboracion:{
+          required:true,
+
+        }
+		
+			},
+
+
+
+
+
+			messages: {
+				id_menu: {
+				noSpace:"Otra VEz CON LOS ESPACIOS PARA",
+				required: "Debes Poner un ID"
+		
+			  },
+			  nombre_menu: {
+				required:"Debes Ingresar Un Nombre al Menu",
+				sololetrasyconmayusculas: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
+				minlength: "Debes ingresar al menos 5 caracteres.", 
+				maxlength: "No puedes ingresar más de 30 caracteres.",
+				noRepetidos: "No se permiten caracteres repetidos en el Nombre del Menu",
+		
+			  noespacios: "El Nombre de Un Menu No Puede Contener Espacios"
+			  },
+		
+		
+			  precio_menu: {
+				required:"Debes Asignarle Precio al Menu No se Van a Regalar",
+
+        min: "El precio mínimo permitido es de 10 LPS",
+        max: "El precio máximo permitido es de 1000 LPS",
+			  noespacios: "No Deben ir espacios en el Precio DE un MENU"
+			  },
+
+			  descripcion_menu: {
+				required:"Debes Agregar Una Descripcion Al Menu Has Seleccionado",
+        decripcioncontrol:"Minimo Escribe una Descripcion Breve y Resumida de 10 Letras sobre el Menu ",
+			  },
+
+		
+			},
+		
+		
+		    errorPlacement: function(error, element) {
+      error.fadeIn().delay(3000).fadeOut();
+      error.insertAfter(element);
+    },
+		
+		
+			submitHandler: function(form) {
+			  $("#mensaje-confirmacion").show();
+			  form.submit();
+			}
+		  });
+		
+		
+
+});
+
+		
+		// Regla personalizada para validar el campo de nombre_cargo
+		$.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
+      return this.optional(element) || /^[A-Z](?:(?!(.)\1\1\1)[a-zA-Z])*$/.test(value);
+		}, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
+		
+		
+
+		
+		
+		// Regla personalizada para validar el campo de nombre_cargo
+		jQuery.validator.addMethod("noSpace", function(value, element) { 
+			return value == '' || value.trim().length != 0;  
+		}, "No espacios Porfavor Eso no se Hace Aqui");
+		
+		// Regla personalizada para validar el campo de nombre_cargo
+		$.validator.addMethod("noRepetidos", function(value, element) {
+		  return this.optional(element) || !/(.)\1+/.test(value);
+		}, "No se permiten caracteres repetidos en este campo");
+
+		
+		
+		$.validator.addMethod("decripcioncontrol", function(value, element) {
+  return this.optional(element) || value.trim().length > 0;
+}, "Escribe una breve descripción del cargo. como Minimo 10 Letras");
+
+
+</script>
     
 </body>
 </html>

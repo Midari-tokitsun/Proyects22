@@ -339,7 +339,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
           <select class="form-select" name="puesto_asignado" id="">
           {% for p in pu %}
-        <option value="{{ p.puesto_id }}">{{ p.puesto }}</option>
+        <option value="{{ p.puesto }}">{{ p.puesto }}</option>
           {% endfor %}
         </select>
       </div>
@@ -349,7 +349,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
         <select class="form-select" name="departamento_asignado" id="">
         {% for deps in dep %}
-        <option value="{{ deps.id_departamento }}">{{ deps.departamento }}</option>
+        <option value="{{ deps.departamento }}">{{ deps.departamento }}</option>
         {% endfor %}
         </select>
       </div>
@@ -359,7 +359,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
         <select class="form-select" name="sucursal_asignado" id="">
         {% for s in sucu %}
-        <option value="{{ s.id_sucursal }}">{{ s.direccion_sucursal }}</option>
+        <option value="{{ s.direccion_sucursal }}">{{ s.direccion_sucursal }}</option>
         {% endfor %}
         </select>
       </div>
@@ -369,7 +369,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
         <select class="form-select" name="cargo_asignado" id="">
         {% for c in car %}
-        <option value="{{ c.id }}">{{ c.nombre_cargo }}</option>
+        <option value="{{ c.nombre_cargo }}">{{ c.nombre_cargo }}</option>
         {% endfor %}
         </select>
       </div>
@@ -380,7 +380,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
         <select class="form-select" name="tipodedocumentos" id="">
         {% for d in docs %}
-        <option value="{{ d.id }}">{{ d.tipo_identificacion }}</option>
+        <option value="{{ d.tipo_identificacion }}">{{ d.tipo_identificacion }}</option>
         {% endfor %}
         </select>
         
@@ -482,7 +482,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
           <select class="form-select" name="puesto_asignado" id="">
           {% for p in pu %}
-        <option value="{{ p.puesto_id }}">{{ p.puesto }}</option>
+        <option value="{{ p.puesto }}">{{ p.puesto }}</option>
           {% endfor %}
         </select>
       </div>
@@ -492,7 +492,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
         <select class="form-select" name="departamento_asignado" id="">
         {% for deps in dep %}
-        <option value="{{ deps.id_departamento }}">{{ deps.departamento }}</option>
+        <option value="{{ deps.departamento }}">{{ deps.departamento }}</option>
         {% endfor %}
         </select>
       </div>
@@ -502,7 +502,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
         <select class="form-select" name="sucursal_asignado" id="">
         {% for s in sucu %}
-        <option value="{{ s.id_sucursal }}">{{ s.direccion_sucursal }}</option>
+        <option value="{{ s.direccion_sucursal }}">{{ s.direccion_sucursal }}</option>
         {% endfor %}
         </select>
       </div>  
@@ -513,7 +513,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
         <select class="form-select" name="cargo_asignado" id="">
         {% for c in car %}
-        <option value="{{ c.id }}">{{ c.nombre_cargo }}</option>
+        <option value="{{ c.nombre_cargo }}">{{ c.nombre_cargo }}</option>
         {% endfor %}
         </select>
       </div>  
@@ -523,7 +523,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
         <select class="form-select" name="tipodedocumentos" id="">
         {% for d in docs %}
-        <option value="{{ d.id }}">{{ d.tipo_identificacion }}</option>
+        <option value="{{ d.tipo_identificacion }}">{{ d.tipo_identificacion }}</option>
         {% endfor %}
         </select>
         
