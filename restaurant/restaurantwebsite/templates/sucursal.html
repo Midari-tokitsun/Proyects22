@@ -6,13 +6,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Control de sucursales</title>
 
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
+
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   
   <body style="background-color:  #FF0099;  /* fallback for old browsers */
@@ -281,7 +294,7 @@
 	<div id="addsucuModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="POST" action="{% url 'añadirsucursal' %}">
+				<form id="formulariosucursal" method="POST" action="{% url 'añadirsucursal' %}">
                     {% csrf_token %}
 					<div class="modal-header">						
 						<h4 class="modal-title">Añadir Sucursal</h4>
@@ -290,15 +303,15 @@
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>ID sucursal</label>
-							<input name="id_sucursal" type="number" class="form-control" required>
+							<input placeholder="Inserta un ID" id="id_sucursal" name="id_sucursal noSpace" type="number" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>direccion de la sucursal</label>
-							<input  id="direccion_sucursal" oninput="validarFormulario()" title="Calle 1, Colonia ABC, Tegucigalpa, Francisco Morazán" name="direccion_sucursal" type="text" class="form-control" required>
+							<input name="direccion_sucursal"  id="direccion_sucursal" placeholder=" EJEMPLO:Calle 1, Colonia ABC, Tegucigalpa, Francisco Morazán" name="direccion_sucursal" type="text" class="form-control noRepetidos noSpace direccionsucursalcontrol" required>
 						</div>
 						<div class="form-group">
 							<label>Descripcion</label>
-							<textarea  maxlength="250" minlength="10" name="descripcion" class="form-control" required></textarea>
+							<textarea placeholder="Escribe una descripcion del sucursal"  maxlength="250" minlength="10" name="descripcion" class="form-control" required></textarea>
 						</div>
 	
 					</div>
@@ -348,6 +361,97 @@
 
 
 	<script>
+
+$("#formulariosucursal").validate({
+    rules: {
+      id_sucursal: {
+        required: true,
+        noSpace: true,
+      },
+      direccion_sucursal: {
+        required: true, 
+        minlength: 4,
+        maxlength:30,
+        noRepetidos: true,
+
+        noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
+        direccionsucursalcontrol:true,
+      },
+
+
+
+      descripcion: {
+        required: true,
+
+        minlength: 10,
+        maxlength: 250,
+      },
+
+    },
+    messages: {
+      id_sucursal: {
+        noSpace:"No se puede Espacios Estimado",
+        required: "Debes Poner un ID"
+
+      },
+      direccion_sucursal: {
+        required:"Debes poner un Direccion De Sucursal DE HONDURAS",
+        direccionsucursalcontrol: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula Y no se permiten Numeros",
+        minlength: "Debes ingresar al menos 4 caracteres.", 
+        maxlength: "No puedes ingresar más de 30 caracteres.",
+        noRepetidos: "No se permiten caracteres repetidos en este campo",
+
+      noespacios: "El nombre de la Sucursal no puede contener espacios"
+      },
+
+
+      descripcion: {
+        required:"Debes poner Una Descripcion del Sucursal Escrito",
+
+        minlength: "Debes ingresar al menos 10 Digitos en la descripcion del Sucursal",
+      maxlength: "No puedes ingresar más de 250 Numeros. en la direccion del Sucursal",
+	  noespacios: "La sucursal no puede contener espacios"
+      },
+
+    },
+
+
+
+
+
+    submitHandler: function(form) {
+      $("#mensaje-confirmacion").show();
+      form.submit();
+    }
+  });
+
+
+
+
+
+
+// Regla personalizada para validar el campo de Descripciion
+
+
+
+
+$.validator.addMethod("direccionsucursalcontrol", function(value, element) {
+  return this.optional(element) || /^[A-Z][a-z]+\.(?!.*(\w)\1)[A-Z]+\w*$/.test(value);
+}, "Este campo debe comenzar con una letra mayúscula, tener un punto, y permitir caracteres repetidos pero no dos caracteres iguales consecutivos.");
+
+
+// Regla personalizada para validar el campo de nombre_cargo
+jQuery.validator.addMethod("noSpace", function(value, element) { 
+    return value == '' || value.trim().length != 0;  
+}, "No espacios Porfavor Eso no se Hace Aqui");
+
+// Regla personalizada para validar el campo de nombre_cargo
+$.validator.addMethod("noRepetidos", function(value, element) {
+  return this.optional(element) || !/(.)\1+/.test(value);
+}, "No se permiten caracteres repetidos en este campo");
+
+
+
 
 
 

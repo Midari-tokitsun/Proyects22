@@ -5,12 +5,18 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Familia Producto</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
+
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
@@ -18,8 +24,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
   
   <body style="background-color:  #5C258D;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to right, #4389A2, #5C258D);  /* Chrome 10-25, Safari 5.1-6 */
@@ -275,7 +282,7 @@
 	<div id="addfamiliaModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="{% url 'añadirfamiliaproducto' %}" method="POST">
+				<form id="Myform" action="{% url 'añadirfamiliaproducto' %}" method="POST">
                     {% csrf_token %}
 					<div class="modal-header">						
 						<h4 class="modal-title">Añadir Nueva Familia</h4>
@@ -284,15 +291,15 @@
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>ID de la Familia</label>
-							<input name="id_familia_producto" type="text" class="form-control" required>
+							<input placeholder="Ingrese un ID" name="id_familia_producto" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Nombre de la Familia</label>
-							<input pattern="^(Carnes y aves|Pescados y mariscos|Frutas y verduras frescas|Lácteos y productos frescos|Panadería y pastelería|Bebidas alcohólicas y no alcohólicas|Suministros de limpieza y desechables|Condimentos y especias|Harinas y cereales|Aceites y grasas|Salsas y aderezos|Menaje y utensilios de cocina|Postres y helados|Bebidas calientes|Snacks y aperitivos)$" title="EJEMPLO:Carnes y aves|Pescados y mariscos|Frutas y verduras frescas|Lácteos y productos frescos|Panadería y pastelería|Bebidas alcohólicas y no alcohólicas|Suministros de limpieza y desechables|Condimentos y especias|Harinas y cereales|Aceites y grasas|Salsas y aderezos|Menaje y utensilios de cocina|Postres y helados|Bebidas calientes|Snacks y aperitivos" name="nombre_familia" type="text" class="form-control" required>
+							<input pattern="^(?!.*([a-zA-Z])\1)[A-Za-z]+$" placeholder="EJEMPLO:Carnes y aves|Pescados y mariscos|Frutas y verduras frescas|Lácteos y productos frescos|Panadería y pastelería|" name="nombre_familia" type="text" class="form-control noSpace noRepetidos familiaProductos" required>
 						</div>
 						<div class="form-group">
 							<label>Descripcion de la Familia</label>
-							<textarea maxlength="250" minlength="10" name="descripcion_familia" class="form-control" required></textarea>
+							<textarea placeholder="Breve Descripcion de la Familia producto" maxlength="250" minlength="10" name="descripcion_familia" class="form-control" required></textarea>
 						</div>
 				
 					</div>
@@ -361,4 +368,113 @@
 		</div>
 	</div>
 </body>
+
+
+
+
+<script>
+
+  $("#Myform").validate({
+      rules: {
+        id_familia_producto: {
+          required: true,
+          noSpace: true,
+        },
+        nombre_familia: {
+          required: true, 
+          minlength: 4,
+          maxlength:16,
+          noRepetidos: true,
+  
+          noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
+          familiaProductos:true,
+        },
+  
+  
+  
+        descripcion_familia: {
+          required: true,
+  
+          minlength: 10,
+          maxlength: 250,
+        },
+  
+      },
+      messages: {
+        id_familia_producto: {
+          noSpace:"No se puede Espacios Estimado",
+          required: "Debes Poner un ID"
+  
+        },
+        nombre_familia: {
+          required:"Debes poner El Nombre de una Familia de Productos ",
+          familiaProductos: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula Y no se permiten Numeros",
+          minlength: "Debes ingresar al menos 4 caracteres.", 
+          maxlength: "No puedes ingresar más de 30 caracteres.",
+          noRepetidos: "No se permiten caracteres repetidos en este campo",
+  
+        noespacios: "El nombre de la Sucursal no puede contener espacios"
+        },
+  
+  
+        descripcion_familia: {
+          required:"Debes poner Una Descripcion de la Familia que has Escrito",
+  
+          minlength: "Debes ingresar al menos 10 Digitos en la descripcion de La Familia",
+        maxlength: "No puedes ingresar más de 250 Numeros. en la Descripcion de la Familia",
+
+        },
+  
+      },
+  
+  
+  
+  
+  
+      submitHandler: function(form) {
+        $("#mensaje-confirmacion").show();
+        form.submit();
+      }
+    });
+  
+  
+  
+  
+  
+  
+  // Regla personalizada para validar el campo de Descripciion
+  
+  
+  
+  
+  $.validator.addMethod("familiaProductos", function(value, element) {
+  return this.optional(element) || /^(?!.*([a-zA-Z])\1)[A-Za-z]+$/.test(value);
+}, "Este campo debe comenzar con una letra mayúscula y solo contiene letras.");
+
+
+  
+  
+  // Regla personalizada para validar el campo de nombre_cargo
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+      return value == '' || value.trim().length != 0;  
+  }, "No espacios Porfavor Eso no se Hace Aqui");
+  
+  // Regla personalizada para validar el campo de nombre_cargo
+  $.validator.addMethod("noRepetidos", function(value, element) {
+    return this.optional(element) || !/(.)\1+/.test(value);
+  }, "No se permiten caracteres repetidos en este campo");
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    </script>
+
+
+
+
 </html>

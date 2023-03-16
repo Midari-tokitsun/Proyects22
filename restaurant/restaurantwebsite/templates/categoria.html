@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
@@ -22,6 +22,21 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
+
+
+
   <body style="background-color:  #360033;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to right, #0b8793, #360033);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #0b8793, #360033); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -277,7 +292,7 @@
 	<div id="addcategoriaModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="POST" action="{% url 'añadircategoria' %}">
+				<form id="myform" method="POST" action="{% url 'añadircategoria' %}">
                     {% csrf_token %}
 					<div class="modal-header">						
 						<h4 class="modal-title">Añadir nueva Categoria</h4>
@@ -286,15 +301,15 @@
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>ID de la Categoria</label>
-							<input name="categoria_id" type="text" class="form-control" required>
+							<input placeholder="Ingrese un ID" name="categoria_id" id="categoria_id" type="text" class="form-control  noSpace " required>
 						</div>
 						<div class="form-group">
 							<label>Nombre de la Categoria</label>
-							<input pattern="[A-Z][a-zA-Z]*" title="EJEMPLO:Postres,Pizzas,Pescados,Carnes" name="nombre_categoria" type="text" class="form-control" required>
+							<input pattern="[A-Z][a-zA-Z]*" id="nombre_categoria" placeholder="EJEMPLO:Postres,Lacteos,Pescados,Carnes" name="nombre_categoria" type="text" class="form-control noSpace noRepetidos sololetrasyconmayusculas" required>
 						</div>
 						<div class="form-group">
 							<label>Descripcion de la Categoria</label>
-							<textarea title="Debes escribir una descripcion breve y resumida" maxlength="250" minlength="10" name="descripcion_categoria" class="form-control" required></textarea>
+							<textarea id="descripcion_categoria" placeholder="Debes escribir una descripcion breve y resumida" maxlength="250" minlength="10" name="descripcion_categoria" class="form-control decripcioncontrol" required></textarea>
 						</div>
 					
 					</div>
@@ -362,5 +377,109 @@
 			</div>
 		</div>
 	</div>
+
+
+
+
+<script>
+
+
+
+
+
+$("#myform").validate({
+    rules: {
+      categoria_id: {
+        required: true,
+        noSpace: true,
+      },
+      nombre_categoria: {
+        required: true, 
+        minlength: 5,
+        maxlength:16,
+        noRepetidos: true,
+
+        noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
+        sololetrasyconmayusculas:true,
+      },
+
+
+
+      descripcion_categoria: {
+        required: true,
+        decripcioncontrol: true,
+        minlength: 10,
+        maxlength: 250,
+      },
+
+    },
+    messages: {
+      categoria_id: {
+        noSpace:"No se puede Espacios Estimado",
+        required: "Debes Poner un ID"
+
+      },
+      nombre_categoria: {
+        required:"Debes poner un Nombre de Categoria ",
+        sololetrasyconmayusculas: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
+        minlength: "Debes ingresar al menos 4 caracteres.", 
+        maxlength: "No puedes ingresar más de 16 caracteres.",
+        noRepetidos: "No se permiten caracteres repetidos en este campo",
+
+      noespacios: "El nombre de la Categoria no puede contener espacios"
+      },
+
+
+      descripcion_categoria: {
+        required:"Debes poner Una Descripcion de la Categoria",
+        decripcioncontrol: "Ingrese un código postal válido Escribe una breve descripción del cargo. como Minimo 10 Letras",
+        minlength: "Debes ingresar al menos 10 Digitos en la Descripcion de la Categoria.",
+      maxlength: "No puedes ingresar más de 250 Numeros. en la categoria ",
+
+      },
+
+    },
+
+
+
+
+
+    submitHandler: function(form) {
+      $("#mensaje-confirmacion").show();
+      form.submit();
+    }
+  });
+
+
+
+
+// Regla personalizada para validar el campo de nombre_cargo
+$.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
+  return this.optional(element) || /^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$/.test(value) && !/\s/.test(value);
+}, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
+
+
+// Regla personalizada para validar el campo de Descripciion
+$.validator.addMethod("decripcioncontrol", function(value, element) {
+  return this.optional(element) || value.trim().length > 0;
+}, "Escribe una breve descripción del cargo. como Minimo 10 Letras");
+
+
+// Regla personalizada para validar el campo de nombre_cargo
+jQuery.validator.addMethod("noSpace", function(value, element) { 
+    return value == '' || value.trim().length != 0;  
+}, "No espacios Porfavor Eso no se Hace Aqui");
+
+// Regla personalizada para validar el campo de nombre_cargo
+$.validator.addMethod("noRepetidos", function(value, element) {
+  return this.optional(element) || !/(.)\1+/.test(value);
+}, "No se permiten caracteres repetidos en este campo");
+
+
+
+</script>
+
+
+
 </body>
 </html>

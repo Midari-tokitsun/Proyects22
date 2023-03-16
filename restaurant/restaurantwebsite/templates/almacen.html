@@ -14,7 +14,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
 
 
   <body>
@@ -274,7 +281,7 @@
 	<div id="addalmacenModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="{% url 'añadiralmacen' %}" method="POST">
+				<form id="myform" action="{% url 'añadiralmacen' %}" method="POST">
 					<div class="modal-header">						{% csrf_token %}
 						<h4 class="modal-title">Añadir Nuevo Almacen</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -282,20 +289,28 @@
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>ID Almacen</label>
-							<input name="id_almacen" type="text" class="form-control" required>
+							<input name="id_almacen" type="text" class="form-control noSpace" required>
 						</div>
 						<div class="form-group">
 							<label>Tipo de almacen</label>
-							<input pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" title="El nombre del tipo de almacen debe ser Ejemplo:Carnes,Secos,Lacteos,Verduras" name="tipo_almacen" type="text" class="form-control" required>
+							<input pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" placeholder="El nombre del tipo de almacen debe ser Ejemplo:Carnes,Secos,Lacteos,Verduras" name="tipo_almacen" title="El nombre del tipo de almacen debe ser Ejemplo:Carnes,Secos,Lacteos,Verduras" name="tipo_almacen" type="text" class="form-control noSpace noRepetidos sololetrasyconmayusculas" required>
 						</div>
 						<div class="form-group">
 							<label>descripcion del almacen</label>
-							<textarea title="Debes escribir una minima descripcion y breve del almacen" maxlength="250" minlength="10" name="descripcion_almacen" class="form-control" required></textarea>
+							<textarea placeholder="Debes escribir una minima descripcion y breve del almacen" maxlength="250" minlength="10" name="descripcion_almacen" class="form-control noSpace" required></textarea>
 						</div>
+
+
 						<div class="form-group">
-							<label>Estado del Almacen</label>
-							<input name="estado_almacen" type="text" class="form-control" required>
-						</div>					
+							<label>Selecciona un Estado</label>	
+						<select name="estado_almacen" id="estado_almacen" class="form-control" required>
+							<option value="">Selecciona una opción</option>
+							<option value="Activo">Activo</option>
+							<option value="Inactivo">Inactivo</option>
+							<option value="Mantenimiento">Mantenimiento</option>
+						</select>
+					</div>
+
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -364,5 +379,131 @@
 			</div>
 		</div>
 	</div>
+
+	<script>
+
+		$("#myform").validate({
+			rules: {
+				id_almacen: {
+				required: true,
+				noSpace: true,
+			  },
+			  tipo_almacen: {
+				required: true, 
+				minlength: 4,
+				maxlength:30,
+				noRepetidos: true,
+		
+				noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
+				sololetrasyconmayusculas:true,
+			  },
+		
+		
+		
+			  descripcion_almacen: {
+				required: true,
+				codigopostalcontrol: true,
+				minlength: 10,
+				maxlength: 250,
+			  },
+		
+			
+
+			estado_almacen: {
+				required: true,
+
+
+			  },
+		
+			},
+
+
+
+
+
+			messages: {
+				id_almacen: {
+				noSpace:"No se puede Espacios Estimado",
+				required: "Debes Poner un ID"
+		
+			  },
+			  tipo_almacen: {
+				required:"Debes Ingresar Un Tipo de Almacen",
+				sololetrasyconmayusculas: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
+				minlength: "Debes ingresar al menos 4 caracteres.", 
+				maxlength: "No puedes ingresar más de 16 caracteres.",
+				noRepetidos: "No se permiten caracteres repetidos en el Almacen",
+		
+			  noespacios: "El Tipo de Almacen No Puede Contener Espacios"
+			  },
+		
+		
+			  descripcion_almacen: {
+				required:"Debes poner Una Descripcion Breve del Almacen",
+
+				minlength: "Debes ingresar al menos 10 Letras en la Descripcion del Almacen.",
+			  maxlength: "No puedes ingresar más de 250 Letras en la Descripcion del Almacen",
+			  noespacios: "No Deben ir espacios en el Almacen"
+			  },
+
+			  estado_almacen: {
+				required:"Debes Escoger El Estado del Almacen",
+
+			  },
+		
+			},
+		
+		
+		
+		
+		
+			submitHandler: function(form) {
+			  $("#mensaje-confirmacion").show();
+			  form.submit();
+			}
+		  });
+		
+		
+		  $(document).ready(function() {
+  $('#myform').submit(function(event) {
+    if ($('#estado_almacen').val() == '') {
+      alert('Debes seleccionar una opción');
+      event.preventDefault();
+    }
+  });
+});
+
+		
+		// Regla personalizada para validar el campo de nombre_cargo
+		$.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
+		  return this.optional(element) || /^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$/.test(value) && !/\s/.test(value);
+		}, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
+		
+		
+
+		
+		
+		// Regla personalizada para validar el campo de nombre_cargo
+		jQuery.validator.addMethod("noSpace", function(value, element) { 
+			return value == '' || value.trim().length != 0;  
+		}, "No espacios Porfavor Eso no se Hace Aqui");
+		
+		// Regla personalizada para validar el campo de nombre_cargo
+		$.validator.addMethod("noRepetidos", function(value, element) {
+		  return this.optional(element) || !/(.)\1+/.test(value);
+		}, "No se permiten caracteres repetidos en este campo");
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		</script>
+
+
+
 </body>
 </html>

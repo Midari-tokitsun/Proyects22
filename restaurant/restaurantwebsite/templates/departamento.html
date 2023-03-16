@@ -16,6 +16,20 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
+
+
   <body>
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
@@ -288,7 +302,7 @@
 	<div id="adddeptModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-        <form action="{% url 'añadirdepartamento' %}" method="POST">
+        <form id="myform" action="{% url 'añadirdepartamento' %}" method="POST">
           {% csrf_token %}
 					<div class="modal-header">						
 						<h4 class="modal-title">Añadir Departamentos</h4>
@@ -297,15 +311,15 @@
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>ID</label>
-							<input type="number" name="id_departamento" class="form-control" required>
+							<input placeholder="Ingrese Un ID" type="number" id="id_departamento" name="id_departamento" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Departamento</label>
-							<input minlength="4" maxlength="30" type="text" pattern="^(?!.*(\S)\1)[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+(\s[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+)*$" title="Ejemplo: Yoro,Copan,Francisco Morazan" name="departamento" class="form-control" required>
+							<input id="departamento" minlength="4" maxlength="30" type="text" pattern="^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$" placeholder="Ejemplo: Yoro,Copan,Francisco Morazan" name="departamento" class="form-control noSpace noRepetidos sololetrasyconmayusculas " required>
 						</div>
 						<div class="form-group">
 							<label>Codigo Postal</label>
-							<input  minlength="5" maxlength="5" pattern="^[0-9]{5}$" type="text" title="Ingrese un código postal válido (5 dígitos numéricos) Ejemplo:1111" name="codigo_postal" class="form-control" required>
+							<input id="codigo_postal"  minlength="5" maxlength="5" pattern="^[0-9]{5}$" type="text" placeholder="(5 dígitos numéricos) Ejemplo:1111" name="codigo_postal" class="form-control noSpace codigopostalcontrol" required>
 						</div>
 				
 					</div>
@@ -313,6 +327,9 @@
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
 						<input type="submit" class="btn btn-success" value="añadirdepartamento">
 					</div>
+					<div id="mensaje-confirmacion" style="display:none">
+						¡Formulario enviado correctamente!
+					  </div>
 				</form>
 			</div>
 		</div>
@@ -373,5 +390,111 @@
 			</div>
 		</div>
 	</div>
+
+
+
+<script>
+
+$("#myform").validate({
+    rules: {
+		id_departamento: {
+        required: true,
+        noSpace: true,
+      },
+      departamento: {
+        required: true, 
+        minlength: 4,
+        maxlength:30,
+        noRepetidos: true,
+
+        noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
+        sololetrasyconmayusculas:true,
+      },
+
+
+
+      codigo_postal: {
+        required: true,
+        codigopostalcontrol: true,
+        minlength: 5,
+        maxlength: 5,
+      },
+
+    },
+    messages: {
+		id_departamento: {
+        noSpace:"No se puede Espacios Estimado",
+        required: "Debes Poner un ID"
+
+      },
+      departamento: {
+        required:"Debes poner un Departamento DE HONDURAS",
+        sololetrasyconmayusculas: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
+        minlength: "Debes ingresar al menos 4 caracteres.", 
+        maxlength: "No puedes ingresar más de 30 caracteres.",
+        noRepetidos: "No se permiten caracteres repetidos en este campo",
+
+      noespacios: "El nombre del Departamento no puede contener espacios"
+      },
+
+
+      codigo_postal: {
+        required:"Debes poner El codigo Postal sobre el Departamento Elegido",
+        codigopostalcontrol: "Ingrese un código postal válido",
+        minlength: "Debes ingresar al menos 5 Digitos del codigo postal.",
+      maxlength: "No puedes ingresar más de 5 Numeros. en el Codigo postal",
+	  noespacios: "El Codigo Postal del Departamento no puede contener espacios"
+      },
+
+    },
+
+
+
+
+
+    submitHandler: function(form) {
+      $("#mensaje-confirmacion").show();
+      form.submit();
+    }
+  });
+
+
+
+
+// Regla personalizada para validar el campo de nombre_cargo
+$.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
+  return this.optional(element) || /^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$/.test(value) && !/\s/.test(value);
+}, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
+
+
+// Regla personalizada para validar el campo de Descripciion
+$.validator.addMethod("codigopostalcontrol", function(value, element) {
+  return this.optional(element) || /^[0-9]{5}$/.test(value) && !/\s/.test(value);
+}, "Ingrese un código postal válido (5 dígitos numéricos) ");
+
+
+// Regla personalizada para validar el campo de nombre_cargo
+jQuery.validator.addMethod("noSpace", function(value, element) { 
+    return value == '' || value.trim().length != 0;  
+}, "No espacios Porfavor Eso no se Hace Aqui");
+
+// Regla personalizada para validar el campo de nombre_cargo
+$.validator.addMethod("noRepetidos", function(value, element) {
+  return this.optional(element) || !/(.)\1+/.test(value);
+}, "No se permiten caracteres repetidos en este campo");
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
 </body>
 </html>

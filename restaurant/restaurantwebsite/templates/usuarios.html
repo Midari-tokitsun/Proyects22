@@ -17,6 +17,19 @@
   
 
 
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
+
+
   <body style="background-color:  #6441A5;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to right, #2a0845, #6441A5);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #2a0845, #6441A5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -282,7 +295,7 @@
 	<div id="addclienteModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="POST" action="{% url 'registrarentablausuario' %}">
+				<form id="myform"  method="POST" action="{% url 'registrarentablausuario' %}">
             {% csrf_token %}
 					<div class="modal-header">						
 						<h4 class="modal-title">Añadir Usuario</h4>
@@ -292,17 +305,17 @@
 
 						<div class="form-group">
 							<label>ID</label>
-							<input name="id_usuario" type="text" class="form-control" required>
+							<input placeholder="introduce Un ID" name="id_usuario" type="text" class="form-control " required>
 						</div>
 
                         <div class="form-group">
 							<label>Nombre</label>
-							<input name="nombre" title="Ejemplo: Pedro,Ana,Noe Sin Caracteres REPETIDOS" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" maxlength="20" minlength="3" type="text" class="form-control" required>
+              <input type="text" id="nombre" placeholder="Ejemplo: Noe,Percy,Andrea,Juan" pattern="^(?!.*(.).*\1)[a-zA-Z]+$"  name="nombre" class="form-control noRepetidos noSpace  lettersonly" required>
 						</div>
 
                         <div class="form-group">
 							<label>Apellido</label>
-							<input name="apellido" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="Ejemplo: Fu,Peres,Funez,Castro" maxlength="20" minlength="5" type="text" class="form-control" required>
+							<input name="apellido" id="apellido" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" placeholder="Ejemplo: Fu,Peres,Funez,Castro"  maxlength="20" minlength="5" type="text" class="form-control noRepetidos noSpace lettersonly" required>
 						</div>
 
 
@@ -311,16 +324,20 @@
 
 						<div class="form-group">
 							<label>Correo Electronico</label>
-							<input name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Por favor introduce un email válido Ejemplo:usuario@gmail.com" type="email" class="form-control" required>
+							<input name="email" id="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" placeholder="Por favor introduce un email válido Ejemplo:usuario@gmail.com" type="email" class="form-control noRepetidos noSpace emailcontrol" required>
 						</div>
+
+
 						<div class="form-group">
 							<label>Nombre de Usuario</label>
-							<input name="username" title="Ejemplo:usuario21,ethan12,nier2 pero sin caracteres repetidos ni espacios" maxlength="16" minlength="4" pattern="^(?!.*(.).*\1)[a-zA-Z0-9]+$" class="form-control" required>
+							<input id="username" name="username" placeholder="Ejemplo:usuario21,ethan12,nier2 pero sin caracteres repetidos ni espacios" maxlength="16" minlength="4" pattern="^(?!.*(.).*\1)[a-zA-Z0-9]+$" class="form-control noRepetidos noSpace usernamecontrol" required>
 						</div>
 						<div class="form-group">
 							<label>Contraseña</label>
-							<input name="password" title="La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula y un número."pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" maxlength="12" minlength="8" type="text" class="form-control" required>
-              <span class="password-info">La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula y un número.</span>
+    
+							<input name="password" placeholder="Introduce la Contraseña Aqui" id="password"  type="text" class="form-control" required>
+              <p id="password-strength"></p>
+              <p>"La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula",</p>
 						</div>			
                         
                         <label class="form-label"> Estado de la Cuenta</label>
@@ -339,6 +356,9 @@
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 						<input type="submit" class="btn btn-success" value="Add">
 					</div>
+          <div id="mensaje-confirmacion" style="display:none">
+            ¡Formulario enviado correctamente!
+          </div>
 				</form>
 			</div>
 		</div>
@@ -443,5 +463,225 @@
 			</div>
 		</div>
 	</div>
+
+
+
+
+
+ 
+
+
+
+  <script>
+$(document).ready(function() {
+  $.validator.setDefaults({
+    lang: 'es'
+  });
+
+
+  $(document).ready(function() {
+  $("#myForm").submit(function(event) {
+    event.preventDefault(); // Evita el envío del formulario
+    // Validaciones
+    var name = $("input[name='name']").val();
+    var email = $("input[name='email']").val();
+    var password = $("input[name='password']").val();
+    var apellido = $("input[name='apellido']").val();
+    var id_usuario=  $("input[name='id_usuario']").val();
+    var username=  $("input[name='username']").val();
+    if (name === "") {
+      alert("Por favor, ingrese su nombre.");
+      return false;
+    }
+    if (email === "") {
+      alert("Por favor, ingrese su correo electrónico.");
+      return false;
+    }
+    if (password === "") {
+      alert("Por favor, ingrese su contraseña.");
+      return false;
+    }
+
+    if (apellido === "") {
+      alert("Por favor, ingrese su apellido");
+      return false;
+    }
+    if (username === "") {
+      alert("Por favor, ingrese su Nombre de Usuario");
+      return false;
+    }
+    if (id_usuario === "") {
+      alert("Por favor, ingrese su id.");
+      return false;
+    }
+
+    // Si todo está bien, se puede enviar el formulario
+    alert("Formulario enviado correctamente.");
+    $(this).unbind('submit').submit(); // Envía el formulario
+  });
+});
+
+
+
+  
+  $('#password').keyup(function() {
+    var password = $(this).val();
+    var strength = 0;
+
+    // Validar la longitud de la contraseña
+    if (password.length < 8) {
+      $('#password-strength').removeClass().addClass('weak').text('Débil');
+      return;
+    }
+
+    // Validar la presencia de caracteres especiales
+    if (password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)) {
+      strength += 1;
+    }
+
+    // Validar la presencia de letras minúsculas y mayúsculas
+    if (password.match(/[a-z]/) && password.match(/[A-Z]/)) {
+      strength += 1;
+    }
+
+    // Validar la presencia de números
+    if (password.match(/\d+/)) {
+      strength += 1;
+    }
+
+    // Validar la fortaleza de la contraseña
+    if (strength == 0) {
+      $('#password-strength').removeClass().addClass('weak').text('Débil');
+    } else if (strength == 1) {
+      $('#password-strength').removeClass().addClass('medium').text('Media');
+    } else {
+      $('#password-strength').removeClass().addClass('strong').text('Fuerte');
+    }
+  });
+
+  $.extend($.validator.messages, {
+    required: "Por favor completa este campo"
+  });
+
+  $("#myform").validate({
+    rules: {
+      id_usuario: {
+        required: true
+      },
+      nombre: {
+        noRepetidos:true,
+        required: true, 
+        minlength: 3,
+        maxlength:18,
+        lettersonly: true,
+        noSpace:true,
+      },
+      apellido: {
+        noRepetidos:true,
+        noSpace:true,
+        required: true,
+        lettersonly: true,
+        minlength: 5,
+        maxlength: 20
+      },
+      username: {
+        noRepetidos:true,
+        noSpace:true,
+        required: true,
+        usernamecontrol: true,
+        minlength: 4,
+        maxlength: 16
+      },
+      email: {
+        noRepetidos:true,
+        noSpace:true,
+        required: true,
+        emailcontrol: true,
+      },
+      password: {
+        
+        required: true,
+        minlength: 8,
+        maxlength: 16
+      }
+    },
+    messages: {
+      nombre: {
+        noRepetidos:"No Se permiten Letras Repetidas",
+        lettersonly: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.",
+        minlength: "Debes ingresar como mínimo 3 letras.",
+        maxlength:"El Maximo de Letras de un nombre no debe ser mayor a 18",
+        noSpace:"No se Permiten Espacios Aca",
+      },
+      apellido: {
+        noRepetidos:"No Se permiten Letras Repetidas",
+        lettersonly: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.",
+        minlength: "Debes ingresar como mínimo 5 letras.",
+        maxlength: "No puedes ingresar más de 20 letras.",
+        noSpace:"No se Permiten Espacios Aca NO HAGA ESO",
+      },
+      username: {
+        noRepetidos:"No Se permiten Letras Repetidas",
+        usernamecontrol: "Introduce un Nombre de Usuario Valido Sin espacios ni Letras Repetidas Ejemplo: Minombre12",
+        minlength: "Debes ingresar como mínimo 4 caracteres.",
+        maxlength: "No puedes ingresar más de 16 caracteres.",
+        noSpace:"No se Permiten Espacios Aca Ya se lo Dije",
+      },
+      email: {
+        noRepetidos:"No Se permiten Letras Repetidas",
+        emailcontrol: "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios",
+        noSpace:"No se Permiten Espacios Aca YA Pare",
+      },
+      password: {
+        minlength: "Debes ingresar como mínimo 8 caracteres.",
+        maxlength: "No puedes ingresar más de 16 caracteres."
+      }
+    },
+    submitHandler: function(form) {
+      $("#mensaje-confirmacion").show();
+      form.submit();
+    }
+  });
+
+// Regla personalizada para validar Que no hayan Espacios
+  $.validator.addMethod("noSpace", function(value, element) {
+  return value.trim().length !== 0; // Devuelve verdadero si no hay espacios en blanco alrededor de la entrada
+}, "No se permiten espacios en blanco");
+
+// Regla personalizada para validar solo letras
+$.validator.addMethod("lettersonly", function(value, element) {
+  return this.optional(element) || /^[A-Z](?!.*(.).*\1)[A-Za-z0-9]+$/i.test(value);
+}, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.");
+
+
+
+
+// Regla personalizada para validar EL Correo Electronico
+$.validator.addMethod("emailcontrol", function(value, element) {
+  // Nueva validación de la regla de correo electrónico
+  return this.optional(element) || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value);
+}, "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios");
+
+
+// Regla personalizada para validar EL nombre de usuario
+$.validator.addMethod("usernamecontrol", function(value, element) {
+  // Validación de la nueva regla
+  return this.optional(element) || /^(?!.*(.).*\1)[a-zA-Z0-9]+$/i.test(value);
+}, "Introduce un Nombre de Usuario Valido Sin espacios ni Letras Repetidas Ejemplo: Minombre12");
+
+});
+//regla para validar Los caracteres repetidos
+$.validator.addMethod("noRepetidos", function(value, element) {
+  return this.optional(element) || !/(.)\1+/.test(value);
+}, "No se permiten caracteres repetidos en este campo");
+
+  </script>
+
+   
+
+
+
+
+    
 </body>
 </html>

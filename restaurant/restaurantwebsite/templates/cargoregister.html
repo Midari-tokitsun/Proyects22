@@ -18,7 +18,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
     
     
     <title>Registro de Cargos</title>
@@ -321,7 +328,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="{% url 'añadircargo' %}" method="POST">
+        <form id="myform" action="{% url 'añadircargo' %}" method="POST">
           {% csrf_token %}
           <div class="row">
         
@@ -332,15 +339,16 @@
         </div>
 
 
-        <div class="col-md-6 mb-4">
+        <div class="col-md-10">
           <p>Nombre del Cargo</p>
-          <input type="text" ti  maxlength="15" minlength="5" pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" name="nombre_cargo" title="Ejemplo: Mesero,Administrador,Secretario,Gerente" required placeholder="Nombre del cargo"  class="form-control" pattern="[a-zA-z]+" >
-        </div>
+          <input placeholder="Ejemplo:Mesero,Gerente,Administrador,Cocinero" type="text" id="nombre_cargo" name="nombre_cargo" class="form-control noRepetidos noSpace nombrecontrol " required minlength="5" maxlength="15" pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" >
 
+        </div>
+        <div id="no-espacios-error" class="text-danger"></div>
 
         <div class="col">
           <p>Descripcion</p>
-          <textarea type="text" maxlength="250" minlength="10" name="descripcion" required placeholder="Descripcion del Cargo"   class="form-control" ></textarea>
+          <textarea type="text" maxlength="250" minlength="10" name="descripcion" required placeholder="Descripcion del Cargo"   class="form-control decripcioncontrol" ></textarea>
         </div>
 
 
@@ -355,7 +363,9 @@
         <button type="submit" class="btn btn-primary">Guardar</button>
       </div>
 
-
+      <div id="mensaje-confirmacion" style="display:none">
+        ¡Formulario enviado correctamente!
+      </div>
 
     </form>
     </div>
@@ -513,7 +523,148 @@
 
 
 
+<script>
 
+$.extend($.validator.messages, {
+    required: "Por favor completa este campo"
+  });
+
+  
+
+$("#myform").validate({
+  submitHandler: function(form) {
+    event.preventDefault();
+
+    var id = $("input[name='id']").val();
+    var nombre_cargo = $("input[name='nombre_cargo']").val();
+    var descripcion = $("input[name='descripcion']").val();
+    if (id === "") {
+      alert("Por favor, ingrese el ID. es necesario");
+      return false;
+    }
+    if (nombre_cargo === "") {
+      alert("Por favor, ingrese su nombre del cargo. es necesario rellenar este campo");
+      return false;
+    }
+    if (descripcion === "") {
+      alert("Por favor, ingrese su descripcion. Es necesario Rellenar este campo");
+      return false;
+    }
+
+    // Si todo está bien, se puede enviar el formulario
+    alert("Formulario enviado correctamente.");
+    $(this).unbind('submit').submit(); // Envía el formulario
+
+
+
+
+
+
+
+
+    form.submit();
+  }
+ });
+
+
+ $(document).ready(function() {
+  // Agregar método de validación personalizado para verificar que no haya espacios
+  $.validator.addMethod("noespacios", function(value, element) {
+    return this.optional(element) || /^[^\s]+$/.test(value);
+  }, "No se permiten espacios en este campo");
+
+
+ $("#myform").validate({
+    rules: {
+      id: {
+        required: true
+      },
+      nombre_cargo: {
+        required: true, 
+        minlength: 5,
+        maxlength:15,
+        noRepetidos: true,
+
+        noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
+        nombrecontrol:true,
+      },
+
+
+
+      descripcion: {
+        required: true,
+        decripcioncontrol: true,
+        minlength: 10,
+        maxlength: 250,
+      },
+
+    },
+    messages: {
+      id: {
+        required: "Este campo Es Requerido"
+
+      },
+      nombre_cargo: {
+        nombrecontrol: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
+        minlength: "Debes ingresar al menos {5} caracteres.", 
+        maxlength: "No puedes ingresar más de {15} caracteres.",
+        noRepetidos: "No se permiten caracteres repetidos en este campo",
+
+      noespacios: "El nombre del cargo no puede contener espacios"
+      },
+
+
+      descripcion: {
+        decripcioncontrol: "Minimo una Descripcion del Cargo",
+        minlength: "Debes ingresar al menos {10} caracteres.",
+      maxlength: "No puedes ingresar más de {250} caracteres.",
+      },
+
+    },
+
+    errorPlacement: function(error, element) {
+      if (element.attr("name") == "nombre_cargo") {
+        $("#no-espacios-error").html(error); // Mostrar el mensaje de error en un elemento específico
+      } else {
+        error.insertAfter(element); // Mostrar el mensaje de error debajo del campo de entrada
+      }
+    },
+
+
+
+    submitHandler: function(form) {
+      $("#mensaje-confirmacion").show();
+      form.submit();
+    }
+  });
+
+});
+
+
+// Regla personalizada para validar el campo de nombre_cargo
+$.validator.addMethod("nombrecontrol", function(value, element) {
+  return this.optional(element) || /^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$/.test(value) && !/\s/.test(value);
+}, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
+
+
+// Regla personalizada para validar el campo de Descripciion
+$.validator.addMethod("decripcioncontrol", function(value, element) {
+  return this.optional(element) || value.trim().length > 0;
+}, "Escribe una breve descripción del cargo. como Minimo 10 Letras");
+
+
+// Regla personalizada para validar el campo de nombre_cargo
+jQuery.validator.addMethod("noSpace", function(value, element) { 
+    return value == '' || value.trim().length != 0;  
+}, "No espacios Porfavor Eso no se Hace Aqui");
+
+// Regla personalizada para validar el campo de nombre_cargo
+$.validator.addMethod("noRepetidos", function(value, element) {
+  return this.optional(element) || !/(.)\1+/.test(value);
+}, "No se permiten caracteres repetidos en este campo");
+
+
+</script>
 
 
 
