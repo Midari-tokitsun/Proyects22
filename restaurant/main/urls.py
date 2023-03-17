@@ -43,6 +43,12 @@ urlpatterns = [
 
 
 
+    path("RegistroNuevoCliente/",views.RegistroNuevoCliente, name="RegistroNuevoCliente"),# REgistro Cliente EN LA TABLA
+    path("AgregarNuevoUsuario",views.AgregarNuevoUsuario, name="AgregarNuevoUsuario"),# REgistro Cliente EN LA TABLA
+  
+
+    
+    
 
 
     path("signup/",views.registrarusuarioenellogin, name="signup"),# REgistro Cliente

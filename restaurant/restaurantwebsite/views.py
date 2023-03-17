@@ -27,10 +27,58 @@ def tableuser(request):
 
     return render(request,"usuarios.html",context)
 
+from passlib.context import CryptContext
+
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.password_validation import validate_password
+"""def registrarusuarioenellogin(request):
+
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        apellido = request.POST['apellido']
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        registro_exitoso = False  # Inicialmente, el registro no es exitoso
+
+        if password != confirm_password:
+            messages.error(request,"Las contraseñas no coinciden")
+            context = {
+            'nombre': nombre,
+            'apellido': apellido,
+            'username': username,
+            'email': email,
+            }
+            return render(request, 'signup.html', context)
+        else:
+            # Encriptar la contraseña
+            pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+            hashed_password = pwd_context.hash(password)
+
+            user = insertuser.objects.create(
+                nombre=nombre,
+                apellido=apellido,
+                username=username,
+                email=email,
+                password=hashed_password,
+            )
+            user.save()
+            registro_exitoso = True  # El registro es exitoso ahora
+
+        if registro_exitoso:
+            messages.success(request,"USUARIO REGISTRADO CON EXITO!!!!")
+            return redirect("signup")
+        else:
+            # renderizar el formulario de registro con los datos previos
+            return render(request, 'signup.html', {'registro_exitoso': registro_exitoso})
+
+    else:
+        return render(request,'signup.html')"""
+
+
 def registrarusuarioenellogin(request):
 
     if request.method == 'POST':
@@ -53,17 +101,23 @@ def registrarusuarioenellogin(request):
             return render(request, 'signup.html', context)
         else:
             # Encriptar la contraseña
-            password_encrypted = make_password(password)
+            pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+            hashed_password = pwd_context.hash(password)
 
-            user = insertuser.objects.create(
-                nombre=nombre,
-                apellido=apellido,
-                username=username,
-                email=email,
-                password=password_encrypted,
-            )
-            user.save()
-            registro_exitoso = True  # El registro es exitoso ahora
+            # Verificar si ya existe un usuario con el mismo nombre de usuario o correo electrónico
+            if insertuser.objects.filter(Q(username=username) | Q(email=email)).exists():
+                messages.error(request,"Ya existe un usuario con ese nombre de usuario o correo electrónico.")
+            else:
+                # Crear un nuevo usuario
+                user = insertuser.objects.create(
+                    nombre=nombre,
+                    apellido=apellido,
+                    username=username,
+                    email=email,
+                    password=hashed_password,
+                )
+                user.save()
+                registro_exitoso = True  # El registro es exitoso ahora
 
         if registro_exitoso:
             messages.success(request,"USUARIO REGISTRADO CON EXITO!!!!")
@@ -73,7 +127,8 @@ def registrarusuarioenellogin(request):
             return render(request, 'signup.html', {'registro_exitoso': registro_exitoso})
 
     else:
-        return render(request, 'signup.html')
+        return render(request,'signup.html')
+
 
 
 
@@ -94,6 +149,8 @@ def registrarentablausuario(request):
 
 #          saverecord.save()
 
+
+
             id_usuario=request.POST.get("id_usuario")
             username=request.POST.get("username")
             nombre=request.POST.get("nombre")
@@ -101,7 +158,6 @@ def registrarentablausuario(request):
             password=request.POST.get("password")
             estado=request.POST.get("estado")
             apellido=request.POST.get("apellido")
-  
 
 
 
@@ -176,7 +232,45 @@ def eliminarusuario(request,id):
 
 
 
+from django.contrib.auth.forms import UserCreationForm
+from .form import CreateUserForm
 
+
+from django.contrib.auth.models import User
+def RegistroNuevoCliente(request):
+    form=CreateUserForm
+    users = User.objects.all()
+
+    context={'form':form , 'users': users }
+
+    return render (request,"RegistroNuevoCliente.html",context)
+
+
+
+def AgregarNuevoUsuario(request):
+    form= CreateUserForm
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+    return redirect ("RegistroNuevoCliente")
+
+
+
+from django.contrib import messages
+from django.contrib.auth.forms import UserChangeForm
+
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.shortcuts import get_object_or_404
+
+
+
+
+
+
+    
 
 
 
@@ -184,12 +278,97 @@ def eliminarusuario(request,id):
 def home(request):
     return render(request, 'home.html')
 
-from django.contrib.auth.hashers import check_password
+
 
 def login_user(request):
 
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        try:
+            user = insertuser.objects.get(username=username)
+            if user.password == password:
+                # Usuario y contraseña válidos
+                request.session['username'] = user.username
+                request.session['password'] = user.password
+                user.intentos = 0 # Resetear attempts si inicia sesión correctamente
+                user.bloqueado = False # Desbloquear la cuenta si inicia sesión correctamente
+                user.save()
+                return render(request, 'home.html')
+            else:
+                # Usuario o contraseña incorrectos
+                user.intentos += 1 # Incrementar attempts si falla el inicio de sesión
+                if user.intentos >= 3:
+                    user.bloqueado = True # Bloquear la cuenta si se supera el límite de intentos
+                user.save()
+                messages.success(request, 'La Cuenta Ha sido BLoqueada por exceder el Numero Maximo de Intentos')
+        except insertuser.DoesNotExist:
+            messages.success(request, 'Usuario No Existente!!')
+    return render(request, 'empleadologin.html')
+
+"""    if request.method == 'POST':
+        username = request.POST.get['username']
+        password = request.POST.get['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Usuario o contraseña incorrecta.')
+    return render(request, 'empleadologin.html')"""
 
 
+
+
+
+
+"""    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        try:
+            user = insertuser.objects.get(username=username)
+        except insertuser.DoesNotExist:
+            return render(request, 'empleadologin.html', {'error_message': 'Correo electrónico o contraseña incorrectos'})
+
+        pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        if pwd_context.verify(password, user.password):
+            # log in user
+            return redirect('home')
+        else:
+            return render(request, 'empleadologin.html', {'error_message': 'Correo electrónico o contraseña incorrectos'})
+    else:
+        return render(request, 'empleadologin.html')"""
+
+
+"""
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # obtén el usuario según su nombre de usuario o correo electrónico
+        user = authenticate(request, username=username.lower(), password=password)
+            
+
+
+
+        if user is not None:
+            print(f"Usuario encontrado: {user}")
+            if check_password(password, user.password):
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.error(request, 'Credenciales inválidas')
+        else:
+            messages.error(request, 'Credenciales inválidas')
+            print(f"Usuario no encontrado: {username}")
+
+    return render(request, 'empleadologin.html')
+"""
+
+
+
+"""
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -202,28 +381,12 @@ def login_user(request):
             messages.error(request, 'Credenciales inválidas')
     
     return render(request, 'empleadologin.html')
+"""
 
 
+   
 
-'''   
-    if request.method=='POST':
-
-
-        try:
-            saverecord = insertuser.objects.get(username=request.POST['username'],password=request.POST['password'])
-            
-            request.session['username']=saverecord.username
-            request.session['password']=saverecord.password
-
-  
-            return render(request,'home.html')
-
-
-        except insertuser.DoesNotExist:
-            messages.success(request, 'Usuario No Existente!!')
-            
-    return render(request, 'empleadologin.html')
-'''    
+    
 
 def signout(request):
     logout(request)
@@ -287,6 +450,7 @@ def addempleado(request):
 
                 cargo_asignado=request.POST.get("cargo_asignado")
                 tipodedocumentos=request.POST.get("tipodedocumentos")
+                numero_identificacion=request.POST.get("numero_identificacion")
 
 
      #   id_sucursal = request.POST.get("departamento")
@@ -316,6 +480,7 @@ def addempleado(request):
 
                 cargo_asignado=cargo_asignado,
                 tipodedocumentos=tipodedocumentos,
+                numero_identificacion=numero_identificacion,
 
 
 
@@ -353,6 +518,7 @@ def editarempleado(request , id):
     puesto_asignado=request.POST.get('puesto_asignado')
     cargo_asignado=request.POST.get('cargo_asignado')
     tipodedocumentos=request.POST.get('tipodedocumentos')
+    numero_identificacion=request.POST.get('numero_identificacion')
 
     emp.id_empleado=id_empleado
     emp.nombre=nombre
@@ -364,6 +530,7 @@ def editarempleado(request , id):
     emp.puesto_asignado=puesto_asignado
     emp.cargo_asignado=cargo_asignado
     emp.tipodedocumentos=tipodedocumentos
+    emp.numero_identificacion=numero_identificacion
 
     emp.save()
 

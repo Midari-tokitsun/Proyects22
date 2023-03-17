@@ -244,6 +244,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
             <th scope="col">Puesto Asignado</th>
             <th scope="col">Cargo Asignado</th>
             <th scope="col">Tipo de documentos</th>
+            <th scope="col">Documento de Identificacion</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -260,6 +261,8 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
             <td>{{e.puesto_asignado}}</td>
             <td>{{e.cargo_asignado}}</td>
             <td>{{e.tipodedocumentos}}</td>
+            <td>{{e.numero_identificacion}}</td>
+            
             <td>
 
               <!-- Button trigger modal -->
@@ -298,43 +301,44 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
     
 
 
-        <form action="{% url 'addempleado' %}" method="POST" class="row g-2 ">
+        <form action="{% url 'addempleado' %}" method="POST" class="row">
           {% csrf_token %} 
           
-          
+          <div class="container">
+            <div class="row">
      
 
-          <div class="col-md">
+              <div class="col-sm-5 col-md-6">
           <label for="form-label">ID-EMPLEADO</label>
         
           
           <input class="form-control" type="number" name="id_empleado">
         </div>
-          <div class="col-md-5">
+        <div class="col-sm-5 col-md-6">
           <label for="form-label">Nombre</label>
         
           <input  pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" title="Ejemplo: Pedro,Ana,Noe"maxlength="20" minlength="3" class="form-control" type="text" name="nombre" required>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-sm-5 col-md-6">
           <label for="form-label">Apellido</label>
         
           <input pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="Ejemplo: Peres,Funez,Castro" maxlength="20" minlength="5"  class="form-control" type="text" name="apellido" required>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-sm-5 col-md-6">
           <label for="form-label">Jornada</label>
         
           <input  class="form-control" type="text" name="jornada" required>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-sm-5 col-md-6">
           <label for="form-label">Telefono</label>
         
           <input class="form-control" type="number" name="telefono" pattern="^\+504\s\d{4}-\d{4}$" title="Ejemplo:+50488446955 o +50432470678" required>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-sm-5 col-md-6">
           <label for="form-label">PUESTO</label>
         
           <select class="form-select" name="puesto_asignado" id="">
@@ -344,7 +348,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         </select>
       </div>
         
-      <div class="col-md">
+      <div class="col-sm-5 col-md-6">
         <label for="form-label">DEPARTAMENTO</label>
         
         <select class="form-select" name="departamento_asignado" id="">
@@ -354,7 +358,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         </select>
       </div>
 
-      <div class="col-md">
+      <div class="col-sm-5 col-md-6">
         <label for="form-label">SUCURSAL</label>
         
         <select class="form-select" name="sucursal_asignado" id="">
@@ -364,7 +368,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         </select>
       </div>
         
-      <div class="col-md-5">
+      <div class="col-sm-5 col-md-6">
         <label for="form-label">Cargo Asignado</label>
         
         <select class="form-select" name="cargo_asignado" id="">
@@ -374,7 +378,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         </select>
       </div>
 
-      <div class="col-md-5">
+      <div class="col-sm-5 col-md-6">
         
         <label for="form-label">Tipo de Documento</label>
         
@@ -386,18 +390,25 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
       </div>
 
+      <div class="col-sm-5 col-md-6">
+        <label for="form-label">Documento  Identificacion</label>
+        <input name="numero_identificacion" id="numero_identificacion" type="text" class="form-control" requeired>
+
+
+      </div>
         
        
 
-
+    </div>
+  </div>
 
 
       
 
       </div>
       <div class="modal-footer">
-        <button type="submit">GUARDAR</button>
-        <button type="reset">LIMpiar CAMPOS</button>
+        <button class="btn btn-success" type="submit">GUARDAR</button>
+        <button class="btn btn-dark" type="reset">LIMpiar CAMPOS</button>
         
       </div>
 
@@ -526,6 +537,8 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         <option value="{{ d.tipo_identificacion }}">{{ d.tipo_identificacion }}</option>
         {% endfor %}
         </select>
+
+
         
       </div> 
 
@@ -533,7 +546,12 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         
     
         
-        
+      <div class="col-md-5">
+        <label for="form-label">Documento  Identificacion</label>
+        <input name="numero_identificacion" id="numero_identificacion" value="{{e.numero_identificacion}}" type="text" class="form-control" requeired>
+
+
+      </div>
         
         
      

@@ -1,9 +1,27 @@
 from django.db import models
 
+
+from passlib.context import CryptContext
+
+from django.contrib.auth.hashers import BasePasswordHasher
+from argon2 import PasswordHasher, exceptions
+from argon2 import PasswordHasher
+
+from cryptography.fernet import Fernet
+
+
+
+
+
+
+
+
+
 class insertuser(models.Model):
     id_usuario=models.CharField(primary_key=True,max_length=40)
-    username = models.CharField(max_length=100)
+    username = models.CharField(max_length=100, )
     apellido=models.CharField(max_length=50)
+    
 
     nombre = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
@@ -14,10 +32,26 @@ class insertuser(models.Model):
     )
     
     estado=models.CharField(max_length=20 , choices=estadocuenta)
-    password =  models.CharField(max_length=100)
-    fecha_creacion=models.DateField(blank=True)
+    password =  models.CharField(max_length=128)
+    fecha_creacion=models.DateField(auto_now_add=True)
+    fecha_modificacion=models.DateField(auto_now=True)
+
+    intentos = models.IntegerField(default=0) # Agregar el campo attempts como un entero con valor por defecto 0
+    bloqueado = models.BooleanField(default=False) # Agregar el campo block como un booleano con valor por defecto False
+
+
+
+
+
+
+
     class Meta:
         db_table = 'users'
+
+    
+
+
+        
 
 
 class sucursal(models.Model):
@@ -67,7 +101,7 @@ class empleados(models.Model):
 
     cargo_asignado=models.CharField(max_length=30)
     tipodedocumentos=models.CharField(max_length=30)
-    
+    numero_identificacion=models.CharField(max_length=40)
 
 
 # RElaciones De otras TAblas
