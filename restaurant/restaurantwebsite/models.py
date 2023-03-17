@@ -141,7 +141,7 @@ class documentoemp(models.Model):
     id=models.CharField(primary_key=True , max_length=20)
 
     tipo_identificacion = models.CharField(max_length=20)
-    numero_identificacion = models.CharField(max_length=20)
+
 
 
     class Meta:

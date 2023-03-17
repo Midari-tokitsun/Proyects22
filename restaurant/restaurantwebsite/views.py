@@ -825,13 +825,13 @@ def añadirdocumentoemp(request):
 
             id=request.POST.get("id")
             tipo_identificacion=request.POST.get("tipo_identificacion")
-            numero_identificacion=request.POST.get("numero_identificacion")
+
 
         
             documentoemp.objects.create(
                 id=id,
                 tipo_identificacion=tipo_identificacion,
-                numero_identificacion=numero_identificacion,
+    
 
 
 
@@ -874,13 +874,13 @@ def actualizartipodedocumento(request , id ):
     id=request.POST.get('id')
 
     tipo_identificacion=request.POST.get('tipo_identificacion')
-    numero_identificacion=request.POST.get('numero_identificacion')
+
     
 
 
 
     docs.id=id
-    docs.numero_identificacion=numero_identificacion
+
     docs.tipo_identificacion=tipo_identificacion
     
 
