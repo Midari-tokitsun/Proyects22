@@ -327,33 +327,24 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
           <label for="form-label">ID-EMPLEADO</label>
         
           
-          <input class="form-control" type="number" name="id_empleado" required>
+          <input placeholder="Ingrese el ID del Empleado" class="form-control noSpace" type="number" name="id_empleado" required>
         </div>
         <div class="col-sm-5 col-md-6">
           <label for="form-label">Nombre</label>
         
-          <input id="nombre"  pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" placeholder="Ejemplo: Pedro,Ana,Noe"maxlength="20" minlength="3" class="form-control" type="text" name="nombre" required>
+          <input id="nombre"  pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" placeholder="Ejemplo: Pedro,Ana,Noe"maxlength="20" minlength="3" class="form-control noSpace noRepetidos textocontrol" type="text" name="nombre" required>
         </div>
 
         <div class="col-sm-5 col-md-6">
           <label for="form-label">Apellido</label>
         
-          <input id="apellido" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" placeholder="Ejemplo: Peres,Funez,Castro" maxlength="20" minlength="5"  class="form-control" type="text" name="apellido" required>
+          <input id="apellido" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" placeholder="Ejemplo: Peres,Funez,Castro" maxlength="20" minlength="5"  class="form-control noSpace noRepetidos textocontrol" type="text" name="apellido" required>
         </div>
 
         <div class="col-sm-5 col-md-6">
           <label for="form-label">Jornada</label>
         
           <input  class="form-control" type="text" name="jornada" required>
-        </div>
-
-        <div class="col-sm-5 col-md-6">
-          <label for="form-label">Telefono</label>
-        
-          <input id="telefono" class="form-control telefonoHonduras" type="number" name="telefono" pattern="^\+504\s\d{4}-\d{4}$" placeholder="Ejemplo:+50488446955 o +50432470678" required>
-       
-          <p style="background-color: red;" id="telefonoError" class="error-message"></p>
-
         </div>
    
 
@@ -400,23 +391,17 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
       <div class="col-sm-5 col-md-6">
         
         <label for="tipodedocumentos">Tipo de documento:</label>
-        <select id="tipodedocumentos" name="tipodedocumentos">
+        <select class="form-select" id="tipodedocumentos" name="tipodedocumentos">
         {% for d in docs %}
         <option value="{{ d.tipo_identificacion }}">{{ d.tipo_identificacion }}</option>        
         {% endfor %}
         </select>
         
-
-
-
-
-
-
       </div>
 
       <div class="col-sm-5 col-md-6">
         <label for="form-label">Documento  Identificacion</label>
-        <input placeholder="DNI-RTN-PASA-RESI" name="numero_identificacion" id="numero_identificacion" type="text" class="form-control" required>
+        <input placeholder="DNI-RTN-PASA-RESI" name="numero_identificacion" id="numero_identificacion" type="text" class="form-control noSpace" required>
 
         <p id="error-rtn"></p>
         <p id="error-dni"></p>
@@ -426,7 +411,17 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
 
       </div>
    
-        
+
+      
+      <div class="col-sm-5 col-md-6">
+        <label for="form-label">Telefono</label>
+      
+        <input id="telefono" class="form-control telefonoHonduras " type="number" name="telefono" pattern="^\+504\s\d{4}-\d{4}$" placeholder="Ejemplo:+50488446955 o +50432470678" required>
+     
+        <p style="background-color: red;" id="telefonoError" class="error-message"></p>
+
+      </div>
+
             
 
     </div>
@@ -438,7 +433,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
       </div>
       <div class="modal-footer">
         <button class="btn btn-success" type="submit" >GUARDAR</button>
-        <button class="btn btn-dark" type="reset">LIMpiar CAMPOS</button>
+        <button class="btn btn-dark" type="reset">Limpiar Campos</button>
         
       </div>
 
@@ -644,7 +639,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         nombre: {
           required: true, 
           minlength: 5,
-          maxlength:15,
+          maxlength:12,
           noRepetidos: true,
   
           noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
@@ -656,8 +651,8 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         apellido: {
           required: true,
           textocontrol:true,
-          minlength: 10,
-          maxlength: 250,
+          minlength: 5,
+          maxlength: 12,
         },
   
   
@@ -677,11 +672,10 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         },
 
         
-        nuemro_identificacion: {
+        numero_identificacion: {
           required: true,
           noSpace:true,
-          minlength: 10,
-          maxlength: 250,
+   
         },
 
 
@@ -695,8 +689,8 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         nombre: {
           required:"Debes Poner un Nombre ",
           textocontrol: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
-          minlength: "Debes ingresar al menos {3} caracteres.", 
-          maxlength: "No puedes ingresar más de {15} caracteres.",
+          minlength: "Debes ingresar al menos 3 caracteres.", 
+          maxlength: "No puedes ingresar más de 12 caracteres.",
           noRepetidos: "No se permiten caracteres repetidos en este campo",
   
         noespacios: "El nombre del Empleado no puede contener espacios"
@@ -705,13 +699,13 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
   
         apellido: {
           textocontrol: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
-          minlength: "Debes ingresar al menos {3} caracteres.",
-
+         
           required:"Debes Poner El Apellido",
  
-          minlength: "Debes ingresar al menos {5} caracteres.",
-        maxlength: "No puedes ingresar más de {15} caracteres.",
-        noespacios: "El Apellido del Empleado no puede contener espacios"
+          minlength: "Debes ingresar al menos 5 caracteres.",
+        maxlength: "No puedes ingresar más de 12 caracteres.",
+        noespacios: "El Apellido del Empleado no puede contener espacios",
+        noRepetidos: "No se permiten caracteres repetidos en este campo",
         
 
         },
@@ -729,11 +723,10 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
           minlength: "Debes ingresar al menos 8 caracteres.",
         maxlength: "No puedes ingresar más de 8 caracteres.",
         },
-        nuemro_identificacion: {
+        numero_identificacion: {
           required:"te falta el Documento De Identificacion",
  
-          minlength: "Debes ingresar al menos {10} caracteres.",
-        maxlength: "No puedes ingresar más de {250} caracteres.",
+       
         noSpace:"No se Pueden Agregar Espacios en un Documento de identificacion",
         },
 
