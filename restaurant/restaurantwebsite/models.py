@@ -32,7 +32,7 @@ class insertuser(models.Model):
     )
     
     estado=models.CharField(max_length=20 , choices=estadocuenta)
-    password =  models.CharField(max_length=128)
+    password =  models.CharField(max_length=120)
     fecha_creacion=models.DateField(auto_now_add=True)
     fecha_modificacion=models.DateField(auto_now=True)
 

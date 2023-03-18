@@ -78,7 +78,29 @@ from django.contrib.auth.password_validation import validate_password
     else:
         return render(request,'signup.html')"""
 
+
+import bcrypt
+import bcrypt
+
+def encriptar_password(password):
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(rounds=4)).decode('utf-8')
+    return hashed_password
+
+import bcrypt
+
+def verificar_password(password, hashed_password):
+    print(f"password: {password}")
+    print(f"hashed_password: {hashed_password}")
+    return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+
+
+
+
+
+
 from django.db import IntegrityError
+from passlib.hash import pbkdf2_sha256
 
 def registrarusuarioenellogin(request):
 
@@ -94,11 +116,11 @@ def registrarusuarioenellogin(request):
             messages.error(request, "Las contraseñas no coinciden")
         else:
         # Encriptar la contraseña
-        
+            hashed_password = encriptar_password(password)
 
         # Verificar si ya existe un usuario con el mismo nombre de usuario o correo electrónico
             if insertuser.objects.filter(Q(username=username) | Q(email=email)).exists():
-                messages.error(request, "Ya existe un usuario con ese nombre de usuario o correo electrónico.")
+                messages.error(request, "Ya existe un usuario con ese nombre de usuario y correo electrónico.")
             else:
                 try:
                 # Crear un nuevo usuario
@@ -107,7 +129,7 @@ def registrarusuarioenellogin(request):
                     apellido=apellido,
                     username=username,
                     email=email,
-                    password=password,
+                    password=hashed_password,
                     )
                     messages.success(request, "USUARIO REGISTRADO CON EXITO!!!!")
                     return redirect("signup")
@@ -204,6 +226,9 @@ def registrarentablausuario(request):
             estado=request.POST.get("estado")
             apellido=request.POST.get("apellido")
 
+        # Encriptar la contraseña
+            hashed_password = encriptar_password(password)
+
                         # Verificar si ya existe un usuario con el mismo id_usuario
             if insertuser.objects.filter(Q(username=username) | Q(email=email) ).exists():
                 messages.error(request, 'Error: ya existe un registro con ese Email y Nombre de Usuario')
@@ -214,7 +239,7 @@ def registrarentablausuario(request):
                 username=username,
                 nombre=nombre,
                 email=email,
-                password=password,
+                password=hashed_password,
                 estado=estado,
                 apellido=apellido,
 
@@ -326,6 +351,7 @@ from django.shortcuts import get_object_or_404
 def home(request):
     return render(request, 'home.html')
 
+from passlib.context import CryptContext
 
 
 def login_user(request):
@@ -339,8 +365,9 @@ def login_user(request):
             if user.bloqueado:
                 # Usuario bloqueado, mostrar mensaje de error
                 messages.error(request, 'La cuenta ha sido bloqueada. Contacte con el Administrador de Pizza Wave')
-            elif user.password == password:
+            elif verificar_password(password, user.password):
                 # Usuario y contraseña válidos
+                
                 request.session['username'] = user.username
                 request.session['password'] = user.password
                 user.intentos = 0 # Resetear attempts si inicia sesión correctamente

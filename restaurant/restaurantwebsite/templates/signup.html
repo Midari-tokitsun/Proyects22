@@ -133,7 +133,7 @@
           </div>
           <div class="input-box">
             <span class="details">Contraseña</span>
-            <input id="password" maxlength="12" minlength="8" name="password" type="password" placeholder="Escribe tu Contraseña" required>
+            <input id="password" maxlength="16" minlength="8" name="password" type="password" placeholder="Escribe tu Contraseña" required>
             
             <p id="password-strength"></p>
             <p>"La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula",</p>
@@ -303,6 +303,7 @@
       },
       messages: {
         nombre: {
+          required:"Debes ingresar tu Nombre",
           noRepetidos:"No Se permiten Letras Repetidas",
           lettersonly: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.",
           minlength: "Debes ingresar como mínimo 3 letras.",
@@ -310,6 +311,7 @@
           noSpace:"No se Permiten Espacios Aca",
         },
         apellido: {
+          required:"Debes Ingresar Tu apellido",
           noRepetidos:"No Se permiten Letras Repetidas",
           lettersonly: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.",
           minlength: "Debes ingresar como mínimo 5 letras.",
@@ -317,6 +319,7 @@
           noSpace:"No se Permiten Espacios Aca NO HAGA ESO",
         },
         username: {
+          required:"Debes ingresar tu Nombre de Usuario",
           noRepetidos:"No Se permiten Letras Repetidas",
           usernamecontrol: "Introduce un Nombre de Usuario Valido Sin espacios ni Letras Repetidas Ejemplo: Minombre12",
           minlength: "Debes ingresar como mínimo 4 caracteres.",
@@ -324,11 +327,13 @@
           noSpace:"No se Permiten Espacios Aca Ya se lo Dije",
         },
         email: {
+          required:"Debes introducir Tu Correo Electronico",
           noRepetidos:"No Se permiten Letras Repetidas",
           emailcontrol: "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios",
           noSpace:"No se Permiten Espacios Aca YA Pare",
         },
         password: {
+          required:"Debes introducir tu Contraseña",
           minlength: "Debes ingresar como mínimo 8 caracteres.",
           maxlength: "No puedes ingresar más de 16 caracteres."
         }
@@ -349,9 +354,6 @@
     return this.optional(element) || /^[A-Z](?!.*(.).*\1)[A-Za-z0-9]+$/i.test(value);
   }, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.");
   
-  
-  
-  
   // Regla personalizada para validar EL Correo Electronico
   $.validator.addMethod("emailcontrol", function(value, element) {
     // Nueva validación de la regla de correo electrónico
@@ -359,12 +361,11 @@
   }, "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios");
   
   
-  // Regla personalizada para validar EL nombre de usuario
   $.validator.addMethod("usernamecontrol", function(value, element) {
-    // Validación de la nueva regla
-    return this.optional(element) || /^(?!.*(.).*\1)[a-zA-Z0-9]+$/i.test(value);
-  }, "Introduce un Nombre de Usuario Valido Sin espacios ni Letras Repetidas Ejemplo: Minombre12");
-  
+  // Validación de la nueva regla
+  return this.optional(element) || /^[A-Z][a-zA-Z0-9]*$/i.test(value);
+}, "Introduce un Nombre de Usuario Valido Sin espacios ni Letras Repetidas Ejemplo: Minombre12");
+
   });
   //regla para validar Los caracteres repetidos
   $.validator.addMethod("noRepetidos", function(value, element) {
