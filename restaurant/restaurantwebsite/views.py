@@ -78,8 +78,10 @@ from django.contrib.auth.password_validation import validate_password
     else:
         return render(request,'signup.html')"""
 
+from django.db import IntegrityError
 
 def registrarusuarioenellogin(request):
+
     if request.method == 'POST':
         nombre = request.POST['nombre']
         apellido = request.POST['apellido']
@@ -89,42 +91,91 @@ def registrarusuarioenellogin(request):
         confirm_password = request.POST['confirm_password']
 
         if password != confirm_password:
-            messages.error(request,"Las contraseñas no coinciden")
-            context = {
-                'nombre': nombre,
-                'apellido': apellido,
-                'username': username,
-                'email': email,
-            }
-            return render(request, 'signup.html', context)
+            messages.error(request, "Las contraseñas no coinciden")
         else:
-            # Encriptar la contraseña
-            hashed_password = make_password(password)
+        # Encriptar la contraseña
+        
 
-            # Verificar si ya existe un usuario con el mismo nombre de usuario o correo electrónico
+        # Verificar si ya existe un usuario con el mismo nombre de usuario o correo electrónico
             if insertuser.objects.filter(Q(username=username) | Q(email=email)).exists():
-                messages.error(request,"Ya existe un usuario con ese nombre de usuario y correo electrónico.")
-                return render(request, 'signup.html')
-
-            try:
+                messages.error(request, "Ya existe un usuario con ese nombre de usuario o correo electrónico.")
+            else:
+                try:
                 # Crear un nuevo usuario
-                user = insertuser.objects.create(
+                    user = insertuser.objects.create(
                     nombre=nombre,
                     apellido=apellido,
                     username=username,
                     email=email,
-                    password=hashed_password,
-                )
-                user.save()
-                messages.success(request,"USUARIO REGISTRADO CON EXITO!!!!")
-                return redirect("signup")
-            except IntegrityError:
-                messages.error(request,"Ya existe un usuario con ese nombre de usuario o correo electrónico.")
-                return render(request, 'signup.html', {'nombre': nombre, 'apellido': apellido, 'username': username, 'email': email})
+                    password=password,
+                    )
+                    messages.success(request, "USUARIO REGISTRADO CON EXITO!!!!")
+                    return redirect("signup")
+                except IntegrityError:
+                    messages.error(request, "Ya existe un usuario con ese nombre de usuario o correo electrónico.")
+    
+    # Agregar los datos ingresados anteriormente al contexto
+        context = {
+        'nombre': nombre,
+        'apellido': apellido,
+        'username': username,
+        'email': email,
+        }
+        return render(request, 'signup.html', context)
+
     else:
-        return render(request,'signup.html')
+    # Si el método de la solicitud no es "POST", crear un contexto vacío.
+        context = {}
+        return render(request, 'signup.html', context)
 
 
+
+
+"""    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        apellido = request.POST['apellido']
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+
+        if password != confirm_password:
+            messages.error(request, "Las contraseñas no coinciden")
+        else:
+            # Encriptar la contraseña
+            
+
+            # Verificar si ya existe un usuario con el mismo nombre de usuario o correo electrónico
+            if insertuser.objects.filter(Q(username=username) | Q(email=email)).exists():
+                messages.error(request, "Ya existe un usuario con ese nombre de usuario o correo electrónico.")
+            else:
+                try:
+                    # Crear un nuevo usuario
+                    user = insertuser.objects.create(
+                        nombre=nombre,
+                        apellido=apellido,
+                        username=username,
+                        email=email,
+                        password=password,
+                    )
+                    user.save()
+                    messages.success(request, "USUARIO REGISTRADO CON EXITO!!!!")
+                    return redirect("signup")
+                except IntegrityError:
+                    messages.error(request, "Ya existe un usuario con ese nombre de usuario o correo electrónico.")
+        
+        # Crear un nuevo contexto que contenga los datos del usuario y el mensaje flash.
+        context = {
+            'nombre': nombre,
+            'apellido': apellido,
+            'username': username,
+            'email': email,
+        }
+        return render(request, 'signup.html', context)
+
+    else:
+        return render(request, 'signup.html')
+"""
 
 def registrarentablausuario(request):
     try:  
@@ -279,7 +330,37 @@ def home(request):
 
 def login_user(request):
 
+
     if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        try:
+            user = insertuser.objects.get(username=username)
+            if user.bloqueado:
+                # Usuario bloqueado, mostrar mensaje de error
+                messages.error(request, 'La cuenta ha sido bloqueada. Contacte con el Administrador de Pizza Wave')
+            elif user.password == password:
+                # Usuario y contraseña válidos
+                request.session['username'] = user.username
+                request.session['password'] = user.password
+                user.intentos = 0 # Resetear attempts si inicia sesión correctamente
+                user.bloqueado = False # Desbloquear la cuenta si inicia sesión correctamente
+                user.save()
+                return render(request, 'home.html')
+            else:
+                # Usuario o contraseña incorrectos
+                user.intentos += 1 # Incrementar attempts si falla el inicio de sesión
+                if user.intentos >= 3:
+                    user.bloqueado = True # Bloquear la cuenta si se supera el límite de intentos
+                user.save()
+                messages.success(request, 'La Contraseña ha sido Incorrecta')
+        except insertuser.DoesNotExist:
+            messages.success(request, 'Usuario No Existente!!')
+    return render(request, 'empleadologin.html')
+
+
+
+"""    if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         try:
@@ -302,7 +383,7 @@ def login_user(request):
         except insertuser.DoesNotExist:
             messages.success(request, 'Usuario No Existente!!')
     return render(request, 'empleadologin.html')
-
+"""
 """    if request.method == 'POST':
         username = request.POST.get['username']
         password = request.POST.get['password']
