@@ -771,9 +771,9 @@ def tipodocumentoemp(request):
 
         if query:
             docs = documentoemp.objects.filter(
-            Q(tipo_identificacion__icontains=query) |
+            
             Q(id__icontains=query) |
-            Q(numero_identificacion__icontains=query) ).distinct
+            Q(tipo_identificacion__icontains=query) ).distinct
 
             print("LO ENCONTRE Y TE ENLISTOS SUS REFERENCIAS!!")
         

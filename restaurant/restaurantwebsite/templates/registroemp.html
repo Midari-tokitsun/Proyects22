@@ -31,6 +31,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
 
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/validator/13.7.2/validator.min.js" integrity="sha512-TfJ6Uk3qNC3aEwuf0SxgM5SKnGr+qohZJ7V/9rxBUpzR5H5QjNk7Bfk5gNzoie8+rkjhr90PZGgX9QJ+NYtVzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <title>Registro Empleados</title>
 
@@ -314,8 +315,8 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
       <div class="modal-body">
     
 
-
-        <form id="myform" action="{% url 'addempleado' %}" method="POST" class="row">
+        
+        <form  id="myform" action="{% url 'addempleado' %}" method="POST" class="row">
           {% csrf_token %} 
           
           <div class="container">
@@ -349,8 +350,12 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         <div class="col-sm-5 col-md-6">
           <label for="form-label">Telefono</label>
         
-          <input id="telefono" class="form-control" type="number" name="telefono" pattern="^\+504\s\d{4}-\d{4}$" placeholder="Ejemplo:+50488446955 o +50432470678" required>
+          <input id="telefono" class="form-control telefonoHonduras" type="number" name="telefono" pattern="^\+504\s\d{4}-\d{4}$" placeholder="Ejemplo:+50488446955 o +50432470678" required>
+       
+          <p style="background-color: red;" id="telefonoError" class="error-message"></p>
+
         </div>
+   
 
         <div class="col-sm-5 col-md-6">
           <label for="form-label">PUESTO</label>
@@ -394,24 +399,35 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
 
       <div class="col-sm-5 col-md-6">
         
-        <label for="form-label">Tipo de Documento</label>
-        
-        <select class="form-select" name="tipodedocumentos" id="">
+        <label for="tipodedocumentos">Tipo de documento:</label>
+        <select id="tipodedocumentos" name="tipodedocumentos">
         {% for d in docs %}
-        <option value="{{ d.tipo_identificacion }}">{{ d.tipo_identificacion }}</option>
+        <option value="{{ d.tipo_identificacion }}">{{ d.tipo_identificacion }}</option>        
         {% endfor %}
         </select>
         
+
+
+
+
+
+
       </div>
 
       <div class="col-sm-5 col-md-6">
         <label for="form-label">Documento  Identificacion</label>
-        <input placeholder="DNI-RTN-PASA-NIF-RESI" name="numero_identificacion" id="numero_identificacion" type="text" class="form-control" required>
+        <input placeholder="DNI-RTN-PASA-RESI" name="numero_identificacion" id="numero_identificacion" type="text" class="form-control" required>
 
+        <p id="error-rtn"></p>
+        <p id="error-dni"></p>
+        <p id="error-tarjeta"></p>
+        <p id="error-pasaporte"></p>
+        
 
       </div>
+   
         
-       
+            
 
     </div>
   </div>
@@ -421,7 +437,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
 
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" type="submit">GUARDAR</button>
+        <button class="btn btn-success" type="submit" >GUARDAR</button>
         <button class="btn btn-dark" type="reset">LIMpiar CAMPOS</button>
         
       </div>
@@ -566,9 +582,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
 
 
       </div>
-        
-        
-     
+
 
 
 
@@ -599,6 +613,12 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
 
 
 <script>
+
+
+
+
+
+
 
   $.extend($.validator.messages, {
       required: "Por favor completa este campo"
@@ -650,15 +670,16 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
 
       telefono: {
           required: true,
-          
+          telefonoHonduras: true,
           minlength: 8,
           maxlength: 8,
+          noSpace:true,
         },
 
         
         nuemro_identificacion: {
           required: true,
-          
+          noSpace:true,
           minlength: 10,
           maxlength: 250,
         },
@@ -703,9 +724,10 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         },
 
         telefono: {
+          telefonoHonduras:"Por favor ingresa un número de teléfono válido de Honduras (ej: +504 8888-8888)",
           required:"Debes Poner el Numero del Empleado",
-          minlength: "Debes ingresar al menos {8} caracteres.",
-        maxlength: "No puedes ingresar más de {8} caracteres.",
+          minlength: "Debes ingresar al menos 8 caracteres.",
+        maxlength: "No puedes ingresar más de 8 caracteres.",
         },
         nuemro_identificacion: {
           required:"te falta el Documento De Identificacion",
@@ -735,43 +757,79 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
   
   
       submitHandler: function(form) {
+    // Seleccionar el campo de selección por su id
+    var tipoDocumento = $("#tipodedocumentos");
 
-  // Obtener la opción seleccionada en el campo de selección
-  var opcionSeleccionada = $('#tipodedocumentos').val();
+// Obtener el valor seleccionado en el campo de selección
+var opcionSeleccionada = tipoDocumento.val();
 
-  // Obtener el valor del campo de número de identificación
-  var numIdentificacion = $('#nuemro_identificacion').val();
+// Obtener el valor del campo de número de identificación
+var numIdentificacion = $("#numero_identificacion").val();
 
-  // Validar el número de identificación en función de la opción seleccionada
-  var patron = "";
-  switch (opcionSeleccionada) {
-    case "RTN":
-      patron = /^\d{14}$/;
-      break;
-    case "DNI":
-      patron = /^\d{8}$/;
-      break;
-    case "Tarjeta de Residencia":
-      patron = /^[A-Za-z]\d{7}$/;
-      break;
-    case "Pasaporte":
-      patron = /^[A-Za-z]{2}\d{7}$/;
-      break;
-    default:
-      patron = /.*/; // Si no se selecciona ninguna opción, se acepta cualquier valor
+
+    // Limpiar los mensajes de error anteriores
+    $("#error-rtn").text("");
+    $("#error-dni").text("");
+    $("#error-tarjeta").text("");
+    $("#error-pasaporte").text("");
+
+
+// Realizar la validación correspondiente según la opción seleccionada
+if (opcionSeleccionada === "RTN") {
+  var rtnPattern = /^\d{14}$/;
+  if (!rtnPattern.test(numIdentificacion)) {
+    $("#error-rtn").text("El número de identificación para RTN debe tener 14 dígitos");
+
+    return false;
   }
-  if (!patron.test(numIdentificacion)) {
-    alert("El número de identificación no es válido para la opción seleccionada");
+} else if (opcionSeleccionada === "DNI") {
+  if (numIdentificacion.length !== 9) {
+    $("#error-dni").text("El número de identificación para DNI debe tener 8 dígitos seguido de una letra");
+
+    return false;
+  }
+  var dniNumbers = numIdentificacion.substring(0,8);
+  var dniLetter = numIdentificacion.substring(8,9);
+  if (!(/^\d+$/.test(dniNumbers)) || !(/^[A-Z]$/.test(dniLetter))) {
+    $("#error-dni").text("El número de identificación para DNI debe tener 8 dígitos seguido de una letra");
+
+    return false;
+  }
+} else if (opcionSeleccionada === "Tarjeta de Residenci") {
+  var tarjetaResidenciaPattern = /^[A-Za-z]\d{7}$/;
+  if (!tarjetaResidenciaPattern.test(numIdentificacion)) {
+    $("#error-tarjeta").text("El número de identificación para Tarjeta de Residencia debe tener una letra seguida de 7 dígitos");
+
+    return false;
+  }
+} else if (opcionSeleccionada === "Pasaporte") {
+  var pasaportePattern = /^[A-Za-z]{2}\d{7}$/;
+  if (!pasaportePattern.test(numIdentificacion)) {
+    $("#error-pasaporte").text("El número de identificación para Pasaporte debe tener 2 letras seguidas de 7 dígitos");
+
+    return false;
+  }
+}
+
+
+  // Obtener el valor del campo de número de teléfono
+  var telefono = $("#telefono").val();
+  
+  // Validar el número de teléfono utilizando una expresión regular
+  var telefonoPattern = /^(504)?[ -]?([89]\d{3}[ -]?\d{4}|\d{4}[ -]?[89]\d{3})$/;
+  if (!telefonoPattern.test(telefono)) {
+    $("#telefonoError").text("El número de teléfono debe tener el formato 504########");
+
     return false;
   }
 
 
 
 
-
-        $("#mensaje-confirmacion").show();
-        form.submit();
-      }
+form.submit();
+$("#mensaje-confirmacion").show();
+return true;
+}
     });
   
 
@@ -794,7 +852,12 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
     return this.optional(element) || !/(.)\1+/.test(value);
   }, "No se permiten caracteres repetidos en este campo");
   
-  
+  $.validator.addMethod("telefonoHonduras", function(value, element) {
+  return this.optional(element) || /^(\+504)?[ -]?\d{4}[ -]?\d{4}$/.test(value);
+}, "Por favor ingresa un número de teléfono válido de Honduras (ej: +504 8888-8888)");
+
+
+
   </script>
   
 
