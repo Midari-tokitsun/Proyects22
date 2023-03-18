@@ -80,7 +80,6 @@ from django.contrib.auth.password_validation import validate_password
 
 
 def registrarusuarioenellogin(request):
-
     if request.method == 'POST':
         nombre = request.POST['nombre']
         apellido = request.POST['apellido']
@@ -88,26 +87,26 @@ def registrarusuarioenellogin(request):
         email = request.POST['email']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
-        registro_exitoso = False  # Inicialmente, el registro no es exitoso
 
         if password != confirm_password:
             messages.error(request,"Las contraseñas no coinciden")
             context = {
-            'nombre': nombre,
-            'apellido': apellido,
-            'username': username,
-            'email': email,
+                'nombre': nombre,
+                'apellido': apellido,
+                'username': username,
+                'email': email,
             }
             return render(request, 'signup.html', context)
         else:
             # Encriptar la contraseña
-            pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-            hashed_password = pwd_context.hash(password)
+            hashed_password = make_password(password)
 
             # Verificar si ya existe un usuario con el mismo nombre de usuario o correo electrónico
             if insertuser.objects.filter(Q(username=username) | Q(email=email)).exists():
-                messages.error(request,"Ya existe un usuario con ese nombre de usuario o correo electrónico.")
-            else:
+                messages.error(request,"Ya existe un usuario con ese nombre de usuario y correo electrónico.")
+                return render(request, 'signup.html')
+
+            try:
                 # Crear un nuevo usuario
                 user = insertuser.objects.create(
                     nombre=nombre,
@@ -117,24 +116,19 @@ def registrarusuarioenellogin(request):
                     password=hashed_password,
                 )
                 user.save()
-                registro_exitoso = True  # El registro es exitoso ahora
-
-        if registro_exitoso:
-            messages.success(request,"USUARIO REGISTRADO CON EXITO!!!!")
-            return redirect("signup")
-        else:
-            # renderizar el formulario de registro con los datos previos
-            return render(request, 'signup.html', {'registro_exitoso': registro_exitoso})
-
+                messages.success(request,"USUARIO REGISTRADO CON EXITO!!!!")
+                return redirect("signup")
+            except IntegrityError:
+                messages.error(request,"Ya existe un usuario con ese nombre de usuario o correo electrónico.")
+                return render(request, 'signup.html', {'nombre': nombre, 'apellido': apellido, 'username': username, 'email': email})
     else:
         return render(request,'signup.html')
 
 
 
-
 def registrarentablausuario(request):
     try:  
-        pass         
+        
         if request.method=='POST':
 #         if request.POST.get('username') and request.POST.get('password'):
 #          saverecord = insertuser()
@@ -159,9 +153,12 @@ def registrarentablausuario(request):
             estado=request.POST.get("estado")
             apellido=request.POST.get("apellido")
 
-
-
-            insertuser.objects.create(
+                        # Verificar si ya existe un usuario con el mismo id_usuario
+            if insertuser.objects.filter(Q(username=username) | Q(email=email) ).exists():
+                messages.error(request, 'Error: ya existe un registro con ese Email y Nombre de Usuario')
+                return redirect('tableuser')
+            else:
+                insertuser.objects.create(
                 id_usuario=id_usuario,
                 username=username,
                 nombre=nombre,
@@ -439,6 +436,7 @@ def addempleado(request):
         pass 
         if request.method=='POST':
 
+
                 nombre=request.POST.get("nombre")
                 apellido=request.POST.get("apellido")
                 jornada=request.POST.get("jornada")
@@ -453,6 +451,11 @@ def addempleado(request):
                 numero_identificacion=request.POST.get("numero_identificacion")
 
 
+                    # Verificar si ya existe un empleado con la misma clave
+                if empleados.objects.filter(Q(nombre=nombre) | Q(apellido=apellido)).exists():
+                    messages.error(request, 'Error: ya existe un registro con ese Nombre Y Apellido')
+                    return redirect('empleados')
+
      #   id_sucursal = request.POST.get("departamento")
       #  sucursal.objects.get(id=id_sucursal)
        # print(id_sucursal)
@@ -462,8 +465,8 @@ def addempleado(request):
 
        # puesto_id = request.POST.get("puesto")
       #  puesto.objects.get(id=puesto_id)
-
-                empleados.objects.create(
+                else:
+                    empleados.objects.create(
         #    sucursal=sucursal,
          #   departamento=departamento,
           #  puesto=puesto,
@@ -673,7 +676,14 @@ def añadircargo(request):
             descripcion=request.POST.get("descripcion")
 
 
-            cargo.objects.create(
+            if cargo.objects.filter(Q(nombre_cargo=nombre_cargo)).exists():
+                messages.error(request, 'Ya existe un Cargo Con ese Nombre')
+                return redirect('cargoregister')
+        
+            else:
+        
+
+                cargo.objects.create(
                 id=id,
                 nombre_cargo=nombre_cargo,
                 descripcion=descripcion,
@@ -827,8 +837,12 @@ def añadirdocumentoemp(request):
             tipo_identificacion=request.POST.get("tipo_identificacion")
 
 
-        
-            documentoemp.objects.create(
+            if documentoemp.objects.filter(Q(tipo_identificacion=tipo_identificacion)).exists():
+                messages.error(request, 'Ya existe un Documento Con ese Nombre')
+                return redirect('tipodocumentoemp')
+            else:
+
+                    documentoemp.objects.create(
                 id=id,
                 tipo_identificacion=tipo_identificacion,
     
@@ -980,14 +994,21 @@ def añadirdepartamento(request):
 #         dept.save()
 #         print("Se ha registrado su Registro a la Pagina de Departamento")
 #    return redirect('departamentohome')
+            
             dept=departamento()
             dept.id_departamento=request.POST.get("id_departamento")
             dept.departamento=request.POST.get("departamento")
             dept.codigo_postal=request.POST.get("codigo_postal")
 
 
+            if departamento.objects.filter(Q(departamento=dept.departamento) | Q(codigo_postal=dept.codigo_postal)).exists():
+                messages.error(request, 'Ya existe un Departamento con Ese nombre y codigo postal por favor introduzca otro')
+                return redirect('departamentohome')
 
-            departamento.objects.create(
+            else:
+
+
+                departamento.objects.create(
                 id_departamento=dept.id_departamento,
                 departamento=dept.departamento,
                 codigo_postal=dept.codigo_postal,
@@ -1095,8 +1116,13 @@ def añadirpuesto(request):
        
             pu.descripcion=request.POST.get("descripcion")
 
-        
-            puesto.objects.create(
+
+            if puesto.objects.filter(Q(puesto=pu.puesto)).exists():
+                messages.error(request, 'Ya existe un Puesto con Ese nombre por favor introduzca otro')
+                return redirect('puestohome')
+
+            else:
+                puesto.objects.create(
                 puesto_id=pu.puesto_id,
                 puesto=pu.puesto,
                 descripcion=pu.descripcion,
@@ -1185,8 +1211,13 @@ def añadirsucursal(request):
             direccion_sucursal=request.POST.get("direccion_sucursal")
             descripcion=request.POST.get("descripcion")
 
+            if sucursal.objects.filter(Q(direccion_sucursal=direccion_sucursal)).exists():
+                messages.error(request, 'Ya existe un Sucursal con Ese nombre por favor introduzca otro')
+                return redirect('sucursalhome')
 
-            sucursal.objects.create(
+
+            else:
+                sucursal.objects.create(
             id_sucursal=id_sucursal,
             direccion_sucursal=direccion_sucursal,
             descripcion=descripcion,
@@ -1268,9 +1299,12 @@ def añadircategoria(request):
 
 
 
+            if categoria.objects.filter(Q(nombre_categoria=nombre_categoria)).exists():
+                messages.error(request, 'Ya existe una Categoria con Ese nombre por favor introduzca otro')
+                return redirect('categoriatabla')
 
-
-            categoria.objects.create(
+            else:
+                categoria.objects.create(
    
                 categoria_id=categoria_id,
                 nombre_categoria=nombre_categoria,
@@ -1359,10 +1393,13 @@ def añadirfamiliaproducto(request):
             descripcion_familia=request.POST.get("descripcion_familia")
 
 
+            if familia_producto.objects.filter(Q(nombre_familia=nombre_familia)).exists():
+                messages.error(request, 'Ya existe una Familia con Ese nombre por favor introduzca otro')
+                return redirect('familiaproductotabla')
 
+            else:
 
-
-            familia_producto.objects.create(
+                familia_producto.objects.create(
    
                 id_familia_producto=id_familia_producto,
                 nombre_familia=nombre_familia,
@@ -1520,7 +1557,13 @@ def añadiralmacen(request):
             estado_almacen=request.POST.get("estado_almacen")
 
 
-            almacen.objects.create(
+            if almacen.objects.filter(Q(tipo_almacen=tipo_almacen)).exists():
+                messages.error(request, 'Ya existe un Almacen con Ese nombre por favor introduzca otro')
+                return redirect('almacentabla')
+
+
+            else:
+                almacen.objects.create(
                 id_almacen=id_almacen,
                 tipo_almacen=tipo_almacen,
                 descripcion_almacen=descripcion_almacen,
@@ -1602,7 +1645,13 @@ def agregarmenu(request):
             modo_elaboracion=request.POST.get("modo_elaboracion")
 
 
-            menutabla.objects.create(
+            if menutabla.objects.filter(Q(nombre_menu=nombre_menu)).exists():
+                messages.error(request, 'Ya existe un Menu con Ese nombre por favor introduzca otro')
+                return redirect('menutablaregistros')
+
+            else:
+
+                menutabla.objects.create(
                 id_menu=id_menu,
                 nombre_menu=nombre_menu,
                 precio_menu=precio_menu,
@@ -1687,7 +1736,13 @@ def agregarreceta(request):
             porciones_receta=request.POST.get("porciones_receta")
 
 
-            recetatabla.objects.create(
+            if recetatabla.objects.filter(Q(nombre_receta=nombre_receta)).exists():
+                messages.error(request, 'Ya existe una Receta con Ese nombre por favor introduzca otro')
+                return redirect('recetatablaregistros')
+
+            else:
+
+                recetatabla.objects.create(
                 id_receta=id_receta,
                 nombre_receta=nombre_receta,
                 menu_id=menu_id,

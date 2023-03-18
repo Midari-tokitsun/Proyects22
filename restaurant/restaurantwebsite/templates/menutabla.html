@@ -543,12 +543,11 @@ $(document).ready(function() {
 });
 
 		
-		// Regla personalizada para validar el campo de nombre_cargo
+		// Regla personalizada para validar el campo de MEnu
 		$.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
-      return this.optional(element) || /^[A-Z](?:(?!(.)\1\1\1)[a-zA-Z])*$/.test(value);
-		}, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
-		
-		
+  return this.optional(element) || /^[A-Z][A-Za-z ]*(?:(?!(.)\1\1)[A-Za-z ])*$/.test(value);
+}, "Este campo solo puede contener letras y espacios y debe comenzar con una letra mayúscula");
+
 
 		
 		

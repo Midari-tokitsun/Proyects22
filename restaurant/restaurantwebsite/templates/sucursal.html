@@ -435,9 +435,13 @@ $("#formulariosucursal").validate({
 
 
 
+
+
+
+// Regla personalizada para validar solo letras
 $.validator.addMethod("direccionsucursalcontrol", function(value, element) {
-  return this.optional(element) || /^[A-Z][a-z]+\.(?!.*(\w)\1)[A-Z]+\w*$/.test(value);
-}, "Este campo debe comenzar con una letra mayúscula, tener un punto, y permitir caracteres repetidos pero no dos caracteres iguales consecutivos.");
+  return this.optional(element) || /^[A-Za-zÁ-Úá-ú]+([.,\s]?[A-Za-zÁ-Úá-ú]+)*$/i.test(value);
+}, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.");
 
 
 // Regla personalizada para validar el campo de nombre_cargo

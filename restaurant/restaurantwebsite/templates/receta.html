@@ -525,12 +525,10 @@ $(document).ready(function() {
 });
 
 		
-		// Regla personalizada para validar el campo de nombre_cargo
-		$.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
-		  return this.optional(element) || /^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$/.test(value) && !/\s/.test(value);
-		}, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
 		
-		
+$.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
+  return this.optional(element) || /^[A-Z][A-Za-z ]*(?:(?!(.)\1\1)[A-Za-z ])*$/.test(value);
+}, "Este campo solo puede contener letras y espacios y debe comenzar con una letra mayúscula");
 
 		
 		
