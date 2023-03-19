@@ -104,6 +104,16 @@ from passlib.hash import pbkdf2_sha256
 
 def registrarusuarioenellogin(request):
 
+
+        # Inicializar variables
+    nombre = ''
+    apellido = ''
+    username = ''
+    email = ''
+    password = ''
+    confirm_password = ''
+    telefono = ''
+
     if request.method == 'POST':
         nombre = request.POST['nombre']
         apellido = request.POST['apellido']
@@ -111,6 +121,7 @@ def registrarusuarioenellogin(request):
         email = request.POST['email']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
+        telefono=request.POST['telefono']
 
         if password != confirm_password:
             messages.error(request, "Las contraseñas no coinciden")
@@ -124,12 +135,13 @@ def registrarusuarioenellogin(request):
             else:
                 try:
                 # Crear un nuevo usuario
-                    user = insertuser.objects.create(
+                    insertuser.objects.create(
                     nombre=nombre,
                     apellido=apellido,
                     username=username,
                     email=email,
                     password=hashed_password,
+                    telefono=telefono,
                     )
                     messages.success(request, "USUARIO REGISTRADO CON EXITO!!!!")
                     return redirect("signup")
@@ -142,6 +154,7 @@ def registrarusuarioenellogin(request):
         'apellido': apellido,
         'username': username,
         'email': email,
+        'telefono':telefono,
         }
         return render(request, 'signup.html', context)
 
@@ -1689,29 +1702,22 @@ def añadiralmacen(request):
         messages.error(request, 'Error: ya existe un registro con esa clave')
     return redirect('almacentabla')
 
-
 def editaralmacen(request,id):
-    alma=almacen.objects.get(id_almacen=id)
-    
-    id_almacen=request.POST.get('id_almacen')
-    tipo_almacen=request.POST.get('tipo_almacen')
-    descripcion_almacen=request.POST.get('descripcion_almacen')
-    estado_almacen=request.POST.get('estado_almacen')
-
-    alma.id_almacen=id_almacen
-    alma.tipo_almacen=tipo_almacen
-    alma.descripcion_almacen=descripcion_almacen
-    alma.estado_almacen=estado_almacen
-
-
-    alma.save()
-
-    messages.success(request, 'Registro Modificado con Exito')
-
-
-
-
-    return redirect('almacentabla')
+    if request.method=='POST':
+        alma=almacen.objects.get(id_almacen=id)
+        id_almacen=request.POST.get('id_almacen')
+        tipo_almacen=request.POST.get('tipo_almacen')
+        descripcion_almacen=request.POST.get('descripcion_almacen')
+        estado_almacen=request.POST.get('estado_almacen')
+        alma.id_almacen=id_almacen
+        alma.tipo_almacen=tipo_almacen
+        alma.descripcion_almacen=descripcion_almacen
+        alma.estado_almacen=estado_almacen
+        alma.save()
+        messages.success(request, 'Registro Modificado con Exito')
+        return redirect('almacentabla')
+    else:
+        return render(request, 'editaralmacen.html')
 
 def eliminaralmacen(request,id):
     alma=almacen.objects.get(id_almacen=id)

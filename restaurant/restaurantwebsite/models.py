@@ -22,6 +22,7 @@ class insertuser(models.Model):
     username = models.CharField(max_length=100, )
     apellido=models.CharField(max_length=50)
     
+    telefono=models.CharField(max_length=50) 
 
     nombre = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
@@ -31,7 +32,7 @@ class insertuser(models.Model):
         ('Inactivo','INACTIVO')
     )
     
-    estado=models.CharField(max_length=20 , choices=estadocuenta)
+    estado=models.CharField(max_length=20 , choices=estadocuenta , default="Activo")
     password =  models.CharField(max_length=120)
     fecha_creacion=models.DateField(auto_now_add=True)
     fecha_modificacion=models.DateField(auto_now=True)

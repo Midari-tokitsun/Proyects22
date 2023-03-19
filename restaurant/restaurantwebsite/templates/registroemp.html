@@ -343,10 +343,17 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
 
         <div class="col-sm-5 col-md-6">
           <label for="form-label">Jornada</label>
-        
-          <input  class="form-control" type="text" name="jornada" required>
-        </div>
+          <select class="form-select" name="jornada" id="jornada" aria-label="Default select example">
+            <option value="Matutina">Matutina</option>
+            <option value="Vespertina">Vespertina</option>
+            <option value="Nocturna">Nocturna</option>
+          </select>
+         </div>
    
+  
+ 
+
+
 
         <div class="col-sm-5 col-md-6">
           <label for="form-label">PUESTO</label>
@@ -501,11 +508,18 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
           <input class="form-control" type="text" value="{{e.apellido}}" name="apellido">
         </div>
 
-        <div class="col-md-5">
+ 
+        <div class="col-sm-5 col-md-6">
           <label for="form-label">Jornada</label>
-        
-          <input class="form-control" type="text" value="{{e.jornada}}" name="jornada">
-        </div>
+          <select class="form-select" name="jornada" id="jornada" aria-label="Default select example">
+            <option value="{{e.jornada}}">{{e.jornada}}</option>
+            <option value="Matutina">Matutina</option>
+            <option value="Vespertina">Vespertina</option>
+            <option value="Nocturna">Nocturna</option>
+          </select>
+         </div>
+   
+
 
         <div class="col-md-5">
           <label for="form-label">Telefono</label>
@@ -804,19 +818,12 @@ if (opcionSeleccionada === "RTN") {
   }
 }
 
-
-  // Obtener el valor del campo de número de teléfono
-  var telefono = $("#telefono").val();
-  
-  // Validar el número de teléfono utilizando una expresión regular
-  var telefonoPattern = /^(504)?[ -]?([89]\d{3}[ -]?\d{4}|\d{4}[ -]?[89]\d{3})$/;
-  if (!telefonoPattern.test(telefono)) {
-    $("#telefonoError").text("El número de teléfono debe tener el formato 504########");
-
-    return false;
-  }
-
-
+var telefono = $("#telefono").val();
+var telefonoPattern = /^(504)?[ -]?(?:(\d)(?!\2{7})){8}$/;
+if (!telefonoPattern.test(telefono)) {
+  $("#telefonoError").text("El número de teléfono debe tener el formato 504######## y no puede tener todos los dígitos iguales");
+  return false;
+}
 
 
 form.submit();
