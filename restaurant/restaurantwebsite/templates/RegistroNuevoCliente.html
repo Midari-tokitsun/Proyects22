@@ -1,171 +1,279 @@
-
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    <title>RegistroNuevoCliente</title>
-</head>
-<body>
     
 
-    <h1>registro nuevo cliente</h1>
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=2, user-scalable=no"
+    />
+    <meta
+      name="description"
+      content="Semantic-UI-Forest, collection of design, themes and templates for Semantic-UI."
+    />
+    <meta name="keywords" content="Semantic-UI, Theme, Design, Template" />
+    <meta name="author" content="PPType" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Homepage Template for Semantic-UI</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+      type="text/css"
+    />
+    <style type="text/css">
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-font-smoothing: grayscale;
+      }
 
+      .hidden.menu {
+        display: none;
+      }
 
+      .masthead.segment {
+        min-height: 600px;
+        padding: 1em 0em;
+      }
 
+      .masthead .logo.item img {
+        margin-right: 1em;
+      }
 
+      .masthead .ui.menu .ui.button {
+        margin-left: 0.5em;
+      }
 
-    <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
-  </button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      .masthead h1.ui.header {
+        margin-top: 2em;
+        margin-bottom: 0em;
+        font-size: 4em;
+        font-weight: normal;
+      }
+
+      .masthead h2 {
+        font-size: 1.7em;
+        font-weight: normal;
+      }
+
+      .ui.vertical.stripe {
+        padding: 8em 0em;
+      }
+
+      .ui.vertical.stripe h3 {
+        font-size: 2em;
+      }
+
+      .ui.vertical.stripe .button + h3,
+      .ui.vertical.stripe p + h3 {
+        margin-top: 3em;
+      }
+
+      .ui.vertical.stripe .floated.image {
+        clear: both;
+      }
+
+      .ui.vertical.stripe p {
+        font-size: 1.33em;
+      }
+
+      .ui.vertical.stripe .horizontal.divider {
+        margin: 3em 0em;
+      }
+
+      .quote.stripe.segment {
+        padding: 0em;
+      }
+
+      .quote.stripe.segment .grid .column {
+        padding-top: 5em;
+        padding-bottom: 5em;
+      }
+
+      .footer.segment {
+        padding: 5em 0em;
+      }
+
+      .secondary.pointing.menu .toc.item {
+        display: none;
+      }
+
+      @media only screen and (max-width: 700px) {
+        .ui.fixed.menu {
+          display: none !important;
+        }
+
+        .secondary.pointing.menu .item,
+        .secondary.pointing.menu .menu {
+          display: none;
+        }
+
+        .secondary.pointing.menu .toc.item {
+          display: block;
+        }
+
+        .masthead.segment {
+          min-height: 350px;
+        }
+
+        .masthead h1.ui.header {
+          font-size: 2em;
+          margin-top: 1.5em;
+        }
+
+        .masthead h2 {
+          margin-top: 0.5em;
+          font-size: 1.5em;
+        }
+      }
+    </style>
+  </head>
+
+  <body id="root">
+      <!--Page Contents-->
+    <div class="pusher">
+      <div class="ui inverted vertical masthead center aligned segment">
+        <div class="ui text container">
+          <h1 class="ui inverted header">Imagine-a-Company</h1>
+          <h2>Do whatever you want when you want to.</h2>
+          <div class="ui huge primary button">
+            Get Started <i class="right arrow icon"></i>
+          </div>
         </div>
-        <div class="modal-body">
-            <form method="POST" action="{% url 'AgregarNuevoUsuario' %}">
-                {% csrf_token %}
-            
-             
-                {{form.username.label}}
-                {{form.username}}
-            
-                {{form.first_name.label}}
-                {{form.first_name}}
-            
-                {{form.last_name.label}}
-                {{form.last_name}}
-            
-                {{form.email.label}}
-                {{form.email}}
-            
-                {{form.password1.label}}
-                {{form.password1}}
-            
-            
-                {{form.password2.label}}
-                {{form.password2}}
-            
-             <button type="submit">Guardar</button>
-            </form>
+      </div>
+      <div class="ui vertical stripe segment">
+        <div class="ui middle aligned stackable grid container">
+          <div class="row">
+            <div class="eight wide column">
+              <h3 class="ui header">We Help Companies and Companions</h3>
+              <p>
+                We can give your company superpowers to do things that they
+                never thought possible. Let us delight your customers and
+                empower your needs...through pure data analytics.
+              </p>
+              <h3 class="ui header">We Make Bananas That Can Dance</h3>
+              <p>
+                Yes that's right, you thought it was the stuff of dreams, but
+                even bananas can be bioengineered.
+              </p>
+            </div>
+            <div class="six wide right floated column">
+              <img
+                class="ui large bordered rounded image"
+                src="./static/images/wireframe/white-image.png"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="center aligned column">
+              <a class="ui huge button">Check Them Out</a>
+            </div>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+      <div class="ui vertical stripe quote segment">
+        <div class="ui equal width stackable internally celled grid">
+          <div class="center aligned row">
+            <div class="column">
+              <h3>"What a Company"</h3>
+              <p>That is what they all say about us</p>
+            </div>
+            <div class="column">
+              <h3>"I shouldn't have gone with their competitor."</h3>
+              <p>
+                <img
+                  class="ui avatar image"
+                  src="./static/images/avatar/nan.jpg"
+                />
+                <b>Nan</b> Chief Fun Officer Acme Toys
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui vertical stripe segment">
+        <div class="ui text container">
+          <h3 class="ui header">Breaking The Grid, Grabs Your Attention</h3>
+          <p>
+            Instead of focusing on content creation and hard work, we have
+            learned how to master the art of doing nothing by providing massive
+            amounts of whitespace and generic content that can seem massive,
+            monolithic and worth your attention.
+          </p>
+          <a class="ui large button">Read More</a>
+          <h4 class="ui horizontal header divider">
+            <a href="#root"> Case Studies</a>
+          </h4>
+          <h3 class="ui header">Did We Tell You About Our Bananas?</h3>
+          <p>
+            Yes I know you probably disregarded the earlier boasts as
+            non-sequitur filler content, but its really true. It took years of
+            gene splicing and combinatory DNA research, but our bananas can
+            really dance.
+          </p>
+          <a class="ui large button">I'm Still Quite Interested</a>
+        </div>
+      </div>
+      <div class="ui inverted vertical footer segment">
+        <div class="ui container">
+          <div
+            class="ui stackable inverted divided equal height stackable grid"
+          >
+            <div class="three wide column">
+              <h4 class="ui inverted header">About</h4>
+              <div class="ui inverted link list">
+                <a class="item" href="#root">Sitemap</a>
+                <a class="item" href="#root">Contact Us</a>
+                <a class="item" href="#root">Religious Ceremonies</a>
+                <a class="item" href="#root">Gazebo Plans</a>
+              </div>
+            </div>
+            <div class="three wide column">
+              <h4 class="ui inverted header">Services</h4>
+              <div class="ui inverted link list">
+                <a class="item" href="#root">Banana Pre-Order</a>
+                <a class="item" href="#root">DNA FAQ</a>
+                <a class="item" href="#root">How To Access</a>
+                <a class="item" href="#root">Favorite X-Men</a>
+              </div>
+            </div>
+            <div class="seven wide column">
+              <h4 class="ui inverted header">Footer Header</h4>
+              <p>
+                Extra space for a call to action inside the footer that could
+                help re-engage users.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        // fix menu when passed
+        $(".masthead").visibility({
+          once: false,
+          onBottomPassed: function() {
+            $(".fixed.menu").transition("fade in");
+          },
+          onBottomPassedReverse: function() {
+            $(".fixed.menu").transition("fade out");
+          }
+        });
 
-
-
-  <table class="table table-hover table-dark">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Nombre De Usuario</th>
-        <th scope="col">Correo Electronico</th>
-        <th scope="col">Contraseña</th>
-        <th scope="col">Ultima vez Ingresado a la Pagina</th>
-        <th scope="col">Fecha de creacion</th>
-        
-        <th scope="col">Estado</th>
-        
-        <th scope="col">acciones</th>
-    
-    </tr>
-    </thead>
-    <tbody>
-        {% for u in users %}
-      <tr>
- 
-        <td>{{u.id}}</td>
-        <td>{{u.username}}</td>
-        <td>{{u.first_name}}</td>
-        <td>{{u.last_name}}</td>
-        <td>{{u.email}}</td>
-        <td>{{u.password}}</td>
-        <td>{{u.last_login}}</td>
-        <td>{{u.date_joined}}</td>
-        <td>{{u.is_active}}</td>
-        
-        <td>
-    <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditarClienteModal-{{forloop.counter}}">
-    Editar
-  </button>
-
-            <a href="" class="btn btn-danger">ELIMINAR</a>
-
-        </td>
-      
-    </tr>
-        {% endfor %}
-    </tbody>
-  </table>
-
-        
-
-
-  {% for user in users %}
-  <div class="modal fade" id="EditarClienteModal-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Editar usuario</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form method="POST" action="{% url 'editar_usuario' user.id %}">
-                {% csrf_token %}
-                <div class="mb-3">
-                  <label for="username_input" class="form-label">Nombre de usuario:</label>
-                  <input type="text" class="form-control" id="username_input" name="username" value="{{ user.username }}">
-                </div>
-                <div class="mb-3">
-                  <label for="email_input" class="form-label">Email:</label>
-                  <input type="email" class="form-control" id="email_input" name="email" value="{{ user.email }}">
-                </div>
-                <button type="submit" class="btn btn-primary">Guardar cambios</button>
-              </form>
-              
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-{% endfor %}
-
-
-  
-
-
-
-
-
-
-
-</body>
+        // create sidebar and attach to menu open
+        $(".ui.sidebar").sidebar("attach events", ".toc.item");
+      });
+    </script>
+  </body>
 </html>
-
-  
-
-
-
-
 
 
