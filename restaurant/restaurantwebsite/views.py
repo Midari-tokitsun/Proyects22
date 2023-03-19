@@ -238,6 +238,7 @@ def registrarentablausuario(request):
             password=request.POST.get("password")
             estado=request.POST.get("estado")
             apellido=request.POST.get("apellido")
+            telefono=request.POST.get("telefono")
 
         # Encriptar la contraseña
             hashed_password = encriptar_password(password)
@@ -255,7 +256,7 @@ def registrarentablausuario(request):
                 password=hashed_password,
                 estado=estado,
                 apellido=apellido,
-
+                telefono=telefono,
 
         )
 
@@ -292,6 +293,7 @@ def actualizarusuario(request,id):
 
 
     email=request.POST.get('email')
+    telefono=request.POST.get('telefono')
 
     user.apellido=apellido
     user.estado=estado
@@ -302,6 +304,7 @@ def actualizarusuario(request,id):
     user.password=password
     user.nombre=nombre
     user.email=email
+    user.telefono=telefono
 
     user.save()
   

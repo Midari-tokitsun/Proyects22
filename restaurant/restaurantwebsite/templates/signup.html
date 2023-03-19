@@ -125,7 +125,7 @@
           </div>
           <div class="input-box">
             <span class="details">Nombre de Usuario</span>
-            <input id="username" class="noSpace noRepetidos " value="{{ username }}" name="username" title="Ejemplo:usuario21,ethan12,nier2 pero sin caracteres repetidos ni espacios" maxlength="16" minlength="4" pattern="^(?!.*(.).*\1)[a-zA-Z0-9]+$" type="text" placeholder="Escribe tu Nombre de usuario" required>
+            <input id="username" class="noSpace noRepetidos usernamecontrol" value="{{ username }}" name="username" title="Ejemplo:usuario21,ethan12,nier2 pero sin caracteres repetidos ni espacios" maxlength="16" minlength="4" pattern="^(?!.*(.).*\1)[a-zA-Z0-9]+$" type="text" placeholder="Escribe tu Nombre de usuario" required>
           </div>
 
           <div class="input-box">
@@ -145,7 +145,11 @@
 
           <div class="input-box">
             <span class="details">Numero de telefono</span>
-            <input id="telefono" value="{{ telefono }}" class="telefono"  type="number" placeholder="Escribe tu Numero de Telefono" name="telefono" required>
+            <input id="telefono" value="{{ telefono }}" class="telefono telefonoHonduras"  type="number" placeholder="Escribe tu Numero de Telefono" name="telefono" required>
+            
+
+            <p style="font-style: italic;" id="telefonoError" class="error-message"></p>
+
           </div>
 
 
@@ -267,9 +271,6 @@
   
     $("#myform").validate({
       rules: {
-        id_usuario: {
-          required: true
-        },
         nombre: {
           noRepetidos:true,
           required: true, 
@@ -309,7 +310,7 @@
 
 
         telefono: {
-          
+          telefonoHonduras:true,
           required: true,
           minlength: 8,
           maxlength: 8
@@ -378,6 +379,7 @@
       
 
         telefono: {
+          telefonoHonduras:"Por favor ingresa un número de teléfono válido de Honduras (ej: +504 8888-8888)",
           required:"Debes introducir tu Numero de Telefono",
           minlength: "Debes ingresar como mínimo 8 caracteres.",
           maxlength: "No puedes ingresar más de 8 caracteres."
@@ -388,6 +390,17 @@
 
 
       submitHandler: function(form) {
+
+        
+        var telefono = $("#telefono").val();
+var telefonoPattern = /^(504)?[ -]?(?:(\d)(?!\2{7})){8}$/;
+if (!telefonoPattern.test(telefono)) {
+  $("#telefonoError").text("El número de teléfono debe tener el formato ####-#### y no puede tener todos los dígitos iguales");
+  return false;
+}
+
+
+
         $("#mensaje-confirmacion").show();
         form.submit();
       }
@@ -398,11 +411,24 @@
     return value.trim().length !== 0; // Devuelve verdadero si no hay espacios en blanco alrededor de la entrada
   }, "No se permiten espacios en blanco");
   
-  // Regla personalizada para validar solo letras
-  $.validator.addMethod("lettersonly", function(value, element) {
-    return this.optional(element) || /^[A-Z](?!.*(.).*\1)[A-Za-z0-9]+$/i.test(value);
-  }, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.");
+
   
+$.validator.addMethod("telefonoHonduras", function(value, element) {
+  return this.optional(element) || /^(\+504)?[ -]?\d{4}[ -]?\d{4}$/.test(value);
+}, "Por favor ingresa un número de teléfono válido de Honduras (ej: +504 8888-8888)");
+
+
+  
+ // Regla personalizada para validar el campo de Empleado
+ $.validator.addMethod("lettersonly", function(value, element) {
+    return this.optional(element) || /^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$/.test(value) && !/\s/.test(value);
+  }, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
+ 
+
+  $.validator.addMethod("usernamecontrol", function(value, element) {
+  return this.optional(element) || /^(?!.*(.).*\1)[a-zA-Z]+[0-9]*$/.test(value);
+}, "Introduce un Nombre de Usuario Valido Sin espacios ni Letras Repetidas Ejemplo: Minombre12 y No se permiten letras repetidas pero consecutivas");
+
   // Regla personalizada para validar EL Correo Electronico
   $.validator.addMethod("emailcontrol", function(value, element) {
     // Nueva validación de la regla de correo electrónico
@@ -410,13 +436,6 @@
   }, "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios");
   
   
-  var telefono = $("#telefono").val();
-var telefonoPattern = /^(504)?[ -]?(?:(\d)(?!\2{7})){8}$/;
-if (!telefonoPattern.test(telefono)) {
-  $("#telefonoError").text("El número de teléfono debe tener el formato 504######## y no puede tener todos los dígitos iguales");
-  return false;
-}
-
 
   $.validator.addMethod("usernamecontrol", function(value, element) {
   // Validación de la nueva regla
