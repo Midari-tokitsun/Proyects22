@@ -1,8 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla
-
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -1909,3 +1908,50 @@ def eliminarreceta(request,id):
     rec.delete()
     messages.success(request, 'Registro Eliminado con Exito')
     return redirect('recetatablaregistros')
+
+
+# FIN DE VISTA Receta
+
+
+
+# Vista de Promociones 
+
+def promocionestabla(request):
+
+
+
+    return render(request,"promociones.html")
+
+
+
+
+def detallepedido(request):
+    deta=detalle_pedido.objects.all()
+    context={
+
+        'deta':deta
+
+    }
+
+
+    return render(request,"detallepedido.html",context)
+
+
+def estadopedido(request):
+    esta=estado_pedido.objects.all()
+    context={
+
+        'esta':esta
+
+    }
+
+
+    return render(request,"estadopedido.html",context)
+
+
+
+
+
+
+# FIN DE VISTA Menu
+

@@ -16,6 +16,10 @@
   
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
 
   <body>
 
@@ -281,7 +285,7 @@
 	<div id="addelaboracionModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="POST"  action="{% url 'añadirelaboracion' %}">
+				<form id="Myform" method="POST"  action="{% url 'añadirelaboracion' %}">
                     {% csrf_token %}
 					<div class="modal-header">						
 						<h4 class="modal-title">Añadir Nueva elaboracion</h4>
@@ -290,12 +294,12 @@
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>ID de Elaboracion</label>
-							<input name="id_elaboracion" type="text" class="form-control" required>
+							<input name="id_elaboracion" type="text" class="form-control noSpace" required>
 						</div>
 
 						<div class="form-group">
 							<label>Descripcion de la Elaboracion</label>
-							<textarea name="descripcion_elaboracion" class="form-control" required></textarea>
+							<textarea name="descripcion_elaboracion" class="form-control noSpace" required></textarea>
 						</div>
 					
 					</div>
@@ -374,5 +378,101 @@
 			</div>
 		</div>
 	</div>
+
+
+
+
+
+
+
+
+
+<script>
+	$("#Myform").validate({
+		rules: {
+			id_elaboracion: {
+			required: true,
+			noSpace: true,
+		  },
+				  
+	
+	
+		  descripcion_elaboracion: {
+			required: true,
+			noSpace:true,
+			minlength: 10,
+			maxlength: 250,
+		  },
+	
+		},
+		messages: {
+			id_elaboracion: {
+			noSpace:"No se puede Espacios Estimado",
+			required: "Debes Poner un ID"
+	
+		  },
+
+	
+	
+		  descripcion_elaboracion: {
+			required:"Debes poner Una Descripcion de la Elaboracion",
+			noSpace:"No se puede Espacios Estimado",
+			minlength: "Debes ingresar al menos 10 Digitos en la descripcion de La Elaboracion",
+		  maxlength: "No puedes ingresar más de 250 Digitos. en la Descripcion de la Elaboracion",
+  
+		  },
+	
+		},
+	
+	
+	
+	
+	
+		submitHandler: function(form) {
+		  $("#mensaje-confirmacion").show();
+		  form.submit();
+		}
+	  });
+	
+	
+	
+	
+	
+	
+	// Regla personalizada para validar el campo de Descripciion
+	
+	
+	
+	
+	
+  
+  
+	
+	
+	// Regla personalizada para validar el campo de nombre_cargo
+	jQuery.validator.addMethod("noSpace", function(value, element) { 
+		return value == '' || value.trim().length != 0;  
+	}, "No espacios Porfavor Eso no se Hace Aqui");
+	
+	// Regla personalizada para validar el campo de nombre_cargo
+	$.validator.addMethod("noRepetidos", function(value, element) {
+	  return this.optional(element) || !/(.)\1+/.test(value);
+	}, "No se permiten caracteres repetidos en este campo");
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	  </script>
+  
+
+
+
+
+
 </body>
 </html>

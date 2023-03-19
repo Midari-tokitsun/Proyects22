@@ -213,6 +213,17 @@ urlpatterns = [
 
 # VISTA Fin de la Vista REceta
 
+# VISTA Promociones
+    path('promociones/', views.promocionestabla , name="promociones"),#pantalla principal del table
+
+
+
+# VISTA de Estado de detallepedido
+    path('detallepedido/', views.detallepedido , name="detallepedido"),#pantalla principal del table
+
+# VISTA de Estado de estado pedido
+    path('estadopedido/', views.estadopedido , name="estadopedido"),#pantalla principal del table
+
 
 
 ] 

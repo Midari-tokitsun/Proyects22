@@ -309,7 +309,7 @@
 						</div>
 						<div class="form-group">
 							<label>Descripcion de la Categoria</label>
-							<textarea id="descripcion_categoria" placeholder="Debes escribir una descripcion breve y resumida" maxlength="250" minlength="10" name="descripcion_categoria" class="form-control decripcioncontrol" required></textarea>
+							<textarea id="descripcion_categoria" placeholder="Debes escribir una descripcion breve y resumida" maxlength="250" minlength="10" name="descripcion_categoria" class="form-control noSpace decripcioncontrol" required></textarea>
 						</div>
 					
 					</div>
@@ -410,6 +410,7 @@ $("#myform").validate({
         decripcioncontrol: true,
         minlength: 10,
         maxlength: 250,
+        noSpace:true,
       },
 
     },

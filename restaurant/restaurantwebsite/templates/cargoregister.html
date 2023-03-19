@@ -348,7 +348,7 @@
 
         <div class="col">
           <p>Descripcion</p>
-          <textarea type="text" maxlength="250" minlength="10" name="descripcion" required placeholder="Descripcion del Cargo"   class="form-control decripcioncontrol" ></textarea>
+          <textarea type="text" maxlength="250" minlength="10" name="descripcion" required placeholder="Descripcion del Cargo"   class="form-control noSpace decripcioncontrol" ></textarea>
         </div>
 
 
@@ -417,9 +417,9 @@
 
 
           
-                  <div class="col-md-6 mb-4">
+                  <div class="col">
                     <p>Descripcion</p>
-                    <input type="text" value="{{ carg.descripcion }}" name="descripcion" required placeholder="Descripcion del Cargo"  class="form-control">
+              <textarea name="descripcion" id="descripcion"  required class="form-control">{{ carg.descripcion }}</textarea>
                   </div>
           
           

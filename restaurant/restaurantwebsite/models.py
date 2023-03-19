@@ -10,7 +10,8 @@ from argon2 import PasswordHasher
 from cryptography.fernet import Fernet
 
 
-
+from django.utils import timezone
+from django.db.models.signals import post_save
 
 
 
@@ -197,6 +198,28 @@ class menutabla(models.Model):
     class Meta:
         db_table='menu'
 
+class HistoricoMenu(models.Model):
+    id_historico = models.CharField(primary_key=True, max_length=50)
+    menu_nombre = models.ForeignKey(menutabla, on_delete=models.CASCADE)
+    fecha_inicio = models.DateTimeField(default=timezone.now)
+    fecha_final = models.DateTimeField(null=True, blank=True)
+    precio_menu = models.CharField(max_length=50)
+
+def actualizar_precio_menu(sender, instance, **kwargs):
+    menu = instance.menu_nombre
+    precio = instance.precio_menu
+    menu.precio = precio
+    menu.save()
+
+    post_save.connect(actualizar_precio_menu, sender=HistoricoMenu)
+
+    
+    class Meta:
+        db_table='historico_menu'
+
+
+    
+
 class recetatabla(models.Model):
     id_receta=models.CharField(primary_key=True, max_length=20)  
     nombre_receta=models.CharField( max_length=100) 
@@ -206,6 +229,23 @@ class recetatabla(models.Model):
 
     class Meta:
         db_table='receta' 
+
+
+
+class detalle_pedido(models.Model):
+    id_detalle=models.CharField(primary_key=True , max_length=40)
+    descripcion_detalle=models.TextField()
+    
+    class Meta:
+        db_table='detalle_pedido' 
+
+
+class estado_pedido(models.Model):
+    id_estado=models.CharField(primary_key=True , max_length=40)
+    descripcion_pedido=models.TextField()       
+    
+    class Meta:
+        db_table='estado_pedido' 
 
 
 class MyException(Exception):

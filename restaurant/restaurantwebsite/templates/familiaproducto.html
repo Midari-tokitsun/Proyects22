@@ -299,7 +299,7 @@
 						</div>
 						<div class="form-group">
 							<label>Descripcion de la Familia</label>
-							<textarea placeholder="Breve Descripcion de la Familia producto" maxlength="250" minlength="10" name="descripcion_familia" class="form-control" required></textarea>
+							<textarea placeholder="Breve Descripcion de la Familia producto" maxlength="250" minlength="10" name="descripcion_familia" class="form-control noSpace" required></textarea>
 						</div>
 				
 					</div>
@@ -394,7 +394,7 @@
   
         descripcion_familia: {
           required: true,
-  
+          noSpace:true,
           minlength: 10,
           maxlength: 250,
         },

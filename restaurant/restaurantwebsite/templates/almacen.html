@@ -289,15 +289,15 @@
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>ID Almacen</label>
-							<input name="id_almacen" type="text" class="form-control noSpace" required>
+							<input name="id_almacen" type="number" class="form-control noSpace" required>
 						</div>
 						<div class="form-group">
 							<label>Tipo de almacen</label>
-							<input pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" placeholder="El nombre del tipo de almacen debe ser Ejemplo:Carnes,Secos,Lacteos,Verduras" name="tipo_almacen" title="El nombre del tipo de almacen debe ser Ejemplo:Carnes,Secos,Lacteos,Verduras" name="tipo_almacen" type="text" class="form-control noSpace noRepetidos sololetrasyconmayusculas" required>
+							<input pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" placeholder="El nombre del tipo de almacen debe ser Ejemplo:Carnes,Secos,Lacteos,Verduras" name="tipo_almacen"  name="tipo_almacen" type="text" class="form-control noSpace noRepetidos sololetrasyconmayusculas" required>
 						</div>
 						<div class="form-group">
 							<label>descripcion del almacen</label>
-							<textarea placeholder="Debes escribir una minima descripcion y breve del almacen" maxlength="250" minlength="10" name="descripcion_almacen" class="form-control decripcioncontrol" required></textarea>
+							<textarea placeholder="Debes escribir una minima descripcion y breve del almacen" maxlength="250" minlength="10" name="descripcion_almacen" class="form-control  noSpace decripcioncontrol " required></textarea>
 						</div>
 
 
@@ -335,7 +335,7 @@
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>ID Almacen</label>
-							<input value="{{a.id_almacen}}" name="id_almacen" type="text" class="form-control" required >
+							<input readonly value="{{a.id_almacen}}" name="id_almacen" type="text" class="form-control" required >
 						</div>
 						<div class="form-group">
 							<label>Tipo de almacen</label>
@@ -390,9 +390,10 @@
 		
 			  descripcion_almacen: {
 				required: true,
-				codigopostalcontrol: true,
+				decripcioncontrol: true,
 				minlength: 10,
 				maxlength: 250,
+				noSpace: true,
 			  },
 		
 			
