@@ -202,6 +202,9 @@ urlpatterns = [
 
 # FIN de VISTA MEnu
 
+
+
+
 # VISTA receta
 
     path('recetatablaregistros/', views.recetatablaregistros , name="recetatablaregistros"),#pantalla principal del table
@@ -232,6 +235,13 @@ urlpatterns = [
     path('editarestadopedido/<int:id>', views.editarestadopedido , name="editarestadopedido"),#pantalla principal del table
     path('eliminarestadopedido/<int:id>', views.eliminarestadopedido , name="eliminarestadopedido"),#pantalla principal del table
 # FIN DE LA VISTA de Estado de estado pedido
+
+# VISTA de Reservaciones
+
+    path('reservaciones/', views.reservaciones , name="reservaciones"),#pantalla principal del table
+
+
+# FIN DE LA VISTA de Reservaciones
 
 
 ] 

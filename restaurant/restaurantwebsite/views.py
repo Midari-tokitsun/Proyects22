@@ -2076,3 +2076,9 @@ def eliminarestadopedido(request,id):
 
 # FIN DE VISTA Menu
 
+def reservaciones(request):
+
+
+
+
+    return render(request,"reservacion.html")

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <head>
+        <style>
+            #restaurante {
+                width: 400px;
+                height: 400px;
+                border: 1px solid black;
+                position: relative;
+                margin: 0 auto;
+            }
+            
+            .mesa {
+                width: 50px;
+                height: 50px;
+                background-color: #ccc;
+                color: white;
+                text-align: center;
+                line-height: 50px;
+                border-radius: 5px;
+                position: absolute;
+                cursor: move;
+            }
+
+
+            
+        </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+        <body>
+
+            <script>
+                $(document).ready(function() {
+                  function generarMesas(cantidad) {
+                    // Agregar las nuevas mesas al final de las existentes
+                    for (var i = 1; i <= cantidad; i++) {
+                      var mesa = $("<div>", {
+                        "class": "mesa",
+                        "text": $(".mesa").length + 1
+                      });
+                      $("#mesas").append(mesa);
+                      mesa.draggable({
+                        containment: "#restaurante",
+                        scroll: false
+                      });
+                    }
+                  }
+              
+                  $("#generar-button").click(function() {
+                    var cantidad = parseInt($("#num-mesas").val());
+                    if (isNaN(cantidad) || cantidad < 1 || cantidad > 10) {
+                      alert("Ingrese un número válido de mesas (entre 1 y 10).");
+                      return;
+                    }
+                    generarMesas(cantidad);
+                  });
+              
+                  $("#reset-button").click(function() {
+  $("#mesas").html('');
+  for (var i = 1; i <= cantidadMesas; i++) {
+    $("#mesas").append('<div class="mesa">' + i + '</div>');
+  }
+  $(".mesa").draggable({
+    containment: "#restaurante",
+    scroll: false
+  });
+});
+
+
+                    // Función para eliminar las mesas
+  function eliminarMesas() {
+    $(".mesa").remove();
+  }
+  
+  // Configuramos el botón de eliminar mesas
+  $("#eliminar-mesas-button").click(function() {
+    eliminarMesas();
+  });
+              
+            
+                });
+              </script>
+
+
+
+<div id="restaurante"></div>
+<div id="mesas">
+
+</div>
+<div class="row">
+  <label for="num-mesas">Número de Mesas:</label>
+  <input type="number" id="num-mesas">
+  <button id="generar-button">Generar</button>
+  <button id="reset-button">Resetear</button>
+  <button id="eliminar-mesas-button">Eliminar</button>
+</div>
+
+
+</body>
+        
+    </html>
