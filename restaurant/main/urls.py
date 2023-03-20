@@ -244,6 +244,27 @@ urlpatterns = [
 # FIN DE LA VISTA de Reservaciones
 
 
+# VISTA DE SAR
+
+    path('sartabla/', views.sartabla , name="sartabla"),#pantalla principal del table
+    path('agregarsar', views.agregarsar , name="agregarsar"),#pantalla principal del table
+    path('elminarsar/<int:id>', views.elminarsar , name="elminarsar"),#pantalla principal del table
+    path('editarsar/<int:id>', views.editarsar , name="editarsar"),#pantalla principal del table
+
+
+# FIN DE LA VISTA SAR
+
+#vista METODO PAGO POST
+
+    path('metodopago/', views.metodopagotabla , name="metodopagotabla"),#pantalla principal del table
+    path('agregarmetododepago', views.agregarmetododepago , name="agregarmetododepago"),#pantalla principal del table
+    path('editarmetododepago/<int:id>', views.editarmetododepago , name="editarmetododepago"),#pantalla principal del table
+    path('eliminarmetododepago/<int:id>', views.eliminarmetododepago , name="eliminarmetododepago"),#pantalla principal del table
+
+
+# FIN VISTA METODO DE PAGO POST
+
+
 ] 
 
 if settings.DEBUG:

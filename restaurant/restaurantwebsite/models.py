@@ -248,5 +248,24 @@ class estado_pedido(models.Model):
         db_table='estado_pedido' 
 
 
+class sar_tabla(models.Model):
+    id_sar=models.CharField(primary_key=True,max_length=50)
+    codigo_sar=models.CharField(max_length=100)
+    correlativo_sar=models.CharField(max_length=100)
+    fecha_emision=models.DateField(auto_now_add=True)
+    descripcion=models.TextField()
+    class Meta:
+        db_table='sar' 
+
+class metodo_pago_tabla(models.Model):
+    id_metodo_pago=models.CharField(primary_key=True,max_length=100)
+    forma_pago=models.CharField(max_length=50)
+    numero_tarjeta=models.CharField(max_length=50)
+    moneda=models.CharField(max_length=40)
+    fecha_pago=models.DateField(auto_now_add=True)
+
+    class Meta:
+        db_table='metodo_pago'
+
 class MyException(Exception):
     pass

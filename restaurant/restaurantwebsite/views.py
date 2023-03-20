@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -2074,7 +2074,9 @@ def eliminarestadopedido(request,id):
 
 
 
-# FIN DE VISTA Menu
+# FIN DE VISTA estado pedido
+
+#Vista de Reservaciones
 
 def reservaciones(request):
 
@@ -2082,3 +2084,167 @@ def reservaciones(request):
 
 
     return render(request,"reservacion.html")
+#Fin De la VISTA RESERVACIONES
+
+
+#VISTA DE SAR
+def sartabla(request):
+    sar=sar_tabla.objects.all()
+    context={
+        'sar':sar
+
+    }
+
+    return render(request,"SAR.html",context)
+
+def agregarsar(request):
+    try:  
+        pass         
+        if request.method=='POST':
+     
+
+            id_sar=request.POST.get("id_sar")
+            codigo_sar=request.POST.get("codigo_sar")
+            correlativo_sar=request.POST.get("correlativo_sar")
+            descripcion=request.POST.get("descripcion")
+
+
+
+
+            sar_tabla.objects.create(
+                id_sar=id_sar,
+                codigo_sar=codigo_sar,
+            correlativo_sar=correlativo_sar,
+            descripcion=descripcion,
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect("sartabla")
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+
+
+
+    return redirect('sartabla')
+
+
+def elminarsar(request,id):
+    sar=sar_tabla.objects.get(id_sar=id)
+    sar.delete()
+
+    messages.success(request, 'Registro Eliminado con Exito')
+
+    return redirect('sartabla')
+
+
+def editarsar(request,id):
+    sar=sar_tabla.objects.get(id_sar=id)
+    
+
+    codigo_sar=request.POST.get('codigo_sar')
+    correlativo_sar=request.POST.get('correlativo_sar')
+    descripcion=request.POST.get('descripcion')
+
+
+    sar.codigo_sar=codigo_sar
+    sar.correlativo_sar=correlativo_sar
+    sar.descripcion=descripcion
+
+    sar.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+
+
+    return redirect('sartabla')
+
+
+#FIN DE LA VISTA SAR
+
+
+# VISTA METODO DE PAGO POST
+
+def metodopagotabla(request):
+    meto=metodo_pago_tabla.objects.all()
+    context={
+        'meto':meto
+
+    }
+
+    return render(request,"metodopago.html",context)
+
+
+def agregarmetododepago(request):
+    try:  
+        pass         
+        if request.method=='POST':
+     
+
+            id_metodo_pago=request.POST.get("id_metodo_pago")
+            forma_pago=request.POST.get("forma_pago")
+            numero_tarjeta=request.POST.get("numero_tarjeta")
+            moneda=request.POST.get("moneda")
+
+
+
+
+            metodo_pago_tabla.objects.create(
+                id_metodo_pago=id_metodo_pago,
+                forma_pago=forma_pago,
+            numero_tarjeta=numero_tarjeta,
+            moneda=moneda,
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect("metodopagotabla")
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+
+
+
+    return redirect('metodopagotabla')
+
+
+def editarmetododepago(request,id):
+
+    meto=metodo_pago_tabla.objects.get(id_metodo_pago=id)
+    
+
+    id_metodo_pago=request.POST.get('id_metodo_pago')
+    forma_pago=request.POST.get('forma_pago')
+    numero_tarjeta=request.POST.get('numero_tarjeta')
+    moneda=request.POST.get('moneda')
+
+    meto.id_metodo_pago=id_metodo_pago
+    meto.forma_pago=forma_pago
+    meto.numero_tarjeta=numero_tarjeta
+    meto.moneda=moneda
+    meto.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+
+
+
+
+    return redirect('metodopagotabla')
+
+
+
+def eliminarmetododepago(request,id):
+    meto=metodo_pago_tabla.objects.get(id_metodo_pago=id)
+    meto.delete()
+    messages.success(request, 'Registro Eliminado con Exito')
+
+    return redirect('metodopagotabla')
+
+
+
+
+# FIN DE LA VISTA METODO DE PAGO POST
