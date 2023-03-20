@@ -1937,6 +1937,70 @@ def detallepedido(request):
     return render(request,"detallepedido.html",context)
 
 
+
+def agregardetallepedido(request):
+    try:  
+        pass         
+        if request.method=='POST':
+
+            id_detalle=request.POST.get("id_detalle")
+            descripcion_detalle=request.POST.get("descripcion_detalle")
+
+
+
+            detalle_pedido.objects.create(
+                id_detalle=id_detalle,
+                descripcion_detalle=descripcion_detalle,
+         
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect("detallepedido")
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+
+    return redirect("detallepedido")
+
+def editardetallepedido(request, id):
+    deta=detalle_pedido.objects.get(id_detalle=id)
+    
+    id_detalle=request.POST.get('id_detalle')
+    descripcion_detalle=request.POST.get('descripcion_detalle')
+
+
+    deta.id_detalle=id_detalle
+    deta.descripcion_detalle=descripcion_detalle
+
+    deta.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+
+
+
+
+    return redirect('detallepedido')
+
+
+def eliminardetallepedido(request, id):
+    deta=detalle_pedido.objects.get(id_detalle=id)
+    deta.delete()
+    messages.success(request, 'Registro Eliminado con Exito')
+
+
+    return redirect('detallepedido')
+
+
+
+
+
+
+
+
+
 def estadopedido(request):
     esta=estado_pedido.objects.all()
     context={
@@ -1949,7 +2013,64 @@ def estadopedido(request):
     return render(request,"estadopedido.html",context)
 
 
+def guardarpedido(request):
+    try:  
+        pass         
+        if request.method=='POST':
 
+            id_estado=request.POST.get("id_estado")
+            descripcion_pedido=request.POST.get("descripcion_pedido")
+
+
+
+            estado_pedido.objects.create(
+                id_estado=id_estado,
+                descripcion_pedido=descripcion_pedido,
+         
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect("estadopedido")
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+
+
+    return redirect("estadopedido")
+
+
+
+def editarestadopedido(request,id):
+    esta=estado_pedido.objects.get(id_estado=id)
+    
+    id_estado=request.POST.get('id_estado')
+    descripcion_pedido=request.POST.get('descripcion_pedido')
+
+    esta.id_estado=id_estado
+    esta.descripcion_pedido=descripcion_pedido
+
+    esta.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+
+
+
+
+    return redirect('estadopedido')
+
+
+
+
+def eliminarestadopedido(request,id):
+    esta=estado_pedido.objects.get(id_estado=id)
+    esta.delete()
+    messages.success(request, 'Registro Eliminado con Exito')
+
+
+    return redirect('estadopedido')
 
 
 

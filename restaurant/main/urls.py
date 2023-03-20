@@ -220,10 +220,18 @@ urlpatterns = [
 
 # VISTA de Estado de detallepedido
     path('detallepedido/', views.detallepedido , name="detallepedido"),#pantalla principal del table
+    path('agregardetallepedido', views.agregardetallepedido , name="agregardetallepedido"),#pantalla principal del table
+    path('editardetallepedido/<int:id>', views.editardetallepedido , name="editardetallepedido"),#pantalla principal del table
+    path('eliminardetallepedido/<int:id>', views.eliminardetallepedido , name="eliminardetallepedido"),#pantalla principal del table
+
+
 
 # VISTA de Estado de estado pedido
     path('estadopedido/', views.estadopedido , name="estadopedido"),#pantalla principal del table
-
+    path('guardarpedido', views.guardarpedido , name="guardarpedido"),#pantalla principal del table
+    path('editarestadopedido/<int:id>', views.editarestadopedido , name="editarestadopedido"),#pantalla principal del table
+    path('eliminarestadopedido/<int:id>', views.eliminarestadopedido , name="eliminarestadopedido"),#pantalla principal del table
+# FIN DE LA VISTA de Estado de estado pedido
 
 
 ] 
