@@ -248,7 +248,7 @@ def registrarentablausuario(request):
                 return redirect('tableuser')
             else:
                 insertuser.objects.create(
-                id_usuario=id_usuario,
+                id_usuario=request.POST.get('id_usuario'),
                 username=username,
                 nombre=nombre,
                 email=email,
@@ -380,6 +380,12 @@ def login_user(request):
             if user.bloqueado:
                 # Usuario bloqueado, mostrar mensaje de error
                 messages.error(request, 'La cuenta ha sido bloqueada. Contacte con el Administrador de Pizza Wave')
+            
+            elif user.estado == 'Inactivo':
+            # Usuario inactivo, mostrar mensaje de error
+                messages.error(request, 'La cuenta está inactiva. Contacte con el Administrador de Pizza Wave')
+            
+            
             elif verificar_password(password, user.password):
                 # Usuario y contraseña válidos
                 

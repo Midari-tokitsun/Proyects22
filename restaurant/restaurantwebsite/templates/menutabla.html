@@ -22,6 +22,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
 
+    <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
+
     
     <title>Menu</title>
 
@@ -276,7 +280,7 @@
                 <label class="input-group-text" for="inputGroupSelect01">ID-Elaboracion</label>
                 <select name="modo_elaboracion" class="form-select" id="inputGroupSelect01" required>
                     {% for e in ela %}
-                  <option value="{{e.id_elaboracion}}">{{e.descripcion_elaboracion}}</option>
+                  <option value="{{e.descripcion_elaboracion}}">{{e.descripcion_elaboracion}}</option>
                   {% endfor %}
                 </select>
               </div>
@@ -332,7 +336,7 @@
 
 
 
-    <table class="table table-dark table-hover ">
+    <table id="mytable" class="table table-dark table-hover ">
         <thead>
           <tr>
             <th scope="col">ID_Menu</th>
@@ -422,7 +426,7 @@
             <label class="input-group-text" for="inputGroupSelect01">ID-Elaboracion</label>
             <select name="modo_elaboracion" class="form-select" id="inputGroupSelect01">
                 {% for e in ela %}
-              <option value="{{e.id_elaboracion}}">{{e.descripcion_elaboracion}}</option>
+              <option value="{{e.descripcion_elaboracion}}">{{e.descripcion_elaboracion}}</option>
               {% endfor %}
             </select>
           </div>
@@ -448,6 +452,17 @@
 
 
 <script>
+
+
+$(document).ready(function() {
+$('#mytable').DataTable({
+"language": {
+"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+}
+});
+});
+
+
 
 
 $(document).ready(function() {

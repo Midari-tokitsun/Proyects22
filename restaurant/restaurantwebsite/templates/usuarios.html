@@ -18,7 +18,6 @@
 
 
 
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
@@ -27,6 +26,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
+<script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 
 
 
@@ -239,11 +241,12 @@
 
 					<div class="col-sm-6">
 						<a href="#addclienteModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Añadir nuevo Usuario</span></a>
-												
+					
+            
 					</div>
               
   
-            <table class="table table-dark table-hover">
+            <table id="mytable" class="table table-dark table-hover" >
                 <thead>
                     <tr>
 						<th>
@@ -321,7 +324,8 @@
 
 						<div class="form-group">
 							<label>ID</label>
-							<input placeholder="introduce Un ID" name="id_usuario " type="number" class="form-control noSpace" required>
+							<input placeholder="introduce Un ID" name="id_usuario" type="text" class="form-control noSpace" required>
+
 						</div>
 
                         <div class="form-group">
@@ -515,6 +519,17 @@
 
 
   <script>
+
+
+$(document).ready(function() {
+$('#mytable').DataTable({
+"language": {
+"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+}
+});
+});
+
+
 $(document).ready(function() {
   $.validator.setDefaults({
     lang: 'es'
