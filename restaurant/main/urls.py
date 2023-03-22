@@ -202,7 +202,13 @@ urlpatterns = [
 
 # FIN de VISTA MEnu
 
+#HISTORICO MENU
+    path('historicomenutabla/', views.historicomenutabla , name="historicomenutabla"),#pantalla principal del table
 
+
+
+
+#FIN DE LA VISTA HISTORICO MENU
 
 
 # VISTA receta

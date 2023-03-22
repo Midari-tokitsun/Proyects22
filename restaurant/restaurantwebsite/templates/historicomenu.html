@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <title>SAR</title>
+    
+    
+    
+    <title>Historico Menu</title>
 </head>
 <body>
-    
 
+    
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Pizza Wave</a>
@@ -195,186 +200,36 @@
           </div>
         </div>
         </nav>
+    <h1> CONTROL HISTORICO MENU</h1>
 
-<br>
-
-        <h1>CONTROL SAR</h1>
-
-    <table id="myTable" class="display">
+    <table id="mytable" class="table">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Codigo CAI</th>
-                <th>Fecha Inicial</th>
-                <th>Fecha Final</th>
-                <th>Descripcion</th>
-                <th>ACciones</th>
-            
-            
+                <th scope="col">ID</th>
+                <th scope="col">Nombre del Menu</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Fecha de Inicio</th>
+                <th scope="col">Fecha Final</th>
             </tr>
         </thead>
         <tbody>
-            {% for s in sar %}
-            <tr>
-                <td>{{s.id_sar}}</td>
-                <td>{{s.codigo_sar}}</td>
-                <td>{{ s.fecha_emision|date:"d/m/Y" }}
-                </td>
-                <td>{{ s.fecha_final|date:"d/m/Y" }}
-                </td>
-                <td>{{s.descripcion}}</td>
-
-
-
-<td>
-
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditarSARmodal-{{forloop.counter}}">
-    EDITAR
-  </button>
-
-  <a href="/elminarsar/{{s.id_sar}}" class="btn btn-danger">Eliminar</a>
-
-</td>
-            </tr>
+            {% for historico in historicos %}
+              <tr>
+                <td>{{ historico.id_historico }}</td>
+                <td>{{ historico.menu_nombre.nombre_menu }}</td>
+                <td>{{ historico.precio_menu }}</td>
+                <td>{{ historico.fecha_inicio }}</td>
+                <td>{{ historico.fecha_final }}</td>
+              </tr>
             {% endfor %}
-        </tbody>
-    </table>
+          </tbody>
+        </table>
 
+<script>
 
-<!-- Button trigger modal AGREGAR -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AgregarSARmodal">
-    Agregar
-  </button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="AgregarSARmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar SAR</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="{% url 'agregarsar' %}" method="POST">
-            {% csrf_token %}
-        <div class="modal-body">
-
-		
-   
     
-    <div class="col-xs-2">
-        <label for="exampleFormControlTextarea1" class="form-label">ID SAR</label>
-    <input name="id_sar" type="text" class="form-control" placeholder="Title">
-    </div>
-    
-    <div class="col-xs-4">
-        <label for="exampleFormControlTextarea1" class="form-label">CODIGO CAI</label>
-    <input name="codigo_sar" type="text" class="form-control" placeholder="First Name">
-    </div>
-    
-    <div class="col-xs-4">
-      <label for="fecha-emision" class="form-label">Fecha de Emisión</label>
-      <input name="fecha_emision" id="fecha-emision" type="date" class="form-control">
-    </div>
-    
-  <div class="col-xs-4">
-    <label for="exampleFormControlTextarea1" class="form-label">Fecha Final</label>
-     
-<input name="fecha_final"  type="date" class="form-control">
-
-</div>
-  
-
-<div class="mb-3">
-  <label for="exampleFormControlTextarea1" class="form-label">DESCRIPCION</label>
-  <textarea name="descripcion" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-</div>
-
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        </div>
-      </div>
-    </form>
-    </div>
-  </div>
-
-  
-  <!-- Modal -->
-              {% for s in sar %}
-  <div class="modal fade" id="EditarSARmodal-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Editar SAR</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="/editarsar/{{s.id_sar}}" method="POST">
-            {% csrf_token %}
-        
-        <div class="modal-body">
-          
- 
-    
-            <div class="col-xs-2">
-                <label for="exampleFormControlTextarea1" class="form-label">ID SAR</label>
-            <input name="id_sar" value="{{s.id_sar}}" type="text" class="form-control" placeholder="Title">
-            </div>
-            
-            <div class="col-xs-4">
-                <label for="exampleFormControlTextarea1" class="form-label">CODIGO CAI</label>
-            <input name="codigo_sar" value="{{s.codigo_sar}}" type="text" class="form-control" placeholder="First Name">
-            </div>
-            
-        
-    
-            <div class="col-xs-4">
-              <label for="fecha-emision" class="form-label">Fecha de Emisión</label>
-
-              <input value="{{ s.fecha_emision|date:'Y-m-d' }}" name="fecha_emision" type="date" class="form-control">
-
-            </div>
-
-
-
-
-          <div class="col-xs-4">
-            <label for="exampleFormControlTextarea1" class="form-label">Fecha Final</label>
-             
-
-            <input value="{{ s.fecha_final|date:'Y-m-d' }}" name="fecha_final" type="date" class="form-control">
-
-
-        
-        </div>
-          
-
-        
-        <div class="mb-3">
-          <label for="exampleFormControlTextarea1" class="form-label">DESCRIPCION</label>
-          <textarea name="descripcion" class="form-control" id="exampleFormControlTextarea1" rows="3">{{s.descripcion}}</textarea>
-        </div>
-        
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Editar</button>
-        </div>
-      </div>
-      </form>
-    </div>
-  </div>
-{% endfor %}
-
-
-  <script>
-
-
-
 $(document).ready(function() {
-$('#myTable').DataTable({
+$('#mytable').DataTable({
 "language": {
 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
 }
@@ -383,24 +238,8 @@ $('#myTable').DataTable({
 
 
 
-  // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
-  const fechaActual = new Date().toISOString().slice(0, 10);
+</script>
 
-  // Establecer la fecha actual como valor predeterminado del campo de fecha de emisión
-  document.getElementById("fecha-emision").value = fechaActual;
-
-  // Establecer la fecha actual como el valor mínimo del campo de fecha de emisión
-  document.getElementById("fecha-emision").min = fechaActual;
-
-  // Establecer la fecha actual como el valor máximo del campo de fecha de emisión
-  document.getElementById("fecha-emision").max = fechaActual;
-
-  // Actualizar la fecha máxima permitida en el campo de fecha cada vez que se carga la página
-  window.onload = function() {
-    const fechaActual = new Date().toISOString().slice(0, 10);
-    document.getElementById("fecha-emision").max = fechaActual;
-  };
-  </script>
-
+    
 </body>
 </html>

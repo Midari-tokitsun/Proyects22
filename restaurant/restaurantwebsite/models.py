@@ -187,31 +187,24 @@ class almacen(models.Model):
         db_table='almacen'
 
 class menutabla(models.Model):
-    id_menu=models.CharField(primary_key=True, max_length=20) 
-    nombre_menu=models.CharField(max_length=50)
-    precio_menu=models.CharField(max_length=50)
-    descripcion_menu=models.TextField()
-    modo_elaboracion=models.CharField(max_length=30)
-
-
+    id_menu = models.CharField(primary_key=True, max_length=20) 
+    nombre_menu = models.CharField(max_length=50)
+    precio_menu = models.CharField(max_length=50)
+    descripcion_menu = models.TextField()
+    modo_elaboracion = models.CharField(max_length=30)
 
     class Meta:
-        db_table='menu'
+        db_table = 'menu'
 
-class HistoricoMenu(models.Model):
+class historico_menu(models.Model):
     id_historico = models.CharField(primary_key=True, max_length=50)
-    menu_nombre = models.ForeignKey(menutabla, on_delete=models.CASCADE)
+    nombre_menu = models.ForeignKey(menutabla, on_delete=models.CASCADE)
     fecha_inicio = models.DateTimeField(default=timezone.now)
     fecha_final = models.DateTimeField(null=True, blank=True)
     precio_menu = models.CharField(max_length=50)
 
-def actualizar_precio_menu(sender, instance, **kwargs):
-    menu = instance.menu_nombre
-    precio = instance.precio_menu
-    menu.precio = precio
-    menu.save()
-
-    post_save.connect(actualizar_precio_menu, sender=HistoricoMenu)
+    def __str__(self):
+        return f"{self.nombre_menu.nombre_menu} - {self.fecha_inicio} - {self.precio_menu}"
 
     
     class Meta:
@@ -251,8 +244,8 @@ class estado_pedido(models.Model):
 class sar_tabla(models.Model):
     id_sar=models.CharField(primary_key=True,max_length=50)
     codigo_sar=models.CharField(max_length=100)
-    correlativo_sar=models.CharField(max_length=100)
-    fecha_emision=models.DateField(auto_now_add=True)
+    fecha_emision=models.DateField()
+    fecha_final=models.DateField()
     descripcion=models.TextField()
     class Meta:
         db_table='sar' 

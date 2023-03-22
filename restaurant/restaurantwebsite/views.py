@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -1743,6 +1743,7 @@ def eliminaralmacen(request,id):
 
 # VISTA DE Menu
 
+
 def menutablaregistros(request):
     ela=elaboracion.objects.all()
     men=menutabla.objects.all()
@@ -1784,6 +1785,14 @@ def agregarmenu(request):
 
 
             )
+
+            historico = historico_menu(
+                    menu_nombre=menu,
+                    precio_menu=precio_menu
+                )
+            historico.save()
+
+
             messages.success(request, 'Registro Agregado con Exito')
 
             return redirect("menutablaregistros")
@@ -1831,6 +1840,17 @@ def eliminarmenutabla(request,id):
 
 
 # FIN DE VISTA Menu
+
+#VISTA HISTORICO MENU
+
+
+def historicomenutabla(request):
+    
+    historicos = historico_menu.objects.all()
+    return render(request, 'historicomenu.html', {'historicos': historicos})
+
+
+#DIN DE LA VISTA HISTORICO MENU
 
 
 
@@ -2111,17 +2131,20 @@ def agregarsar(request):
 
             id_sar=request.POST.get("id_sar")
             codigo_sar=request.POST.get("codigo_sar")
-            correlativo_sar=request.POST.get("correlativo_sar")
+
             descripcion=request.POST.get("descripcion")
 
-
+            fecha_emision=request.POST.get("fecha_emision")
+            fecha_final=request.POST.get("fecha_final")
 
 
             sar_tabla.objects.create(
                 id_sar=id_sar,
                 codigo_sar=codigo_sar,
-            correlativo_sar=correlativo_sar,
+       
             descripcion=descripcion,
+            fecha_emision=fecha_emision,
+            fecha_final=fecha_final,
 
 
             )
@@ -2152,12 +2175,17 @@ def editarsar(request,id):
     
 
     codigo_sar=request.POST.get('codigo_sar')
-    correlativo_sar=request.POST.get('correlativo_sar')
+
     descripcion=request.POST.get('descripcion')
 
+    fecha_emision=request.POST.get("fecha_emision")
+    fecha_final=request.POST.get("fecha_final")
+
+    sar.fecha_emision=fecha_emision
+    sar.fecha_final=fecha_final
 
     sar.codigo_sar=codigo_sar
-    sar.correlativo_sar=correlativo_sar
+
     sar.descripcion=descripcion
 
     sar.save()
