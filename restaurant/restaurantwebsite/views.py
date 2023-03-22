@@ -1788,7 +1788,9 @@ def agregarmenu(request):
 
                 historico = historico_menu(
                     nombre_menu=nombre_menu,
-                    precio_menu=precio_menu
+                    precio_menu=precio_menu,
+                
+                
                 )
                 historico.save()
 
@@ -1809,12 +1811,15 @@ def agregarmenu(request):
 
 def editarmenutabla(request,id):
     men=menutabla.objects.get(id_menu=id)
-    
+    his = historico_menu.objects.get(nombre_menu=men.nombre_menu)
+
     id_menu=request.POST.get('id_menu')
     nombre_menu=request.POST.get('nombre_menu')
     precio_menu=request.POST.get('precio_menu')
     descripcion_menu=request.POST.get('descripcion_menu')
     modo_elaboracion=request.POST.get('modo_elaboracion')
+
+   
 
     men.id_menu=id_menu
     men.nombre_menu=nombre_menu
@@ -1822,7 +1827,13 @@ def editarmenutabla(request,id):
     men.descripcion_menu=descripcion_menu
     men.modo_elaboracion=modo_elaboracion
 
+
+    his.precio_menu = precio_menu
+
+
     men.save()
+    his.save()
+
 
     messages.success(request, 'Registro Modificado con Exito')
 

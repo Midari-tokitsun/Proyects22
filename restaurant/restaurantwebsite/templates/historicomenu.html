@@ -217,10 +217,13 @@
             {% for h in his %}
                 <tr>
                     <td>{{ h.id_historico }}</td>
-                    <td>{{ h.menu_nombre.nombre_menu }}</td>
+                    <td>{{ h.nombre_menu }}</td>
                     <td>{{ h.precio_menu }}</td>
-                    <td>{{ h.fecha_inicio }}</td>
-                    <td>{% if h.fecha_final %}{{ h.fecha_final }}{% else %}&nbsp;{% endif %}</td>
+                    <td>{{ h.fecha_inicio|date:"d/m/Y" }}</td>
+                    <td>{{ h.fecha_final|date:"d/m/Y" }}</td>
+                       
+       
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
