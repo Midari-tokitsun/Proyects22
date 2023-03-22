@@ -202,6 +202,7 @@
         </nav>
     <h1> CONTROL HISTORICO MENU</h1>
 
+
     <table id="mytable" class="table">
         <thead>
             <tr>
@@ -213,17 +214,17 @@
             </tr>
         </thead>
         <tbody>
-            {% for historico in historicos %}
-              <tr>
-                <td>{{ historico.id_historico }}</td>
-                <td>{{ historico.menu_nombre.nombre_menu }}</td>
-                <td>{{ historico.precio_menu }}</td>
-                <td>{{ historico.fecha_inicio }}</td>
-                <td>{{ historico.fecha_final }}</td>
-              </tr>
+            {% for h in his %}
+                <tr>
+                    <td>{{ h.id_historico }}</td>
+                    <td>{{ h.menu_nombre.nombre_menu }}</td>
+                    <td>{{ h.precio_menu }}</td>
+                    <td>{{ h.fecha_inicio }}</td>
+                    <td>{% if h.fecha_final %}{{ h.fecha_final }}{% else %}&nbsp;{% endif %}</td>
+                </tr>
             {% endfor %}
-          </tbody>
-        </table>
+        </tbody>
+    </table>
 
 <script>
 

@@ -1786,11 +1786,11 @@ def agregarmenu(request):
 
             )
 
-            historico = historico_menu(
-                    menu_nombre=menu,
+                historico = historico_menu(
+                    nombre_menu=nombre_menu,
                     precio_menu=precio_menu
                 )
-            historico.save()
+                historico.save()
 
 
             messages.success(request, 'Registro Agregado con Exito')
@@ -1845,9 +1845,15 @@ def eliminarmenutabla(request,id):
 
 
 def historicomenutabla(request):
-    
-    historicos = historico_menu.objects.all()
-    return render(request, 'historicomenu.html', {'historicos': historicos})
+    men=menutabla.objects.all()
+    his = historico_menu.objects.all()
+    context={
+        'his':his,
+        'men':men
+    }
+
+
+    return render(request, 'historicomenu.html', context)
 
 
 #DIN DE LA VISTA HISTORICO MENU

@@ -198,13 +198,11 @@ class menutabla(models.Model):
 
 class historico_menu(models.Model):
     id_historico = models.CharField(primary_key=True, max_length=50)
-    nombre_menu = models.ForeignKey(menutabla, on_delete=models.CASCADE)
+    nombre_menu = models.CharField(max_length=100)
     fecha_inicio = models.DateTimeField(default=timezone.now)
-    fecha_final = models.DateTimeField(null=True, blank=True)
+    fecha_final = models.DateField(blank=True)
     precio_menu = models.CharField(max_length=50)
 
-    def __str__(self):
-        return f"{self.nombre_menu.nombre_menu} - {self.fecha_inicio} - {self.precio_menu}"
 
     
     class Meta:
