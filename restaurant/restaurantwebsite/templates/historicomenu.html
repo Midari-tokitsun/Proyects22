@@ -211,6 +211,7 @@
                 <th scope="col">Precio</th>
                 <th scope="col">Fecha de Inicio</th>
                 <th scope="col">Fecha Final</th>
+                <th scope="col">Activo</th>
             </tr>
         </thead>
         <tbody>
@@ -221,7 +222,7 @@
                     <td>{{ h.precio_menu }}</td>
                     <td>{{ h.fecha_inicio|date:"d/m/Y" }}</td>
                     <td>{{ h.fecha_final|date:"d/m/Y" }}</td>
-                       
+                    <td>{{ h.activo }}</td>
        
                     </td>
                 </tr>
@@ -229,9 +230,35 @@
         </tbody>
     </table>
 
+
+
+
+    <h1>Crear registro histórico</h1>
+    <form method="POST" action="{% url 'crearhistorico' %}" onsubmit="document.getElementById('submit-btn').disabled = true;">
+        {% csrf_token %}
+        <label for="menu">Seleccione el menú:</label>
+        <select name="id_menu" id="menu">
+            {% for men in men %}
+            <option value="{{ men.id_menu }}">{{ men.nombre_menu }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="nuevo_precio">Nuevo precio:</label>
+        <input type="text" name="nuevo_precio" id="nuevo_precio">
+        <br>
+        <button type="submit" id="submit-btn">Agregar registro histórico</button>
+    
+    
+
+
+
+
 <script>
 
     
+
+
+
 $(document).ready(function() {
 $('#mytable').DataTable({
 "language": {

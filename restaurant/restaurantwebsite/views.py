@@ -1867,6 +1867,85 @@ def historicomenutabla(request):
     return render(request, 'historicomenu.html', context)
 
 
+from django.utils import timezone
+
+def crearhistorico(request):
+    if request.method == 'POST':
+        # Obtener el menú seleccionado del formulario
+        id_menu = request.POST.get('id_menu')
+
+        # Obtener el menú correspondiente al ID seleccionado
+        menu = menutabla.objects.get(id_menu=id_menu)
+
+        # Obtener el precio nuevo del formulario
+        precio_menu = request.POST.get('nuevo_precio')
+
+        # Obtener el registro histórico más reciente del menú correspondiente
+        ultimo_historico = historico_menu.objects.filter(nombre_menu=menu.nombre_menu, activo=True).last()
+
+        # Verificar si el precio nuevo es igual al precio del registro histórico más reciente
+        if ultimo_historico and precio_menu == ultimo_historico.precio_menu:
+            # El precio nuevo es igual al precio del registro histórico más reciente, no es necesario crear un nuevo registro
+            messages.warning(request, 'El precio nuevo es igual al precio del registro histórico más reciente')
+            return redirect('historicomenutabla')
+        else:
+            # Buscar si existe un registro histórico con el mismo nombre de menú y precio
+            historico_existente = historico_menu.objects.filter(nombre_menu=menu.nombre_menu, precio_menu=precio_menu, activo=True).first()
+
+            if historico_existente:
+                # Si ya existe un registro histórico con el mismo nombre de menú y precio, actualizarlo y establecerlo como activo
+                historico_existente.activo = True
+                historico_existente.fecha_final = None
+                historico_existente.save()
+
+                # Actualizar el precio del menú actual y el registro histórico más reciente
+                menu.precio_menu = precio_menu
+
+                messages.success(request, 'Registro actualizado con éxito')
+            else:
+                # Si no existe un registro histórico con el mismo nombre de menú y precio, establecer todos los registros históricos del menú correspondiente como inactivos y actualizar sus fechas finales
+                historicos = historico_menu.objects.filter(nombre_menu=menu.nombre_menu, activo=True)
+                for historico in historicos:
+                    historico.activo = False
+                    historico.fecha_final = timezone.now() - timezone.timedelta(seconds=1)
+                    historico.save()
+
+                # Crear un nuevo registro histórico con la fecha de inicio actual y establecerlo como activo
+                his = historico_menu.objects.create(
+                    nombre_menu=menu.nombre_menu,
+                    precio_menu=precio_menu,
+                    fecha_inicio=timezone.now(),
+                    fecha_final=None,
+                    activo=True,
+                )
+
+                # Actualizar el precio del menú actual y el registro histórico más reciente
+                menu.precio_menu = precio_menu
+
+                messages.success(request, 'Registro creado con éxito')
+
+            menu.save()
+            return redirect('historicomenutabla')
+
+    # Obtener todos los menús disponibles
+    menus = menutabla.objects.all()
+
+    # Renderizar el formulario HTML
+    return render(request, 'crearhistorico.html', {'menus': menus})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #DIN DE LA VISTA HISTORICO MENU
 
 

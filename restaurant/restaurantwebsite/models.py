@@ -202,7 +202,7 @@ class historico_menu(models.Model):
     fecha_inicio = models.DateField(default=timezone.now)
     fecha_final = models.DateField(null=True,blank=True)
     precio_menu = models.CharField(max_length=50)
-
+    activo=models.BooleanField(default=False)
 
     
     class Meta:
