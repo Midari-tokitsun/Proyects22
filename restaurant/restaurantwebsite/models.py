@@ -202,7 +202,7 @@ class historico_menu(models.Model):
     fecha_inicio = models.DateField(default=timezone.now)
     fecha_final = models.DateField(null=True,blank=True)
     precio_menu = models.CharField(max_length=50)
-    activo=models.BooleanField(default=False)
+
 
     
     class Meta:
@@ -257,6 +257,22 @@ class metodo_pago_tabla(models.Model):
 
     class Meta:
         db_table='metodo_pago'
+
+class reservacionestabla(models.Model):
+    id_reservacion=models.CharField(primary_key=True,max_length=20)
+    nombre_reservante=models.CharField(max_length=50)
+    nombre_sucursal=models.CharField(max_length=50)
+    numero_mesas=models.CharField(max_length=20)
+    fecha_reserva=models.DateField()
+    fecha_llegada=models.DateField()
+    descripcion=models.CharField(max_length=100)
+
+
+
+    class Meta:
+        db_table='reservaciones'
+
+
 
 class MyException(Exception):
     pass

@@ -357,21 +357,22 @@ $('#myTable').DataTable({
             </tfoot>
     
     <tbody>
+      {% for r in res %}
     <tr>
-    <td>1</td>
-    <td>Felix</td>
-    <td>Los Prinos</td>
-    <td>4</td>
-    <td>20 de marzo del 23</td>
-    <td>22 de marzo del 23</td>
-    <td>Llegaran una gente super importante de la ciudad a reconocer su comida</td>
+    <td>{{ r.id_reservacion }}</td>
+    <td>{{ r.nombre_reservante }}</td>
+    <td>{{ r.nombre_sucursal }}</td>
+    <td>{{ r.numero_mesas }}</td>
+    <td>{{ r.fecha_reserva|date:"d/m/Y" }}</td>
+    <td>{{ r.fecha_llegada|date:"d/m/Y" }}</td>
+    <td>{{ r.descripcion }}</td>
     <td>
         <a href="" class="btn btn-primary">EDITAR</a>
         <a href="" class="btn btn-danger">ELIMINAR</a>
     </td>
 
 </tr>
-
+{% endfor %}
 </tbody>
 </table>
 
@@ -385,8 +386,76 @@ $('#myTable').DataTable({
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
-        </div>
+
+   
+          
+
+
+
+
+          <div class="form-group ">
+
+                 
+            <label for=""> ID de la Reservacion </label>
+                 <input class="form-select" id="name" name="name" placeholder="Introduce el ID de la reservacion" type="text"/>
+                </div>
+              </div>
+        
+                
+                
+              
+              <label for=""> Nombre del reservante </label>
+                <select class="form-control" name="" id="">
+                  {% for u in user %}
+                  <option class="form-select" value="{{u.nombre}}">{{u.nombre}}</option>
+                  {% endfor %}
+                </select>
+               
+          
+
+                <label for=""> Nombre de la Sucursal </label>
+                <select class="form-control" name="" id="">
+                  {% for s in sucu %}
+                <option class="form-select" value="{{s.direccion_sucursal}}">{{s.direccion_sucursal}}
+
+                </option>
+                {% endfor %}
+                </select>
+             
+               
+
+                
+                <label for=""> Numero de Reservaciones </label>
+                <select class="form-control" name="" id="">
+                  
+                <option class="form-control" value="">Numero de Reservaciones</option>
+                <option value="">1</option>
+                <option value="">2</option>
+                <option value="">3</option>
+                <option value="">4</option>
+                <option value="">5</option>
+                <option value="">6</option>
+                <option value="">7</option>
+                <option value="">8</option>
+                <option value="">9</option>
+                <option value="">10</option>
+                
+                
+              </select>
+              
+                <div class="form-group ">
+
+                  <label for=""> Fecha de inicio de La Reserva </label>
+              <input class="form-control" id="name" name="name" placeholder="" type="date"/>
+            </div>
+
+              <div class="form-group ">
+                <label for=""> Fecha de Llegada a la Reserva </label>
+            <input class="form-control" id="name" name="name" placeholder="Introduce el ID de la reservacion" type="date"/>
+          </div>
+
+
+  
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Save changes</button>

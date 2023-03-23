@@ -205,6 +205,7 @@ urlpatterns = [
 #HISTORICO MENU
     path('historicomenutabla/', views.historicomenutabla , name="historicomenutabla"),#pantalla principal del table
     path('crearhistorico', views.crearhistorico , name="crearhistorico"),#pantalla principal del table
+    path('editar_historico/<int:id>', views.editar_historico , name="editar_historico"),#pantalla principal del table
 
 
 

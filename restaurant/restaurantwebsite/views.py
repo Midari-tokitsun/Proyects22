@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -1878,10 +1878,10 @@ def crearhistorico(request):
         menu = menutabla.objects.get(id_menu=id_menu)
 
         # Obtener el precio nuevo del formulario
-        precio_menu = request.POST.get('nuevo_precio')
+        precio_menu = request.POST.get('precio_menu')
 
         # Obtener el registro histórico más reciente del menú correspondiente
-        ultimo_historico = historico_menu.objects.filter(nombre_menu=menu.nombre_menu, activo=True).last()
+        ultimo_historico = historico_menu.objects.filter(nombre_menu=menu.nombre_menu).last()
 
         # Verificar si el precio nuevo es igual al precio del registro histórico más reciente
         if ultimo_historico and precio_menu == ultimo_historico.precio_menu:
@@ -1890,36 +1890,41 @@ def crearhistorico(request):
             return redirect('historicomenutabla')
         else:
             # Buscar si existe un registro histórico con el mismo nombre de menú y precio
-            historico_existente = historico_menu.objects.filter(nombre_menu=menu.nombre_menu, precio_menu=precio_menu, activo=True).first()
+            historico_existente = historico_menu.objects.filter(nombre_menu=menu.nombre_menu, precio_menu=precio_menu).first()
 
             if historico_existente:
-                # Si ya existe un registro histórico con el mismo nombre de menú y precio, actualizarlo y establecerlo como activo
-                historico_existente.activo = True
-                historico_existente.fecha_final = None
+                # Si ya existe un registro histórico con el mismo nombre de menú y precio, actualizarlo y establecer su fecha final
+                historico_existente.fecha_final = timezone.now()
                 historico_existente.save()
 
                 # Actualizar el precio del menú actual y el registro histórico más reciente
                 menu.precio_menu = precio_menu
 
-                messages.success(request, 'Registro actualizado con éxito')
-            else:
-                # Si no existe un registro histórico con el mismo nombre de menú y precio, establecer todos los registros históricos del menú correspondiente como inactivos y actualizar sus fechas finales
-                historicos = historico_menu.objects.filter(nombre_menu=menu.nombre_menu, activo=True)
-                for historico in historicos:
-                    historico.activo = False
-                    historico.fecha_final = timezone.now() - timezone.timedelta(seconds=1)
-                    historico.save()
-
-                # Crear un nuevo registro histórico con la fecha de inicio actual y establecerlo como activo
+                # Crear un nuevo registro histórico con la fecha de inicio actual
                 his = historico_menu.objects.create(
                     nombre_menu=menu.nombre_menu,
                     precio_menu=precio_menu,
                     fecha_inicio=timezone.now(),
                     fecha_final=None,
-                    activo=True,
                 )
 
-                # Actualizar el precio del menú actual y el registro histórico más reciente
+                messages.success(request, 'Registro actualizado con éxito')
+            else:
+                # Si no existe un registro histórico con el mismo nombre de menú y precio, crear uno nuevo y establecer la fecha final del registro histórico más reciente
+                if ultimo_historico:
+                    ultimo_historico.fecha_final = timezone.now()
+                    ultimo_historico.save()
+
+                # Crear un nuevo registro histórico con la fecha de inicio actual
+                his = historico_menu.objects.create(
+                    nombre_menu=menu.nombre_menu,
+                    precio_menu=precio_menu,
+                    fecha_inicio=timezone.now(),
+                    fecha_final=None,
+                )
+
+                # Actualizar el precio del menú actual
+         
                 menu.precio_menu = precio_menu
 
                 messages.success(request, 'Registro creado con éxito')
@@ -1932,6 +1937,45 @@ def crearhistorico(request):
 
     # Renderizar el formulario HTML
     return render(request, 'crearhistorico.html', {'menus': menus})
+
+
+
+
+
+def editar_historico(request, id):
+    historico = historico_menu.objects.get(id_historico=id)
+    menu = menutabla.objects.get(nombre_menu=historico.nombre_menu)
+    if request.method == 'POST':
+        nuevo_precio = request.POST.get('nuevo_precio')
+        historico.precio_menu = nuevo_precio
+        menu.precio_menu = nuevo_precio
+        historico.save()
+        menu.save()
+        messages.success(request, 'Historial actualizado con éxito.')
+        return redirect('historicomenutabla')
+    else:
+        return render(request, 'editarhistorico.html', {'historico': historico})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2201,11 +2245,65 @@ def eliminarestadopedido(request,id):
 #Vista de Reservaciones
 
 def reservaciones(request):
+    res=reservacionestabla.objects.all()
+    sucu=sucursal.objects.all()
+    user=insertuser.objects.all()
+    context={
+        'res':res,
+        'sucu':sucu,
+        'user':user,
+    }
+
+
+
+    return render(request,"reservacion.html",context)
+
+def agregarreservacion(request):
+    try:  
+        pass         
+        if request.method=='POST':
+
+            id_reservacion=request.POST.get("id_reservacion")
+            nombre_reservante=request.POST.get("nombre_reservante")
+            nombre_sucursal=request.POST.get("nombre_sucursal")
+            numero_mesas=request.POST.get("numero_mesas")
+            fecha_reserva=request.POST.get("fecha_reserva")
+            fecha_llegada=request.POST.get("fecha_llegada")
+            descripcion=request.POST.get("descripcion")
 
 
 
 
-    return render(request,"reservacion.html")
+
+
+
+            reservacionestabla.objects.create(
+                id_reservacion=id_reservacion,
+                nombre_reservante=nombre_reservante,
+                nombre_sucursal=nombre_sucursal,
+                numero_mesas=numero_mesas,
+                fecha_reserva=fecha_reserva,
+                fecha_llegada=fecha_llegada,
+                descripcion=descripcion,
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect("reservaciones")
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+
+
+    return redirect("reservaciones")
+
+
+
+
+
+
 #Fin De la VISTA RESERVACIONES
 
 
