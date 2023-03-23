@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -2510,3 +2510,113 @@ def eliminarmetododepago(request,id):
 
 
 # FIN DE LA VISTA METODO DE PAGO POST
+
+#VISTA DE INVENTARIO
+
+def inventario(request):
+    inv=inventariotabla.objects.all()
+    context={
+        'inv':inv
+    }
+
+
+
+    return render(request,"inventario.html",context)
+
+
+def agregarinventario(request):
+
+    try:  
+        pass         
+        if request.method=='POST':
+     
+
+            id_inventario=request.POST.get("id_inventario")
+            producto=request.POST.get("producto")
+            cantidad_actual=request.POST.get("cantidad_actual")
+            cantidad_minima=request.POST.get("cantidad_minima")
+            cantidad_maxima=request.POST.get("cantidad_maxima")
+            unidad_de_medida=request.POST.get("unidad_de_medida")
+            
+
+
+
+            inventariotabla.objects.create(
+                id_inventario=id_inventario,
+                producto=producto,
+            cantidad_actual=cantidad_actual,
+            cantidad_minima=cantidad_minima,
+            cantidad_maxima=cantidad_maxima,
+            unidad_de_medida=unidad_de_medida,
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect("inventario")
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+
+    return redirect('inventario')
+
+
+def editarinventario(request,id):
+
+    inv=inventariotabla.objects.get(id_inventario=id)
+    
+
+    id_inventario=request.POST.get('id_inventario')
+    producto=request.POST.get('producto')
+    cantidad_actual=request.POST.get('cantidad_actual')
+    cantidad_minima=request.POST.get('cantidad_minima')
+    cantidad_maxima=request.POST.get('cantidad_maxima')
+    unidad_de_medida=request.POST.get('unidad_de_medida')
+
+    inv.id_inventario=id_inventario
+    inv.producto=producto
+    inv.cantidad_actual=cantidad_actual
+    inv.cantidad_minima=cantidad_minima
+    inv.cantidad_maxima=cantidad_maxima
+    inv.unidad_de_medida=unidad_de_medida
+
+    inv.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+
+    return redirect('inventario')
+
+
+def eliminarinventario(request,id):
+    inv=inventariotabla.objects.get(id_inventario=id)
+    inv.delete()
+    messages.success(request, 'Registro Eliminado con Exito')
+
+    return redirect('inventario')
+
+
+#FIN DE LA VISTA DE INVENTARIO
+
+
+
+#VISTA DE PRODUCTOS
+
+
+def productos(request):
+    pro=productostabla.objects.all()
+    cat=categoria.objects.all()
+    alma=almacen.objects.all()
+    #FALTA INVENTARIO
+    fam=familia_producto.objects.all()
+    men=menutabla.objects.all()
+    context={
+        'pro':pro,
+        'cat':cat,
+        'alma':alma,
+        'fam':fam,
+        'men':men,
+
+    }
+
+    return render(request,"productos.html",context)

@@ -460,7 +460,7 @@ $('#myTable').DataTable({
           </div>
 
           <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+            <label for="exampleFormControlTextarea1" class="form-label">Descripcion del Reservante</label>
             <textarea name="descripcion" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
           </div>
 
@@ -484,7 +484,7 @@ $('#myTable').DataTable({
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Reservacion</h5>
+          <h5 class="modal-title" id="exampleModalLabel">EDITAR RESERVACION</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form action="/editarreservacion/{{ r.id_reservacion }}" method="POST">
@@ -562,7 +562,7 @@ $('#myTable').DataTable({
           </div>
 
           <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+            <label for="exampleFormControlTextarea1" class="form-label">Descripcion del Reservante</label>
             <textarea name="descripcion" value="{{ r.descripcion }}"  class="form-control" id="exampleFormControlTextarea1" rows="3">{{ r.descripcion }}</textarea>
           </div>
 

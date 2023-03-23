@@ -273,6 +273,31 @@ class reservacionestabla(models.Model):
         db_table='reservaciones'
 
 
+class inventariotabla(models.Model):
+    id_inventario=models.CharField(primary_key=True ,max_length=20)
+    producto=models.CharField(max_length=50)
+    cantidad_actual=models.CharField(max_length=50)
+    cantidad_minima=models.CharField(max_length=50)
+    cantidad_maxima=models.CharField(max_length=50)
+    unidad_de_medida=models.CharField(max_length=50)
+
+    class Meta:
+        db_table='inventario'
+
+
+class productostabla(models.Model):
+    id_producto=models.CharField(primary_key=True,max_length=20)
+    nombre_producto=models.CharField(max_length=50)
+    id_categoria=models.CharField(max_length=50)
+    almacen_id=models.CharField(max_length=50)
+    inventario_id=models.CharField(max_length=50)
+    familia_id=models.CharField(max_length=50)
+    menu_id=models.CharField(max_length=50)
+
+
+    class Meta:
+        db_table='productos'
+
 
 class MyException(Exception):
     pass

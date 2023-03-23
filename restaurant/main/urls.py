@@ -277,6 +277,22 @@ urlpatterns = [
 
 # FIN VISTA METODO DE PAGO POST
 
+#VISTA DE PRODUCTOS
+
+    path('productos/', views.productos , name="productos"),#pantalla principal del table
+
+
+#FIN DE LA VISTA DE PRODUCTOS
+
+
+
+#VISTA DE INVENTARIO
+
+    path('inventario/', views.inventario , name="inventario"),#pantalla principal del table
+
+
+#FIN DE LA VISTA DE INVENTARIO
+
 
 ] 
 
