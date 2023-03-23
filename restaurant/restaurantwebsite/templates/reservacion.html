@@ -367,8 +367,11 @@ $('#myTable').DataTable({
     <td>{{ r.fecha_llegada|date:"d/m/Y" }}</td>
     <td>{{ r.descripcion }}</td>
     <td>
-        <a href="" class="btn btn-primary">EDITAR</a>
-        <a href="" class="btn btn-danger">ELIMINAR</a>
+       <!-- Button trigger modal de Agregar Modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditarReservacionModal-{{forloop.counter}}">
+ EDITAR
+</button>
+        <a href="/eliminarreservacion/{{ r.id_reservacion }}" class="btn btn-danger">ELIMINAR</a>
     </td>
 
 </tr>
@@ -385,6 +388,8 @@ $('#myTable').DataTable({
           <h5 class="modal-title" id="exampleModalLabel">Agregar Reservacion</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <form action="{% url 'agregarreservacion' %}" method="POST">
+          {% csrf_token %}
         <div class="modal-body">
 
    
@@ -397,7 +402,7 @@ $('#myTable').DataTable({
 
                  
             <label for=""> ID de la Reservacion </label>
-                 <input class="form-select" id="name" name="name" placeholder="Introduce el ID de la reservacion" type="text"/>
+                 <input class="form-select" id="id_reservacion" name="id_reservacion" placeholder="Introduce el ID de la reservacion" type="text"/>
                 </div>
               </div>
         
@@ -405,7 +410,7 @@ $('#myTable').DataTable({
                 
               
               <label for=""> Nombre del reservante </label>
-                <select class="form-control" name="" id="">
+                <select class="form-control" name="nombre_reservante" id="nombre_reservante">
                   {% for u in user %}
                   <option class="form-select" value="{{u.nombre}}">{{u.nombre}}</option>
                   {% endfor %}
@@ -414,7 +419,7 @@ $('#myTable').DataTable({
           
 
                 <label for=""> Nombre de la Sucursal </label>
-                <select class="form-control" name="" id="">
+                <select class="form-control" name="nombre_sucursal" id="nombre_sucursal">
                   {% for s in sucu %}
                 <option class="form-select" value="{{s.direccion_sucursal}}">{{s.direccion_sucursal}}
 
@@ -426,19 +431,19 @@ $('#myTable').DataTable({
 
                 
                 <label for=""> Numero de Reservaciones </label>
-                <select class="form-control" name="" id="">
+                <select class="form-control" name="numero_mesas" id="numero_mesas">
                   
-                <option class="form-control" value="">Numero de Reservaciones</option>
-                <option value="">1</option>
-                <option value="">2</option>
-                <option value="">3</option>
-                <option value="">4</option>
-                <option value="">5</option>
-                <option value="">6</option>
-                <option value="">7</option>
-                <option value="">8</option>
-                <option value="">9</option>
-                <option value="">10</option>
+
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
                 
                 
               </select>
@@ -446,23 +451,142 @@ $('#myTable').DataTable({
                 <div class="form-group ">
 
                   <label for=""> Fecha de inicio de La Reserva </label>
-              <input class="form-control" id="name" name="name" placeholder="" type="date"/>
+              <input class="form-control" id="fecha_reserva" name="fecha_reserva"  type="date"/>
             </div>
 
               <div class="form-group ">
                 <label for=""> Fecha de Llegada a la Reserva </label>
-            <input class="form-control" id="name" name="name" placeholder="Introduce el ID de la reservacion" type="date"/>
+            <input class="form-control" id="fecha_llegada" name="fecha_llegada"  type="date"/>
+          </div>
+
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+            <textarea name="descripcion" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
           </div>
 
 
   
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         </div>
+      </form>
       </div>
+  
     </div>
   </div>
+
+
+
+  <!-- Modal EDITAR -->
+  {% for r in res %}
+  <div class="modal fade" id="EditarReservacionModal-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Reservacion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="/editarreservacion/{{ r.id_reservacion }}" method="POST">
+          {% csrf_token %}
+        <div class="modal-body">
+
+   
+          
+
+
+
+
+          <div class="form-group ">
+
+                 
+            <label for=""> ID de la Reservacion </label>
+                 <input class="form-select" value="{{ r.id_reservacion }}" id="id_reservacion" name="id_reservacion" placeholder="Introduce el ID de la reservacion" type="text"/>
+                </div>
+              </div>
+        
+                
+                
+              
+              <label for=""> Nombre del reservante </label>
+                <select class="form-control" name="nombre_reservante" id="nombre_reservante">
+                  <option value="{{r.nombre_reservante}}">{{r.nombre_reservante}}</option>
+                  {% for u in user %}
+                  <option class="form-select" value="{{u.nombre}}">{{u.nombre}}</option>
+                  {% endfor %}
+                </select>
+               
+          
+
+                <label for=""> Nombre de la Sucursal </label>
+                <select class="form-control" name="nombre_sucursal" id="nombre_sucursal">
+                  <option value="{{r.nombre_sucursal}}">{{r.nombre_sucursal}}</option>
+                  {% for s in sucu %}
+
+                <option class="form-select" value="{{s.direccion_sucursal}}">{{s.direccion_sucursal}}
+
+                </option>
+                {% endfor %}
+                </select>
+             
+               
+
+                
+                <label for=""> Numero de Reservaciones </label>
+                <select class="form-control" name="numero_mesas" id="numero_mesas">
+                  <option value="{{ r.numero_mesas }}">{{ r.numero_mesas }}</option>
+
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                
+                
+              </select>
+              
+                <div class="form-group ">
+
+                  <label for=""> Fecha de inicio de La Reserva </label>
+              <input class="form-control" id="fecha_reserva" name="fecha_reserva" value="{{ r.fecha_reserva|date:'Y-m-d' }}"  type="date"/>
+            </div>
+
+              <div class="form-group ">
+                <label for=""> Fecha de Llegada a la Reserva </label>
+            <input class="form-control" id="fecha_llegada" name="fecha_llegada" value="{{ r.fecha_llegada|date:'Y-m-d' }}"  type="date"/>
+          </div>
+
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+            <textarea name="descripcion" value="{{ r.descripcion }}"  class="form-control" id="exampleFormControlTextarea1" rows="3">{{ r.descripcion }}</textarea>
+          </div>
+
+
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </form>
+      </div>
+  
+    </div>
+  </div>
+
+  {% endfor %}
+
+
+
+
+
+
+
+
 
 </body>
         

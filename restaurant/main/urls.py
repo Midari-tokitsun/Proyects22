@@ -247,6 +247,11 @@ urlpatterns = [
 # VISTA de Reservaciones
 
     path('reservaciones/', views.reservaciones , name="reservaciones"),#pantalla principal del table
+    path('agregarreservacion', views.agregarreservacion , name="agregarreservacion"),#pantalla principal del table
+   
+    path('editarreservacion/<int:id>', views.editarreservacion , name="editarreservacion"),#pantalla principal del table
+   
+    path('eliminarreservacion/<int:id>', views.eliminarreservacion , name="eliminarreservacion"),#pantalla principal del table
 
 
 # FIN DE LA VISTA de Reservaciones

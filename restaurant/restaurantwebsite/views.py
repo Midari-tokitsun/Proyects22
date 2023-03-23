@@ -2300,7 +2300,41 @@ def agregarreservacion(request):
     return redirect("reservaciones")
 
 
+def editarreservacion(request,id):
+    res=reservacionestabla.objects.get(id_reservacion=id)
+    
+    nombre_reservante=request.POST.get('nombre_reservante')
+    nombre_sucursal=request.POST.get('nombre_sucursal')
+    numero_mesas=request.POST.get('numero_mesas')
+    fecha_reserva=request.POST.get('fecha_reserva')
+    fecha_llegada=request.POST.get('fecha_llegada')
+    descripcion=request.POST.get('descripcion')
 
+    res.nombre_reservante=nombre_reservante
+    res.nombre_sucursal=nombre_sucursal
+    res.numero_mesas=numero_mesas
+    res.fecha_reserva=fecha_reserva
+    res.fecha_llegada=fecha_llegada
+    res.descripcion=descripcion
+
+    res.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+
+
+
+
+    return redirect('reservaciones')
+
+def eliminarreservacion(request, id):
+    res=reservacionestabla.objects.get(id_reservacion=id)
+    res.delete()
+
+    messages.success(request, 'Registro Eliminado con Exito')
+
+
+    return redirect('reservaciones')
+    
 
 
 
