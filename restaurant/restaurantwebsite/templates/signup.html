@@ -117,7 +117,7 @@
           </div>
           <div class="input-box">
             <span class="details">Apellido</span>
-            <input id="apellido" class="noSpace noRepetidos lettersonly" value="{{ apellido }}" name="apellido"  pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="Ejemplo: Josue,Funez,Castro" maxlength="20" minlength="5" type="text" placeholder="Escribe tu Apellido" required>
+            <input id="apellido" class="noSpace noRepetidos apellidocontrol" value="{{ apellido }}" name="apellido"  pattern="^(?!.*(.).*\1)[a-zA-Z]+$" title="Ejemplo: Josue,Funez,Castro" maxlength="20" minlength="5" type="text" placeholder="Escribe tu Apellido" required>
           </div>
           <div class="input-box">
             <span class="details">Correo Electronico</span>
@@ -283,7 +283,7 @@
           noRepetidos:true,
           noSpace:true,
           required: true,
-          lettersonly: true,
+          apellidocontrol: true,
           minlength: 5,
           maxlength: 20
         },
@@ -333,7 +333,7 @@
         nombre: {
           required:"Debes ingresar tu Nombre",
           noRepetidos:"No Se permiten Letras Repetidas",
-          lettersonly: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.",
+
           minlength: "Debes ingresar como mínimo 3 letras.",
           maxlength:"El Maximo de Letras de un nombre no debe ser mayor a 18",
           noSpace:"No se Permiten Espacios Aca",
@@ -341,7 +341,7 @@
         apellido: {
           required:"Debes Ingresar Tu apellido",
           noRepetidos:"No Se permiten Letras Repetidas",
-          lettersonly: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.",
+
           minlength: "Debes ingresar como mínimo 5 letras.",
           maxlength: "No puedes ingresar más de 20 letras.",
           noSpace:"No se Permiten Espacios Aca NO HAGA ESO",
@@ -419,10 +419,37 @@ $.validator.addMethod("telefonoHonduras", function(value, element) {
 
 
   
- // Regla personalizada para validar el campo de Empleado
- $.validator.addMethod("lettersonly", function(value, element) {
-    return this.optional(element) || /^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$/.test(value) && !/\s/.test(value);
-  }, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
+$.validator.addMethod("lettersonly", function(value, element) {
+    var regex = /^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/;
+    var isValid = regex.test(value);
+    if (!isValid) {
+        $.validator.messages.lettersonly = "Este campo solo puede contener letras y debe comenzar con una letra mayúscula";
+        if (value.trim().split(" ").length < 2) {
+            $.validator.messages.lettersonly = "Debe introducir su Segundo Nombre después del espacio";
+        } else if (!/^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/.test(value)) {
+            $.validator.messages.lettersonly = "El Nombre y su Segundo Nombre debe comenzar con una letra mayúscula y tener al menos 3 o 4 letras";
+        }
+        return false;
+    }
+    return true;
+}, "");
+
+
+
+$.validator.addMethod("apellidocontrol", function(value, element) {
+    var regex = /^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/;
+    var isValid = regex.test(value);
+    if (!isValid) {
+        $.validator.messages.apellidocontrol = "Este campo solo puede contener letras y debe comenzar con una letra mayúscula";
+        if (value.trim().split(" ").length < 2) {
+            $.validator.messages.apellidocontrol = "Debe introducir su segundo Apellido después del espacio";
+        } else if (!/^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/.test(value)) {
+            $.validator.messages.apellidocontrol = "El Apellido y su Segundo Apellido debe comenzar con una letra mayúscula y tener al menos 3 o 4 letras";
+        }
+        return false;
+    }
+    return true;
+}, "");
  
 
   $.validator.addMethod("usernamecontrol", function(value, element) {
@@ -431,9 +458,9 @@ $.validator.addMethod("telefonoHonduras", function(value, element) {
 
   // Regla personalizada para validar EL Correo Electronico
   $.validator.addMethod("emailcontrol", function(value, element) {
-    // Nueva validación de la regla de correo electrónico
-    return this.optional(element) || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value);
-  }, "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios");
+  // Nueva validación de la regla de correo electrónico
+  return this.optional(element) || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}(?:\.[^\s@]{2,})?$/.test(value);
+}, "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios");
   
   
 

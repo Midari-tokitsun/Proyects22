@@ -358,7 +358,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
         <div class="col-sm-5 col-md-6">
           <label for="form-label">Apellido</label>
         
-          <input id="apellido" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" placeholder="Ejemplo: Peres,Funez,Castro" maxlength="20" minlength="5"  class="form-control noSpace noRepetidos textocontrol" type="text" name="apellido" required>
+          <input id="apellido" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" placeholder="Ejemplo: Peres,Funez,Castro" maxlength="20" minlength="5"  class="form-control noSpace noRepetidos apellidocontrol" type="text" name="apellido" required>
         </div>
 
         <div class="col-sm-5 col-md-6">
@@ -689,7 +689,7 @@ $('#mytable').DataTable({
         nombre: {
           required: true, 
           minlength: 5,
-          maxlength:12,
+          maxlength:20,
           noRepetidos: true,
   
           noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
@@ -700,9 +700,9 @@ $('#mytable').DataTable({
   
         apellido: {
           required: true,
-          textocontrol:true,
+          apellidocontrol:true,
           minlength: 5,
-          maxlength: 12,
+          maxlength: 18,
         },
   
   
@@ -737,8 +737,8 @@ $('#mytable').DataTable({
           noSpace:"No se Permiten Espacios Ya se lo Dije",
         },
         nombre: {
-          required:"Debes Poner un Nombre ",
-          textocontrol: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
+          required:"Debes Poner un Nombre y su Segundo ",
+
           minlength: "Debes ingresar al menos 3 caracteres.", 
           maxlength: "No puedes ingresar más de 12 caracteres.",
           noRepetidos: "No se permiten caracteres repetidos en este campo",
@@ -748,9 +748,9 @@ $('#mytable').DataTable({
   
   
         apellido: {
-          textocontrol: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
+
          
-          required:"Debes Poner El Apellido",
+          required:"Debes Poner El Apellido y su Segundo",
  
           minlength: "Debes ingresar al menos 5 caracteres.",
         maxlength: "No puedes ingresar más de 12 caracteres.",
@@ -826,15 +826,13 @@ if (opcionSeleccionada === "RTN") {
     return false;
   }
 } else if (opcionSeleccionada === "DNI") {
-  if (numIdentificacion.length !== 9) {
-    $("#error-dni").text("El número de identificación para DNI debe tener 8 dígitos seguido de una letra");
+  if (numIdentificacion.length !== 13) {
+    $("#error-dni").text("El número de identificación para DNI debe tener 13 dígitos");
 
     return false;
   }
-  var dniNumbers = numIdentificacion.substring(0,8);
-  var dniLetter = numIdentificacion.substring(8,9);
-  if (!(/^\d+$/.test(dniNumbers)) || !(/^[A-Z]$/.test(dniLetter))) {
-    $("#error-dni").text("El número de identificación para DNI debe tener 8 dígitos seguido de una letra");
+  if (!/^\d+$/.test(numIdentificacion)) {
+    $("#error-dni").text("El número de identificación para DNI debe contener solo números");
 
     return false;
   }
@@ -871,11 +869,38 @@ return true;
 
 
   
-  // Regla personalizada para validar el campo de Empleado
-  $.validator.addMethod("textocontrol", function(value, element) {
-    return this.optional(element) || /^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$/.test(value) && !/\s/.test(value);
-  }, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
+ 
   
+  $.validator.addMethod("textocontrol", function(value, element) {
+    var regex = /^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/;
+    var isValid = regex.test(value);
+    if (!isValid) {
+        $.validator.messages.textocontrol = "Este campo solo puede contener letras y debe comenzar con una letra mayúscula";
+        if (value.trim().split(" ").length < 2) {
+            $.validator.messages.textocontrol = "Debe introducir su Segundo Nombre después del espacio";
+        } else if (!/^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/.test(value)) {
+            $.validator.messages.textocontrol = "El Nombre y su Segundo Nombre debe comenzar con una letra mayúscula y tener al menos 3 o 4 letras";
+        }
+        return false;
+    }
+    return true;
+}, "");
+
+
+$.validator.addMethod("apellidocontrol", function(value, element) {
+    var regex = /^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/;
+    var isValid = regex.test(value);
+    if (!isValid) {
+        $.validator.messages.apellidocontrol = "Este campo solo puede contener letras y debe comenzar con una letra mayúscula";
+        if (value.trim().split(" ").length < 2) {
+            $.validator.messages.apellidocontrol = "Debe introducir su segundo Apellido después del espacio";
+        } else if (!/^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/.test(value)) {
+            $.validator.messages.apellidocontrol = "El Apellido y su Segundo Apellido debe comenzar con una letra mayúscula y tener al menos 3 o 4 letras";
+        }
+        return false;
+    }
+    return true;
+}, "");
   
   
   // Regla personalizada para validar el campo de nombre_cargo

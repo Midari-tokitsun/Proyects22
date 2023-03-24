@@ -320,7 +320,8 @@
 						<h4 class="modal-title">Añadir Usuario</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
-					<div class="modal-body">					
+					<div class="modal-body">
+	
 
 						<div class="form-group">
 							<label>ID</label>
@@ -329,13 +330,13 @@
 						</div>
 
                         <div class="form-group">
-							<label>Nombre</label>
-              <input type="text" id="nombre" placeholder="Ejemplo: Noe,Percy,Andrea,Juan" pattern="^(?!.*(.).*\1)[a-zA-Z]+$"  name="nombre" class="form-control noRepetidos noSpace  lettersonly" required>
+							<label>Nombre</label> 
+              <input type="text" maxlength="18" minlength="3" id="nombre" placeholder="Ejemplo: Noe,Percy,Andrea,Juan" pattern="^(?!.*(.).*\1)[a-zA-Z]+$"  name="nombre" class="form-control noRepetidos noSpace  lettersonly" required>
 						</div>
 
                         <div class="form-group">
 							<label>Apellido</label>
-							<input name="apellido" id="apellido" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" placeholder="Ejemplo: Fu,Peres,Funez,Castro"  maxlength="20" minlength="5" type="text" class="form-control noRepetidos noSpace lettersonly" required>
+							<input name="apellido" id="apellido" pattern="^(?!.*(.).*\1)[a-zA-Z]+$" placeholder="Ejemplo: Fu,Peres,Funez,Castro"  maxlength="20" minlength="5" type="text" class="form-control noRepetidos noSpace apellidocontrol" required>
 						</div>
 
 
@@ -638,7 +639,7 @@ $(document).ready(function() {
         noRepetidos:true,
         noSpace:true,
         required: true,
-        lettersonly: true,
+        apellidocontrol: true,
         minlength: 5,
         maxlength: 20
       },
@@ -674,28 +675,28 @@ $(document).ready(function() {
     
     messages: {
       nombre: {
-        noRepetidos:"No Se permiten Letras Repetidas",
-        lettersonly: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.",
-        minlength: "Debes ingresar como mínimo 3 letras.",
-        maxlength:"El Maximo de Letras de un nombre no debe ser mayor a 18",
+        noRepetidos:"No Se permiten Letras Repetidas, Ni espacios repetidos",
+
+        minlength: "Debes ingresar como mínimo {3} letras.",
+        maxlength:"El Maximo de Letras de un nombre no debe ser mayor a {18}",
         noSpace:"No se Permiten Espacios Aca",
       },
       apellido: {
-        noRepetidos:"No Se permiten Letras Repetidas",
-        lettersonly: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula sin espacios.",
+        noRepetidos:"No Se permiten Letras Repetidas ,Ni espacios repetidos",
+
         minlength: "Debes ingresar como mínimo 5 letras.",
         maxlength: "No puedes ingresar más de 20 letras.",
         noSpace:"No se Permiten Espacios Aca NO HAGA ESO",
       },
       username: {
-        noRepetidos:"No Se permiten Letras Repetidas",
+        noRepetidos:"No Se permiten Letras Repetidas , Ni espacios repetidos",
         usernamecontrol: "Introduce un Nombre de Usuario Valido Sin espacios ni Letras Repetidas Ejemplo: Minombre12",
         minlength: "Debes ingresar como mínimo 4 caracteres.",
         maxlength: "No puedes ingresar más de 16 caracteres.",
         noSpace:"No se Permiten Espacios Aca Ya se lo Dije",
       },
       email: {
-        noRepetidos:"No Se permiten Letras Repetidas",
+        noRepetidos:"No Se permiten Letras Repetidas , Ni espacios repetidos",
         emailcontrol: "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios",
         noSpace:"No se Permiten Espacios Aca YA Pare",
       },
@@ -749,16 +750,46 @@ $.validator.addMethod("telefonoHonduras", function(value, element) {
 
 
 
-  $.validator.addMethod("lettersonly", function(value, element) {
-    return this.optional(element) || /^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$/.test(value) && !/\s/.test(value);
-  }, "Este campo solo puede contener letras y debe comenzar con una letra mayúscula");
+$.validator.addMethod("lettersonly", function(value, element) {
+    var regex = /^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/;
+    var isValid = regex.test(value);
+    if (!isValid) {
+        $.validator.messages.lettersonly = "Este campo solo puede contener letras y debe comenzar con una letra mayúscula";
+        if (value.trim().split(" ").length < 2) {
+            $.validator.messages.lettersonly = "Debe introducir su Segundo Nombre después del espacio";
+        } else if (!/^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/.test(value)) {
+            $.validator.messages.lettersonly = "El Nombre y su Segundo Nombre debe comenzar con una letra mayúscula y tener al menos 3 o 4 letras";
+        }
+        return false;
+    }
+    return true;
+}, "");
+
+$.validator.addMethod("apellidocontrol", function(value, element) {
+    var regex = /^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/;
+    var isValid = regex.test(value);
+    if (!isValid) {
+        $.validator.messages.apellidocontrol = "Este campo solo puede contener letras y debe comenzar con una letra mayúscula";
+        if (value.trim().split(" ").length < 2) {
+            $.validator.messages.apellidocontrol = "Debe introducir su segundo Apellido después del espacio";
+        } else if (!/^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/.test(value)) {
+            $.validator.messages.apellidocontrol = "El Apellido y su Segundo Apellido debe comenzar con una letra mayúscula y tener al menos 3 o 4 letras";
+        }
+        return false;
+    }
+    return true;
+}, "");
 
 
-// Regla personalizada para validar EL Correo Electronico
+
+
+
+
 $.validator.addMethod("emailcontrol", function(value, element) {
   // Nueva validación de la regla de correo electrónico
-  return this.optional(element) || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value);
+  return this.optional(element) || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}(?:\.[^\s@]{2,})?$/.test(value);
 }, "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios");
+
 
 
 // Regla personalizada para validar EL nombre de usuario
@@ -777,7 +808,7 @@ $.validator.addMethod("usernamecontrol", function(value, element) {
 //regla para validar Los caracteres repetidos
 $.validator.addMethod("noRepetidos", function(value, element) {
   return this.optional(element) || !/(.)\1+/.test(value);
-}, "No se permiten caracteres repetidos en este campo");
+}, "No se permiten caracteres repetidos en este campo Ni espacios Repetidos");
 
   </script>
 
