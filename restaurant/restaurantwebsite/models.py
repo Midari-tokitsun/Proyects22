@@ -284,6 +284,16 @@ class inventariotabla(models.Model):
     class Meta:
         db_table='inventario'
 
+class promocionestabla(models.Model):
+    id_promocion=models.CharField(primary_key=True, max_length=50)
+    nombre_promocion=models.CharField(max_length=50)
+    menu_id=models.TextField()
+    precio_oferta=models.CharField(max_length=50)
+    descripcion=models.TextField()
+
+    class Meta:
+        db_table='promociones'
+
 
 class productostabla(models.Model):
     id_producto=models.CharField(primary_key=True,max_length=20)

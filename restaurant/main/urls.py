@@ -225,7 +225,7 @@ urlpatterns = [
 # VISTA Fin de la Vista REceta
 
 # VISTA Promociones
-    path('promociones/', views.promocionestabla , name="promociones"),#pantalla principal del table
+    path('promociones/', views.promociones , name="promociones"),#pantalla principal del table
 
 
 

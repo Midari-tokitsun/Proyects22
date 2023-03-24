@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -2082,13 +2082,90 @@ def eliminarreceta(request,id):
 
 # Vista de Promociones 
 
-def promocionestabla(request):
+def promociones(request):
+    promo=promocionestabla.objects.all()
+    men=menutabla.objects.all()
+    context={
+        'promo':promo,
+        'men':men,
+    }
+
+
+    return render(request,"promociones.html",context)
+
+
+def agregarpromociones(request):
+    try:  
+        pass         
+        if request.method=='POST':
+
+            id_promocion=request.POST.get("id_promocion")
+            nombre_promocion=request.POST.get("nombre_promocion")
+            menu_id=request.POST.get("menu_id")           
+            precio_oferta=request.POST.get("precio_oferta") 
+            descripcion=request.POST.get("descripcion")
+
+
+            promocionestabla.objects.create(
+                precio_oferta=precio_oferta,
+                id_promocion=id_promocion,
+                nombre_promocion=nombre_promocion,
+                menu_id=menu_id,
+                descripcion=descripcion,
+         
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect('promociones')
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')   
 
 
 
-    return render(request,"promociones.html")
+    return redirect('promociones')
 
 
+def editarpromocion(request,id):
+    promo=promocionestabla.objects.get(id_promocion=id)
+    
+    id_promocion=request.POST.get('id_promocion')
+    nombre_promocion=request.POST.get('nombre_promocion')
+    menu_id=request.POST.get('menu_id')
+    precio_oferta=request.POST.get('precio_oferta')
+    descripcion=request.POST.get('descripcion')
+
+    promo.id_promocion=id_promocion
+    promo.nombre_promocion=nombre_promocion
+    promo.menu_id=menu_id
+    promo.precio_oferta=precio_oferta
+    promo.descripcion=descripcion
+
+    promo.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+
+
+
+
+    return redirect('promociones')
+
+
+
+def eliminarpromocion(request,id):
+    promo=promocionestabla.objects.get(id_promocion=id)
+    promo.delete()
+
+    messages.success(request, 'Registro Modificado con Exito')
+
+
+    return redirect('promociones')
+
+
+
+#FIN DE LA VISTA DE PROMOCIONES
 
 
 def detallepedido(request):
