@@ -226,6 +226,9 @@ urlpatterns = [
 
 # VISTA Promociones
     path('promociones/', views.promociones , name="promociones"),#pantalla principal del table
+    path('agregarpromociones', views.agregarpromociones , name="agregarpromociones"),#pantalla principal del table
+    path('editarpromocion/<int:id>', views.editarpromocion , name="editarpromocion"),#pantalla principal del table
+    path('eliminarpromocion/<int:id>', views.eliminarpromocion , name="eliminarpromocion"),#pantalla principal del table
 
 
 

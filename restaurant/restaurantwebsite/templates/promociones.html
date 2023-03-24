@@ -236,13 +236,153 @@
         <td>{{p.precio_oferta}}</td>
         <td>{{p.descripcion}}</td>
 		<td>
-			<a href="">EDITAR</a>
-			<a href="">ELIMINAR</a>
+					<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Editarmodalpromociones-{{ forloop.counter }}">
+	EDITAR
+  </button>
+			<a class="btn btn-danger" href="/eliminarpromocion/{{p.id_promocion}}">ELIMINAR</a>
 		</td>
         </tr>
 		{% endfor %}
         </tbody>
         </table>
+
+
+
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarmodalpromocion">
+	Agregar nueva Promocion
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="agregarmodalpromocion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Promocion</h1>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<form action="{% url 'agregarpromociones' %}" method="POST">
+			{% csrf_token %} 
+		<div class="modal-body">
+
+			<div class="mb-3">
+		  <label class="form-label" for="">
+			promocion ID
+		  </label>
+		  <input class="form-control" type="text" name="id_promocion" id="" placeholder="Inserte ID de la Promocion">
+		</div>
+
+		<div class="mb-3">
+
+		  <label class="form-label" for="">
+			Nombre de la Promocion
+		 </label>
+		 <input class="form-control" type="text" name="nombre_promocion" id="" placeholder="Inserte Nombre de la promocion">
+		</div>
+
+
+		<div class="mb-3">
+		 <label class="form-label" for="">Nombre del Menu</label>
+		 <select class="form-control" name="menu_id" id="">
+
+			<option value="" selected disabled>Seleccione un Menu</option>
+			{% for m in men %}
+			<option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
+			{% endfor %}
+		 </select>
+		</div>
+
+		<div class="mb-3">
+		 <label class="form-label" for="">Precio en oferta</label>
+		 <input class="form-control" type="number" name="precio_oferta" id="">
+		</div>
+
+		<div class="mb-3">
+		 <label class="form-label" for="">Descripcion</label>
+		 <textarea class="form-control" name="descripcion" id="" cols="30" rows="10"></textarea>
+		</div>
+
+
+
+
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+		  <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+		</div>
+	  </div>
+	  </form>
+	</div>
+  </div>
+
+  
+  <!-- Modal EDitar Promocion-->
+  {% for p in promo %}
+  <div class="modal fade" id="Editarmodalpromociones-{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Promocion</h1>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<form action="/editarpromocion/{{p.id_promocion}}" method="POST">
+			{% csrf_token %} 
+		<div class="modal-body">
+			<div class="mb-3">
+				<label class="form-label" for="">
+				  promocion ID
+				</label>
+				<input class="form-control" value="{{p.id_promocion}}" type="text" name="id_promocion" id="" placeholder="Inserte ID de la Promocion">
+			  </div>
+	  
+			  <div class="mb-3">
+	  
+				<label class="form-label" for="">
+				  Nombre de la Promocion
+			   </label>
+			   <input class="form-control" value="{{p.nombre_promocion}}" type="text" name="nombre_promocion" id="" placeholder="Inserte Nombre de la promocion">
+			  </div>
+	  
+	  
+			  <div class="mb-3">
+			   <label class="form-label" for="">Nombre del Menu</label>
+			   <select class="form-control" name="menu_id" id="">
+	  
+				  <option value="{{p.menu_id}}" selected>{{p.menu_id}}</option>
+				  {% for m in men %}
+				  <option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
+				  {% endfor %}
+			   </select>
+			  </div>
+	  
+			  <div class="mb-3">
+			   <label class="form-label" for="">Precio en oferta</label>
+			   <input class="form-control" value="{{p.precio_oferta}}" type="number" name="precio_oferta" id="">
+			  </div>
+	  
+			  <div class="mb-3">
+			   <label class="form-label" for="">Descripcion</label>
+			   <textarea class="form-control" name="descripcion" id="" cols="30" rows="10">{{p.descripcion}}</textarea>
+			  </div>
+	  
+
+
+
+
+
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+		  <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+		</div>
+	</form>
+	  </div>
+	</div>
+  </div>
+  {% endfor %}
+
 
 
 
