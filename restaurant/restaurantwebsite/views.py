@@ -2607,16 +2607,97 @@ def productos(request):
     pro=productostabla.objects.all()
     cat=categoria.objects.all()
     alma=almacen.objects.all()
-    #FALTA INVENTARIO
+    inv=inventariotabla.objects.all()
     fam=familia_producto.objects.all()
     men=menutabla.objects.all()
     context={
         'pro':pro,
         'cat':cat,
         'alma':alma,
+        'inv':inv,
         'fam':fam,
         'men':men,
 
     }
 
     return render(request,"productos.html",context)
+
+
+def agregarproductos(request):
+    try:  
+        pass         
+        if request.method=='POST':
+     
+
+            id_producto=request.POST.get("id_producto")
+            nombre_producto=request.POST.get("nombre_producto")
+            id_categoria=request.POST.get("id_categoria")
+            almacen_id=request.POST.get("almacen_id")
+            inventario_id=request.POST.get("inventario_id")
+            familia_id=request.POST.get("familia_id")
+            menu_id=request.POST.get("menu_id")
+            
+
+
+
+            productostabla.objects.create(
+            id_producto=id_producto,
+            nombre_producto=nombre_producto,
+            id_categoria=id_categoria,
+            almacen_id=almacen_id,
+            inventario_id=inventario_id,
+            familia_id=familia_id,
+            menu_id=menu_id,
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect('productos')
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+    return redirect('productos')
+
+
+
+
+def editarproducto(request,id):
+    pro=productostabla.objects.get(id_producto=id)
+    
+
+    id_producto=request.POST.get('id_producto')
+    nombre_producto=request.POST.get('nombre_producto')
+    id_categoria=request.POST.get('id_categoria')
+    almacen_id=request.POST.get('almacen_id')
+    inventario_id=request.POST.get('inventario_id')
+    familia_id=request.POST.get('familia_id')
+    menu_id=request.POST.get('menu_id')
+
+
+    pro.id_producto=id_producto
+    pro.nombre_producto=nombre_producto
+    pro.id_categoria=id_categoria
+    pro.almacen_id=almacen_id
+    pro.inventario_id=inventario_id
+    pro.familia_id=familia_id
+    pro.menu_id=menu_id
+
+    pro.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+    return redirect('productos')
+
+
+def eliminarproducto(request,id):
+    pro=productostabla.objects.get(id_producto=id)
+    pro.delete()
+
+    messages.success(request, 'Registro Eliminado con Exito')
+
+    return redirect('productos')
+
+
+
+#FIN DE LA VISTA DE PRODUCTOS

@@ -45,10 +45,10 @@
             <td>
                 
   <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarmodalinventario">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarmodalinventario-{{forloop.counter}}">
     EDITAR
   </button>
-                <a href="" class="btn btn-danger">ELIMINAR</a>
+                <a href="/eliminarinventario/{{i.id_inventario}}" class="btn btn-danger">ELIMINAR</a>
             </td>
         </tr>
         {% endfor %}
@@ -71,43 +71,48 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="" method="">
-
+          <form action="{% url 'agregarinventario' %}" method="POST">
+            {% csrf_token %}
                     <!-- Name input -->
                     <div class="form-outline mb-4">
-                        <input type="text" id="name2" class="form-control" />
+                        <input type="number" name="id_inventario" id="id_inventario" class="form-control" />
                         <label class="form-label" for="name2">ID</label>
                     </div>
 
                     <!-- Email input -->
                     <div class="form-outline mb-4">
-                        <input type="email" id="email2" class="form-control" />
+                        <input type="text" name="producto" id="email2" class="form-control" />
                         <label class="form-label" for="email2">Producto</label>
                     </div>
 
                     <!-- password input -->
                     <div class="form-outline mb-4">
-                        <input type="password" id="password2" class="form-control" />
+                        <input type="number" name="cantidad_actual" id="password2" class="form-control" />
                         <label class="form-label" for="password2">Cantidad Actual</label>
                     </div>
 
 
                     <!-- password input -->
                     <div class="form-outline mb-4">
-                        <input type="password" id="password2" class="form-control" />
+                        <input type="number" name="cantidad_minima" id="password2" class="form-control" />
                         <label class="form-label" for="password2">Cantidad Minima</label>
                     </div>
 
                     <!-- password input -->
                     <div class="form-outline mb-4">
-                        <input type="password" id="password2" class="form-control" />
+                        <input type="number" name="cantidad_maxima" id="password2" class="form-control" />
                         <label class="form-label" for="password2">Cantidad Maxima</label>
                     </div>
 
                     <!-- password input -->
                     <div class="form-outline mb-4">
-                        <input type="password" id="password2" class="form-control" />
                         <label class="form-label" for="password2">Unidad de Medida</label>
+
+                        <select name="unidad_de_medida" id="">
+                            <option value="Lbs">Libras</option>
+                            <option value="Kgs">Kilogramos</option>
+                            <option value="Gr">Gramos</option>
+                        </select>
                     </div>
 
 
@@ -116,22 +121,24 @@
 
 
 
-          </form>
 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary">Guardar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
-      </div>
+    </form>
+
+    </div>
     </div>
   </div>
 
 
 
-  
+
   <!-- Modal -->
-  <div class="modal fade" id="editarmodalinventario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  {% for i in inv %}
+  <div class="modal fade" id="editarmodalinventario-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -139,17 +146,72 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+       
+
+            <form action="/editarinventario/{{i.id_inventario}}" method="POST">
+                {% csrf_token %}
+                        <!-- Name input -->
+                        <div class="form-outline mb-4">
+                            <input type="number" value="{{i.id_inventario}}" name="id_inventario" id="id_inventario" class="form-control" />
+                            <label class="form-label" for="name2">ID</label>
+                        </div>
+    
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <input value="{{i.producto}}" type="text" name="producto" id="email2" class="form-control" />
+                            <label class="form-label" for="email2">Producto</label>
+                        </div>
+    
+                        <!-- password input -->
+                        <div class="form-outline mb-4">
+                            <input type="number" value="{{i.cantidad_actual}}" name="cantidad_actual" id="password2" class="form-control" />
+                            <label class="form-label" for="password2">Cantidad Actual</label>
+                        </div>
+    
+    
+                        <!-- password input -->
+                        <div class="form-outline mb-4">
+                            <input type="number" value="{{i.cantidad_minima}}" name="cantidad_minima" id="password2" class="form-control" />
+                            <label class="form-label" for="password2">Cantidad Minima</label>
+                        </div>
+    
+                        <!-- password input -->
+                        <div class="form-outline mb-4">
+                            <input type="number" value="{{i.cantidad_maxima}}" name="cantidad_maxima" id="password2" class="form-control" />
+                            <label class="form-label" for="password2">Cantidad Maxima</label>
+                        </div>
+    
+                        <!-- password input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="password2">Unidad de Medida</label>
+    
+                            <select name="unidad_de_medida" id="">
+                                <option value="{{i.unidad_de_medida}}" selected>{{i.unidad_de_medida}}</option>
+                                <option value="Lbs">Libras</option>
+                                <option value="Kgs">Kilogramos</option>
+                                <option value="Gr">Gramos</option>
+                            </select>
+                        </div>
+    
+    
+    
+    
+
+
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Guardar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
+
+
+    </form>
       </div>
     </div>
   </div>
 
-
+  {% endfor %}
 
 
     <script>

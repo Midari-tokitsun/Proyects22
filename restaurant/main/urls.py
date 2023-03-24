@@ -280,6 +280,9 @@ urlpatterns = [
 #VISTA DE PRODUCTOS
 
     path('productos/', views.productos , name="productos"),#pantalla principal del table
+    path('agregarproductos', views.agregarproductos , name="agregarproductos"),#pantalla principal del table
+    path('editarproducto/<int:id>', views.editarproducto , name="editarproducto"),#pantalla principal del table
+    path('eliminarproducto/<int:id>', views.eliminarproducto , name="eliminarproducto"),#pantalla principal del table
 
 
 #FIN DE LA VISTA DE PRODUCTOS
@@ -289,6 +292,9 @@ urlpatterns = [
 #VISTA DE INVENTARIO
 
     path('inventario/', views.inventario , name="inventario"),#pantalla principal del table
+    path('agregarinventario', views.agregarinventario , name="agregarinventario"),#pantalla principal del table
+    path('eliminarinventario/<int:id>', views.eliminarinventario , name="eliminarinventario"),#pantalla principal del table
+    path('editarinventario/<int:id>', views.editarinventario , name="editarinventario"),#pantalla principal del table
 
 
 #FIN DE LA VISTA DE INVENTARIO
