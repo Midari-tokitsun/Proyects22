@@ -305,6 +305,11 @@ urlpatterns = [
 #VISTA DE PROVEDORES
 
     path('provedores/', views.provedores , name="provedores"),#pantalla principal del table
+    path('agregarprovedor', views.agregarprovedor , name="agregarprovedor"),#pantalla principal del table
+    
+    path('editarprovedores/<int:id>', views.editarprovedores , name="editarprovedores"),#pantalla principal del table
+    
+    path('eliminarprovedor/<int:id>', views.eliminarprovedor , name="eliminarprovedor"),#pantalla principal del table
 
 
 

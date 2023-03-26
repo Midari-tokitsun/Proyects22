@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
+<script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
+
+    <title>Provedores</title>
+</head>
+<body>
+
+
+
+    <br>
+    <h1>Provedores Control</h1>
+
+    <table id="mytable" class="table table-dark table-hover" >
+        <thead>
+            <tr>
+                <th>
+                    <span class="custom-checkbox">
+                        <input type="checkbox" id="selectAll">
+                        <label for="selectAll"></label>
+                    </span>
+                </th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Compañia</th>
+                <th>Telefono</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for p in prov %} 
+            <tr>
+                <td>
+                    <span class="custom-checkbox">
+                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                        <label for="checkbox1"></label>
+                    </span>
+                </td>
+                <td>{{p.id_provedor}}</td>
+                <td>{{p.nombre_provedor}}</td>
+                <td>{{p.apellido_provedor}}</td>
+                <td>{{p.compañia_provevdor}}</td>
+                <td>{{p.telefono_provedor}}</td>
+                <td>{{p.email_provedor}}</td>
+                <td>
+                    <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editproModal-{{forloop.counter}}">
+                <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                    </button>
+
+                    <a href="/eliminarprovedor/{{p.id_provedor}}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                </td>
+            </tr>
+            {% endfor %} 
+        </tbody>
+    </table>
+    </div>
+</div>
+</div>
+
+    
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AgregarProvedor">
+    Agregar Provedor
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="AgregarProvedor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Provedor</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'agregarprovedor' %}" method="POST">
+                {% csrf_token %}
+                <label for="">ID</label>
+                <input class="form-control" type="text" name="id_provedor" id="id_provedor">
+                <br>
+                <label for="">Nombre</label>
+                <input class="form-control" type="text" name="nombre_provedor" id="nombre_provedor">
+                <br>
+                <label for="">Apellido</label>
+                <input class="form-control" type="text" name="apellido_provedor" id="apellido_provedor">
+                <br>
+                <label for="">Compañia</label>
+                <input class="form-control" type="text" name="compañia_provevdor" id="">
+                <br>
+                <label for="">Telefono</label>
+                <input class="form-control" type="text" name="telefono_provedor" id="telefono_provedor">
+                <br>
+                <label for="">Email</label>
+                <input class="form-control" type="text" name="email_provedor" id="email_provedor">
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </form>  
+    </div>
+    </div>
+  </div>
+
+
+
+    <!-- Modal  EDITAR -->
+    {% for p in prov %} 
+    <div class="modal fade" id="editproModal-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Editar Provedor</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/editarprovedores/{{p.id_provedor}}" method="POST">
+                    {% csrf_token %}
+                    <label for="">ID</label>
+                    <input class="form-control" type="text" name="id_provedor" value="{{p.id_provedor}}" id="id_provedor">
+                    <br>
+                    <label for="">Nombre</label>
+                    <input value="{{p.nombre_provedor}}" class="form-control" type="text" name="nombre_provedor" id="nombre_provedor">
+                    <br>
+                    <label for="">Apellido</label>
+                    <input value="{{p.apellido_provedor}}" class="form-control" type="text" name="apellido_provedor" id="apellido_provedor">
+                    <br>
+                    <label for="">Compañia</label>
+                    <input value="{{p.compañia_provevdor}}" class="form-control" type="text" name="compañia_provevdor" id="">
+                    <br>
+                    <label for="">Telefono</label>
+                    <input value="{{p.telefono_provedor}}" class="form-control" type="text" name="telefono_provedor" id="telefono_provedor">
+                    <br>
+                    <label for="">Email</label>
+                    <input value="{{p.email_provedor}}" class="form-control" type="text" name="email_provedor" id="email_provedor">
+                
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+        </form>  
+        </div>
+        </div>
+      </div>
+      {% endfor %} 
+    
+
+<script>
+    
+$(document).ready(function() {
+$('#mytable').DataTable({
+"language": {
+"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+}
+});
+});
+
+</script>
+
+</body>
+</html>

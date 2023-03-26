@@ -2769,6 +2769,7 @@ def productos(request):
     inv=inventariotabla.objects.all()
     fam=familia_producto.objects.all()
     men=menutabla.objects.all()
+    prov=provedorestabla.objects.all()
     context={
         'pro':pro,
         'cat':cat,
@@ -2776,6 +2777,7 @@ def productos(request):
         'inv':inv,
         'fam':fam,
         'men':men,
+        'prov':prov,
 
     }
 
@@ -2795,7 +2797,7 @@ def agregarproductos(request):
             inventario_id=request.POST.get("inventario_id")
             familia_id=request.POST.get("familia_id")
             menu_id=request.POST.get("menu_id")
-            
+            provedor_id=request.POST.get("provedor_id")            
 
 
 
@@ -2807,6 +2809,7 @@ def agregarproductos(request):
             inventario_id=inventario_id,
             familia_id=familia_id,
             menu_id=menu_id,
+            provedor_id=provedor_id,
 
 
             )
@@ -2833,7 +2836,7 @@ def editarproducto(request,id):
     inventario_id=request.POST.get('inventario_id')
     familia_id=request.POST.get('familia_id')
     menu_id=request.POST.get('menu_id')
-
+    provedor_id=request.POST.get('provedor_id')
 
     pro.id_producto=id_producto
     pro.nombre_producto=nombre_producto
@@ -2842,6 +2845,7 @@ def editarproducto(request,id):
     pro.inventario_id=inventario_id
     pro.familia_id=familia_id
     pro.menu_id=menu_id
+    pro.provedor_id=provedor_id
 
     pro.save()
 

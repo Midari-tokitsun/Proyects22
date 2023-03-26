@@ -256,6 +256,7 @@
             <th>Inventario</th>
             <th>Familia</th>
             <th>Menu</th>
+            <th>Provedor</th>
             <th>ACCIONES</th>
         </tr>
         </thead>
@@ -269,6 +270,7 @@
             <td>{{ p.inventario_id }}</td>
             <td>{{ p.familia_id }}</td>
             <td>{{ p.menu_id }}</td>
+            <td>{{ p.provedor_id }}</td>
             <td>
 
                  <!-- Button trigger modal -->
@@ -355,6 +357,15 @@
                 {% endfor %}
             </select>
 
+            <label for="">Provedor</label>
+            <select class="form-select" aria-label="Default select example" name="provedor_id">
+              <option selected>Selecciona un provedor</option>
+              {% for p in prov %}
+              
+              <option value="{{p.nombre_provedor}}">{{p.nombre_provedor}}</option>
+              {% endfor %}
+          </select>
+
 
         </div>
         <div class="modal-footer">
@@ -436,6 +447,14 @@
             </select>
 
 
+            <label for="">Provedor</label>
+            <select class="form-select" aria-label="Default select example" name="provedor_id">
+              <option value="{{p.provedor_id}}">{{p.provedor_id}}</option>
+              {% for p in prov %}
+              
+              <option value="{{p.nombre_provedor}}">{{p.nombre_provedor}}</option>
+              {% endfor %}
+          </select>
 
 
 

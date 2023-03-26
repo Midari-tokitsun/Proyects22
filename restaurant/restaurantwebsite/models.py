@@ -316,6 +316,7 @@ class productostabla(models.Model):
     inventario_id=models.CharField(max_length=50)
     familia_id=models.CharField(max_length=50)
     menu_id=models.CharField(max_length=50)
+    provedor_id=models.CharField(max_length=50)
 
 
     class Meta:
