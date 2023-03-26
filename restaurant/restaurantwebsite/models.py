@@ -295,6 +295,19 @@ class promocionestabla(models.Model):
         db_table='promociones'
 
 
+class provedorestabla(models.Model):
+    id_provedor=models.CharField(primary_key=True,max_length=40)
+    nombre_provedor=models.CharField(max_length=50)
+    apellido_provedor=models.CharField(max_length=50)
+    compañia_provevdor=models.CharField(max_length=50)
+    telefono_provedor=models.CharField(max_length=50)
+    email_provedor=models.CharField(max_length=50)
+
+
+    class Meta:
+        db_table='provedores'
+
+
 class productostabla(models.Model):
     id_producto=models.CharField(primary_key=True,max_length=20)
     nombre_producto=models.CharField(max_length=50)

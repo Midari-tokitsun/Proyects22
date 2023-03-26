@@ -302,6 +302,14 @@ urlpatterns = [
 
 #FIN DE LA VISTA DE INVENTARIO
 
+#VISTA DE PROVEDORES
+
+    path('provedores/', views.provedores , name="provedores"),#pantalla principal del table
+
+
+
+#FIN DE LA VISTA DE PROVEEODRES
+
 
 ] 
 

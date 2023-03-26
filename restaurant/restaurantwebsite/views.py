@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -2675,7 +2675,89 @@ def eliminarinventario(request,id):
 
 #FIN DE LA VISTA DE INVENTARIO
 
+#VISTA DE PROVEDORES
+ 
+def provedores(request):
+    prov=provedorestabla.objects.all()
+    context={
+        'prov':prov
+    }
 
+    return render(request,"provedores.html",context)
+
+def agregarprovedor(request):
+    try:  
+        pass         
+        if request.method=='POST':
+     
+
+            id_provedor=request.POST.get("id_provedor")
+            nombre_provedor=request.POST.get("nombre_provedor")
+            apellido_provedor=request.POST.get("apellido_provedor")
+            compañia_provevdor=request.POST.get("compañia_provevdor")
+            telefono_provedor=request.POST.get("telefono_provedor")
+            email_provedor=request.POST.get("email_provedor")
+       
+            
+
+
+
+            provedorestabla.objects.create(
+            id_provedor=id_provedor,
+            nombre_provedor=nombre_provedor,
+            apellido_provedor=apellido_provedor,
+            compañia_provevdor=compañia_provevdor,
+            telefono_provedor=telefono_provedor,
+            email_provedor=email_provedor,
+
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect('provedores')
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+
+
+    return redirect('provedores')
+
+
+def editarprovedores(request,id):
+    prov=provedorestabla.objects.get(id_provedor=id)
+    
+
+    id_provedor=request.POST.get('id_provedor')
+    nombre_provedor=request.POST.get('nombre_provedor')
+    apellido_provedor=request.POST.get('apellido_provedor')
+    compañia_provevdor=request.POST.get('compañia_provevdor')
+    telefono_provedor=request.POST.get('telefono_provedor')
+    email_provedor=request.POST.get('email_provedor')
+
+    prov.id_provedor=id_provedor
+    prov.nombre_provedor=nombre_provedor
+    prov.apellido_provedor=apellido_provedor
+    prov.compañia_provevdor=compañia_provevdor
+    prov.telefono_provedor=telefono_provedor
+    prov.email_provedor=email_provedor
+
+    prov.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+
+    return redirect('provedores')
+
+
+def eliminarprovedor(request,id):
+     prov=provedorestabla.objects.get(id_provedor=id)
+     prov.delete()
+     messages.success(request, 'Registro Eliminado con Exito')
+     return redirect('provedores')
+
+
+#FIN DE LA VISTA DE PROVEDORES
 
 #VISTA DE PRODUCTOS
 

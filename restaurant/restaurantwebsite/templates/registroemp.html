@@ -493,7 +493,7 @@ background: linear-gradient(to right, #512DA8, #673AB7); /* W3C, IE 10+/ Edge, F
       <div class="col-sm-5 col-md-6">
         <label for="form-label">Telefono</label>
       
-        <input id="telefono" class="form-control telefonoHonduras " type="number" name="telefono" pattern="^\+504\s\d{4}-\d{4}$" placeholder="Ejemplo:+50488446955 o +50432470678" required>
+        <input id="telefono" class="form-control telefonoHonduras " minlength="8" maxlength="8" type="text" name="telefono" pattern="^\+504\s\d{4}-\d{4}$" placeholder="Ejemplo:+50488446955 o +50432470678" required>
      
         <p style="background-color: red;" id="telefonoError" class="error-message"></p>
 
