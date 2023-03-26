@@ -124,6 +124,30 @@
           </li>
 
 
+          <li class="nav-item">
+            <a class="nav-link" href="/reservaciones">Registros de Reservaciones</a>
+            </li>
+
+
+
+          <li class="nav-item">
+            <a class="nav-link" href="/promociones">Registros de Promociones</a>
+            </li>
+
+            
+
+
+
+          <li class="nav-item">
+            <a class="nav-link" href="/metodopago">Metodo de Pago</a>
+            </li>
+
+
+
+            <li class="nav-item">
+              <a class="nav-link" href="/sartabla">SAR</a>
+              </li>
+
     
       </ul>
       </li>
@@ -156,6 +180,11 @@
         <a class="nav-link" href="/menutabla">Registros del Menu</a>
         </li>
 
+
+        <li class="nav-item">
+          <a class="nav-link" href="/historicomenutabla">Registros Historicos del Menu</a>
+          </li>
+
         <li class="nav-item">
         <a class="nav-link" href="/elaboracion">Registros de Elaboracion</a>
         </li>
@@ -164,6 +193,17 @@
         <li class="nav-item">
         <a class="nav-link" href="/recetatablaregistros">Registros de Receta</a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/inventario">Registros de inventario</a>
+          </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/productos">Registros de Productos</a>
+          </li>
+
+
+
     
       </ul>
       </li>
@@ -300,13 +340,6 @@
                     {% endfor %} 
                 </tbody>
             </table>
-			<div class="clearfix">
-
-                <ul class="pagination">
-                  <li class="page-item"><a href="#" class="page-link">Anterior</a></li>
-
-                    <li class="page-item"><a href="#" class="page-link">Siguiente</a></li>
-                </ul>
             </div>
         </div>
     </div>
@@ -356,12 +389,19 @@
 						<div class="form-group">
 							<label>Contraseña</label>
     
-							<input name="password" placeholder="Introduce la Contraseña Aqui" id="password"  type="text" class="form-control noSpace" required>
+							<input name="password" minlength="8" maxlength="16" placeholder="Introduce la Contraseña Aqui" id="password"  type="password" class="form-control noSpace" required>
               <p id="password-strength"></p>
               <p>"La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula",</p>
 						</div>			
                         
-                        <label class="form-label"> Estado de la Cuenta</label>
+
+            <div class="form-group">
+              <label>Confirmar Contraseña</label>
+              <input id="confirm_password" minlength="8" maxlength="16" name="confirm_password" placeholder="Confirma la contraseña aquí" type="password" class="form-control noSpace" required>
+              <div class="invalid-feedback" id="password-message"></div>
+            </div>
+
+            <label class="form-label"> Estado de la Cuenta</label>
                         <select class="form-control" aria-label="Default select example" name="estado" required>
                             <option required selected disabled value="">--Estado---</option>
                             <option>Activo</option>
@@ -380,7 +420,7 @@
           <div class="form-group">
 
             <label class="form-label">Numero de telefono</label>
-            <input id="telefono" class="form-control telefonoHonduras telefono "  type="number" placeholder="Escribe tu Numero de Telefono" name="telefono" required>
+            <input id="telefono" class="form-control telefonoHonduras telefono " minlength="8" maxlength="8"  type="text" placeholder="Escribe tu Numero de Telefono" name="telefono" required>
             <p style="background-color: red;" id="telefonoError" class="error-message"></p>
           </div>
 
@@ -388,8 +428,8 @@
 
 
           <div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-success" value="Add">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+						<input type="submit" class="btn btn-success" value="Agregar">
 					</div>
           <div id="mensaje-confirmacion" style="display:none">
             ¡Formulario enviado correctamente!
@@ -480,7 +520,7 @@
 
                         <div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-info" value="Save">
+						<input type="submit" class="btn btn-info" value="Agregar">
 					</div>
 				</form>
 			</div>
@@ -572,6 +612,9 @@ $(document).ready(function() {
       alert("Por favor, ingrese su id.");
       return false;
     }
+
+
+
 
     // Si todo está bien, se puede enviar el formulario
     alert("Formulario enviado correctamente.");
@@ -670,10 +713,25 @@ $(document).ready(function() {
         required: true,
         minlength: 8,
         maxlength: 8
+      },
+      confirm_password:{
+        required:true,
+        noSpace: true,
+        minlength: 8,
+        maxlength: 16,
+        equalTo: "#password"
+
       }
     },
     
     messages: {
+      confirm_password: {
+        minlength: "Debes ingresar como mínimo 8 caracteres.",
+        maxlength: "No puedes ingresar más de 16 caracteres.",
+        required:"Debes ingresar tu contraseña Nuevamente",
+        noSpace:"No se Permiten espacios",
+        equalTo: "Las contraseñas no coinciden"
+      },
       nombre: {
         noRepetidos:"No Se permiten Letras Repetidas, Ni espacios repetidos",
 
@@ -713,6 +771,7 @@ $(document).ready(function() {
         noSpace:"No se Permiten Espacios Aca",
       
       },
+      
 
 
     },
@@ -731,12 +790,24 @@ if (!telefonoPattern.test(telefono)) {
 }
 
 
-
-
       $("#mensaje-confirmacion").show();
       form.submit();
     }
   });
+
+
+  $('#confirm_password').on('input', function() {
+    var password = $('#password').val();
+    var confirmPassword = $(this).val();
+
+    if (password === confirmPassword) {
+      $('#password-message').text('Las contraseñas coinciden');
+    } else {
+      $('#password-message').text('Las contraseñas no coinciden');
+    }
+  });
+
+
 
 // Regla personalizada para validar Que no hayan Espacios
   $.validator.addMethod("noSpace", function(value, element) {
@@ -792,11 +863,6 @@ $.validator.addMethod("emailcontrol", function(value, element) {
 
 
 
-// Regla personalizada para validar EL nombre de usuario
-$.validator.addMethod("usernamecontrol", function(value, element) {
-  // Validación de la nueva regla
-  return this.optional(element) || /^(?!.*(.).*\1)[a-zA-Z0-9]+$/i.test(value);
-}, "Introduce un Nombre de Usuario Valido Sin espacios ni Letras Repetidas Ejemplo: Minombre12");
 
 
 $.validator.addMethod("usernamecontrol", function(value, element) {
@@ -810,7 +876,8 @@ $.validator.addMethod("noRepetidos", function(value, element) {
   return this.optional(element) || !/(.)\1+/.test(value);
 }, "No se permiten caracteres repetidos en este campo Ni espacios Repetidos");
 
-  </script>
+
+</script>
 
    
 

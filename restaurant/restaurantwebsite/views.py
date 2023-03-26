@@ -210,7 +210,7 @@ def registrarusuarioenellogin(request):
     else:
         return render(request, 'signup.html')
 """
-
+from django.http import JsonResponse
 def registrarentablausuario(request):
     try:  
         
@@ -242,7 +242,7 @@ def registrarentablausuario(request):
         # Encriptar la contraseña
             hashed_password = encriptar_password(password)
 
-                        # Verificar si ya existe un usuario con el mismo id_usuario
+            # Verificar si ya existe un usuario con el mismo id_usuario
             if insertuser.objects.filter(Q(username=username) | Q(email=email) ).exists():
                 messages.error(request, 'Error: ya existe un registro con ese Email y Nombre de Usuario')
                 return redirect('tableuser')
