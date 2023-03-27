@@ -877,16 +877,16 @@ if (opcionSeleccionada === "RTN") {
     return false;
   }
 } else if (opcionSeleccionada === "Tarjeta de Residenci") {
-  var tarjetaResidenciaPattern = /^[A-Za-z]\d{7}$/;
+  var tarjetaResidenciaPattern = /^[A-Za-z]{7}\d{13}$/;
   if (!tarjetaResidenciaPattern.test(numIdentificacion)) {
-    $("#error-tarjeta").text("El número de identificación para Tarjeta de Residencia debe tener una letra seguida de 7 dígitos");
+    $("#error-tarjeta").text("El número de identificación para Tarjeta de Residencia debe tener 7 letras seguidas de 13 dígitos");
 
     return false;
   }
 } else if (opcionSeleccionada === "Pasaporte") {
-  var pasaportePattern = /^[A-Za-z]{2}\d{7}$/;
+  var pasaportePattern = /^[A-Za-z0-9]{20}$/;
   if (!pasaportePattern.test(numIdentificacion)) {
-    $("#error-pasaporte").text("El número de identificación para Pasaporte debe tener 2 letras seguidas de 7 dígitos");
+    $("#error-pasaporte").text("El número de identificación para Pasaporte debe tener 20 letras y dígitos");
 
     return false;
   }
