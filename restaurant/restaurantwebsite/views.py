@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -524,8 +524,7 @@ def menu(request):
     return render(request, 'menu.html')
 
 
-def pedidos(request):
-    return render(request, 'pedidos.html')
+
 
 
 # ver Editar,eliminar,añadir,enlistar y Buscar Cargo  VISTA EMPLEADO
@@ -2864,3 +2863,89 @@ def eliminarproducto(request,id):
 
 
 #FIN DE LA VISTA DE PRODUCTOS
+
+#vista de pedidos
+
+
+def pedidos(request):
+    est=estado_pedido.objects.all()
+    det=detalle_pedido.objects.all()
+    user=insertuser.objects.all()
+    ped=pedidostabla.objects.all()
+    men=menutabla.objects.all()
+    context={
+        'ped':ped,
+        'est':est,
+        'det':det,
+        'user':user,
+        'men':men,
+    }
+
+    return render(request, 'pedidos.html',context)
+
+def agregarpedido(request):
+    try:  
+        pass         
+        if request.method=='POST':
+     
+
+            id_pedido=request.POST.get("id_pedido")
+            nombre_cliente=request.POST.get("nombre_cliente")
+            nombre_menu=request.POST.get("nombre_menu")
+            tamaño_menu=request.POST.get("tamaño_menu")
+            pedido_descripcion=request.POST.get("pedido_descripcion")
+            detalle_descripcion=request.POST.get("detalle_descripcion")
+           
+
+
+
+            pedidostabla.objects.create(
+            id_pedido=id_pedido,
+            nombre_cliente=nombre_cliente,
+            nombre_menu=nombre_menu,
+            tamaño_menu=tamaño_menu,
+            pedido_descripcion=pedido_descripcion,
+            detalle_descripcion=detalle_descripcion,
+
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect('pedidos')
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+    return redirect('pedidos')
+
+def editarpedido(request,id):
+    ped=pedidostabla.objects.get(id_pedido=id)
+    
+
+    id_pedido=request.POST.get('id_pedido')
+    nombre_cliente=request.POST.get('nombre_cliente')
+    nombre_menu=request.POST.get('nombre_menu')
+    tamaño_menu=request.POST.get('tamaño_menu')
+    pedido_descripcion=request.POST.get('pedido_descripcion')
+    detalle_descripcion=request.POST.get('detalle_descripcion')
+
+    ped.id_pedido=id_pedido
+    ped.nombre_cliente=nombre_cliente
+    ped.nombre_menu=nombre_menu
+    ped.tamaño_menu=tamaño_menu
+    ped.pedido_descripcion=pedido_descripcion
+    ped.detalle_descripcion=detalle_descripcion
+
+    ped.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+    return redirect('pedidos')
+
+
+def eliminarpedido(request,id):
+    ped=pedidostabla.objects.get(id_pedido=id)
+    ped.delete()
+    messages.success(request, 'Registro Eliminado con Exito')
+    return redirect('pedidos')
+#fin de la vista de pedidos

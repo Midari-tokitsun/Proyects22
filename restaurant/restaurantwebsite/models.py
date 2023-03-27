@@ -307,6 +307,19 @@ class provedorestabla(models.Model):
     class Meta:
         db_table='provedores'
 
+class pedidostabla(models.Model):
+    id_pedido=models.CharField(primary_key=True,max_length=40)
+    nombre_cliente=models.CharField(max_length=50)
+    nombre_menu=models.CharField(max_length=50)
+    tamaño_menu=models.CharField(max_length=50)
+    pedido_descripcion=models.CharField(max_length=50)
+    detalle_descripcion=models.CharField(max_length=50)
+    fecha_pedido=models.DateField(blank=True,auto_now=True)
+
+
+    class Meta:
+        db_table='pedido'    
+
 
 class productostabla(models.Model):
     id_producto=models.CharField(primary_key=True,max_length=20)

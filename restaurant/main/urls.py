@@ -57,7 +57,7 @@ urlpatterns = [
     path('signout/',views.signout, name='signout'),# Cerrar Sesion Usuario
 # OPERACIONES DEL MENU PARA EL USUARIO--CLIENTE 
     path("menu/",views.menu, name="menu"),
-    path("pedidos/",views.pedidos, name="pedidos"),
+
 
 
 # VISTA DE EMPLEADO
@@ -314,6 +314,18 @@ urlpatterns = [
 
 
 #FIN DE LA VISTA DE PROVEEODRES
+
+
+#Vista de PEDIDOS
+
+    path("pedidos/",views.pedidos, name="pedidos"),
+    path("agregarpedido",views.agregarpedido, name="agregarpedido"),
+    path("editarpedido/<int:id>",views.editarpedido, name="editarpedido"),
+    path("eliminarpedido/<int:id>",views.eliminarpedido, name="eliminarpedido"),
+
+
+
+#FIN DE LA VISTA DE PEDIDOS
 
 
 ] 
