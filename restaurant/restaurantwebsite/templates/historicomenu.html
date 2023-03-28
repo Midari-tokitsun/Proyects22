@@ -263,11 +263,6 @@
                     <td>{{ h.fecha_inicio|date:"d/m/Y" }}</td>
                     <td>{{ h.fecha_final|date:"d/m/Y" }}</td>
                     <td>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarhistorico-{{forloop.counter}}">
-    EDITAR
-  </button>
-
   <a href="" class="btn btn-danger">ELIMINAR</a>
 
                     </td>
@@ -277,80 +272,8 @@
         </tbody>
     </table>
 
-
-
-
-
-
-
-    <h1>Crear registro histórico</h1>
-    <form method="POST" action="{% url 'crearhistorico' %}" onsubmit="document.getElementById('submit-btn').disabled = true;">
-        {% csrf_token %}
-        <label for="menu">Seleccione el menú:</label>
-        <select name="id_menu" id="menu">
-            {% for men in men %}
-            <option value="{{ men.id_menu }}">{{ men.nombre_menu }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="nuevo_precio">Nuevo precio:</label>
-        <input type="text" name="precio_menu" id="nuevo_precio">
-        <br>
-        <button type="submit" id="submit-btn">Agregar registro histórico</button>
-    
-    
- 
-
-        <h1>Editar registro histórico</h1>
-        {% for h in his %}
-
-  
-  <!-- Modal -->
-  <div class="modal fade" id="editarhistorico-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-         
-
-            <h1>Editar registro histórico</h1>
-            <form method="POST" action="/editar_historico/{{ h.id_historico }}">
-                {% csrf_token %}
-                <label for="menu">Menú:</label>
-                <p>{{ h.nombre_menu }}</p>
-                <label for="precio_actual">Precio actual:</label>
-                <p>{{ h.precio_menu }}</p>
-                <label for="nuevo_precio">Nuevo precio:</label>
-                <input type="text" name="nuevo_precio" id="nuevo_precio" value="{{ historico.precio_menu }}">
-                <br>
-                <button type="submit">Actualizar registro histórico</button>
-            </form>
-            
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-{% endfor %}
-        
-
-
-
-
-
 <script>
-
-    
-
-
-
+  
 $(document).ready(function() {
 $('#mytable').DataTable({
 "language": {
@@ -359,10 +282,7 @@ $('#mytable').DataTable({
 });
 });
 
-
-
 </script>
-
     
 </body>
 </html>

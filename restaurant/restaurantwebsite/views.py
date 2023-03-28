@@ -1741,6 +1741,7 @@ def eliminaralmacen(request,id):
 
 
 # VISTA DE Menu
+from datetime import datetime
 
 
 def menutablaregistros(request):
@@ -1788,7 +1789,7 @@ def agregarmenu(request):
                 historico = historico_menu(
                     nombre_menu=nombre_menu,
                     precio_menu=precio_menu,
-                
+                    fecha_inicio=datetime.now() # Establecer la fecha_inicio al momento de crear el registro
                 
                 )
                 historico.save()
@@ -1818,7 +1819,9 @@ def editarmenutabla(request,id):
     descripcion_menu=request.POST.get('descripcion_menu')
     modo_elaboracion=request.POST.get('modo_elaboracion')
 
-   
+    if his:
+        his.fecha_final = datetime.now()
+        his.save()
 
     men.id_menu=id_menu
     men.nombre_menu=nombre_menu
@@ -1826,12 +1829,15 @@ def editarmenutabla(request,id):
     men.descripcion_menu=descripcion_menu
     men.modo_elaboracion=modo_elaboracion
 
-
-    his.precio_menu = precio_menu
-
-
     men.save()
-    his.save()
+
+    historico = historico_menu(
+        nombre_menu=nombre_menu,
+        precio_menu=precio_menu,
+        fecha_inicio=datetime.now(),
+        fecha_final=None
+    )
+    historico.save()
 
 
     messages.success(request, 'Registro Modificado con Exito')
@@ -1865,10 +1871,18 @@ def historicomenutabla(request):
 
     return render(request, 'historicomenu.html', context)
 
+#HISTORICO PRODUCTO
+def historicoproducto(request):
+
+
+
+    return render(request,"historicoproducto.html")
+
+
 
 from django.utils import timezone
 
-def crearhistorico(request):
+"""def crearhistorico(request):
     if request.method == 'POST':
         # Obtener el menú seleccionado del formulario
         id_menu = request.POST.get('id_menu')
@@ -1935,13 +1949,13 @@ def crearhistorico(request):
     menus = menutabla.objects.all()
 
     # Renderizar el formulario HTML
-    return render(request, 'crearhistorico.html', {'menus': menus})
+    return render(request, 'crearhistorico.html', {'menus': menus})"""
 
 
 
 
 
-def editar_historico(request, id):
+"""def editar_historico(request, id):
     historico = historico_menu.objects.get(id_historico=id)
     menu = menutabla.objects.get(nombre_menu=historico.nombre_menu)
     if request.method == 'POST':
@@ -1955,41 +1969,9 @@ def editar_historico(request, id):
     else:
         return render(request, 'editarhistorico.html', {'historico': historico})
 
+"""
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#DIN DE LA VISTA HISTORICO MENU
+#FIN DE LA VISTA HISTORICO MENU
 
 
 
@@ -2420,8 +2402,10 @@ def eliminarreservacion(request, id):
 #VISTA DE SAR
 def sartabla(request):
     sar=sar_tabla.objects.all()
+    sucu=sucursal.objects.all()
     context={
-        'sar':sar
+        'sar':sar,
+        'sucu':sucu,
 
     }
 
@@ -2441,6 +2425,11 @@ def agregarsar(request):
             fecha_emision=request.POST.get("fecha_emision")
             fecha_final=request.POST.get("fecha_final")
 
+            numero_inicial=request.POST.get("numero_inicial")
+            numero_final=request.POST.get("numero_final")
+            consecutivo=request.POST.get("consecutivo")
+            cod_sucursal=request.POST.get("cod_sucursal")
+
 
             sar_tabla.objects.create(
                 id_sar=id_sar,
@@ -2449,7 +2438,10 @@ def agregarsar(request):
             descripcion=descripcion,
             fecha_emision=fecha_emision,
             fecha_final=fecha_final,
-
+            numero_inicial=numero_inicial,
+            numero_final=numero_final,
+            consecutivo=consecutivo,
+            cod_sucursal=cod_sucursal,
 
             )
             messages.success(request, 'Registro Agregado con Exito')
@@ -2484,6 +2476,16 @@ def editarsar(request,id):
 
     fecha_emision=request.POST.get("fecha_emision")
     fecha_final=request.POST.get("fecha_final")
+
+    numero_inicial=request.POST.get("numero_inicial")
+    numero_final=request.POST.get("numero_final")
+    consecutivo=request.POST.get("consecutivo")
+    cod_sucursal=request.POST.get("cod_sucursal")
+    sar.numero_inicial=numero_inicial
+    sar.numero_final=numero_final
+    sar.consecutivo=consecutivo
+    sar.cod_sucursal=cod_sucursal
+
 
     sar.fecha_emision=fecha_emision
     sar.fecha_final=fecha_final
@@ -2523,7 +2525,7 @@ def agregarmetododepago(request):
 
             id_metodo_pago=request.POST.get("id_metodo_pago")
             forma_pago=request.POST.get("forma_pago")
-            numero_tarjeta=request.POST.get("numero_tarjeta")
+
             moneda=request.POST.get("moneda")
 
 
@@ -2532,7 +2534,7 @@ def agregarmetododepago(request):
             metodo_pago_tabla.objects.create(
                 id_metodo_pago=id_metodo_pago,
                 forma_pago=forma_pago,
-            numero_tarjeta=numero_tarjeta,
+
             moneda=moneda,
 
 
@@ -2557,12 +2559,10 @@ def editarmetododepago(request,id):
 
     id_metodo_pago=request.POST.get('id_metodo_pago')
     forma_pago=request.POST.get('forma_pago')
-    numero_tarjeta=request.POST.get('numero_tarjeta')
     moneda=request.POST.get('moneda')
 
     meto.id_metodo_pago=id_metodo_pago
     meto.forma_pago=forma_pago
-    meto.numero_tarjeta=numero_tarjeta
     meto.moneda=moneda
     meto.save()
 

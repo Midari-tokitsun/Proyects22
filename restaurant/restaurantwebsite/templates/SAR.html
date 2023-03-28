@@ -247,6 +247,10 @@
                 <th>Codigo CAI</th>
                 <th>Fecha Inicial</th>
                 <th>Fecha Final</th>
+                <th>Numero Inicial</th>
+                <th>Numero Final</th>
+                <th>Consecutivo</th>
+                <th>Codigo de la Sucursal</th>
                 <th>Descripcion</th>
                 <th>ACciones</th>
             
@@ -258,10 +262,14 @@
             <tr>
                 <td>{{s.id_sar}}</td>
                 <td>{{s.codigo_sar}}</td>
+                <td>{{s.numero_inicial}}</td>
+                <td>{{s.numero_final}}</td>
                 <td>{{ s.fecha_emision|date:"d/m/Y" }}
                 </td>
                 <td>{{ s.fecha_final|date:"d/m/Y" }}
                 </td>
+                <td>{{s.consecutivo}}</td>
+                <td>{{s.cod_sucursal}}</td>
                 <td>{{s.descripcion}}</td>
 
 
@@ -304,14 +312,39 @@
     
     <div class="col-xs-2">
         <label for="exampleFormControlTextarea1" class="form-label">ID SAR</label>
-    <input name="id_sar" type="text" class="form-control" placeholder="Title">
+    <input name="id_sar" type="text" class="form-control" placeholder="Id del SAR">
     </div>
     
     <div class="col-xs-4">
         <label for="exampleFormControlTextarea1" class="form-label">CODIGO CAI</label>
-    <input name="codigo_sar" type="text" class="form-control" placeholder="First Name">
+    <input name="codigo_sar" type="text" class="form-control" placeholder="CODIGO CAI">
     </div>
     
+    <div class="col-xs-4">
+      <label for="exampleFormControlTextarea1" class="form-label">Numero Inicial</label>
+  <input name="numero_inicial" type="number" class="form-control" placeholder="Numero Inicial">
+  </div>
+  
+
+  <div class="col-xs-4">
+    <label for="exampleFormControlTextarea1" class="form-label">Numero Final</label>
+<input name="numero_final" type="number" class="form-control" placeholder="Numero Final">
+</div>
+
+<div class="col-xs-4">
+  <label for="exampleFormControlTextarea1" class="form-label">Consecutivo</label>
+<input name="consecutivo" type="number" class="form-control" placeholder="Consecutivo">
+</div>
+
+<label for="">Selecciona una Sucursal</label>
+<select name="cod_sucursal" class="form-control" id="cod_sucursal">
+<option value="" selected disabled>Selecciona una sucursal</option>
+  {% for s in sucu %}
+  <option value="{{s.id_sucursal}}">{{s.direccion_sucursal}}</option>
+{% endfor %}
+</select>
+
+
     <div class="col-xs-4">
       <label for="fecha-emision" class="form-label">Fecha de Emisión</label>
       <input name="fecha_emision" id="fecha-emision" type="date" class="form-control">
@@ -389,6 +422,32 @@
 
         
         </div>
+
+
+        <div class="col-xs-4">
+          <label for="exampleFormControlTextarea1" class="form-label">Numero Inicial</label>
+      <input name="numero_inicial" value="{{s.numero_inicial}}" type="number" class="form-control" placeholder="Numero Inicial">
+      </div>
+      
+    
+      <div class="col-xs-4">
+        <label for="exampleFormControlTextarea1" class="form-label">Numero Final</label>
+    <input name="numero_final" value="{{s.numero_final}}" type="number" class="form-control" placeholder="Numero Final">
+    </div>
+    
+    <div class="col-xs-4">
+      <label for="exampleFormControlTextarea1" class="form-label">Consecutivo</label>
+    <input name="consecutivo" value="{{s.consecutivo}}" type="number" class="form-control" placeholder="Consecutivo">
+    </div>
+    
+    <label for="">Selecciona una Sucursal</label>
+    <select name="cod_sucursal" class="form-control" id="cod_sucursal">
+    <option value="{{s.cod_sucursal}}">{{s.cod_sucursal}}</option>
+      {% for s in sucu %}
+      <option value="{{s.id_sucursal}}">{{s.direccion_sucursal}}</option>
+    {% endfor %}
+    </select>
+    
           
 
         

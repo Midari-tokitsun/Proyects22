@@ -242,7 +242,6 @@
             <tr>
                 <th>ID</th>
                 <th>Forma de pago</th>
-                <th>Numero de Tarjeta</th>
                 <th>Moneda</th>
                 <th>fecha en que se pago</th>
                 <th>Acciones</th>
@@ -256,7 +255,6 @@
             <tr>
                 <td>{{m.id_metodo_pago}}</td>
                 <td>{{m.forma_pago}}</td>
-                <td>{{m.numero_tarjeta}}</td>
                 <td>{{m.moneda}}</td>
                 <td>{{m.fecha_pago}}</td>
                 <td>
@@ -304,10 +302,7 @@
               </div>
 
 
-              <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Numero de Tarjeta</label>
-                <input name="numero_tarjeta" class="form-control" id="exampleFormControlTextarea1" type="number" >
-              </div>
+
 
               <div class="mb-3">
               <label for="exampleFormControlTextarea1" class="form-label">Forma de Pago</label>
@@ -357,11 +352,6 @@
                 <input name="id_metodo_pago" value="{{m.id_metodo_pago}}" type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
               </div>
 
-
-              <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Numero de Tarjeta</label>
-                <input value="{{m.numero_tarjeta}}" name="numero_tarjeta" class="form-control" id="exampleFormControlTextarea1" type="number" >
-              </div>
 
               <div class="mb-3">
               <label for="exampleFormControlTextarea1" class="form-label">Forma de Pago</label>

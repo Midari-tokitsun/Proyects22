@@ -209,6 +209,9 @@ class historico_menu(models.Model):
         db_table='historico_menu'
 
 
+
+
+
     
 
 class recetatabla(models.Model):
@@ -245,13 +248,16 @@ class sar_tabla(models.Model):
     fecha_emision=models.DateField()
     fecha_final=models.DateField()
     descripcion=models.TextField()
+    numero_inicial=models.CharField(max_length=50)
+    numero_final=models.CharField(max_length=50)
+    consecutivo=models.CharField(max_length=80)
+    cod_sucursal=models.CharField(max_length=50)
     class Meta:
         db_table='sar' 
 
 class metodo_pago_tabla(models.Model):
     id_metodo_pago=models.CharField(primary_key=True,max_length=100)
     forma_pago=models.CharField(max_length=50)
-    numero_tarjeta=models.CharField(max_length=50)
     moneda=models.CharField(max_length=40)
     fecha_pago=models.DateField(auto_now_add=True)
 
@@ -319,6 +325,7 @@ class pedidostabla(models.Model):
 
     class Meta:
         db_table='pedido'    
+
 
 
 class productostabla(models.Model):
