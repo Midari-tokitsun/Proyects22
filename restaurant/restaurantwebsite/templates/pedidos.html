@@ -256,9 +256,8 @@
           <th scope="col">ID</th>
           <th scope="col">Nombre del Cliente</th>
           <th scope="col">Nombre del Menu</th>
-          <th scope="col">Tamaño del Menu</th>
-		  <th scope="col">Estado del Pedido</th>
-          <th scope="col">Detalle del Pedido</th>
+          <th scope="col">Cantidades</th>
+          <th scope="col">Detalle del Pedido(ID)</th>
 		  <th scope="col">Fecha de Realizacion del pedido</th>
 		  <th scope="col">Acciones</th>
 		</tr>
@@ -269,10 +268,9 @@
           <th scope="row">{{p.id_pedido}}</th>
           <td>{{p.nombre_cliente}}</td>
           <td>{{p.nombre_menu}}</td>
-          <td>{{p.tamaño_menu}}</td>
-		  <td>{{p.pedido_descripcion}}</td>
-          <td>{{p.detalle_descripcion}}</td>
-          <td>{{p.fecha_pedido|date:'d/m/y'}}</td>
+          <td>{{p.cantidades}}</td>
+          <td>{{p.detalle_id}}</td> 
+		  <td>{{p.fecha_pedido|date:'d/m/y'}}</td>
 		  <td>
 
 			  <!-- Button trigger modal -->
@@ -328,31 +326,27 @@
 			</select>
 			<br>
 
-			<label for="">Tamaño del Menu</label>
-			<select class="form-control" name="tamaño_menu" id="tamaño_menu">
-			<option value="" selected disabled>Selecciona un Tamaño del Menu</option>
-			<option value="Individual">Individual</option>
-			<option value="Parejas">Parejas</option>
-			<option value="Familiar">Familiar</option>
-			</select>
+			<label for="">Cantidades</label>
+			<select class="form-control" name="cantidades" id="cantidades">
+				<option value="" selected disabled>Selecciona El Numero de Cantidades</option>
+
+			<option value="2">2</option>
+			<option value="4">4</option>
+			<option value="6">6</option>
+			<option value="8">8</option>
+			<option value="10">10</option>
+			
+		</select>
 			<br>
 
-			<label for="">Estado del Pedido</label>
-			<select class="form-control" name="pedido_descripcion" id="pedido_descripcion">
-			<option value="" selected disabled>Selecciona el Estado Del Pedido</option>
-			{% for e in est %}	
-			<option value="{{e.descripcion_pedido}}">{{e.descripcion_pedido}}</option>
+			<label for="">Detalle del Pedido(ID)</label>
+			<select class="form-control" name="detalle_id" id="detalle_id">
+				<option value="" selected disabled>Selecciona El Detalle del Pedido</option>
+				{% for d in det %}
+			<option value="{{d.id_detalle}}">{{d.id_detalle}}</option>
+
 			{% endfor %}
-			</select>
-			<br>
-			
-			<label for="">Detalle del Pedido</label>
-			<select class="form-control" name="detalle_descripcion" id="detalle_descripcion">
-				<option value="" selected disabled>Selecciona el Detalle del Pedido</option>
-			{% for d in det %}	
-			<option value="{{d.descripcion_detalle}}">{{d.descripcion_detalle}}</option>
-			{% endfor %}
-			</select>
+		</select>
 			<br>
 
 
@@ -404,32 +398,32 @@
 			</select>
 			<br>
 
-			<label for="">Tamaño del Menu</label>
-			<select name="tamaño_menu" id="">
-			<option value="Individual">Individual</option>
-			<option value="Parejas">Parejas</option>
-			<option value="Familiar">Familiar</option>
-			</select>
-			<br>
 
-			<label for="">Estado del Pedido</label>
-			<select name="pedido_descripcion" id="">
-			<option value="{{p.pedido_descripcion}}">{{p.pedido_descripcion}}</option>
-			{% for e in est %}	
-			<option value="{{e.descripcion_pedido}}">{{e.descripcion_pedido}}</option>
-			{% endfor %}
-			</select>
-			<br>
+			<label for="">Cantidades</label>
+			<select class="form-control" name="cantidades" id="cantidades">
+				<option value="{{p.cantidades}}">{{p.cantidades}}</option>
+
+			<option value="2">2</option>
+			<option value="4">4</option>
+			<option value="6">6</option>
+			<option value="8">8</option>
+			<option value="10">10</option>
 			
-			<label for="">Detalle del Pedido</label>
-			<select name="detalle_descripcion" id="">
-				<option value="{{p.detalle_descripcion}}">{{p.detalle_descripcion}}</option>
-			{% for d in det %}	
-			<option value="{{d.descripcion_detalle}}">{{d.descripcion_detalle}}</option>
-			{% endfor %}
-			</select>
+		</select>
 			<br>
 
+			<label for="">Detalle del Pedido(ID)</label>
+			<select class="form-control" name="detalle_id" id="detalle_id">
+				<option value="{{p.detalle_id}}">{{p.detalle_id}}</option>
+				{% for d in det %}
+			<option value="{{d.id_detalle}}">{{d.id_detalle}}</option>
+
+			{% endfor %}
+		</select>
+			<br>
+
+			
+	
 
 		</div>
 		<div class="modal-footer">

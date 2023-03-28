@@ -270,6 +270,8 @@
         <thead>
         <tr>
             <th>Id Detalle Pedido</th>
+			<th>Tamaño del Menu</th>
+			<th>Estado del Pedido</th>
             <th>Descripcion</th>
             <th>Acciones</th>
         
@@ -278,6 +280,8 @@
         <tfoot>
             <tr>
                 <th>Id Detalle Pedido</th>
+				<th>Tamaño del Menu</th>
+				<th>Estado del Pedido</th>
                 <th>Descripcion</th>
                 <th>Acciones</th>
 
@@ -288,7 +292,9 @@
             {% for d in deta  %}
         <tr>
         <td>{{d.id_detalle}}</td>
-        <td>{{d.descripcion_detalle}}</td>
+		<td>{{d.tamaño_menu}}</td>
+        <td>{{d.estado_pedido}}</td>
+		<td>{{d.descripcion_detalle}}</td>
         <td><!-- Button trigger modal -->
 			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditarDetallePedidoModal-{{forloop.counter}}">
 				Editar Detalle
@@ -327,6 +333,29 @@ Agregar Nuevo Detalle
 				<label for="exampleFormControlInput1" class="form-label">ID Del DETALLE</label>
 				<input type="text" name="id_detalle" class="form-control" id="id_detalle" placeholder="">
 			  </div>
+
+
+
+			  <label for="">Tamaño del Menu</label>
+			  <select class="form-control" name="tamaño_menu" id="tamaño_menu">
+			  <option value="" selected disabled>Selecciona un Tamaño del Menu</option>
+			  <option value="Individual">Individual</option>
+			  <option value="Parejas">Parejas</option>
+			  <option value="Familiar">Familiar</option>
+			  </select>
+			  <br>
+
+			  
+
+			  <label for="">Estado del Pedido</label>
+			  <select class="form-control" name="estado_pedido" id="estado_pedido">
+			  <option value="" selected disabled>Selecciona el Estado Del Pedido</option>
+			  {% for e in esta %}	
+			  <option value="{{e.descripcion_pedido}}">{{e.descripcion_pedido}}</option>
+			  {% endfor %}
+			  </select>
+			  <br>
+
 			  <div class="mb-3">
 				<label for="exampleFormControlTextarea1" class="form-label">DESCRIPCION DEL DETALLE PEDIDO</label>
 				<textarea name="descripcion_detalle" class="form-control" id="descripcion_detalle" rows="3"></textarea>
@@ -367,6 +396,28 @@ Agregar Nuevo Detalle
 					<label for="exampleFormControlInput1" class="form-label">ID Del DETALLE</label>
 					<input readonly type="text" name="id_detalle" class="form-control" id="id_detalle" value="{{d.id_detalle}}" >
 				  </div>
+
+
+
+				  <label for="">Tamaño del Menu</label>
+				  <select name="tamaño_menu" id="">
+				  <option value="Individual">Individual</option>
+				  <option value="Parejas">Parejas</option>
+				  <option value="Familiar">Familiar</option>
+				  </select>
+				  <br>
+	  
+				  <label for="">Estado del Pedido</label>
+				  <select name="estado_pedido" id="">
+				  <option value="{{d.estado_pedido}}">{{d.estado_pedido}}</option>
+				  {% for e in esta %}	
+				  <option value="{{e.descripcion_pedido}}">{{e.descripcion_pedido}}</option>
+				  {% endfor %}
+				  </select>
+				  <br>
+
+
+
 				  <div class="mb-3">
 					<label for="exampleFormControlTextarea1" class="form-label">DESCRIPCION DEL DETALLE PEDIDO</label>
 					<textarea name="descripcion_detalle" class="form-control" id="descripcion_detalle" rows="3">{{d.descripcion_detalle}}</textarea>

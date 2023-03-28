@@ -1811,7 +1811,8 @@ def agregarmenu(request):
 
 def editarmenutabla(request,id):
     men=menutabla.objects.get(id_menu=id)
-    his = historico_menu.objects.get(nombre_menu=men.nombre_menu)
+
+    his = historico_menu.objects.filter(nombre_menu=men.nombre_menu, fecha_final=None).first()
 
     id_menu=request.POST.get('id_menu')
     nombre_menu=request.POST.get('nombre_menu')
@@ -2151,8 +2152,9 @@ def eliminarpromocion(request,id):
 
 def detallepedido(request):
     deta=detalle_pedido.objects.all()
+    esta=estado_pedido.objects.all()
     context={
-
+        'esta':esta,
         'deta':deta
 
     }
@@ -2169,13 +2171,17 @@ def agregardetallepedido(request):
 
             id_detalle=request.POST.get("id_detalle")
             descripcion_detalle=request.POST.get("descripcion_detalle")
+            estado_pedido=request.POST.get("estado_pedido")
+            tamaño_menu=request.POST.get("tamaño_menu")
+            
 
 
 
             detalle_pedido.objects.create(
                 id_detalle=id_detalle,
                 descripcion_detalle=descripcion_detalle,
-         
+                estado_pedido=estado_pedido,
+                tamaño_menu=tamaño_menu,
 
 
             )
@@ -2194,10 +2200,14 @@ def editardetallepedido(request, id):
     
     id_detalle=request.POST.get('id_detalle')
     descripcion_detalle=request.POST.get('descripcion_detalle')
+    estado_pedido=request.POST.get("estado_pedido")
+    tamaño_menu=request.POST.get("tamaño_menu")
 
 
     deta.id_detalle=id_detalle
     deta.descripcion_detalle=descripcion_detalle
+    deta.estado_pedido=estado_pedido
+    deta.tamaño_menu=tamaño_menu
 
     deta.save()
 
@@ -2892,9 +2902,9 @@ def agregarpedido(request):
             id_pedido=request.POST.get("id_pedido")
             nombre_cliente=request.POST.get("nombre_cliente")
             nombre_menu=request.POST.get("nombre_menu")
-            tamaño_menu=request.POST.get("tamaño_menu")
-            pedido_descripcion=request.POST.get("pedido_descripcion")
-            detalle_descripcion=request.POST.get("detalle_descripcion")
+            cantidades=request.POST.get("cantidades")
+            detalle_id=request.POST.get("detalle_id")
+
            
 
 
@@ -2903,9 +2913,9 @@ def agregarpedido(request):
             id_pedido=id_pedido,
             nombre_cliente=nombre_cliente,
             nombre_menu=nombre_menu,
-            tamaño_menu=tamaño_menu,
-            pedido_descripcion=pedido_descripcion,
-            detalle_descripcion=detalle_descripcion,
+            cantidades=cantidades,
+            detalle_id=detalle_id
+
 
 
 
@@ -2926,16 +2936,16 @@ def editarpedido(request,id):
     id_pedido=request.POST.get('id_pedido')
     nombre_cliente=request.POST.get('nombre_cliente')
     nombre_menu=request.POST.get('nombre_menu')
-    tamaño_menu=request.POST.get('tamaño_menu')
-    pedido_descripcion=request.POST.get('pedido_descripcion')
-    detalle_descripcion=request.POST.get('detalle_descripcion')
+    cantidades=request.POST.get("cantidades")
+    detalle_id=request.POST.get("detalle_id")
 
+
+    ped.cantidades=cantidades
+    ped.detalle_id=detalle_id
     ped.id_pedido=id_pedido
     ped.nombre_cliente=nombre_cliente
     ped.nombre_menu=nombre_menu
-    ped.tamaño_menu=tamaño_menu
-    ped.pedido_descripcion=pedido_descripcion
-    ped.detalle_descripcion=detalle_descripcion
+
 
     ped.save()
 
