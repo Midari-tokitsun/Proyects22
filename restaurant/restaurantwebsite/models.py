@@ -318,7 +318,7 @@ class provedorestabla(models.Model):
 class pedidostabla(models.Model):
     id_pedido=models.CharField(primary_key=True,max_length=40)
     nombre_cliente=models.CharField(max_length=50)
-    nombre_menu=models.CharField(max_length=50)
+    nombre_menu=models.TextField()
     detalle_id=models.CharField(max_length=50)
     cantidades=models.CharField(max_length=30)
     fecha_pedido=models.DateField(blank=True,auto_now=True)

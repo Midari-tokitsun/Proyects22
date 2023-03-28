@@ -2901,18 +2901,20 @@ def agregarpedido(request):
 
             id_pedido=request.POST.get("id_pedido")
             nombre_cliente=request.POST.get("nombre_cliente")
-            nombre_menu=request.POST.get("nombre_menu")
+            nombre_menu=request.POST.getlist("nombre_menu[]")  # Obtener la lista de opciones seleccionadas
             cantidades=request.POST.get("cantidades")
             detalle_id=request.POST.get("detalle_id")
 
-           
+                       # convierte la lista en una cadena separada por comas
+            nombre_menu_str = ', '.join(nombre_menu)
 
 
 
             pedidostabla.objects.create(
             id_pedido=id_pedido,
             nombre_cliente=nombre_cliente,
-            nombre_menu=nombre_menu,
+            nombre_menu=nombre_menu_str,
+
             cantidades=cantidades,
             detalle_id=detalle_id
 

@@ -317,14 +317,14 @@
 			<br>
 
 			<label for="">Nombre del Menu</label>
-			<select class="form-control" name="nombre_menu" id="nombre_menu">
+			<select class="form-control" name="nombre_menu[]" id="nombre_menu" multiple>
 				<option value="" selected disabled>Selecciona un Menu</option>
-			{% for m in men %}	
-			<option value="{{m.nombre_menu}}">{{m.nombre_menu}}
-			</option>
-			{% endfor %}
+				{% for m in men %}    
+					<option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
+				{% endfor %}
 			</select>
 			<br>
+			
 
 			<label for="">Cantidades</label>
 			<select class="form-control" name="cantidades" id="cantidades">
