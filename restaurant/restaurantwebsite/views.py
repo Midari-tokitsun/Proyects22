@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla,historico_producto
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -1872,12 +1872,7 @@ def historicomenutabla(request):
 
     return render(request, 'historicomenu.html', context)
 
-#HISTORICO PRODUCTO
-def historicoproducto(request):
 
-
-
-    return render(request,"historicoproducto.html")
 
 
 
@@ -2768,6 +2763,14 @@ def eliminarprovedor(request,id):
 
 #FIN DE LA VISTA DE PROVEDORES
 
+#HISTORICO PRODUCTO
+def historicoproducto(request):
+    his=historico_producto.objects.all()
+    context={
+        'his':his
+    }
+    return render(request,"historicoproducto.html",context)
+
 #VISTA DE PRODUCTOS
 
 
@@ -2807,7 +2810,7 @@ def agregarproductos(request):
             familia_id=request.POST.get("familia_id")
             menu_id=request.POST.get("menu_id")
             provedor_id=request.POST.get("provedor_id")            
-
+            precio_producto=request.POST.get("precio_producto") 
 
 
             productostabla.objects.create(
@@ -2819,9 +2822,17 @@ def agregarproductos(request):
             familia_id=familia_id,
             menu_id=menu_id,
             provedor_id=provedor_id,
+            precio_producto=precio_producto,
 
 
             )
+            historico = historico_producto(
+            nombre_producto=nombre_producto,
+            precio_producto=precio_producto,
+            fecha_inicio=datetime.now() # Establecer la fecha_inicio al momento de crear el registro
+                
+                )
+            historico.save()
             messages.success(request, 'Registro Agregado con Exito')
 
             return redirect('productos')
@@ -2836,7 +2847,8 @@ def agregarproductos(request):
 
 def editarproducto(request,id):
     pro=productostabla.objects.get(id_producto=id)
-    
+    his =  historico_producto.objects.filter(nombre_producto=pro.nombre_producto, fecha_final=None).first()
+
 
     id_producto=request.POST.get('id_producto')
     nombre_producto=request.POST.get('nombre_producto')
@@ -2846,6 +2858,14 @@ def editarproducto(request,id):
     familia_id=request.POST.get('familia_id')
     menu_id=request.POST.get('menu_id')
     provedor_id=request.POST.get('provedor_id')
+
+    precio_producto=request.POST.get("precio_producto") 
+
+    if his:
+        his.fecha_final = datetime.now()
+        his.save()
+    
+    pro.precio_producto=precio_producto
 
     pro.id_producto=id_producto
     pro.nombre_producto=nombre_producto
@@ -2857,6 +2877,15 @@ def editarproducto(request,id):
     pro.provedor_id=provedor_id
 
     pro.save()
+
+
+    historico = historico_producto(
+        nombre_producto=nombre_producto,
+        precio_producto=precio_producto,
+        fecha_inicio=datetime.now(),
+        fecha_final=None
+    )
+    historico.save()
 
     messages.success(request, 'Registro Modificado con Exito')
     return redirect('productos')
@@ -2906,7 +2935,7 @@ def agregarpedido(request):
             detalle_id=request.POST.get("detalle_id")
 
                        # convierte la lista en una cadena separada por comas
-            nombre_menu_str = ', '.join(nombre_menu)
+            nombre_menu_str =  ', '.join(nombre_menu)
 
 
 

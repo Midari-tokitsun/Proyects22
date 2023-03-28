@@ -209,7 +209,17 @@ class historico_menu(models.Model):
         db_table='historico_menu'
 
 
+class historico_producto(models.Model):
+    id_historico = models.CharField(primary_key=True, max_length=20)
+    nombre_producto = models.CharField(max_length=50)
+    precio_producto = models.CharField(max_length=50)
+    fecha_inicio = models.DateField(default=timezone.now)
+    fecha_final = models.DateField(null=True,blank=True)
 
+
+    
+    class Meta:
+        db_table='historico_producto'
 
 
     
@@ -338,7 +348,7 @@ class productostabla(models.Model):
     familia_id=models.CharField(max_length=50)
     menu_id=models.CharField(max_length=50)
     provedor_id=models.CharField(max_length=50)
-
+    precio_producto=models.CharField(max_length=50)
 
     class Meta:
         db_table='productos'
