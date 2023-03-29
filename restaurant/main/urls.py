@@ -333,6 +333,14 @@ urlpatterns = [
 #FIN DE LA VISTA DE PEDIDOS
 
 
+#FActuracion TAbla
+
+    path("facturacion/",views.facturaciontabla, name="facturacion"),
+
+
+#FIN
+
+
 ] 
 
 if settings.DEBUG:

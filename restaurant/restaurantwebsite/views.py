@@ -388,9 +388,15 @@ def login_user(request):
             
             elif verificar_password(password, user.password):
                 # Usuario y contraseña válidos
-                
+                #ponemos Esto para agarrar los datos del
+                #usuario Logeado y extraer los datos
                 request.session['username'] = user.username
                 request.session['password'] = user.password
+                request.session['nombre'] = user.nombre
+                request.session['apellido'] = user.apellido
+                request.session['email'] = user.email
+                request.session['telefono'] = user.telefono
+                
                 user.intentos = 0 # Resetear attempts si inicia sesión correctamente
                 user.bloqueado = False # Desbloquear la cuenta si inicia sesión correctamente
                 user.save()
@@ -2990,3 +2996,20 @@ def eliminarpedido(request,id):
     messages.success(request, 'Registro Eliminado con Exito')
     return redirect('pedidos')
 #fin de la vista de pedidos
+
+
+
+#VISTA DE FACTURACION
+
+def facturaciontabla(request):
+    men=menutabla.objects.all()
+    user=insertuser.objects.all()
+    meto=metodo_pago_tabla.objects.all()
+    context={
+        'men':men,
+        'user':user,
+        'meto':meto,
+    }
+    return render(request,"facturacion.html",context)
+
+#fIN DE LA VISTA FACTURACION
