@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
     <title>SAR</title>
 </head>
 <body>
@@ -245,10 +249,10 @@
             <tr>
                 <th>ID</th>
                 <th>Codigo CAI</th>
-                <th>Fecha Inicial</th>
-                <th>Fecha Final</th>
                 <th>Numero Inicial</th>
                 <th>Numero Final</th>
+                <th>Fecha Inicial</th>
+                <th>Fecha Final</th>
                 <th>Consecutivo</th>
                 <th>Codigo de la Sucursal</th>
                 <th>Descripcion</th>
@@ -303,7 +307,7 @@
           <h5 class="modal-title" id="exampleModalLabel">Agregar SAR</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="{% url 'agregarsar' %}" method="POST">
+        <form id="Myform" action="{% url 'agregarsar' %}" method="POST">
             {% csrf_token %}
         <div class="modal-body">
 
@@ -312,28 +316,28 @@
     
     <div class="col-xs-2">
         <label for="exampleFormControlTextarea1" class="form-label">ID SAR</label>
-    <input name="id_sar" type="text" class="form-control" placeholder="Id del SAR">
+    <input name="id_sar" id="id_sar" type="text" class="form-control" placeholder="Id del SAR">
     </div>
     
     <div class="col-xs-4">
         <label for="exampleFormControlTextarea1" class="form-label">CODIGO CAI</label>
-    <input name="codigo_sar" type="text" class="form-control" placeholder="CODIGO CAI">
+    <input name="codigo_sar" id="codigo_sar" type="text" class="form-control" placeholder="CODIGO CAI">
     </div>
     
     <div class="col-xs-4">
       <label for="exampleFormControlTextarea1" class="form-label">Numero Inicial</label>
-  <input name="numero_inicial" type="number" class="form-control" placeholder="Numero Inicial">
+  <input name="numero_inicial" id="numero_inicial" type="number" class="form-control" placeholder="Numero Inicial">
   </div>
   
 
   <div class="col-xs-4">
     <label for="exampleFormControlTextarea1" class="form-label">Numero Final</label>
-<input name="numero_final" type="number" class="form-control" placeholder="Numero Final">
+<input name="numero_final" id="numero_final" type="number" class="form-control" placeholder="Numero Final">
 </div>
 
 <div class="col-xs-4">
   <label for="exampleFormControlTextarea1" class="form-label">Consecutivo</label>
-<input name="consecutivo" type="number" class="form-control" placeholder="Consecutivo">
+<input name="consecutivo" id="consecutivo" type="number" class="form-control" placeholder="Consecutivo">
 </div>
 
 <label for="">Selecciona una Sucursal</label>
@@ -353,14 +357,17 @@
   <div class="col-xs-4">
     <label for="exampleFormControlTextarea1" class="form-label">Fecha Final</label>
      
-<input name="fecha_final"  type="date" class="form-control">
+<input name="fecha_final" id="fecha_final" type="date" class="form-control">
 
 </div>
   
+<div id="mensaje-validacion" style="display: none;">
+  La fecha final debe ser mayor a la fecha de emisión
+</div>
 
 <div class="mb-3">
   <label for="exampleFormControlTextarea1" class="form-label">DESCRIPCION</label>
-  <textarea name="descripcion" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  <textarea name="descripcion" class="form-control" id="descripcion" rows="3"></textarea>
 </div>
 
 
@@ -453,7 +460,7 @@
         
         <div class="mb-3">
           <label for="exampleFormControlTextarea1" class="form-label">DESCRIPCION</label>
-          <textarea name="descripcion" class="form-control" id="exampleFormControlTextarea1" rows="3">{{s.descripcion}}</textarea>
+          <textarea minlength="10" maxlength="250" name="descripcion" class="form-control" id="exampleFormControlTextarea1" rows="3">{{s.descripcion}}</textarea>
         </div>
         
         </div>
@@ -472,6 +479,7 @@
 
 
 
+
 $(document).ready(function() {
 $('#myTable').DataTable({
 "language": {
@@ -482,23 +490,132 @@ $('#myTable').DataTable({
 
 
 
-  // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
-  const fechaActual = new Date().toISOString().slice(0, 10);
 
-  // Establecer la fecha actual como valor predeterminado del campo de fecha de emisión
-  document.getElementById("fecha-emision").value = fechaActual;
 
-  // Establecer la fecha actual como el valor mínimo del campo de fecha de emisión
-  document.getElementById("fecha-emision").min = fechaActual;
 
-  // Establecer la fecha actual como el valor máximo del campo de fecha de emisión
-  document.getElementById("fecha-emision").max = fechaActual;
+  $("#Myform").validate({
+  rules: {
+    id_sar: {
+      required: true,
+      noSpace: true,
+    },
+    codigo_sar: {
+      required: true,
+      caiValido:true,
+    },
+    fecha_emision: {
+      required: true,
+      date: true
 
-  // Actualizar la fecha máxima permitida en el campo de fecha cada vez que se carga la página
-  window.onload = function() {
-    const fechaActual = new Date().toISOString().slice(0, 10);
-    document.getElementById("fecha-emision").max = fechaActual;
-  };
+    },
+    fecha_final: {
+      required: true,
+      date: true,
+  greaterEqualThan: '#fecha_emision',
+  lessEqualThan: new Date()
+
+    },
+    descripcion: {
+      required: true,
+    },
+    numero_inicial: {
+      required: true,
+      max: function() {
+        return parseInt($('#numero_final').val());
+  }
+    },
+    numero_final: {
+      required: true,
+      min: function() {
+        return parseInt($('#numero_inicial').val());
+  }
+    },
+    consecutivo: {
+      required: true,
+    },
+    cod_sucursal: {
+      required: true,
+    },
+  },
+  messages: {
+    id_sar: {
+      noSpace: "No se puede Espacios Estimado",
+      required: "Debes Poner un ID",
+    },
+    codigo_sar: {
+      required: "Debes Escribir el Codigo CAI",
+      
+    },
+    fecha_emision: {
+      required: "Debes Seleccionar la fecha de emision",
+    },
+    fecha_final: {
+      required: "Debes Seleccionar la Fecha Final",
+      min:"La fecha final no debe ser Menor a la Fecha de Emision",
+      max: "La fecha de final debe ser mayor o igual a la fecha de emisión"
+      
+    },
+    descripcion: {
+      required: "Debes Escribir una Descripcion",
+    },
+    numero_inicial: {
+      required: "Debes Ingresar el Numero Inicial",
+      max:"El rango inicial no debe ser mayor al rango final"
+    },
+    numero_final: {
+      required: "Debes Ingresar el Numero Final",
+      min:"el rango final no debe ser menor al rango inicial",
+    },
+    consecutivo: {
+      required: "Debes Ingresar el Consecutivo",
+    },
+    cod_sucursal: {
+      required: "Debes Seleccionar el Codigo de la Sucursal",
+    },
+  },
+  submitHandler: function (form) {
+    $("#mensaje-confirmacion").show();
+    form.submit();
+  },
+});
+
+// Regla personalizada para validar el campo de Descripciion
+jQuery.validator.addMethod("noSpace", function (value, element) {
+  return value == "" || value.trim().length != 0;
+}, "No espacios Porfavor Eso no se Hace Aqui");
+
+// Regla personalizada para validar el campo de nombre_cargo
+$.validator.addMethod("noRepetidos", function (value, element) {
+  return this.optional(element) || !/(.)\1+/.test(value);
+}, "No se permiten caracteres repetidos en este campo");
+
+
+// Agrega regla personalizada para validar que la fecha sea mayor o igual que otra fecha
+$.validator.addMethod('greaterEqualThan', function(value, element, param) {
+  var otherDate = $(param).val();
+  if (!value || !otherDate) {
+    return true;
+  }
+  return new Date(value) >= new Date(otherDate);
+}, 'La fecha debe ser mayor o igual que la fecha de Emision.');
+
+// Agrega regla personalizada para validar que la fecha sea menor o igual que la fecha actual
+$.validator.addMethod('lessEqualThan', function(value, element, param) {
+  var maxDate = new Date(param);
+  if (!value) {
+    return true;
+  }
+  return new Date(value) >= maxDate;
+}, 'La fecha debe ser mayor que la fecha de Emision.');
+
+
+$.validator.addMethod("caiValido", function(value, element) {
+  // Expresión regular para validar el CAI
+  var regex = /^[A-Z0-9]{37}$/;
+  return regex.test(value);
+}, "El CAI ingresado no es válido.");
+
+
   </script>
 
 </body>

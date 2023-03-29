@@ -2602,8 +2602,10 @@ def eliminarmetododepago(request,id):
 
 def inventario(request):
     inv=inventariotabla.objects.all()
+    pro=productostabla.objects.all()
     context={
-        'inv':inv
+        'inv':inv,
+        'pro':pro,
     }
 
 

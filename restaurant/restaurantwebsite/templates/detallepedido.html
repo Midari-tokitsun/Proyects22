@@ -25,6 +25,10 @@
 <script type="text/javascript" src="//cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
 
     
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
     <title>DetallePedido</title>
 </head>
 <body>
@@ -325,19 +329,19 @@ Agregar Nuevo Detalle
 		  <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Nuevo Detalle</h1>
 		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		</div>
-		<form action="{% url 'agregardetallepedido' %}" method="POST">
+		<form id="Myform" action="{% url 'agregardetallepedido' %}" method="POST">
 			{% csrf_token %}
 		<div class="modal-body">
 		
 			<div class="mb-3">
 				<label for="exampleFormControlInput1" class="form-label">ID Del DETALLE</label>
-				<input type="text" name="id_detalle" class="form-control" id="id_detalle" placeholder="">
+				<input type="text" name="id_detalle" class="form-control" id="id_detalle" placeholder="" required>
 			  </div>
 
 
 
 			  <label for="">Tamaño del Menu</label>
-			  <select class="form-control" name="tamaño_menu" id="tamaño_menu">
+			  <select class="form-control" name="tamaño_menu" id="tamaño_menu" required>
 			  <option value="" selected disabled>Selecciona un Tamaño del Menu</option>
 			  <option value="Individual">Individual</option>
 			  <option value="Parejas">Parejas</option>
@@ -348,7 +352,7 @@ Agregar Nuevo Detalle
 			  
 
 			  <label for="">Estado del Pedido</label>
-			  <select class="form-control" name="estado_pedido" id="estado_pedido">
+			  <select class="form-control" name="estado_pedido" id="estado_pedido" required>
 			  <option value="" selected disabled>Selecciona el Estado Del Pedido</option>
 			  {% for e in esta %}	
 			  <option value="{{e.descripcion_pedido}}">{{e.descripcion_pedido}}</option>
@@ -358,7 +362,7 @@ Agregar Nuevo Detalle
 
 			  <div class="mb-3">
 				<label for="exampleFormControlTextarea1" class="form-label">DESCRIPCION DEL DETALLE PEDIDO</label>
-				<textarea name="descripcion_detalle" class="form-control" id="descripcion_detalle" rows="3"></textarea>
+				<textarea minlength="10" maxlength="250" required name="descripcion_detalle" class="form-control" id="descripcion_detalle" rows="3"></textarea>
 			  </div>
 
 
@@ -448,6 +452,98 @@ $('#detalle').DataTable({
 }
 });
 })
+
+
+
+
+
+
+
+
+
+	$("#Myform").validate({
+		rules: {
+			id_detalle: {
+			required: true,
+			noSpaceafterletters: true,
+		  },
+				  
+	
+	
+		  tamaño_menu: {
+			required: true,
+		  },
+		  estado_pedido: {
+			required: true,
+		  },
+		  descripcion_detalle: {
+			required: true,
+			noSpace:true,
+			minlength: 10,
+			maxlength: 250,
+		  },
+
+	
+		},
+		messages: {
+			id_detalle: {
+			noSpace:"No se puede Espacios Estimado",
+			required: "Debes Poner un ID"
+	
+		  },
+
+	
+	
+		  tamaño_menu: {
+			required:"Debes poner Un Tamaño del Menu",  
+		  },
+
+
+		  estado_pedido: {
+			required:"Debes Seleccionar un Estado del Pedido",
+
+  
+		  },
+		  descripcion_detalle: {
+			required:"Debes poner Una Descripcion del Detalle del pedido",
+			noSpace:"No se puede Espacios Estimado",
+			minlength: "Debes ingresar al menos 10 Digitos en la descripcion de La Elaboracion",
+		  maxlength: "No puedes ingresar más de 250 Digitos. en la Descripcion de la Elaboracion",
+  
+		  },
+
+	
+		},
+	
+	
+	
+	
+	
+		submitHandler: function(form) {
+		  $("#mensaje-confirmacion").show();
+		  form.submit();
+		}
+	  });
+	
+	// Regla personalizada para validar el campo de Descripciion
+
+	jQuery.validator.addMethod("noSpace", function(value, element) { 
+		return value == '' || value.trim().length != 0;  
+	}, "No espacios Porfavor Eso no se Hace Aqui");
+	
+	// Regla personalizada para validar el campo de nombre_cargo
+	$.validator.addMethod("noRepetidos", function(value, element) {
+	  return this.optional(element) || !/(.)\1+/.test(value);
+	}, "No se permiten caracteres repetidos en este campo");
+	
+	jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+    return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+}, "No letras ni digitos despues de espacios por favor");
+
+
+
+
+
         </script>
 
     

@@ -39,6 +39,14 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css
         ">
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+
+
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+        
+
         <body>
 
 
@@ -268,72 +276,6 @@
                 <h1>Control de Reservaciones</h1>
 
 
-<script>
-
-
-
-
-
-$(document).ready(function() {
-$('#myTable').DataTable({
-"language": {
-"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-}
-});
-})
-
-
-                $(document).ready(function() {
-                  function generarMesas(cantidad) {
-                    // Agregar las nuevas mesas al final de las existentes
-                    for (var i = 1; i <= cantidad; i++) {
-                      var mesa = $("<div>", {
-                        "class": "mesa",
-                        "text": $(".mesa").length + 1
-                      });
-                      $("#mesas").append(mesa);
-                      mesa.draggable({
-                        containment: "#restaurante",
-                        scroll: false
-                      });
-                    }
-                  }
-              
-                  $("#generar-button").click(function() {
-                    var cantidad = parseInt($("#num-mesas").val());
-                    if (isNaN(cantidad) || cantidad < 1 || cantidad > 10) {
-                      alert("Ingrese un número válido de mesas (entre 1 y 10).");
-                      return;
-                    }
-                    generarMesas(cantidad);
-                  });
-              
-                  $("#reset-button").click(function() {
-  $("#mesas").html('');
-  for (var i = 1; i <= cantidadMesas; i++) {
-    $("#mesas").append('<div class="mesa">' + i + '</div>');
-  }
-  $(".mesa").draggable({
-    containment: "#restaurante",
-    scroll: false
-  });
-});
-
-
-                    // Función para eliminar las mesas
-  function eliminarMesas() {
-    $(".mesa").remove();
-  }
-  
-  // Configuramos el botón de eliminar mesas
-  $("#eliminar-mesas-button").click(function() {
-  $(".mesa").last().remove();
-});
-
-              
-            
-                });
-              </script>
 
 
 
@@ -427,7 +369,7 @@ $('#myTable').DataTable({
           <h5 class="modal-title" id="exampleModalLabel">Agregar Reservacion</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="{% url 'agregarreservacion' %}" method="POST">
+        <form id="Myform" action="{% url 'agregarreservacion' %}" method="POST">
           {% csrf_token %}
         <div class="modal-body">
 
@@ -449,29 +391,30 @@ $('#myTable').DataTable({
                 
               
               <label for=""> Nombre del reservante </label>
-                <select class="form-control" name="nombre_reservante" id="nombre_reservante">
+                <select class="form-control" name="nombre_reservante" id="nombre_reservante" >
+                  <option value="" selected disabled>Escoge un Reservante</option>
                   {% for u in user %}
                   <option class="form-select" value="{{u.nombre}}">{{u.nombre}}</option>
                   {% endfor %}
                 </select>
                
           
-
-                <label for=""> Nombre de la Sucursal </label>
-                <select class="form-control" name="nombre_sucursal" id="nombre_sucursal">
-                  {% for s in sucu %}
-                <option class="form-select" value="{{s.direccion_sucursal}}">{{s.direccion_sucursal}}
-
-                </option>
-                {% endfor %}
-                </select>
+                <div class="form-group">
+                  <label for=""> Nombre de la Sucursal </label>
+                  <select class="form-control" name="nombre_sucursal" id="nombre_sucursal" >
+                      <option value="" >Selecciona una Sucursal</option>
+                      {% for s in sucu %}
+                          <option class="form-select" value="{{s.direccion_sucursal}}">{{s.direccion_sucursal}}</option>
+                      {% endfor %}
+                  </select>
+              </div>
              
                
 
                 
                 <label for=""> Numero de Reservaciones </label>
-                <select class="form-control" name="numero_mesas" id="numero_mesas">
-                  
+                <select class="form-control" name="numero_mesas" id="numero_mesas" >
+                  <option value="" selected disabled>Selecciona el Numero de Reservaciones</option>
 
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -490,17 +433,17 @@ $('#myTable').DataTable({
                 <div class="form-group ">
 
                   <label for=""> Fecha de inicio de La Reserva </label>
-              <input class="form-control" id="fecha_reserva" name="fecha_reserva"  type="date"/>
+              <input class="form-control" id="fecha_reserva" name="fecha_reserva" min="2023-03-26"  type="date" />
             </div>
 
               <div class="form-group ">
                 <label for=""> Fecha de Llegada a la Reserva </label>
-            <input class="form-control" id="fecha_llegada" name="fecha_llegada"  type="date"/>
+            <input class="form-control" id="fecha_llegada" name="fecha_llegada" min="2023-03-26"    type="date" />
           </div>
 
           <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">Descripcion del Reservante</label>
-            <textarea name="descripcion" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            <textarea name="descripcion" class="form-control" id="descripcion" rows="3" minlength="10" maxlength="250" ></textarea>
           </div>
 
 
@@ -622,7 +565,179 @@ $('#myTable').DataTable({
 
 
 
+  <script>
 
+
+    $(document).ready(function() {
+    $('#myTable').DataTable({
+    "language": {
+    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+    }
+    });
+    })
+    
+    
+                    $(document).ready(function() {
+                      function generarMesas(cantidad) {
+                        // Agregar las nuevas mesas al final de las existentes
+                        for (var i = 1; i <= cantidad; i++) {
+                          var mesa = $("<div>", {
+                            "class": "mesa",
+                            "text": $(".mesa").length + 1
+                          });
+                          $("#mesas").append(mesa);
+                          mesa.draggable({
+                            containment: "#restaurante",
+                            scroll: false
+                          });
+                        }
+                      }
+                  
+                      $("#generar-button").click(function() {
+                        var cantidad = parseInt($("#num-mesas").val());
+                        if (isNaN(cantidad) || cantidad < 1 || cantidad > 10) {
+                          alert("Ingrese un número válido de mesas (entre 1 y 10).");
+                          return;
+                        }
+                        generarMesas(cantidad);
+                      });
+                  
+                      $("#reset-button").click(function() {
+      $("#mesas").html('');
+      for (var i = 1; i <= cantidadMesas; i++) {
+        $("#mesas").append('<div class="mesa">' + i + '</div>');
+      }
+      $(".mesa").draggable({
+        containment: "#restaurante",
+        scroll: false
+      });
+    });
+    
+    
+                        // Función para eliminar las mesas
+      function eliminarMesas() {
+        $(".mesa").remove();
+      }
+      
+      // Configuramos el botón de eliminar mesas
+      $("#eliminar-mesas-button").click(function() {
+      $(".mesa").last().remove();
+    });
+    
+                  
+    
+    
+    $("#Myform").validate({
+    rules: {
+        id_reservacion: {
+            required: true,
+            noSpaceafterletters: true,
+        },
+        nombre_reservante: {
+            required: true,
+        },
+        nombre_sucursal: {
+            required: true,
+        },
+        numero_mesas: {
+            required: true,
+        },
+        fecha_reserva: {
+            required: true,
+            
+        },
+        fecha_llegada: {
+            required: true,
+        },
+
+        fecha_llegada: {
+            required: true,
+            min: function() {
+                return $("#fecha_reserva").val();
+            },
+            max: function() {
+                return $("#fecha_inicio").val();
+            }
+        },
+        fecha_inicio: {
+            required: true,
+            min: function() {
+                return $("#fecha_reserva").val();
+            },
+            max: function() {
+                return $("#fecha_llegada").val();
+            }
+        },
+        descripcion: {
+            required: true,
+            noSpace: true,
+            minlength: 10,
+            maxlength: 250,
+        },
+    },
+    messages: {
+        id_reservacion: {
+            noSpace: "No se puede Espacios Estimado",
+            required: "Debes Poner un ID",
+        },
+        nombre_reservante: {
+            required: "Debes Seleccionar El nombre del Reservante",
+        },
+        nombre_sucursal: {
+            required: "Debes Seleccionar Una Sucursal",
+        },
+        numero_mesas: {
+            required: "Debes Seleccionar el Numero de Reservaciones Hechas",
+        },
+        fecha_reserva: {
+            required: "Debes seleccionar la fecha de Reserva",
+        },
+        fecha_llegada: {
+            required: "Debes Seleccionar la Fecha de llegada",
+            min: "La Fecha de llegada no puede ser anterior a la Fecha de Reserva",
+            max: "La Fecha de llegada no puede ser posterior a la Fecha de Inicio"
+        },
+        fecha_inicio: {
+            required: "Debes Seleccionar la Fecha de Inicio",
+            min: "La Fecha de Inicio no puede ser anterior a la Fecha de Reserva",
+            max: "La Fecha de Inicio no puede ser posterior a la Fecha de llegada"
+        },
+        descripcion: {
+            required: "Debes Escribir una Minima Descripcion de la Reserva",
+        },
+    },
+    submitHandler: function(form) {
+          $("#mensaje-confirmacion").show();
+          form.submit();
+        }
+});
+
+      
+      
+      
+
+
+    
+    
+        jQuery.validator.addMethod("noSpace", function(value, element) { 
+        return value == '' || value.trim().length != 0;  
+      }, "No espacios Porfavor Eso no se Hace Aqui");
+      
+      // Regla personalizada para validar el campo de nombre_cargo
+      $.validator.addMethod("noRepetidos", function(value, element) {
+        return this.optional(element) || !/(.)\1+/.test(value);
+      }, "No se permiten caracteres repetidos en este campo");
+      
+      jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+        return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+    }, "No letras ni digitos despues de espacios por favor");
+    
+    
+                
+                    });
+    
+                  </script>
+    
 
 
 
