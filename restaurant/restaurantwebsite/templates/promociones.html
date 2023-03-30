@@ -15,6 +15,11 @@
 			<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css
 			">
 			<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
     <title>Promociones</title>
 </head>
 <body>
@@ -303,7 +308,7 @@
 		  <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Promocion</h1>
 		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		</div>
-		<form action="{% url 'agregarpromociones' %}" method="POST">
+		<form id="Myform" action="{% url 'agregarpromociones' %}" method="POST">
 			{% csrf_token %} 
 		<div class="modal-body">
 
@@ -311,7 +316,7 @@
 		  <label class="form-label" for="">
 			promocion ID
 		  </label>
-		  <input class="form-control" type="text" name="id_promocion" id="" placeholder="Inserte ID de la Promocion">
+		  <input class="form-control" type="text" name="id_promocion" id="id_promocion" placeholder="Inserte ID de la Promocion">
 		</div>
 
 		<div class="mb-3">
@@ -319,13 +324,13 @@
 		  <label class="form-label" for="">
 			Nombre de la Promocion
 		 </label>
-		 <input class="form-control" type="text" name="nombre_promocion" id="" placeholder="Inserte Nombre de la promocion">
+		 <input class="form-control" type="text" name="nombre_promocion" id="nombre_promocion" placeholder="Inserte Nombre de la promocion">
 		</div>
 
 
 		<div class="mb-3">
 		 <label class="form-label" for="">Nombre del Menu</label>
-		 <select class="form-control" name="menu_id" id="">
+		 <select class="form-control" name="menu_id" id="menu_id">
 
 			<option value="" selected disabled>Seleccione un Menu</option>
 			{% for m in men %}
@@ -336,12 +341,12 @@
 
 		<div class="mb-3">
 		 <label class="form-label" for="">Precio en oferta</label>
-		 <input class="form-control" type="number" name="precio_oferta" id="">
+		 <input class="form-control" type="number" name="precio_oferta" id="precio_oferta">
 		</div>
 
 		<div class="mb-3">
 		 <label class="form-label" for="">Descripcion</label>
-		 <textarea class="form-control" name="descripcion" id="" cols="30" rows="10"></textarea>
+		 <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="10" minlength="10" maxlength="250"></textarea>
 		</div>
 
 
@@ -434,6 +439,95 @@ $('#promociones').DataTable({
 }
 });
 })
+
+
+
+
+
+
+
+
+$("#Myform").validate({
+  rules: {
+    id_promocion: {
+      required: true,
+	  noSpace:true,
+    },
+    nombre_promocion: {
+      required: true,
+	  espacioYMinimo:true,
+	  soloLetras:true,
+    },
+    menu_id: {
+      required: true,
+
+ 
+    },
+    precio_oferta: {
+      required: true,
+
+    },
+    descripcion: {
+      required: true,
+     
+    },
+
+  },
+  messages: {
+    id_promocion: {
+      noSpace: "No se permiten espacios",
+      required: "Debes poner un ID",
+    },
+    nombre_promocion: {
+      required: " Debes ingresar el Nombre de la Promocion",
+    },
+    menu_id: {
+      required: "Debes Seleccionar el Menu para la Promocion",
+
+    },
+    precio_oferta: {
+      required: "Debes Ingresar el Precio de Oferta para el Menu",
+        
+    },
+    descripcion: {
+      required: "Debes Ingresar una Breve Descripcion de la Promocion",
+        
+    },
+
+  },
+  submitHandler: function(form) {
+    $("#mensaje-confirmacion").show();
+    form.submit();
+  }
+});
+
+	
+	// Regla personalizada para validar el campo de Descripciion
+
+	jQuery.validator.addMethod("noSpace", function(value, element) { 
+		return value == '' || value.trim().length != 0;  
+	}, "No espacios Porfavor Eso no se Hace Aqui");
+	
+	// Regla personalizada para validar el campo de nombre_cargo
+	$.validator.addMethod("noRepetidos", function(value, element) {
+  return this.optional(element) || !/(.)\1{2,}/.test(value);
+}, "No se permiten caracteres repetidos en este campo");
+
+	jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+    return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+}, "No letras ni digitos despues de espacios por favor");
+
+$.validator.addMethod("espacioYMinimo", function(value, element) {
+    return this.optional(element) || /^\S{4,}\s\S+/.test(value);
+}, "Ingrese al menos 3 caracteres después del espacio.");
+
+$.validator.addMethod("soloLetras", function(value, element) {
+    return this.optional(element) || /^[a-zA-Z]+$/.test(value);
+}, "Ingrese solo letras.");
+
+
+
+
         </script>
 
 

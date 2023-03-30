@@ -26,6 +26,9 @@
 <script type="text/javascript" src="//cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
 
     
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
     <title>Estadopedido</title>
 </head>
 <body>
@@ -276,7 +279,7 @@
         <thead>
         <tr>
         <th>Id</th>
-        <th>Descripcion</th>
+        <th>Estado</th>
         <th>Acciones</th>
 
         </tr>
@@ -284,7 +287,7 @@
         <tfoot>
             <tr>
                 <th>Id Estado Pedido</th>
-                <th>Descripcion</th>
+                <th>Estado</th>
                 <th>Acciones</th>
                 </tr>
         </tfoot>
@@ -330,9 +333,10 @@
 		<div class="modal-header">
 		  <h1 class="modal-title fs-5" id="exampleModalLabel">AÑADIR ESTADO</h1>
 		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-		<form action="{% url 'guardarpedido' %}" method="POST">
-			{% csrf_token %}
 		</div>
+		<form id="Myform" action="{% url 'guardarpedido' %}" method="POST">
+			{% csrf_token %}
+		
 		<div class="modal-body">
 			<div class="mb-3">
 				<label for="exampleFormControlInput1" class="form-label">ID</label>
@@ -340,7 +344,7 @@
 			  </div>
 			  <div class="mb-3">
 				<label for="exampleFormControlTextarea1" class="form-label">Descripcion del Estado</label>
-				<textarea class="form-control" id="descripcion_pedido" name="descripcion_pedido" rows="3"></textarea>
+				<input class="form-control" id="descripcion_pedido" name="descripcion_pedido" rows="3">
 			  </div>
 
 
@@ -378,7 +382,7 @@
 			  </div>
 			  <div class="mb-3">
 				<label for="exampleFormControlTextarea1" class="form-label">Descripcion del Estado</label>
-				<textarea class="form-control" id="descripcion_pedido" name="descripcion_pedido" rows="3">{{e.descripcion_pedido}}"</textarea>
+				<input class="form-control" id="descripcion_pedido" name="descripcion_pedido" value="{{e.descripcion_pedido}}" rows="3">
 			  </div>
 
 
@@ -410,6 +414,75 @@ $('#Estadopedido').DataTable({
 }
 });
 })
+
+
+
+
+
+$("#Myform").validate({
+  rules: {
+    id_estado: {
+      required: true,
+	  noSpace:true,
+    },
+    descripcion_pedido: {
+      required: true,
+	  noSpace:true,
+	  noRepetidos:true,
+	  soloLetras:true,
+    },
+
+  },
+  messages: {
+    id_estado: {
+      noSpace: "No se permiten espacios",
+      required: "Debes poner un ID",
+    },
+    descripcion_pedido: {
+      required: " Ingresar El Estado del Pedido",
+    },
+
+
+  },
+  submitHandler: function(form) {
+    $("#mensaje-confirmacion").show();
+    form.submit();
+  }
+});
+
+
+
+
+	jQuery.validator.addMethod("noSpace", function(value, element) { 
+		return value == '' || value.trim().length != 0;  
+	}, "No espacios Porfavor Eso no se Hace Aqui");
+	
+	// Regla personalizada para validar el campo de nombre_cargo
+	$.validator.addMethod("noRepetidos", function(value, element) {
+  return this.optional(element) || !/(.)\1{2,}/.test(value);
+}, "No se permiten caracteres repetidos en este campo");
+
+	jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+    return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+}, "No letras ni digitos despues de espacios por favor");
+
+$.validator.addMethod("espacioYMinimo", function(value, element) {
+    return this.optional(element) || /^\S{4,}\s\S+/.test(value);
+}, "Ingrese al menos 3 caracteres después del espacio.");
+
+
+$.validator.addMethod("soloLetras", function(value, element) {
+    return this.optional(element) || /^[a-zA-Z]+$/.test(value);
+}, "Ingrese solo letras.");
+
+
+
+
+
+
+
+
+
         </script>
 
 
