@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+  
 
     <title>Metodo de Pago</title>
 </head>
@@ -293,10 +295,11 @@
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Metodo de Pago</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          <form id="Myform" action="{% url 'agregarmetododepago' %}" method="POST">
+        </div>
+          <form id="miformulario" action="{% url 'agregarmetododepago' %}" method="POST">
             {% csrf_token %}
        
-        </div>
+     
 
      
         <div class="modal-body">
@@ -304,7 +307,7 @@
 
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">ID</label>
-                <input name="id_metodo_pago" id="id_metodo_pago" type="text" class="form-control"  placeholder="" required>
+                <input id="id_metodo_pago"  name="id_metodo_pago"  type="text" class="form-control"  placeholder="" >
               </div>
 
 
@@ -312,7 +315,7 @@
 
               <div class="mb-3">
               <label for="exampleFormControlTextarea1" class="form-label">Metodo de Pago</label>
-              <select class="form-select" aria-label="Default select example" name="forma_pago" id="forma_pago" required>
+              <select id="forma_pago" class="form-select" aria-label="Default select example" name="forma_pago"  >
                 <option value="" selected> Selecciona el Metodo de Pago</option>
                 <option value="Tarjeta">Tarjeta</option>
                 <option value="Cupon">Cupon</option>
@@ -324,7 +327,7 @@
 
               <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Moneda</label>
-                <input name="moneda" id="moneda" class="form-control"  type="text" required>
+                <input name="moneda" id="moneda" class="form-control"  type="text" >
               </div>
                   
         </div>
@@ -416,16 +419,8 @@ $('#myTable').DataTable({
 });
 })
 
+$('#miformulario').validate({
 
-
-
-
-
-
-
-
-
-$("#Myform").validate({
   rules: {
     id_metodo_pago: {
       required: true,
@@ -445,10 +440,10 @@ $("#Myform").validate({
       required: "Debes Poner un ID",
     },
     forma_pago: {
-      required: "Debes poner Un Tamaño del Menu",
+      required: "Debes Seleccionar la Metodo de Pago",
     },
     moneda: {
-      required: "Debes Seleccionar un Estado del Pedido",
+      required: "Debes Ingresar La Moneda del Metodo de Pago",
     },
   },
   submitHandler: function (form) {

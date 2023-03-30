@@ -27,6 +27,11 @@
 <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
+
     <title>Provedores</title>
 </head>
 <body>
@@ -102,7 +107,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form action="{% url 'agregarprovedor' %}" method="POST">
+            <form id="myform" action="{% url 'agregarprovedor' %}" method="POST">
                 {% csrf_token %}
                 <label for="">ID</label>
                 <input class="form-control" type="text" name="id_provedor" id="id_provedor">
@@ -117,7 +122,8 @@
                 <input class="form-control" type="text" name="compañia_provevdor" id="">
                 <br>
                 <label for="">Telefono</label>
-                <input class="form-control" type="text" name="telefono_provedor" id="telefono_provedor">
+                <input class="form-control" type="text" name="telefono_provedor" id="telefono_provedor" minlength="8" maxlength="8">
+                <p style="background-color: red;" id="telefonoError" class="error-message"></p>
                 <br>
                 <label for="">Email</label>
                 <input class="form-control" type="text" name="email_provedor" id="email_provedor">
@@ -185,6 +191,195 @@ $('#mytable').DataTable({
 }
 });
 });
+
+
+
+$("#myform").validate({
+    rules: {
+        id_provedor: {
+        noSpace:true,
+        required: true
+      },
+      nombre_provedor: {
+        noRepetidos:true,
+        required: true, 
+        minlength: 3,
+        maxlength:18,
+        lettersonly: true,
+        noSpace:true,
+      },
+      apellido_provedor: {
+        noRepetidos:true,
+        noSpace:true,
+        required: true,
+        apellidocontrol: true,
+        minlength: 5,
+        maxlength: 20
+      },
+      compañia_provevdor: {
+        noRepetidos:true,
+        noSpace:true,
+        required: true,
+        minlength: 4,
+        maxlength: 16
+      },
+      email_provedor: {
+        noRepetidos:true,
+        noSpace:true,
+        required: true,
+        emailcontrol: true,
+      },
+    
+      telefono_provedor: {
+      telefonoHonduras:true,  
+      noSpace:true,
+        required: true,
+        minlength: 8,
+        maxlength: 8
+      },
+
+    },
+    
+    messages: {
+
+        nombre_provedor: {
+        noRepetidos:"No Se permiten Letras Repetidas, Ni espacios repetidos",
+
+        minlength: "Debes ingresar como mínimo {3} letras.",
+        maxlength:"El Maximo de Letras de un nombre no debe ser mayor a {18}",
+        noSpace:"No se Permiten Espacios Aca",
+      },
+      apellido_provedor: {
+        noRepetidos:"No Se permiten Letras Repetidas ,Ni espacios repetidos",
+
+        minlength: "Debes ingresar como mínimo 5 letras.",
+        maxlength: "No puedes ingresar más de 20 letras.",
+        noSpace:"No se Permiten Espacios Aca NO HAGA ESO",
+      },
+      compañia_provevdor: {
+        noRepetidos:"No Se permiten Letras Repetidas , Ni espacios repetidos",
+
+        minlength: "Debes ingresar como mínimo 4 caracteres.",
+        maxlength: "No puedes ingresar más de 16 caracteres.",
+        noSpace:"No se Permiten Espacios Aca Ya se lo Dije",
+      },
+      email_provedor: {
+        noRepetidos:"No Se permiten Letras Repetidas , Ni espacios repetidos",
+        emailcontrol: "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios",
+        noSpace:"No se Permiten Espacios Aca YA Pare",
+      },
+
+      telefono_provedor: {
+        telefonoHonduras:"Por favor ingresa un número de teléfono válido de Honduras (ej: +504 8888-8888)",
+        minlength: "Debes ingresar como mínimo 8 caracteres.",
+        maxlength: "No puedes ingresar más de 8 caracteres.",
+        noSpace:"No se Permiten Espacios Aca",
+      
+      },
+      
+
+
+    },
+
+
+
+
+
+    submitHandler: function(form) {
+
+      var telefono = $("#telefono_provedor").val();
+var telefonoPattern = /^(504)?[ -]?(?:(\d)(?!\2{7})){8}$/;
+if (!telefonoPattern.test(telefono)) {
+  $("#telefonoError").text("El número de teléfono debe tener el formato 504######## y no puede tener todos los dígitos iguales");
+  return false;
+}
+
+
+      $("#mensaje-confirmacion").show();
+      form.submit();
+    }
+  });
+
+
+  $('#confirm_password').on('input', function() {
+    var password = $('#password').val();
+    var confirmPassword = $(this).val();
+
+    if (password === confirmPassword) {
+      $('#password-message').text('Las contraseñas coinciden');
+    } else {
+      $('#password-message').text('Las contraseñas no coinciden');
+    }
+  });
+
+
+
+// Regla personalizada para validar Que no hayan Espacios
+  $.validator.addMethod("noSpace", function(value, element) {
+  return value.trim().length !== 0; // Devuelve verdadero si no hay espacios en blanco alrededor de la entrada
+}, "No se permiten espacios en blanco");
+
+
+$.validator.addMethod("telefonoHonduras", function(value, element) {
+  return this.optional(element) || /^(\+504)?[ -]?\d{4}[ -]?\d{4}$/.test(value);
+}, "Por favor ingresa un número de teléfono válido de Honduras (ej: +504 8888-8888)");
+
+
+
+$.validator.addMethod("lettersonly", function(value, element) {
+    var regex = /^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/;
+    var isValid = regex.test(value);
+    if (!isValid) {
+        $.validator.messages.lettersonly = "Este campo solo puede contener letras y debe comenzar con una letra mayúscula";
+        if (value.trim().split(" ").length < 2) {
+            $.validator.messages.lettersonly = "Debe introducir su Segundo Nombre después del espacio";
+        } else if (!/^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/.test(value)) {
+            $.validator.messages.lettersonly = "El Nombre y su Segundo Nombre debe comenzar con una letra mayúscula y tener al menos 3 o 4 letras";
+        }
+        return false;
+    }
+    return true;
+}, "");
+
+$.validator.addMethod("apellidocontrol", function(value, element) {
+    var regex = /^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/;
+    var isValid = regex.test(value);
+    if (!isValid) {
+        $.validator.messages.apellidocontrol = "Este campo solo puede contener letras y debe comenzar con una letra mayúscula";
+        if (value.trim().split(" ").length < 2) {
+            $.validator.messages.apellidocontrol = "Debe introducir su segundo Apellido después del espacio";
+        } else if (!/^[A-Z][a-z]{2,}\s[A-Z][a-z]{3,}$/.test(value)) {
+            $.validator.messages.apellidocontrol = "El Apellido y su Segundo Apellido debe comenzar con una letra mayúscula y tener al menos 3 o 4 letras";
+        }
+        return false;
+    }
+    return true;
+}, "");
+
+
+
+
+
+
+$.validator.addMethod("emailcontrol", function(value, element) {
+  // Nueva validación de la regla de correo electrónico
+  return this.optional(element) || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}(?:\.[^\s@]{2,})?$/.test(value);
+}, "Por favor introduce un email válido Ejemplo: usuario@gmail.com sin espacios");
+
+
+
+
+
+
+//regla para validar Los caracteres repetidos
+$.validator.addMethod("noRepetidos", function(value, element) {
+  return this.optional(element) || !/(.)\1+/.test(value);
+}, "No se permiten caracteres repetidos en este campo Ni espacios Repetidos");
+
+
+
+
+
 
 </script>
 

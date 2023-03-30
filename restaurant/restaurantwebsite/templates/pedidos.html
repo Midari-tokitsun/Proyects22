@@ -13,6 +13,9 @@
 
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
     <title>Pedidos</title>
 </head>
 {% if request.session.email %}
@@ -299,7 +302,7 @@
 		  <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Pedido</h1>
 		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		</div>
-		<form action="{% url 'agregarpedido' %}" method="POST">
+		<form id="Myform" action="{% url 'agregarpedido' %}" method="POST">
 			{% csrf_token %}
 		<div class="modal-body">
 
@@ -318,7 +321,7 @@
 
 			<label for="">Nombre del Menu</label>
 			<select class="form-control" name="nombre_menu[]" id="nombre_menu" multiple>
-				<option value="" selected disabled>Selecciona un Menu</option>
+				<option value="" selected >Selecciona un Menu</option>
 				{% for m in men %}    
 					<option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
 				{% endfor %}
@@ -450,6 +453,78 @@ $(document).ready( function () {
         }
     });
 });
+
+
+$("#Myform").validate({
+  rules: {
+    id_pedido: {
+      required: true,
+	  noSpace:true,
+    },
+    nombre_cliente: {
+      required: true,
+    },
+    nombre_menu: {
+      required: true,
+
+ 
+    },
+    detalle_id: {
+      required: true,
+
+    },
+    cantidades: {
+      required: true,
+     
+    },
+
+  },
+  messages: {
+    id_pedido: {
+      noSpace: "No se permiten espacios",
+      required: "Debes poner un ID",
+    },
+    nombre_cliente: {
+      required: " selecciona un Cliente",
+    },
+    nombre_menu: {
+      required: "Debes Seleccionar los Menus para el Cliente",
+
+    },
+    detalle_id: {
+      required: "Debes Seleccionar el ID de Detalle del Pedido",
+        
+    },
+    cantidades: {
+      required: "Debes Seleccionar las Cantidades del Menu",
+        
+    },
+
+  },
+  submitHandler: function(form) {
+    $("#mensaje-confirmacion").show();
+    form.submit();
+  }
+});
+
+	
+	// Regla personalizada para validar el campo de Descripciion
+
+	jQuery.validator.addMethod("noSpace", function(value, element) { 
+		return value == '' || value.trim().length != 0;  
+	}, "No espacios Porfavor Eso no se Hace Aqui");
+	
+	// Regla personalizada para validar el campo de nombre_cargo
+	$.validator.addMethod("noRepetidos", function(value, element) {
+	  return this.optional(element) || !/(.)\1+/.test(value);
+	}, "No se permiten caracteres repetidos en este campo");
+	
+	jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+    return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+}, "No letras ni digitos despues de espacios por favor");
+
+
+
 
 </script>
 
