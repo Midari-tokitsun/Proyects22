@@ -316,14 +316,15 @@ const select = document.getElementById('metodo-pago');
         }
     });
 
+
+
+    
     $(document).ready(function() {
   // Lista de menús seleccionados
   var selectedMenus = [];
 
 
-  $("#reset-total-button").click(function() {
-  $("#total-a-pagar").val("0€");
-});
+
 
 
   // Función para actualizar el input de "Total a pagar"
@@ -408,35 +409,51 @@ const select = document.getElementById('metodo-pago');
 
 
 
-    $(document).ready(function() {
-      // Agregar un menú seleccionado
-      $("#menu-grid-container .grid-item").click(function() {
-        var menu = $(this).attr("data-menu");
-        var menuName = $(this).text();
+$(document).ready(function() {
+  // Agregar un menú seleccionado
+  $("#menu-grid-container .grid-item").click(function() {
+    var menu = $(this).attr("data-menu");
+    var menuName = $(this).text();
 
-        // Realizar una solicitud AJAX para obtener los detalles del menú, incluyendo el precio
-        $.ajax({
-          url: "/obtener_detalles_menu",
-          data: { menu: menu },
-          success: function(response) {
-            var precio = response.precio;
+    // Realizar una solicitud AJAX para obtener los detalles del menú, incluyendo el precio
+    $.ajax({
+      url: "/obtener_detalles_menu",
+      data: { menu: menu },
+      success: function(response) {
+        var precio = response.precio;
 
-            // Agregar el menú seleccionado y su precio a la lista de menús
-            $("#selected-menus-list").append('<li data-menu="' + menu + '" data-precio="' + precio + '">' + menuName + ' (' + precio + '€) <button class="remove-menu-btn">Eliminar</button></li>');
-            updateSelectedMenusInput();
-          },
-          error: function() {
-            alert("Error al obtener los detalles del menú.");
-          }
-        });
-      });
-
-      // Eliminar un menú seleccionado
-      $("#selected-menus-list").on("click", ".remove-menu-btn", function() {
-        $(this).parent().remove();
-        updateSelectedMenusInput();
-      });
+        // Agregar el menú seleccionado y su precio a la lista de menús
+        $("#selected-menus-list").append('<li data-menu="' + menu + '" data-precio="' + precio + '">' + menuName + ' (' + precio + '€) <button class="remove-menu-btn">Eliminar</button></li>');
+        updateTotalPrice();
+      },
+      error: function() {
+        alert("Error al obtener los detalles del menú.");
+      }
     });
+  });
+
+  // Eliminar un menú seleccionado
+  $("#selected-menus-list").on("click", ".remove-menu-btn", function() {
+    $(this).parent().remove();
+    updateTotalPrice();
+  });
+
+  // Reiniciar la lista de menús seleccionados y el precio total
+  $("#reset-total-button").click(function() {
+    $("#selected-menus-list").empty();
+    updateTotalPrice();
+  });
+
+  // Función para recalcular el precio total
+  function updateTotalPrice() {
+    var totalPrice = 0;
+    $("#selected-menus-list li").each(function() {
+      totalPrice += parseFloat($(this).data("precio"));
+    });
+    $("#total-a-pagar").val(totalPrice.toFixed(2) + "€");
+  }
+});
+
     $(document).ready(function() {
     // Esta función se ejecuta cuando la página ha sido completamente cargada
 
