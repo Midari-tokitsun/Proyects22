@@ -3007,11 +3007,43 @@ def facturaciontabla(request):
     men=menutabla.objects.all()
     user=insertuser.objects.all()
     meto=metodo_pago_tabla.objects.all()
+    sar=sar_tabla.objects.all()
     context={
         'men':men,
         'user':user,
         'meto':meto,
+        'sar':sar,
     }
     return render(request,"facturacion.html",context)
 
 #fIN DE LA VISTA FACTURACION
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def obtener_detalles_pedido(request):
+    if request.method == 'GET':
+        cliente_id = request.GET.get('cliente_id', '')
+        
+        if cliente_id:
+            # Obtener el último pedido del cliente seleccionado
+            pedido = pedidostabla.objects.filter(nombre_cliente=cliente_id).last()
+            
+            if pedido is not None:
+                # Crear un diccionario con los detalles del pedido
+                detalles_pedido = {
+                    'menu_nombre': pedido.nombre_menu,
+                    'cantidades': pedido.cantidades,
+                    'detalle_id': pedido.id_pedido,
+                    'fecha': pedido.fecha_pedido,
+                }
+                
+                return JsonResponse(detalles_pedido)
+        
+        # Si no se encontró ningún pedido o no se proporcionó el parámetro `cliente_id`, devolver una respuesta vacía
+    return JsonResponse({})
+@csrf_exempt
+def obtener_detalles_menu(request):
+    menu_nombre = request.GET.get('menu', None)
+    menu = get_object_or_404(menutabla, nombre_menu=menu_nombre)
+    precio = menu.precio_menu
+    return JsonResponse({'precio': str(precio)})

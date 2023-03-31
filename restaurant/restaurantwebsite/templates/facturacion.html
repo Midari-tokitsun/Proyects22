@@ -75,12 +75,12 @@
             .grid-container {
               display: grid;
               grid-template-columns: repeat(3, 1fr);
-              grid-gap: 10px;
+              grid-gap: 5px;
             }
             .grid-item {
               background-color: #ddd;
-              padding: 20px;
-              font-size: 30px;
+              padding: 15px;
+              font-size: 15px;
               text-align: center;
             }
           </style>
@@ -100,8 +100,32 @@
        </div>
        <div class="modal-body">
       
-        <h1>DATOS</h1>
         <form id="factura-form">
+
+
+          
+
+          <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha</label>
+            <input type="date" class="form-control" id="fecha" name="fecha">
+          </div>
+
+          <br>
+          <div class="mb-3">
+            <label for="cliente" class="form-label">Codigo CAI</label>
+            <select class="form-control" name="" id="">
+               <option value="" selected>Selecciona un CAI</option>
+               {% for s in sar %}
+               <option value="{{s.codigo_sar}}">{{s.codigo_sar}}</option>
+               {% endfor %}             
+           </select>
+          </div>
+    
+          <br>
+           <label for="">Numero de Factura</label>
+            <input type="text" class="form-control" name="" id="">
+
+            <br>
         {% if request.session %}
 
          <input class="form-control" value="{{ request.session.nombre }}" readonly>
@@ -114,7 +138,7 @@
             <br>
            <div class="mb-3">
              <label for="cliente" class="form-label">Nombre del Cliente</label>
-             <select class="form-control" name="" id="">
+             <select class="form-control" name="" id="cliente-select">
                 <option value="" selected>Consumidor Final</option>
                 {% for u in user %}
                 <option value="{{u.nombre}}">{{u.nombre}}</option>
@@ -123,14 +147,44 @@
            </div>
             <br>
 
+            <div class="mb-3">
+              <label for="menu" class="form-label">Nombre del Menú</label>
+              <input type="text" name="menu" id="menu-input" readonly>
+          </div>
+          
+          <div class="mb-3">
+              <label for="cantidades" class="form-label">Cantidades</label>
+              <input type="text" name="cantidades" id="cantidades-input" readonly>
+          </div>
+          
+          <div class="mb-3">
+              <label for="detalle" class="form-label">Detalle del Pedido(ID)</label>
+              <input type="text" name="detalle" id="detalle-input" readonly>
+          </div>
+          
+          <div class="mb-3">
+              <label for="fecha" class="form-label">Fecha de Realización del Pedido</label>
+              <input type="text" name="fecha" id="fecha-input" readonly>
+          </div>
+            
+
+            <div class="mb-3">
+              <label for="cliente" class="form-label">Descuento</label>
+              <select class="form-control" name="" id="">
+                 <option value="" selected>0%</option>
+                 <option value="" >5%</option>
+                 <option value="" >10%</option>
+             
+              </select>
+            </div>
+ 
+
 
             <div class="mb-3">
                 <label for="cliente" class="form-label">ISV</label>
                 <select class="form-control" name="" id="">
-                   <option value="" selected>10%</option>
-                   <option value="" >15%</option>
-                   <option value="" >20%</option>
-               
+                   <option value="" selected>15%</option>
+                   <option value="" >18%</option>               
                 </select>
               </div>
    
@@ -165,30 +219,33 @@
             </div>
 
 
+<!-- Este es el contenedor de la grilla de selección de menú -->
+<div id="menu-grid-container">
+  <h2>Seleccione un menú:</h2>
+  <div class="grid-container">
+    {% for m in men %}
+    <div class="grid-item" data-menu="{{m.nombre_menu}}" data-precio="{{m.precio_menu}}">{{m.nombre_menu}} - {{m.precio_menu}}</div>
+    {% endfor %}
+  </div>
+</div>
 
-           <div class="mb-3">
-             <label for="fecha" class="form-label">Fecha</label>
-             <input type="date" class="form-control" id="fecha" name="fecha">
-           </div>
-           <!-- Este es el contenedor de la grilla de selección de menú -->
-           <div id="menu-grid-container">
-             <h2>Seleccione un menú:</h2>
-             <div class="grid-container">
-                {% for m in men %}
-                <div class="grid-item" data-menu="{{m.nombre_menu}}">{{m.nombre_menu}}</div>
-                {% endfor %}
-              </div>
-           </div>
-           <!-- Este es el contenedor de los menús seleccionados -->
-           <div id="selected-menus-container">
-             <h2>Menús seleccionados:</h2>
-             <ul id="selected-menus-list">
-              </ul>
-              
-           </div>
+
+<div id="selected-menus-container">
+  <h2>Menús seleccionados:</h2>
+  <ul id="selected-menus-list"></ul>
+</div>
+
            <br>
-           <label class="form-label" for="">Total A Pagar</label>
-           <input class="form-control" type="text">
+           <label class="form-label" for="total-a-pagar">Total a pagar:</label>
+           <input id="total-a-pagar" class="form-control" type="text" >
+
+
+
+
+
+           <button id="reset-total-button" type="button">Resetear cuenta</button>
+
+
      
      
            <div class="modal-footer">
@@ -201,6 +258,38 @@
 
 
         <script>
+
+
+$(document).ready(function() {
+    $('#cliente-select').change(function() {
+        var cliente_id = $(this).val();
+        
+        if (cliente_id !== '') {
+            $.ajax({
+                url: '/obtener_detalles_pedido/',
+                type: 'GET',
+                data: {
+                    'cliente_id': cliente_id
+                },
+                success: function(response) {
+                    $('#menu-input').val(response.menu_nombre);
+                    $('#cantidades-input').val(response.cantidades);
+                    $('#detalle-input').val(response.detalle_id);
+                    $('#fecha-input').val(response.fecha);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        } else {
+            // Limpiar los campos de entrada si no se ha seleccionado ningún cliente
+            $('#menu-input').val('');
+            $('#cantidades-input').val('');
+            $('#detalle-input').val('');
+            $('#fecha-input').val('');
+        }
+    });
+});
 
 
 const select = document.getElementById('metodo-pago');
@@ -227,32 +316,128 @@ const select = document.getElementById('metodo-pago');
         }
     });
 
-
-function updateSelectedMenusInput() {
+    $(document).ready(function() {
+  // Lista de menús seleccionados
   var selectedMenus = [];
-  $("#selected-menus-list li").each(function() {
-    selectedMenus.push($(this).attr("data-menu"));
+
+
+  $("#reset-total-button").click(function() {
+  $("#total-a-pagar").val("0€");
+});
+
+
+  // Función para actualizar el input de "Total a pagar"
+  function updateSelectedMenusInput() {
+    var total = 0;
+    for (var i = 0; i < selectedMenus.length; i++) {
+      total += parseInt(selectedMenus[i].precio) * selectedMenus[i].cantidad;
+    }
+    $("#total-a-pagar").val(total + "€");
+  }
+
+  function addSelectedMenu(menu) {
+  // Buscar el menú en la lista de seleccionados
+  var selectedMenu = selectedMenus.find(function(m) {
+    return m.nombre === menu.nombre;
   });
-  $("#menus_seleccionados").val(selectedMenus.join(","));
+
+  if (selectedMenu) {
+    // Incrementar la cantidad del menú seleccionado y actualizar el elemento de lista
+    selectedMenu.cantidad++;
+    $("#selected-menus-list li[data-nombre='" + menu.nombre + "']").text(selectedMenu.nombre + " x" + selectedMenu.cantidad);
+  } else {
+    // Agregar el menú a la lista con cantidad inicial de 1
+    selectedMenu = {
+      nombre: menu.nombre,
+      precio: menu.precio,
+      cantidad: 1
+    };
+    selectedMenus.push(selectedMenu);
+
+    // Crear un nuevo elemento de lista con el nombre y el precio del menú
+    var $newListItem = $("<li></li>")
+      .text(selectedMenu.nombre + " x" + selectedMenu.cantidad)
+      .attr("data-nombre", selectedMenu.nombre)
+      .attr("data-precio", selectedMenu.precio);
+
+    // Agregar el nuevo elemento a la lista de menús seleccionados
+    $("#selected-menus-list").append($newListItem);
+  }
+
+  // Actualizar el input de "Total a pagar"
+  updateSelectedMenusInput();
 }
+  
 
-$(document).ready(function() {
-  // Agregar un menú seleccionado
-  $("#menu-grid-container .grid-item").click(function() {
-    var menu = $(this).attr("data-menu");
-    var menuName = $(this).text();
-    $("#selected-menus-list").append('<li data-menu="' + menu + '">' + menuName + ' <button class="remove-menu-btn">Eliminar</button></li>');
-    updateSelectedMenusInput();
-  });
+  // Función para quitar un menú de la lista de seleccionados
+  function removeSelectedMenu(menu) {
+    // Buscar el menú en la lista
+    for (var i = 0; i < selectedMenus.length; i++) {
+      if (selectedMenus[i].nombre === menu.nombre) {
+        // Decrementar la cantidad de selección y quitar el menú si la cantidad llega a 0
+        selectedMenus[i].cantidad--;
+        if (selectedMenus[i].cantidad === 0) {
+          selectedMenus.splice(i, 1);
 
-  // Eliminar un menú seleccionado
-  $("#selected-menus-list").on("click", ".remove-menu-btn", function() {
-    $(this).parent().remove();
+          // Buscar el elemento de lista correspondiente y quitarlo
+          $("#selected-menus-list li").each(function() {
+            if ($(this).text() === menu.nombre) {
+              $(this).remove();
+              return false;
+            }
+          });
+        }
+        break;
+      }
+    }
+
+    // Actualizar el input de "Total a pagar"
     updateSelectedMenusInput();
+  }
+
+  // Manejador de eventos para hacer clic en un menú
+  $(".grid-item").click(function() {
+    // Obtener el nombre y el precio del menú
+    var menuNombre = $(this).data("menu");
+    var menuPrecio = $(this).data("precio");
+
+    // Agregar o quitar el menú según corresponda
+    addSelectedMenu({nombre: menuNombre, precio: menuPrecio});
   });
 });
 
-$(document).ready(function() {
+
+
+    $(document).ready(function() {
+      // Agregar un menú seleccionado
+      $("#menu-grid-container .grid-item").click(function() {
+        var menu = $(this).attr("data-menu");
+        var menuName = $(this).text();
+
+        // Realizar una solicitud AJAX para obtener los detalles del menú, incluyendo el precio
+        $.ajax({
+          url: "/obtener_detalles_menu",
+          data: { menu: menu },
+          success: function(response) {
+            var precio = response.precio;
+
+            // Agregar el menú seleccionado y su precio a la lista de menús
+            $("#selected-menus-list").append('<li data-menu="' + menu + '" data-precio="' + precio + '">' + menuName + ' (' + precio + '€) <button class="remove-menu-btn">Eliminar</button></li>');
+            updateSelectedMenusInput();
+          },
+          error: function() {
+            alert("Error al obtener los detalles del menú.");
+          }
+        });
+      });
+
+      // Eliminar un menú seleccionado
+      $("#selected-menus-list").on("click", ".remove-menu-btn", function() {
+        $(this).parent().remove();
+        updateSelectedMenusInput();
+      });
+    });
+    $(document).ready(function() {
     // Esta función se ejecuta cuando la página ha sido completamente cargada
 
     // Seleccionamos todos los elementos de la grilla
@@ -264,10 +449,7 @@ $(document).ready(function() {
       var selectedMenusList = $("#selected-menus-list");
       var menuItem = $(this).data("menu");
 
-      // Si el elemento ya fue seleccionado, no lo agregamos de nuevo
-      if (!selectedMenusList.find("[data-menu='" + menuItem + "']").length) {
-        selectedMenusList.append("<li data-menu='" + menuItem + "'>" + $(this).text() + "</li>");
-      }
+
     });
 
     // Agregamos un listener de submit al formulario
