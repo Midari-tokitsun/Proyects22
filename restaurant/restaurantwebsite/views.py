@@ -735,46 +735,6 @@ def cargoregister(request):
 
     car=cargo.objects.all()
 
-    paginator = Paginator(car,2)
-    page=request.GET.get('page')
-    car=paginator.get_page(page)
-
-
-
-    if request.method == 'GET' :
-        query = request.GET.get('buscarcargosemp')
-
-        paginator = Paginator(car,2)
-        page=request.GET.get('page')
-        car=paginator.get_page(page)
-    
-
-        if query:
-            car = cargo.objects.filter(
-
-
-
-
-            
-            Q(nombre_cargo__icontains=query) |
-            Q(id__icontains=query) ).distinct
-            print("Lo encontre EL CARGO ES!!!")    
-         
-        else:
-            car=cargo.objects.all()
-
-
-            paginator = Paginator(car,2)
-            page=request.GET.get('page')
-            car=paginator.get_page(page)    
-
-            query = request.GET.get('buscarcargosemp')
-            print("REtornando de vuelta a la vista principal de CARGOS")
-
-
-
-
-
 
     context={
         'car':car
@@ -1009,44 +969,6 @@ def departamentohome(request):
     dep=departamento.objects.all()
 
 
-
-    paginator = Paginator(dep,2)
-    page=request.GET.get('page')
-    dep=paginator.get_page(page)
-
-
-    if request.method == 'GET' :
-        query = request.GET.get('buscardept')
-
-
-        paginator = Paginator(dep,2)
-        page=request.GET.get('page')
-        dep=paginator.get_page(page)
-
-
-
-        if query:
-            dep = departamento.objects.filter(
-            Q(departamento__icontains=query) |
-            Q(codigo_postal__icontains=query) |
-            Q(id_departamento__icontains=query) ).distinct
-
-            print("LO ENCONTRE Y TE ENLISTOS SUS REFERENCIAS!!")
-        
-         
-        else:
-            dep=departamento.objects.all()
-
-
-            paginator = Paginator(dep,2)
-            page=request.GET.get('page')
-            dep=paginator.get_page(page)
-
-
-            
-
-            query = request.GET.get('buscardept')
-            print("Retornando a Todos los registros")
 
     context={
         'dep':dep
@@ -1839,7 +1761,11 @@ def historicomenutabla(request):
 
     return render(request, 'historicomenu.html', context)
 
-
+def eliminarhistoricomenu(request,id):
+    his=historico_menu.objects.get(id_historico=id)
+    his.delete()
+    messages.success(request, 'Registro Eliminado con Exito')
+    return redirect('historicomenutabla')
 
 
 
@@ -2739,6 +2665,14 @@ def historicoproducto(request):
         'his':his
     }
     return render(request,"historicoproducto.html",context)
+
+def eliminarhistoricoproducto(request,id):
+    his=historico_producto.objects.get(id_historico=id)
+    his.delete()
+
+    messages.success(request, 'Registro Eliminado con Exito')
+
+    return redirect('historicoproducto')
 
 #VISTA DE PRODUCTOS
 

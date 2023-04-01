@@ -293,17 +293,6 @@
 	  
     <br>
 
-    <div class="container">
-      <form action="{% url 'departamentohome' %}" class="form-inline my-2 my-lg-0 mr-4" method="GET"  >
-       
-       
-
-        <input value="{{ request.GET.buscardept }}" name="buscardept" class="form-control mr-sm-2s" type="search" placeholder="Buscar Departamento" aria-label="Search">
-        <button class="btn btn-success" type="submit">Buscar Departamento</button>
-      </form>
-
-      
-    </div>
 
 
     <div class="container">
@@ -314,12 +303,11 @@
 						<h2>Manejo de <b>Departamentos</b></h2>
 					</div>
 					<div class="col-sm-6">
-						<a href="#adddeptModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Añadir Departamento</span></a>
-											
+						<a href="#adddeptModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Añadir Departamento</span></a>				
 					</div>
                 </div>
             </div>
-            <table id="" class="table table-dark table-hover">
+            <table id="mytable" class="table table-dark table-hover">
                 <thead>
                     <tr>
 						<th>
@@ -351,26 +339,11 @@
                             <a href="/departamentoeliminar/{{ deps.id_departamento }}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                         </td>
                     </tr>
-                    <tr>
+                   
                       {% endfor %}  
                 </tbody>
             </table>
-			<div class="clearfix">
-				<ul class="pagination">
-					{% if dep.has_previous %} 
-					   <li class="page-item"><a href="?page={{ dep.previous_page_number }}{% if request.GET.buscardept %}&q={{ request.GET.buscardept }}{% endif %}" class="page-link">Anterior</a></li>
-					   {% endif %}
-				   
-				   
-				   
-				   
-						 {% if dep.has_next %} 
-						 <li class="page-item"><a href="?page={{ dep.next_page_number }}{% if request.GET.buscardept %}&q={{ request.GET.buscardept }}{% endif %}"  class="page-link">Siguiente</a></li>
-						 {% endif %}
-					 </ul>
-            </div>
-        </div>
-    </div>
+
 
 
 	<!-- add Modal HTML -->
@@ -400,7 +373,7 @@
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-						<input type="submit" class="btn btn-success" value="añadirdepartamento">
+						<input type="submit" class="btn btn-success" value="Guardar">
 					</div>
 					<div id="mensaje-confirmacion" style="display:none">
 						¡Formulario enviado correctamente!
@@ -436,8 +409,8 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-info" value="actualizardepartamentos">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+						<input type="submit" class="btn btn-info" value="Guardar">
 					</div>
 				</form>
 			</div>

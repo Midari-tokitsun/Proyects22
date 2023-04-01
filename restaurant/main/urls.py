@@ -204,6 +204,7 @@ urlpatterns = [
 
 #HISTORICO MENU
     path('historicomenutabla/', views.historicomenutabla , name="historicomenutabla"),#pantalla principal del table
+    path('eliminarhistoricomenu/<int:id>', views.eliminarhistoricomenu , name="eliminarhistoricomenu"),#pantalla principal del table
 
 
 
@@ -213,6 +214,7 @@ urlpatterns = [
 #HISTORICO PRODUCTO
 
     path('historicoproducto/', views.historicoproducto , name="historicoproducto"),#pantalla principal del table
+    path('eliminarhistoricoproducto/<int:id>', views.eliminarhistoricoproducto , name="eliminarhistoricoproducto"),#pantalla principal del table
 
 
 #FIN DEL HISTORICO PRODUCTO
