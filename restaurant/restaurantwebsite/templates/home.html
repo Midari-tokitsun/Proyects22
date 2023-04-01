@@ -1,730 +1,922 @@
-
 <!DOCTYPE html>
-  {% load static %}
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurante</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+  
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    
-
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <title>Inicio</title>
 
 
+</head>
+<body>
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
-      type="text/css"
-    />
-    <style type="text/css">
-      body {
-        -webkit-font-smoothing: antialiased;
-        -moz-font-smoothing: grayscale;
-      }
-
-      .hidden.menu {
-        display: none;
-      }
-
-      .masthead.segment {
-        min-height: 600px;
-        padding: 1em 0em;
-      }
-
-      .masthead .logo.item img {
-        margin-right: 1em;
-      }
-
-      .masthead .ui.menu .ui.button {
-        margin-left: 0.5em;
-      }
-
-      .masthead h1.ui.header {
-        margin-top: 2em;
-        margin-bottom: 0em;
-        font-size: 4em;
-        font-weight: normal;
-      }
-
-      .masthead h2 {
-        font-size: 1.7em;
-        font-weight: normal;
-      }
-
-      .ui.vertical.stripe {
-        padding: 8em 0em;
-      }
-
-      .ui.vertical.stripe h3 {
-        font-size: 2em;
-      }
-
-      .ui.vertical.stripe .button + h3,
-      .ui.vertical.stripe p + h3 {
-        margin-top: 3em;
-      }
-
-      .ui.vertical.stripe .floated.image {
-        clear: both;
-      }
-
-      .ui.vertical.stripe p {
-        font-size: 1.33em;
-      }
-
-      .ui.vertical.stripe .horizontal.divider {
-        margin: 3em 0em;
-      }
-
-      .quote.stripe.segment {
-        padding: 0em;
-      }
-
-      .quote.stripe.segment .grid .column {
-        padding-top: 5em;
-        padding-bottom: 5em;
-      }
-
-      .footer.segment {
-        padding: 5em 0em;
-      }
-
-      .secondary.pointing.menu .toc.item {
-        display: none;
-      }
-
-      @media only screen and (max-width: 700px) {
-        .ui.fixed.menu {
-          display: none !important;
-        }
-
-        .secondary.pointing.menu .item,
-        .secondary.pointing.menu .menu {
-          display: none;
-        }
-
-        .secondary.pointing.menu .toc.item {
-          display: block;
-        }
-
-        .masthead.segment {
-          min-height: 350px;
-        }
-
-        .masthead h1.ui.header {
-          font-size: 2em;
-          margin-top: 1.5em;
-        }
-
-        .masthead h2 {
-          margin-top: 0.5em;
-          font-size: 1.5em;
-        }
-      }
-    </style>
+  <style>
 
 
-
-  </head>
-{% if request.session.email %}
-
-{% else %}
-{% endif %}
-<body id="root" style="background-color:  #C33764;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #1D2671, #C33764);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #1D2671, #C33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
- ;">
-
- 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Pizza Wave</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-    <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="/usuario">Inicio</a>
-    </li>
-  
-  
-    {% if request.session.username %}
-  
-    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-    <ul class="navbar-nav">
-      <li class="nav-item dropdown">
-    
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Vista Empleados
-    </a>
-    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-    <li class="nav-item">
-      <a class="nav-link" href="/cargoregister">Registros de Cargos del Empleado</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-link" href="/empleado">Registro de Empleados</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-link" href="/tipodocumentoemp">Registro de Tipo De Documento</a>
-    </li>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;1,200;1,300;1,400&display=swap');
 
 
-    <li class="nav-item">
-      <a class="nav-link" href="/departamentohome">Registro de Departamento</a>
-    </li>
+/*Globales*/
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    <li class="nav-item">
-      <a class="nav-link" href="/puestos">Control de Puestos</a>
-    </li>
+html {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    color: #000;
+    scroll-behavior: smooth;
+}
 
-    <li class="nav-item">
-      <a class="nav-link" href="/sucursal">Control de sucursal</a>
-    </li>
+body {
+    overflow-x: hidden;
+}
 
-    </ul>
-  
-    </li>
-    </ul>
-  </div>
-    
-  
-  
-    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-    <ul class="navbar-nav">
-      <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      Vista Usuarios
-      </a>
-      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-    
-      <li class="nav-item">
-      <a class="nav-link" href="/pedidos">Realizar Pedidos</a>
-      </li>
+section {
+    padding: 3.9rem 0;
+    overflow: hidden;
+    background-color: #252525;
+}
 
-
-      
-  
-      <li class="nav-item">
-        <a class="nav-link" href="/registrousuarios">Usuarios</a>
-      </li>
-    
-
-
-      <li class="nav-item">
-        <a class="nav-link" href="/estadopedido">Estado Pedido</a>
-        </li>
-  
-        <li class="nav-item">
-          <a class="nav-link" href="/detallepedido">Detalle Pedido</a>
-          </li>
-
-
-          <li class="nav-item">
-            <a class="nav-link" href="/reservaciones">Registros de Reservaciones</a>
-            </li>
-
-
-
-          <li class="nav-item">
-            <a class="nav-link" href="/promociones">Registros de Promociones</a>
-            </li>
-
-            
-
-
-
-          <li class="nav-item">
-            <a class="nav-link" href="/metodopago">Metodo de Pago</a>
-            </li>
-
-
-
-            <li class="nav-item">
-              <a class="nav-link" href="/sartabla">SAR</a>
-              </li>
+img {
+    width: 100%;
+    max-width: 100%;
 
     
-      </ul>
-      </li>
-    </ul>
-    </div>
+}
 
+a {
+    text-decoration: none;
+}
 
+p {
+    font-size: 1.6rem;
+    color: #fff;
+}
 
-    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-      <ul class="navbar-nav">
-      <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Vista productos
-      </a>
-      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-    
-        <li class="nav-item">
-        <a class="nav-link" href="/categoria">Registros de categoria</a>
-        </li>
-    
-        <li class="nav-item">
-        <a class="nav-link" href="/almacen">Registros del almacen </a>
-        </li>
+.container {
+    width: 100%;
+    max-width: 122.5rem;
+    margin:  0 auto;
+    padding: 0 2.4rem;
+}
 
-        <li class="nav-item">
-        <a class="nav-link" href="/familiaproducto">Registros de familia producto</a>
-        </li>
+/*Header*/
+header {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-image: linear-gradient(to bottom, rgba(0,0,0,.5), transparent);
+}
+.nav {
+    height: 7.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        <li class="nav-item">
-        <a class="nav-link" href="/menutabla">Registros del Menu</a>
-        </li>
+.menu-toggle {
+    color: #fff;
+    font-size: 2.2rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 2.5rem;
+    cursor: pointer;
+    z-index: 1500;
+}
 
+.fa-times {
+    display: none;
+}
 
-        <li class="nav-item">
-          <a class="nav-link" href="/historicomenutabla">Registros Historicos del Menu</a>
-          </li>
-
-        <li class="nav-item">
-        <a class="nav-link" href="/elaboracion">Registros de Elaboracion</a>
-        </li>
-
-
-        <li class="nav-item">
-        <a class="nav-link" href="/recetatablaregistros">Registros de Receta</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="/inventario">Registros de inventario</a>
-          </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="/productos">Registros de Productos</a>
-          </li>
-
-
-
-    
-      </ul>
-      </li>
-      </ul>
-      </div>
-    
-  
-  
-  
-  
-    <li class="nav-item">
-    <a class="nav-link" href="/signout">Cerrar Sesion</a>
-    </li>
-  
-  
-  
+.nav-list {
+    list-style: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80%;
+    height: 100vh;
+    background-color: #252525;
+    padding: 4.4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    z-index: 1250;
+    transform: translateX(-100%);
    
-    {% else %}
-    
-    <li class="nav-item">
-    <a class="nav-link" href="/login_user">Iniciar Sesion</a>
-    </li>
-     
-  
-       <li class="nav-item">
-    <a class="nav-link" href="/signup">Registrarse</a>
-    </li>
-  
-  
-    
-    {% endif %}
-    
-    
-  
-  
-  
-    
-  
-       <li class="nav-item">
-    <a class="nav-link" href="/menu">Menu</a>
-    </li>
-  
-    
-  
-    <div class="collapse navbar-collapse" id="navbarNav">
-    <li class="nav-item">
-      <a class="nav-link desactivated">{{request.session.username}}</a>
-    </li>
-    </div>
-  
-  
-    </ul>
-    </div>
-  </div>
-  </nav>
+}
+
+.nav::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .8);
+    z-index: 1000;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity .5s;
+
+}
+
+.open .fa-times {
+    display: block;
+}
+
+.open .fa-bars {
+    display: none;
+}
+
+.open .nav-list {
+    transform: translateX(0);
+}
+.open .nav::before{
+    opacity: 1;
+    transform: scale(1);
+}
+
+.logo {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.nav-item {
+    border-bottom: 2px solid rgba(255, 255, 255, .3);
+}
+
+.nav-link {
+    display: block;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    margin-right: -2px;
+}
+
+.nav-link:hover {
+    color: #3bcc75;
+}
+
+/*Hero*/
 
 
-<br>
-  <!--Page Contents-->
-  <div class="pusher" >
- 
+.hero {
+    width: 100%;
+    height: 70vh;
+    background: url("{% static 'images/pizzawavelogo2.jpg' %}") center no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.h2-sub {
+    font-size: 3rem;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(212, 47, 177);
+    font-weight: 600;
+    line-height: .4;
+}
+
+.fil {
+    text-transform: uppercase;
+    font-size: 3rem;
+}
+
+.head {
+    color: #b65ddf;
+    font-size: 3.7rem;
+    font-family: 'Freestyle Script', sans-serif;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: .5rem;
+    margin: 2.4rem 0;
+}
+
+.circle {
+    font-size: 1.5rem;
+    color: #d41a58;
+    margin: 0 1.6rem;
+}
+
+.he-des h5 {
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 100;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    letter-spacing: 3px;
+    margin-right: -3px;
+}
+
+.btn {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-right: -2px;
+}
+
+.cta-btn {
+    font-size: 1.1rem;
+    background-color: #ff459c;
+    padding: 1.5rem 3rem;
+    color: #fff;
+    border-radius: .4rem;
+}
+.cta-btn:hover,
+.cta-btn:focus {
+    color: #fff;
+    background-color: #50065f;
+}
 
 
-    <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
-      <div class="d-flex justify-content-center">  
-  
-  <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner" style="border-radius: 25px ;">
-      <div class="carousel-item active" data-bs-interval="2000">
-        <img src="{% static 'images/pizza5.jpg' %}" class="d-block w-100" style="height: 600px  ;" alt="...">
-        <div class="carousel-caption" >
-          <h5 style="font-size: 500%  ; color: black; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; ">BIENVENIDO </h5>
+.global {
+    text-align: center;
+    margin-top: 3.9rem;
+}
+
+.dis-sto .global {
+    margin-top: 6.9rem;
+}
+
+.global .circle {
+    color: #d41a58;
+    margin: 2.4rem 0;
+}
+
+.hea-dark {
+    color: #b65ddf;
+    letter-spacing: .7rem;
+    margin-right: -.7rem;
+}
+
+.global .h2-sub {
+    letter-spacing: -1px;
+    line-height: .42;
+}
+
+.res-info {
+    text-align: center;
+}
+
+.res-des {
+    margin-bottom: 3rem;
+}
+
+.res-des p {
+    line-height: 1.6;
+    margin-bottom: 2.4rem
+}
+
+
+/*menu*/
+
+.taste {
+    background: url("{% static 'images/pizza2.jpg' %}") center no-repeat;
+    background-size: cover;
+}
+
+.bt {
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+}
+
+
+/*platillos*/
+
+.image-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1.5rem;
+    
+}
+
+.disco .res-des {
+    padding-top: 3rem;
+    margin-bottom: 0;
+}
+
+.pb {
+    background: url("{% static 'images/pizza7.jpg' %}") center no-repeat;
+    background-size: cover;
+}
+
+
+/*footer*/
+footer {
+    padding: 7.9rem 0;
+    background-color: #121212;
+    color: #fff;
+    text-align: center;
+    position: relative;
+}
+
+.footer-content {
+    overflow: hidden;
+}
+
+.footer-content h4 {
+    font-size: 1.9rem;
+    text-transform: uppercase;
+    font-weight: 100;
+    letter-spacing: 3px;
+    margin-bottom: 3rem;
+}
+
+.footer-content .circle{
+    margin: 2.4rem 0;
+}
+
+.footer-content-about {
+    margin-bottom: 5.4rem;
+}
+
+.footer-content-about p {
+    line-height: 2;
+}
+
+.social-icons {
+    list-style: none;
+    margin-bottom: 5.4rem;
+    display: flex;
+    justify-content: center;
+}
+
+.social-icons i {
+    font-size: 2rem;
+    color: #3bcc75;
+    padding: .8rem 2rem;
+    
+}
+
+.social-icons i:hover,
+.social-icons i:focus {
+    color: #ffc845;
+}
+
+.news-form {
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+
+}
+
+.news-input {
+    width: 100%;
+    max-width: 25rem;
+    padding: 1rem;
+    border-radius: .4rem;
+}
+.news-btn {
+    background: transparent;
+    border: none;
+    color: #252525;
+    cursor: pointer;
+    font-size: 1.6rem;
+    padding: 1px .6rem;
+    position: absolute;
+    top: 30%;
+    margin-left: 20.5rem;
+}
+
+@media screen and (min-width: 900px) {
+
+    section {
+        padding: 7.9rem;
+    }
+
+    .menu-toggle {
+        display: none;
+    }
+
+    .nav {
+        justify-content: space-between;
+    }
+
+    .nav-list {
+        position: initial;
+        width: initial;
+        height: initial;
+        background-color: transparent;
+        padding: 0;
+        justify-content: initial;
+        flex-direction: row;
+        transform: initial;
+        transition: initial;
+    }
+
+    .nav-item {
+        margin: 0 2.4rem;
+    }
+
+    .nav-item:last-child {
+        margin-right: 0;
+    }
+
+    .nav-link {
+        font-size: 1.3rem;
+    }
+
+    .active {
+        position: relative;
+    }
+    .active::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: #fff;
+        left: 0;
+        bottom: -3px;
+    }
+
+    .h2-sub {
+        font-size: 3rem;
+    }
+
+    .fil {
+        font-size: 3rem;
+    }
+    .head {
+        font-size: 4.7rem;
+        letter-spacing: .8rem;
+    }
+
+    .res-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .res-info > div {
+        flex: 1;
+    }
+
+    .pad-rig {
+        padding-right: 7rem;
+    }
+
+    .footer-content {
+        max-width: 77.5rem;
+        margin: auto;
+    }
+
+    .footer-content-about {
+        max-width: 51.3rem;
+        margin:  0 auto 5.4rem;
+    }
+
+    .footer-div{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .social-media,
+    .news-form {
+        width: 100%;
+        max-width: 27.3rem;
+        margin: 0 1rem;
+    }
+
+   .news-btn {
+       margin-left: 7.5rem;
+   }
+    
+}
+
+  </style>
+    <header>
+        <div class="container">
+          <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Pizza Wave</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+              <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/usuario">Inicio</a>
+              </li>
+            
+            
+              {% if request.session.username %}
+            
+              <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+              <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+              
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Vista Empleados
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              <li class="nav-item">
+                <a class="nav-link" href="/cargoregister">Registros de Cargos del Empleado</a>
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link" href="/empleado">Registro de Empleados</a>
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link" href="/tipodocumentoemp">Registro de Tipo De Documento</a>
+              </li>
           
-        </div>
-      </div>
-      <div class="carousel-item" data-bs-interval="2000">
-        <img src="{% static 'images/pizza6.jpg' %}" class="d-block w-100" style="height: 600px ;" alt="...">
-        <div class="carousel-caption">
-          <h5 style="font-size: 500%  ; color: purple; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">PIZZA </h5>
           
-        </div>
-      </div>
-      <div class="carousel-item" data-bs-interval="2000">
-        
-        <img src="{% static 'images/pizza7.jpg' %}" class="d-block w-100" style="height: 600px ;" alt="...">
-        <div class="carousel-caption">
-          <h5 style="font-size: 500%  ; color: purple; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">WAVE </h5>
+              <li class="nav-item">
+                <a class="nav-link" href="/departamentohome">Registro de Departamento</a>
+              </li>
           
-        </div>
-      </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-
-</div>    
-</div>
-
-    <div class="ui vertical stripe segment">
-      <div class="ui middle aligned stackable grid container">
-        <div class="row">
-          <div class="eight wide column">
-            <h3 class="ui header">Somos una Empresa Recien Empezando y nos interesaria tu opinion sobre los diferentes sabores que cuentan nuestros menus Acompañanos que esto apenas esta a punto de comenzar</h3>
-            <p>
-              Ofrecemos Grandes Pequeñas y Minimos Combos para ya sea en familia en pareja y solos por si te agarra la noche luego de terminar tu trabajo
-            </p>
-            <h3 class="ui header">Contamos con ingredientes que el Cliente pueda escoger dependiendo de su gusto </h3>
-            <p>
-              Tambien contamos con la opcion de personalizar tu Menu con los ingredientes que contamos en nuestro catalogo
-            </p>
-          </div>
-          <div class="six wide right floated column">
-            <img
-              class="ui large bordered rounded image"
-              src="{% static 'images/pizza1.jpg' %}"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="center aligned column">
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="ui vertical stripe quote segment">
-      <div class="ui equal width stackable internally celled grid">
-        <div class="center aligned row">
-          <div class="column">
-            <h3>"Sobre Nosotros"</h3>
-            <p>Somos una empresa Recien entrando en el ambito lo cual nos llevara un gran camino por delante y con tu acompañamiento seria el mejor modo para progresar en este ambito y ser exitosos!
-            </p>
-          </div>
-          <div class="column">
-            <h3>"Contamos con diferentes Personalizaciones para el Usuario---PROXIMAMENTE----"</h3>
-            <p>
-              <img
-                class="ui avatar image"
-                src="{% static 'images/pizza2.jpg' %}"
-              />
-              <b>PROXIMAMENTE EN</b> pizza wave
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="ui vertical stripe segment">
-      <div class="ui text container">
-        <h3 class="ui header">Vision</h3>
-        <p>
-          Nuestras inspiraciones son Dominos Pizza,Little Caersan,Tito Pizza,Freddys Fazbear pizzas buscamos igualarles el nivel a estas compañias
-        </p>
-        <h4 class="ui horizontal header divider">
-          <a href="#root"> Hola de Nuevo </a>
-        </h4>
-        <h3 class="ui header">¿Sabias Que?</h3>
-        <p>
-          La Pizza Varia su Sabor dependiendo de la situacion y el estado de animo en la que te encuentres,
-          otro secreto a los programadores les encanta la pizza? Tu que estas viendo este mensaje sabias eso?
-        </p>
-        <a class="ui large button">Estoy Interesado</a>
-      </div>
-    </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      // fix menu when passed
-      $(".masthead").visibility({
-        once: false,
-        onBottomPassed: function() {
-          $(".fixed.menu").transition("fade in");
-        },
-        onBottomPassedReverse: function() {
-          $(".fixed.menu").transition("fade out");
-        }
-      });
-
-      // create sidebar and attach to menu open
-      $(".ui.sidebar").sidebar("attach events", ".toc.item");
-    });
-  </script>
-
-
-
-
-
-      <!-- Masthead-->
-      <header class="masthead" style="height: 950px ;" id="header1">
-        <div class="container px-4 px-lg-5 d-flex h-50 align-items-center justify-content-center">
-            <div id="divdelheader1" class="d-flex justify-content-center" >
-                <div class="text-center" >
-                    <h1 style="font-size: xx-larger  ;" class="mx-auto my-0 text-uppercase">Pizza Wave</h1>
-                    <h2 style="font-size: xx-larger  ;" class="text-dark-100 mx-auto mt-2 mb-5">donde el Sabor y la frescura se disfrutan al lado de una computadora macintosh o windows 98 .</h2>
-                    <a class="btn btn-danger" href="/menu">Visita Nuestro menu No te Arepentiras</a>
-                </div>
+              <li class="nav-item">
+                <a class="nav-link" href="/puestos">Control de Puestos</a>
+              </li>
+          
+              <li class="nav-item">
+                <a class="nav-link" href="/sucursal">Control de sucursal</a>
+              </li>
+          
+              </ul>
+            
+              </li>
+              </ul>
             </div>
+              
+            
+            
+              <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+              <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Vista Usuarios
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              
+                <li class="nav-item">
+                <a class="nav-link" href="/pedidos">Realizar Pedidos</a>
+                </li>
+          
+          
+                
+            
+                <li class="nav-item">
+                  <a class="nav-link" href="/registrousuarios">Usuarios</a>
+                </li>
+              
+          
+          
+                <li class="nav-item">
+                  <a class="nav-link" href="/estadopedido">Estado Pedido</a>
+                  </li>
+            
+                  <li class="nav-item">
+                    <a class="nav-link" href="/detallepedido">Detalle Pedido</a>
+                    </li>
+          
+          
+                    <li class="nav-item">
+                      <a class="nav-link" href="/reservaciones">Registros de Reservaciones</a>
+                      </li>
+          
+          
+          
+                    <li class="nav-item">
+                      <a class="nav-link" href="/promociones">Registros de Promociones</a>
+                      </li>
+          
+                      
+          
+          
+          
+                    <li class="nav-item">
+                      <a class="nav-link" href="/metodopago">Metodo de Pago</a>
+                      </li>
+          
+          
+          
+                      <li class="nav-item">
+                        <a class="nav-link" href="/sartabla">SAR</a>
+                        </li>
+          
+              
+                </ul>
+                </li>
+              </ul>
+              </div>
+          
+          
+          
+              <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Vista productos
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              
+                  <li class="nav-item">
+                  <a class="nav-link" href="/categoria">Registros de categoria</a>
+                  </li>
+              
+                  <li class="nav-item">
+                  <a class="nav-link" href="/almacen">Registros del almacen </a>
+                  </li>
+          
+                  <li class="nav-item">
+                  <a class="nav-link" href="/familiaproducto">Registros de familia producto</a>
+                  </li>
+          
+                  <li class="nav-item">
+                  <a class="nav-link" href="/menutabla">Registros del Menu</a>
+                  </li>
+          
+          
+                  <li class="nav-item">
+                    <a class="nav-link" href="/historicomenutabla">Registros Historicos del Menu</a>
+                    </li>
+          
+                  <li class="nav-item">
+                  <a class="nav-link" href="/elaboracion">Registros de Elaboracion</a>
+                  </li>
+          
+          
+                  <li class="nav-item">
+                  <a class="nav-link" href="/recetatablaregistros">Registros de Receta</a>
+                  </li>
+          
+                  <li class="nav-item">
+                    <a class="nav-link" href="/inventario">Registros de inventario</a>
+                    </li>
+          
+                  <li class="nav-item">
+                    <a class="nav-link" href="/productos">Registros de Productos</a>
+                    </li>
+          
+          
+          
+              
+                </ul>
+                </li>
+                </ul>
+                </div>
+              
+            
+            
+            
+            
+              <li class="nav-item">
+              <a class="nav-link" href="/signout">Cerrar Sesion</a>
+              </li>
+            
+            
+            
+             
+              {% else %}
+              
+              <li class="nav-item">
+              <a class="nav-link" href="/login_user">Iniciar Sesion</a>
+              </li>
+               
+            
+                 <li class="nav-item">
+              <a class="nav-link" href="/signup">Registrarse</a>
+              </li>
+            
+            
+              
+              {% endif %}
+              
+              
+            
+            
+            
+              
+            
+                 <li class="nav-item">
+              <a class="nav-link" href="/menu">Menu</a>
+              </li>
+            
+              
+            
+              <div class="collapse navbar-collapse" id="navbarNav">
+              <li class="nav-item">
+                <a class="nav-link desactivated">{{request.session.username}}</a>
+              </li>
+              </div>
+            
+            
+              </ul>
+              </div>
+            </div>
+            </nav>
+          
         </div>
     </header>
 
-    <br>
+
+    <section class="hero" id="hero">
+        <div class="container">
+            <h2 class="h2-sub">
+                <span class="fil">B</span>ienvenido a
+            </h2>
+            <h1 class="head">Pizza Wave</h1>
+            <div class="he-des">
+                <h5>Pizza Wave donde el Sabor y la frescura se disfrutan al lado de una computadora macintosh o windows 98 .</h5>
+     
+            </div>
+        </div>
+    </section>
+
+    <section class="dis-sto">
+        <div class="container">
+            <div class="res-info">
+                <div>
+                    <img src="{% static 'images/pizza5.jpg' %}" alt="">
+                </div>
+            
+                <div class="res-des pad-rig">
+                    <div class="global">
+                        <h2 class="h2-sub">
+                            <span class="fil">D</span>escubre
+                        </h2>
+                        <h1 class="head hea-dark">La Historia</h1>
+                        <div class="circle">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                    </div>
+                    <p>
+                      Somos una empresa Recien entrando en el ambito lo cual nos llevara un gran camino por delante y con tu acompañamiento seria el mejor modo para progresar en este ambito y ser exitosos!
+
+                      Nuestras inspiraciones son Dominos Pizza,Little Caersan,Tito Pizza,Freddys Fazbear pizzas buscamos igualarles el nivel a estas compañias
+                    </p>
+                    <a href="#" class="btn cta-btn">Nosotros</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
 
+    <section class="taste bt">
+        <div class="container">
+            <div class="global">
+                <h2 class="h2-sub">
+                    <span class="fil">P</span>latillos
+                </h2>
+                <h1 class="head">La Pizza Varia su Sabor dependiendo de la situacion y el estado de animo en la que te encuentres,
+                  otro secreto a los programadores les encanta la pizza? Tu que estas viendo este mensaje sabias eso?</h1>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="disco">
+        <div class="container">
+            <div class="res-info">
+                <div class="res-des">
+                    <div class="global">
+                        <h2 class="h2-sub">
+                            <span class="fil">D</span>escubre
+                        </h2>
+                        <h1 class="head hea-dark">Menú</h1>
+                        <div class="circle">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                    </div>
+                    <p>
+                     Contamos con diferentes estilos en el menu desde tradicional,picante y supremas que varian los tamaños y grandes ofertas para que puedas disfrutar en parejas o en familia 
+                    </p>
+                    <a href="#" class="btn cta-btn">Pide el menu</a>
+                </div>
+                <div class="image-group pad-rig">
+                    <img src="{% static 'images/pizza1.jpg' %}" alt="">
+                    <img src="{% static 'images/pizza2.jpg' %}" alt="">
+                    <img src="{% static 'images/pizza3.jpg' %}" alt="">
+                    <img src="{% static 'images/pizza5.jpg' %}" alt="">
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="pb bt">
+        <div class="container">
+            <div class="global">
+                <h2 class="h2-sub">
+                    <span class="fil">P</span>latillos
+                </h2>
+                <h1 class="head"> Ofrecemos Grandes Pequeños Combos para ya sea en familia en pareja y solos por si te agarra la noche luego de terminar tu trabajo</h1>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="res-info">
+
+                <div class="image-group">
+                    <img src="{% static 'images/pizza5.jpg' %}" alt="">
+                    <img src="{% static 'images/pizza7.jpg' %}" alt="">
+                </div>
+                <div class="res-des pad-rig">
+                    <div class="global">
+                        <h2 class="h2-sub">
+                            <span class="fil">D</span>egusta
+                        </h2>
+                        <h1 class="head hea-dark">Delisioso menú</h1>
+                        <div class="circle">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                    </div>
+                    <p>
+                      Tambien contamos con la opcion de personalizar tu Menu con los ingredientes que contamos en nuestro catalogo.
+                      
+                    </p>
+                    <a href="#" class="btn cta-btn">Has una reservacion</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+
+                <div class="footer-content-about">
+                    <h4>Ubicacion</h4>
+                    <div class="circle">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <p>Calle Poseidon enfrente de la Universidad Jose Cecilio del Valle Visitanos y no te arrepentiras</p>
+                </div>
+                <div class="footer-div">
+                    <div class="social-media">
+                        <h4>Siguenos</h4>
+                        <ul class="social-icons">
+                            <li>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fab fa-facebook-square"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Noticias</h4>
+                        <form action="" class="news-form">
+                            <input type="text" class="news-input"
+                            placeholder="Escribe tu email"
+                            >
+                            <button class="news-btn" type="submit">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+        const selectElement = function(element) {
+            return document.querySelector(element);
+        }
+
+
+        let menuToggle = selectElement('.menu-toggle');
+        let body = selectElement('body');
+
+        menuToggle.addEventListener('click', function(){
+            body.classList.toggle('open');
+        })
+
+    </script>
 
     
-
-
-
-
-      <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
-        <div class="d-flex justify-content-center">  
-    
-    <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner" style="border-radius: 25px ;">
-        <div class="carousel-item active" data-bs-interval="2000">
-          <img src="{% static 'images/pizza5.jpg' %}" class="d-block w-100" style="height: 600px  ;" alt="...">
-        </div>
-        <div class="carousel-item" data-bs-interval="2000">
-          <img src="{% static 'images/pizza6.jpg' %}" class="d-block w-100" style="height: 600px ;" alt="...">
-        </div>
-        <div class="carousel-item" data-bs-interval="2000">
-          <img src="{% static 'images/pizza7.jpg' %}" class="d-block w-100" style="height: 600px ;" alt="...">
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
-
-  </div>    
-</div>
-
-
-
-
-
-
-  <img src="{% static 'images/bakingpizza2.gif' %}" class="card-img" id="logoimg"   /> 
-
-  <div id="logoitem" >
-  <div class="card" style="width: 18rem;" >
-    <img src="{% static 'images/pizza1.jpg' %}" class="card-img-top" alt="...">
-    <div class="card-body">
-      <p class="card-text">Tenemos la version de Peperoni Picante con toque picoso con ingredientes nunca antes vistos</p>
-    </div>
-  </div>
-
-  <div id="logoitem2" class="col">
-    <div class="card " style="width: 18rem;" >
-      <img src="{% static 'images/pizza1.jpg' %}" class="card-img-top" alt="...">
-      <div class="card-body">
-        <p class="card-text">Tenemos la tradicional pizza de peperoni que habitualmente es comprada y esta a un super precio</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-<div class="row row-cols-1 row-cols-md-3 g-5" id="pizzal">
-  <div class="col">
-    <div class="card h-100">
-      <img src="{% static 'images/pizza1.jpg' %}" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Pizza Picante de Peperoni</h5>
-        <p class="card-text">Esta pizza es de tamaño familiar y cuenta de dos sabores picante y tradicional</p>
-      </div>
-      <div class="card-footer">
-        <small class="text-muted">ultima vez actualizado hace 3 min</small>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100">
-      <img src="{% static 'images/pizza2.jpg' %}"class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Pizza Vegetariana Especial</h5>
-        <p class="card-text">Tenemos la pizza vegetariana para esas personas que no le gusta comer animales tambien contamos con su alternativa hecha de carne vegetal y quesillo</p>
-      </div>
-      <div class="card-footer">
-        <small class="text-muted">ultima vez actualizado hace 3 min</small>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100">
-      <img src="{% static 'images/pizza3.jpg' %}" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Pizza Hiperpicante modo diablo</h5>
-        <p class="card-text">Esta pizza esta a base de los chiles mas picante de la ciudad sumado a que el chile esta disperso lo cual no sabras si estas comiendo un chile</p>
-      </div>
-      <div class="card-footer">
-        <small class="text-muted">ultima vez actualizado hace 3 min</small>
-      </div>
-    </div>
-  </div> 
-</div>
-
-
-
-        <!-- Projects-->
-        <section class="projects-section bg-light" id="projects" style="background-color: #5C258D;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to right, #4389A2, #5C258D);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #4389A2, #5C258D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-         ;">
-          <div class="container px-4 px-lg-5">
-              <!-- Featured Project Row-->
-              <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-                  <div class="col-lg-6"><img class="img-fluid " src="{% static 'images/pizza2.jpg' %}" alt="..." /></div>
-                  <div class="col-lg-6">
-                    <div class="bg-black text-center h-100 project">
-                      <div class="d-flex h-100">
-                      <div class="project-text w-100 my-auto text-center text-lg-left">
-                          <h4 class="text-white">Definicion de nuestros Ingredientes</h4>
-                          <p class="mb-0 text-white-50">Nuestras Recetas se basan en lo tradicional lo cual no conllevan aditivos perjudicales para la salud y contamos con diversas variedades para aquellas personas que no les apetece lo que mata pero complace</p>
-                          <hr class="d-none d-lg-block mb-0 ms-0" />
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-              </div>
-              <!-- Project One Row-->
-              <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-                  <div class="col-lg-6"><img class="img-fluid" src="{% static 'images/pizza5.jpg' %}" alt="..." /></div>
-                  <div class="col-lg-6">
-                      <div class="bg-black text-center h-100 project">
-                          <div class="d-flex h-100">
-                              <div class="project-text w-100 my-auto text-center text-lg-left">
-                                  <h4 class="text-white">Contamos con Variedades de Tamaño</h4>
-                                  <p class="mb-0 text-white-50">Tenemos variedades de tamaños y estilos para personas que les gusta disfrutar individual o en grupo y en pareja</p>
-                                  <hr class="d-none d-lg-block mb-0 ms-0" />
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <!-- Project Two Row-->
-              <div class="row gx-0 justify-content-center">
-                  <div class="col-lg-6"><img class="img-fluid" src="{% static 'images/pizza6.jpg' %}" alt="..." /></div>
-                  <div class="col-lg-6 order-lg-first">
-                      <div class="bg-black text-center h-100 project">
-                          <div class="d-flex h-100">
-                              <div class="project-text w-100 my-auto text-center text-lg-right">
-                                  <h4 class="text-white">Ubicacion</h4>
-                                  <p class="mb-0 text-white-50">Calle Poseidon enfrente de la Universidad Jose Cecilio del Valle Visitanos y no te arrepentiras</p>
-                                  <hr class="d-none d-lg-block mb-0 me-0" />
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </section>
-
-
-
-
-      <div class="card mb-3">
-        <img class="card-img-top" src="{% static 'images/bakingpizza.gif' %}" alt="..." />
-  
-      <div class="card-img-overlay">
-
-      <div class="row gx-4 gx-lg-5 justify-content-center">
-          <div class="col-lg-8">
- 
-          </div>
-      </div>
-    </div>
-  </div>
-
-
-
-  <div class="ui inverted vertical footer segment">
-    <div class="ui container">
-      <div
-        class="ui stackable inverted divided equal height stackable grid"
-      >
-        <div class="three wide column">
-          <h4 class="ui inverted header">Datos de Nosotros</h4>
-          <div class="ui inverted link list">
-            <a class="item" href="#root">Calle Humuya Enfrente de la UJCV</a>
-            <a class="item" href="#root">Contactanos 88446955 y 87722631</a>
-            <a class="item" href="#root">Religious Ceremonies</a>
-            <a class="item" href="#root">Gazebo Plans</a>
-          </div>
-        </div>
-        <div class="three wide column">
-          <h4 class="ui inverted header">Servicios</h4>
-          <div class="ui inverted link list">
-            <a class="item" href="#root">A Domiciolio</a>
-            <a class="item" href="#root">Pre ORDEN de Nuevos Proyectos</a>
-            <a class="item" href="#root">Ofertas a los usuarios VIP y Compradores recurrentes</a>
-            <a class="item" href="#root">Y mucho mas</a>
-          </div>
-        </div>
-        <div class="seven wide column">
-          <h4 class="ui inverted header">Ubicacion</h4>
-          <p>
-            Calle Humuya Adelante de la Universidad Jose Cecilio del Valle  
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
 </body>
-
 </html>

@@ -2916,14 +2916,14 @@ def eliminarproducto(request,id):
 
 def pedidos(request):
     est=estado_pedido.objects.all()
-    det=detalle_pedido.objects.all()
+
     user=insertuser.objects.all()
     ped=pedidostabla.objects.all()
     men=menutabla.objects.all()
     context={
         'ped':ped,
         'est':est,
-        'det':det,
+
         'user':user,
         'men':men,
     }
@@ -2940,7 +2940,8 @@ def agregarpedido(request):
             nombre_cliente=request.POST.get("nombre_cliente")
             nombre_menu=request.POST.getlist("nombre_menu[]")  # Obtener la lista de opciones seleccionadas
             cantidades=request.POST.get("cantidades")
-            detalle_id=request.POST.get("detalle_id")
+            tamaño_menu=request.POST.get("tamaño_menu")
+            estado_pedido=request.POST.get("estado_pedido")
 
                        # convierte la lista en una cadena separada por comas
             nombre_menu_str =  ', '.join(nombre_menu)
@@ -2951,9 +2952,9 @@ def agregarpedido(request):
             id_pedido=id_pedido,
             nombre_cliente=nombre_cliente,
             nombre_menu=nombre_menu_str,
-
             cantidades=cantidades,
-            detalle_id=detalle_id
+            tamaño_menu=tamaño_menu,
+            estado_pedido=estado_pedido,
 
 
 
@@ -2976,11 +2977,15 @@ def editarpedido(request,id):
     nombre_cliente=request.POST.get('nombre_cliente')
     nombre_menu=request.POST.get('nombre_menu')
     cantidades=request.POST.get("cantidades")
-    detalle_id=request.POST.get("detalle_id")
+    tamaño_menu=request.POST.get("tamaño_menu")
+    estado_pedido=request.POST.get("estado_pedido")
 
+
+    ped.tamaño_menu=tamaño_menu
+    ped.estado_pedido=estado_pedido
 
     ped.cantidades=cantidades
-    ped.detalle_id=detalle_id
+
     ped.id_pedido=id_pedido
     ped.nombre_cliente=nombre_cliente
     ped.nombre_menu=nombre_menu
@@ -3019,27 +3024,26 @@ def facturaciontabla(request):
 #fIN DE LA VISTA FACTURACION
 from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt
 def obtener_detalles_pedido(request):
     if request.method == 'GET':
         cliente_id = request.GET.get('cliente_id', '')
         
         if cliente_id:
             # Obtener el último pedido del cliente seleccionado
-            pedido = pedidostabla.objects.filter(nombre_cliente=cliente_id).last()
+            pedido = get_object_or_404(pedidostabla, nombre_cliente=cliente_id)
             
-            if pedido is not None:
-                # Crear un diccionario con los detalles del pedido
-                detalles_pedido = {
-                    'menu_nombre': pedido.nombre_menu,
-                    'cantidades': pedido.cantidades,
-                    'detalle_id': pedido.id_pedido,
-                    'fecha': pedido.fecha_pedido,
-                }
-                
-                return JsonResponse(detalles_pedido)
+            # Crear un diccionario con los detalles del pedido
+            detalles_pedido = {
+                'menu_nombre': pedido.nombre_menu,
+                'cantidades': pedido.cantidades,
+                'tamaño_menu': pedido.tamaño_menu,
+                'estado_pedido': pedido.estado_pedido,
+                'fecha': pedido.fecha_pedido.strftime('%Y-%m-%d'),
+            }
+            
+            return JsonResponse(detalles_pedido)
         
-        # Si no se encontró ningún pedido o no se proporcionó el parámetro `cliente_id`, devolver una respuesta vacía
+        # Si no se proporcionó el parámetro `cliente_id`, devolver una respuesta vacía
     return JsonResponse({})
 @csrf_exempt
 def obtener_detalles_menu(request):

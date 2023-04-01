@@ -158,8 +158,13 @@
           </div>
           
           <div class="mb-3">
-              <label for="detalle" class="form-label">Detalle del Pedido(ID)</label>
+              <label for="detalle" class="form-label">Tamaño del Menú</label>
               <input type="text" name="detalle" id="detalle-input" readonly>
+          </div>
+          
+          <div class="mb-3">
+              <label for="estado" class="form-label">Estado del Pedido</label>
+              <input type="text" name="estado" id="estado-input" readonly>
           </div>
           
           <div class="mb-3">
@@ -219,6 +224,8 @@
             </div>
 
 
+            <label for="">Cantidad a Pagar</label>
+            <input class="form-control" type="text" name="" id="">
 <!-- Este es el contenedor de la grilla de selección de menú -->
 <div id="menu-grid-container">
   <h2>Seleccione un menú:</h2>
@@ -238,15 +245,13 @@
            <br>
            <label class="form-label" for="total-a-pagar">Total a pagar:</label>
            <input id="total-a-pagar" class="form-control" type="text" >
+           <button class="btn btn-danger" id="reset-total-button" type="button">Resetear cuenta</button>
+           <br>
 
-
-
-
-
-           <button id="reset-total-button" type="button">Resetear cuenta</button>
-
-
-     
+           <br>
+           <label for="" class="form-label">Cambio(Vuelto)</label>
+          <input class="form-control" type="text" name="" id="">
+      <br>
      
            <div class="modal-footer">
 
@@ -261,36 +266,30 @@
 
 
 $(document).ready(function() {
-    $('#cliente-select').change(function() {
-        var cliente_id = $(this).val();
-        
-        if (cliente_id !== '') {
+        // Escuchar cambios en la selección del cliente
+        $('#cliente-select').change(function() {
+            var cliente_id = $(this).val();
+            
+            // Hacer una llamada AJAX para obtener los detalles del pedido
             $.ajax({
                 url: '/obtener_detalles_pedido/',
-                type: 'GET',
                 data: {
-                    'cliente_id': cliente_id
+                    cliente_id: cliente_id
                 },
-                success: function(response) {
-                    $('#menu-input').val(response.menu_nombre);
-                    $('#cantidades-input').val(response.cantidades);
-                    $('#detalle-input').val(response.detalle_id);
-                    $('#fecha-input').val(response.fecha);
+                success: function(data) {
+                    // Actualizar los campos de entrada correspondientes con los detalles del pedido
+                    $('#menu-input').val(data.menu_nombre);
+                    $('#cantidades-input').val(data.cantidades);
+                    $('#detalle-input').val(data.tamaño_menu);
+                    $('#estado-input').val(data.estado_pedido);
+                    $('#fecha-input').val(data.fecha);
                 },
-                error: function(error) {
-                    console.log(error);
+                error: function(xhr, status, error) {
+                    console.error(error);
                 }
             });
-        } else {
-            // Limpiar los campos de entrada si no se ha seleccionado ningún cliente
-            $('#menu-input').val('');
-            $('#cantidades-input').val('');
-            $('#detalle-input').val('');
-            $('#fecha-input').val('');
-        }
+        });
     });
-});
-
 
 const select = document.getElementById('metodo-pago');
     const inputTarjeta = document.getElementById('input-tarjeta');

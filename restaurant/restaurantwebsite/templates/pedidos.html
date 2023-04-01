@@ -260,7 +260,8 @@
           <th scope="col">Nombre del Cliente</th>
           <th scope="col">Nombre del Menu</th>
           <th scope="col">Cantidades</th>
-          <th scope="col">Detalle del Pedido(ID)</th>
+          <th scope="col">Tamaño del Menu</th>
+          <th scope="col">Estado del Pedido</th>
 		  <th scope="col">Fecha de Realizacion del pedido</th>
 		  <th scope="col">Acciones</th>
 		</tr>
@@ -272,7 +273,8 @@
           <td>{{p.nombre_cliente}}</td>
           <td>{{p.nombre_menu}}</td>
           <td>{{p.cantidades}}</td>
-          <td>{{p.detalle_id}}</td> 
+		  <th>{{p.tamaño_menu}}</th>
+          <th>{{p.estado_pedido}}</th>
 		  <td>{{p.fecha_pedido|date:'d/m/y'}}</td>
 		  <td>
 
@@ -328,6 +330,14 @@
 			</select>
 			<br>
 			
+			<label for="">Tamaño del Menu</label>
+			<select class="form-control" name="tamaño_menu" id="tamaño_menu" required>
+			<option value="" selected disabled>Selecciona un Tamaño del Menu</option>
+			<option value="Individual">Individual</option>
+			<option value="Parejas">Parejas</option>
+			<option value="Familiar">Familiar</option>
+			</select>
+			<br>
 
 			<label for="">Cantidades</label>
 			<select class="form-control" name="cantidades" id="cantidades">
@@ -342,11 +352,11 @@
 		</select>
 			<br>
 
-			<label for="">Detalle del Pedido(ID)</label>
-			<select class="form-control" name="detalle_id" id="detalle_id">
+			<label for="">Estado del Pedido</label>
+			<select class="form-control" name="estado_pedido" id="estado_pedido">
 				<option value="" selected disabled>Selecciona El Detalle del Pedido</option>
-				{% for d in det %}
-			<option value="{{d.id_detalle}}">{{d.id_detalle}}</option>
+				{% for e in est %}
+			<option value="{{e.descripcion_pedido}}">{{e.descripcion_pedido}}</option>
 
 			{% endfor %}
 		</select>
@@ -379,11 +389,11 @@
 		<div class="modal-body">
 		  
 			<label for="">ID del Pedido</label>
-			<input type="text" name="id_pedido" value="{{p.id_pedido}}" id="">
+			<input class="form-control" type="text" name="id_pedido" value="{{p.id_pedido}}" id="">
 			<br>
 
 			<label for="">Nombre del Cliente</label>
-			<select name="nombre_cliente" id="">
+			<select class="form-control" name="nombre_cliente" id="">
 				<option value="{{p.nombre_cliente}}">{{p.nombre_cliente}}</option>
 			{% for u in user %}	
 			<option value="{{u.nombre}}">{{u.nombre}}</option>
@@ -392,7 +402,7 @@
 			<br>
 
 			<label for="">Nombre del Menu</label>
-			<select name="nombre_menu" id="">
+			<select class="form-control" name="nombre_menu" id="">
 				<option value="{{p.nombre_menu}}">{{p.nombre_menu}}</option>
 			{% for m in men %}	
 			<option value="{{m.nombre_menu}}">{{m.nombre_menu}}
@@ -401,6 +411,15 @@
 			</select>
 			<br>
 
+
+			<label for="">Tamaño del Menu</label>
+			<select class="form-control" name="tamaño_menu" id="tamaño_menu" required>
+			<option value="{{p.tamaño_menu}}" selected >{{p.tamaño_menu}}</option>
+			<option value="Individual">Individual</option>
+			<option value="Parejas">Parejas</option>
+			<option value="Familiar">Familiar</option>
+			</select>
+			<br>
 
 			<label for="">Cantidades</label>
 			<select class="form-control" name="cantidades" id="cantidades">
@@ -415,11 +434,11 @@
 		</select>
 			<br>
 
-			<label for="">Detalle del Pedido(ID)</label>
-			<select class="form-control" name="detalle_id" id="detalle_id">
-				<option value="{{p.detalle_id}}">{{p.detalle_id}}</option>
-				{% for d in det %}
-			<option value="{{d.id_detalle}}">{{d.id_detalle}}</option>
+			<label for="">Estado del Pedido</label>
+			<select class="form-control" name="estado_pedido" id="estado_pedido">
+				<option value="{{p.estado_pedido}}" selected>{{p.estado_pedido}}</option>
+				{% for e in est %}
+			<option value="{{e.descripcion_pedido}}">{{e.descripcion_pedido}}</option>
 
 			{% endfor %}
 		</select>
@@ -469,7 +488,11 @@ $("#Myform").validate({
 
  
     },
-    detalle_id: {
+    tamaño_menu: {
+      required: true,
+
+    },
+    estado_pedido: {
       required: true,
 
     },
@@ -491,10 +514,15 @@ $("#Myform").validate({
       required: "Debes Seleccionar los Menus para el Cliente",
 
     },
-    detalle_id: {
-      required: "Debes Seleccionar el ID de Detalle del Pedido",
+    tamaño_menu: {
+      required: "Debes Seleccionar Un Tamaño del Menu",
         
     },
+    estado_pedido: {
+      required: "Debes Seleccionar el Estado Del Pedido",
+        
+    },
+
     cantidades: {
       required: "Debes Seleccionar las Cantidades del Menu",
         
