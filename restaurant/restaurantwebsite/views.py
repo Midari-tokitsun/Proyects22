@@ -898,45 +898,6 @@ def tipodocumentoemp(request):
 
     docs=  documentoemp.objects.all()
 
-    paginator = Paginator(docs,2)
-    page=request.GET.get('page')
-    docs=paginator.get_page(page)
-
-
-    if request.method == 'GET' :
-        query = request.GET.get('buscardocuemntoemp')
-
-
-        paginator = Paginator(docs,2)
-        page=request.GET.get('page')
-        docs=paginator.get_page(page)
-
-
-
-        if query:
-            docs = documentoemp.objects.filter(
-            
-            Q(id__icontains=query) |
-            Q(tipo_identificacion__icontains=query) ).distinct
-
-            print("LO ENCONTRE Y TE ENLISTOS SUS REFERENCIAS!!")
-        
-         
-        else:
-            docs=documentoemp.objects.all()
-
-
-            paginator = Paginator(docs,2)
-            page=request.GET.get('page')
-            docs=paginator.get_page(page)
-
-
-            
-
-            query = request.GET.get('buscardocuemntoemp')
-            print("Retornando a Todos los registros")
- 
-
 
     context={
         

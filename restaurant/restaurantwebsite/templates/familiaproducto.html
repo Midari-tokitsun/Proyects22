@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -30,12 +31,17 @@
 <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 
-  <body style="background-color:  #5C258D;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #4389A2, #5C258D);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #4389A2, #5C258D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-   ;">
+  <body>
 
+    <style>
 
+      body{
+        background: url("{% static 'images/pizzab14.jpg' %}") center no-repeat;
+      background-size: cover;
+  
+      }
+  
+    </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
   <div class="container-fluid">
