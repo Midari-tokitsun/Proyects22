@@ -307,7 +307,7 @@
 
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">ID</label>
-                <input id="id_metodo_pago"  name="id_metodo_pago"  type="text" class="form-control"  placeholder="" >
+                <input id="id_metodo_pago"  name="id_metodo_pago"  type="number" class="form-control"  placeholder="" >
               </div>
 
 
@@ -375,7 +375,7 @@
                 </div>
 
               <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Moneda</label>
+                <label for="exampleFormControlTextarea1" class="form-label">Moneda en Siglas Porfavor(LPS.$)</label>
                 <input value="{{m.moneda}}" name="moneda" class="form-control" id="exampleFormControlTextarea1" type="text" >
               </div>
 
@@ -432,6 +432,7 @@ $('#miformulario').validate({
     },
     moneda: {
       required: true,
+      moneda:true,
     },
   },
   messages: {
@@ -461,6 +462,11 @@ jQuery.validator.addMethod("noSpace", function (value, element) {
 $.validator.addMethod("noRepetidos", function (value, element) {
   return this.optional(element) || !/(.)\1+/.test(value);
 }, "No se permiten caracteres repetidos en este campo");
+
+$.validator.addMethod("moneda", function(value, element) {
+  return this.optional(element) || /^[A-Z$€]+$/.test(value);
+}, "Por favor ingrese una sigla de moneda válida (USD, EUR, GBP, JPY, etc.)");
+
 
 
 

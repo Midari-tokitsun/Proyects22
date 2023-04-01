@@ -375,7 +375,7 @@
 
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Nombre de la Receta</label>
-                <input name="nombre_receta" type="text" class="form-control noSpace noRepetidos sololetrasyconmayusculas" id="nombre_receta" placeholder="Nombre de la Receta" required>
+                <input name="nombre_receta" type="text" class="form-control noSpace sololetrasyconmayusculas" id="nombre_receta" placeholder="Nombre de la Receta" required>
               </div>
 
 
@@ -533,7 +533,7 @@ $(document).ready(function() {
 				required: true, 
 				minlength: 5,
 				maxlength:16,
-				noRepetidos: true,
+				noCaracteresRepetidos: true,
 		
 				noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
 				sololetrasyconmayusculas:true,
@@ -620,10 +620,14 @@ $(document).ready(function() {
 });
 
 		
-		
+$.validator.addMethod("noCaracteresRepetidos", function (value, element) {
+  return this.optional(element) || !/(.)\1{2,}/.test(value);
+}, "No se permiten caracteres repetidos más de dos veces seguidas");
+
 $.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
-  return this.optional(element) || /^[A-Z][A-Za-z ]*(?:(?!(.)\1\1)[A-Za-z ])*$/.test(value);
-}, "Este campo solo puede contener letras y espacios y debe comenzar con una letra mayúscula");
+  return this.optional(element) || /^(?=.{4,})(?:(?:[A-Z][a-z]*|[a-z]*\s)[A-Za-z]*(\w)\1?(?!\1))+$/g.test(value);
+}, "Este campo solo puede contener letras y espacios y debe comenzar con una letra mayúscula. No se permiten más de dos caracteres consecutivos iguales.");
+
 
 		
 		

@@ -504,6 +504,7 @@ $('#myTable').DataTable({
       caiValido:true,
     },
     fecha_emision: {
+      lessThan: '#fecha_final',
       required: true,
       date: true
 
@@ -511,6 +512,7 @@ $('#myTable').DataTable({
     fecha_final: {
       required: true,
       date: true,
+       
   greaterEqualThan: '#fecha_emision',
   lessEqualThan: new Date()
 
@@ -611,9 +613,20 @@ $.validator.addMethod('lessEqualThan', function(value, element, param) {
 
 $.validator.addMethod("caiValido", function(value, element) {
   // Expresión regular para validar el CAI
-  var regex = /^[A-Z0-9]{37}$/;
+  var regex = /^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/;
   return regex.test(value);
 }, "El CAI ingresado no es válido.");
+
+
+
+$.validator.addMethod("lessThan", function (value, element, param) {
+    var $otherElement = $(param);
+    return this.optional(element) || new Date(value) <= new Date($otherElement.val());
+}, "La fecha de emisión no puede ser mayor a la fecha final.");
+
+
+
+
 
 
   </script>

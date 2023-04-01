@@ -456,7 +456,7 @@ $("#Myform").validate({
     nombre_promocion: {
       required: true,
 	  espacioYMinimo:true,
-	  soloLetras:true,
+	  soloLetrasConEspacio: true
     },
     menu_id: {
       required: true,
@@ -521,10 +521,11 @@ $.validator.addMethod("espacioYMinimo", function(value, element) {
     return this.optional(element) || /^\S{4,}\s\S+/.test(value);
 }, "Ingrese al menos 3 caracteres después del espacio.");
 
-$.validator.addMethod("soloLetras", function(value, element) {
-    return this.optional(element) || /^[a-zA-Z]+$/.test(value);
-}, "Ingrese solo letras.");
 
+
+$.validator.addMethod("soloLetrasConEspacio", function(value, element) {
+  return this.optional(element) || /^[a-zA-Z]+\s?[a-zA-Z]*$/.test(value);
+}, "Por favor ingrese solo letras y un espacio.");
 
 
 

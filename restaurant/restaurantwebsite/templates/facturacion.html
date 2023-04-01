@@ -149,27 +149,27 @@
 
             <div class="mb-3">
               <label for="menu" class="form-label">Nombre del Menú</label>
-              <input type="text" name="menu" id="menu-input" readonly>
+              <input class="form-control" type="text" name="menu" id="menu-input" readonly>
           </div>
           
           <div class="mb-3">
               <label for="cantidades" class="form-label">Cantidades</label>
-              <input type="text" name="cantidades" id="cantidades-input" readonly>
+              <input class="form-control" type="text" name="cantidades" id="cantidades-input" readonly>
           </div>
           
           <div class="mb-3">
               <label for="detalle" class="form-label">Tamaño del Menú</label>
-              <input type="text" name="detalle" id="detalle-input" readonly>
+              <input class="form-control" type="text" name="detalle" id="detalle-input" readonly>
           </div>
           
           <div class="mb-3">
               <label for="estado" class="form-label">Estado del Pedido</label>
-              <input type="text" name="estado" id="estado-input" readonly>
+              <input class="form-control" type="text" name="estado" id="estado-input" readonly>
           </div>
           
           <div class="mb-3">
               <label for="fecha" class="form-label">Fecha de Realización del Pedido</label>
-              <input type="text" name="fecha" id="fecha-input" readonly>
+              <input class="form-control" type="text" name="fecha" id="fecha-input" readonly>
           </div>
             
 
@@ -224,8 +224,8 @@
             </div>
 
 
-            <label for="">Cantidad a Pagar</label>
-            <input class="form-control" type="text" name="" id="">
+            <label for="cantidad-a-pagar">Cantidad a pagar:</label>
+            <input id="cantidad-a-pagar" class="form-control" type="text" name="cantidad-a-pagar">
 <!-- Este es el contenedor de la grilla de selección de menú -->
 <div id="menu-grid-container">
   <h2>Seleccione un menú:</h2>
@@ -249,8 +249,8 @@
            <br>
 
            <br>
-           <label for="" class="form-label">Cambio(Vuelto)</label>
-          <input class="form-control" type="text" name="" id="">
+           <label for="cambio">Cambio (Vuelto):</label>
+           <input id="cambio" class="form-control" type="text" name="cambio">
       <br>
      
            <div class="modal-footer">
@@ -316,6 +316,32 @@ const select = document.getElementById('metodo-pago');
     });
 
 
+    $(document).ready(function() {
+  // Obtener los campos de cantidad a pagar, total a pagar y cambio
+  var $cantidadAPagar = $('#cantidad-a-pagar');
+  var $totalAPagar = $('#total-a-pagar');
+  var $cambio = $('#cambio');
+  
+  // Escuchar el evento "input" del campo de cantidad a pagar
+  $cantidadAPagar.on('input', function() {
+    // Obtener la cantidad a pagar y el total a pagar
+    var cantidadAPagar = parseFloat($cantidadAPagar.val());
+    var totalAPagar = parseFloat($totalAPagar.val());
+    
+    // Calcular el cambio
+    var cambio = cantidadAPagar - totalAPagar;
+    
+    // Actualizar el campo de cambio
+    $cambio.val(cambio.toFixed(2));
+  });
+  
+  // Resetear la cuenta
+  $('#reset-total-button').on('click', function() {
+    $cantidadAPagar.val('');
+    $totalAPagar.val('');
+    $cambio.val('');
+  });
+});
 
     
     $(document).ready(function() {
@@ -332,7 +358,7 @@ const select = document.getElementById('metodo-pago');
     for (var i = 0; i < selectedMenus.length; i++) {
       total += parseInt(selectedMenus[i].precio) * selectedMenus[i].cantidad;
     }
-    $("#total-a-pagar").val(total + "€");
+    $("#total-a-pagar").val(total + "LPS");
   }
 
   function addSelectedMenu(menu) {
@@ -422,7 +448,7 @@ $(document).ready(function() {
         var precio = response.precio;
 
         // Agregar el menú seleccionado y su precio a la lista de menús
-        $("#selected-menus-list").append('<li data-menu="' + menu + '" data-precio="' + precio + '">' + menuName + ' (' + precio + '€) <button class="remove-menu-btn">Eliminar</button></li>');
+        $("#selected-menus-list").append('<li data-menu="' + menu + '" data-precio="' + precio + '">' + menuName + ' (' + precio + 'LPS) <button class="remove-menu-btn">Eliminar</button></li>');
         updateTotalPrice();
       },
       error: function() {
@@ -449,7 +475,7 @@ $(document).ready(function() {
     $("#selected-menus-list li").each(function() {
       totalPrice += parseFloat($(this).data("precio"));
     });
-    $("#total-a-pagar").val(totalPrice.toFixed(2) + "€");
+    $("#total-a-pagar").val(totalPrice.toFixed(2) + "LPS");
   }
 });
 
