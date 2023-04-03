@@ -2825,7 +2825,51 @@ def pedidos(request):
 
     return render(request, 'pedidos.html',context)
 
+
 def agregarpedido(request):
+    try:
+        if request.method == 'POST':
+            id_pedido = request.POST.get("id_pedido")
+            nombre_cliente = request.POST.get("nombre_cliente")
+            nombre_menu = request.POST.get("nombre_menu_hidden")
+            cantidades = request.POST.get("cantidades_hidden")
+
+            nombres = [nombre.strip() for nombre in nombre_menu.split(',')]
+            cantidades_list = [cantidad.strip() for cantidad in cantidades.split(',')]
+
+            # Crear una lista de cadenas de nombre y cantidad
+            nombre_cantidad = [f"{cantidad}x{nombre}" for nombre, cantidad in zip(nombres, cantidades_list)]
+
+            # Convertir la lista de cadenas en una sola cadena separada por comas y espacios
+            nombre_cantidad_str = "\n".join(nombre_cantidad)
+
+
+
+            tamaño_menu = request.POST.get("tamaño_menu")
+            estado_pedido = request.POST.get("estado_pedido")
+
+            # Crear un nuevo registro en la base de datos
+            pedidostabla.objects.create(
+                id_pedido=id_pedido,
+                nombre_cliente=nombre_cliente,
+                nombre_menu=nombre_cantidad_str,
+                cantidades=cantidades,
+                tamaño_menu=tamaño_menu,
+                estado_pedido=estado_pedido,
+            )
+
+            messages.success(request, 'Registro Agregado con Exito')
+            return redirect('pedidos')
+
+    except IntegrityError:
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+    return redirect('pedidos')
+
+
+
+
+"""def agregarpedido(request):
     try:  
         pass         
         if request.method=='POST':
@@ -2862,7 +2906,7 @@ def agregarpedido(request):
     except IntegrityError:    
         messages.error(request, 'Error: ya existe un registro con esa clave')
 
-    return redirect('pedidos')
+    return redirect('pedidos')"""
 
 def editarpedido(request,id):
     ped=pedidostabla.objects.get(id_pedido=id)

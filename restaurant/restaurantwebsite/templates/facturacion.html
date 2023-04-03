@@ -33,21 +33,54 @@
     
 
 
-    <table id="mitabla" class="display" cellspacing="0" width="100%">
+    <table id="mitabla" class="container" cellspacing="0" width="100%">
         <thead>
         <tr>
-        <th>Id </th>
-        <th>Descripcion</th>
+        <th>ID</th>
+        <th>Codigo CAI</th>
+        <th>Numero de Factura</th>
+        <th>Nombre del Encargado</th>
+        <th>Apellido del Encargado</th>
+        <th>Correo del Encargado</th>
+        <th>Numero Telefonico</th>
+        <th>Nombre del Cliente</th>
+        <th>Nombre del Menu</th>
+        <th>Cantidades</th>
+        <th>Tamaño del Menu</th>
+        <th>Estado del Pedido</th>
+        <th>Fecha de Realizacion del Pedido</th>
+        <th>Descuentos</th>
+        <th>ISV</th>
+        <th>Metodo de Pago</th>
+        <th>Numero de la Tarjeta</th>
+        <th>Cantidad a Pagar</th>
+        <th>Total a Pagar</th>
         <th>Acciones</th>
-
-        </tr>
+      </tr>
         </thead>
         <tfoot>
             <tr>
-                <th>Id</th>
-                <th>Descripcion</th>
-                <th>Acciones</th>
-                </tr>
+              <th>ID</th>
+              <th>Codigo CAI</th>
+              <th>Numero de Factura</th>
+              <th>Nombre del Encargado</th>
+              <th>Apellido del Encargado</th>
+              <th>Correo del Encargado</th>
+              <th>Numero Telefonico</th>
+              <th>Nombre del Cliente</th>
+              <th>Nombre del Menu</th>
+              <th>Cantidades</th>
+              <th>Tamaño del Menu</th>
+              <th>Estado del Pedido</th>
+              <th>Fecha de Realizacion del Pedido</th>
+              <th>Descuentos</th>
+              <th>ISV</th>
+              <th>Metodo de Pago</th>
+              <th>Numero de la Tarjeta</th>
+              <th>Cantidad a Pagar</th>
+              <th>Total a Pagar</th>
+              <th>Acciones</th>
+                      </tr>
         </tfoot>
         
         <tbody>
@@ -135,13 +168,18 @@
             <br>
         {% if request.session %}
 
+         <label for="">Nombre del Encargado</label>
          <input class="form-control" value="{{ request.session.nombre }}" readonly>
+         <label for="">Apellido del Encargado</label>
          <input class="form-control" value="{{ request.session.apellido }}" readonly>
+         <label for="">Correo Electronico</label>
          <input class="form-control" value="{{ request.session.email }}" readonly>
+         <label for="">Telefono</label>
          <input class="form-control" value="{{ request.session.telefono }}" readonly>
 
          {% endif %}
            <!-- Aquí agregas los campos necesarios para la factura, como el nombre del cliente, fecha, etc. -->
+           <h1>Descripcion de la Factura</h1>
             <br>
            <div class="mb-3">
              <label for="cliente" class="form-label">Nombre del Cliente</label>
@@ -156,7 +194,7 @@
 
             <div class="mb-3">
               <label for="menu" class="form-label">Nombre del Menú</label>
-              <input class="form-control" type="text" name="menu" id="menu-input" readonly>
+              <textarea class="form-control" type="text" name="menu" id="menu-input" readonly></textarea>
           </div>
           
           <div class="mb-3">
@@ -339,7 +377,7 @@ const select = document.getElementById('metodo-pago');
     var cambio = cantidadAPagar - totalAPagar;
     
     // Actualizar el campo de cambio
-    $cambio.val(cambio.toFixed(2));
+    $cambio.val(cambio.toFixed(2) + "LPS");
   });
   
   // Resetear la cuenta

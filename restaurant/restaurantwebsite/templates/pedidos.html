@@ -331,14 +331,31 @@
 			</select>
 			<br>
 
-			<label for="">Nombre del Menu</label>
-			<select class="form-control" name="nombre_menu[]" id="nombre_menu" multiple>
-				<option value="" selected >Selecciona un Menu</option>
-				{% for m in men %}    
+
+
+			<div class="form-group">
+				<label for="">Nombre del Menu</label>
+				<select class="form-control" name="nombre_menu" id="nombre_menu">
+				  <option value="" selected>Selecciona un Menu</option>
+				  {% for m in men %}    
 					<option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
-				{% endfor %}
-			</select>
-			<br>
+				  {% endfor %}
+				</select>
+			  </div>
+			
+			  <div class="form-group">
+				<label for="">Cantidad</label>
+				<input type="number" class="form-control" name="cantidad" id="cantidad" min="1" value="1" required>
+			  </div>
+			
+			  <button type="button" id="agregar-menu" class="btn btn-primary">Agregar</button>
+			
+			  <div id="menu-seleccionado">
+				<ul></ul>
+				<input type="hidden" name="nombre_menu_hidden" id="nombre_menu_hidden">
+				<input type="hidden" name="cantidades_hidden" id="cantidades_hidden">
+			  </div>
+			
 			
 			<label for="">Tamaño del Menu</label>
 			<select class="form-control" name="tamaño_menu" id="tamaño_menu" required>
@@ -349,18 +366,7 @@
 			</select>
 			<br>
 
-			<label for="">Cantidades</label>
-			<select class="form-control" name="cantidades" id="cantidades">
-				<option value="" selected disabled>Selecciona El Numero de Cantidades</option>
 
-			<option value="2">2</option>
-			<option value="4">4</option>
-			<option value="6">6</option>
-			<option value="8">8</option>
-			<option value="10">10</option>
-			
-		</select>
-			<br>
 
 			<label for="">Estado del Pedido</label>
 			<select class="form-control" name="estado_pedido" id="estado_pedido">
@@ -412,14 +418,14 @@
 			<br>
 
 			<label for="">Nombre del Menu</label>
-			<select class="form-control" name="nombre_menu" id="">
-				<option value="{{p.nombre_menu}}">{{p.nombre_menu}}</option>
-			{% for m in men %}	
-			<option value="{{m.nombre_menu}}">{{m.nombre_menu}}
-			</option>
-			{% endfor %}
+			<select class="form-control" name="nombre_menu[]" id="nombre_menu" multiple>
+				<option value="" selected >Selecciona un Menu</option>
+				{% for m in men %}    
+					<option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
+				{% endfor %}
 			</select>
 			<br>
+
 
 
 			<label for="">Tamaño del Menu</label>
@@ -472,6 +478,56 @@
 
 
 <script>
+
+$(document).ready(function() {
+  $('#agregar-menu').click(function() {
+    var nombreMenu = $('#nombre_menu option:selected').text();
+    var cantidad = $('#cantidad').val(); // obtenemos la cantidad ingresada por el usuario
+
+    // Verificar si ya se ha agregado el menú seleccionado
+    if ($(`#menu-seleccionado [data-menu-nombre="${nombreMenu}"]`).length > 0) {
+      // Si el menú ya está agregado, mostrar un mensaje de error y salir de la función
+      alert('Ya has seleccionado este menú.');
+      return;
+    }
+    
+    // Agregar el menú seleccionado al contenedor
+    var menuHtml = `
+      <div class="form-group" data-menu-nombre="${nombreMenu}">
+        <label for="cantidad-${nombreMenu}">${nombreMenu}</label>
+        <input type="number" class="form-control" name="cantidad[]" id="cantidad-${nombreMenu}" min="1" value="${cantidad}" required> <!-- agregar la cantidad ingresada por el usuario -->
+      </div>
+    `;
+    $('#menu-seleccionado').append(menuHtml);
+
+    // Agregar la cantidad y el nombre del menú seleccionado al campo "CANTIDADES"
+    var cantidades = $('#cantidades_hidden').val();
+    var menuCantidad = `(${cantidad})`;
+    var menuNombreCant = `${menuCantidad}${nombreMenu}`;
+    if (cantidades == "") {
+      $('#cantidades_hidden').val(menuCantidad);
+    } else {
+      $('#cantidades_hidden').val(`${cantidades},${menuCantidad}`);
+    }
+
+    // Agregar el nombre del menú seleccionado al campo "nombre_menu_hidden"
+    var nombres = $('#nombre_menu_hidden').val();
+    if (nombres == "") {
+      $('#nombre_menu_hidden').val(nombreMenu);
+    } else {
+      $('#nombre_menu_hidden').val(`${nombres},${nombreMenu}`);
+    }
+  });
+
+  // Modificar la función de guardar para guardar los datos de nombre_menu_hidden y cantidades
+  $('#guardar').click(function() {
+    var nombreMenu = $('#nombre_menu_hidden').val();
+    var cantidades = $('#cantidades_hidden').val();
+
+    // hacer algo con los datos
+  });
+});
+
 
 
 
