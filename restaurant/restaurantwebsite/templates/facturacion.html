@@ -44,8 +44,7 @@
         <th>Correo del Encargado</th>
         <th>Numero Telefonico</th>
         <th>Nombre del Cliente</th>
-        <th>Nombre del Menu</th>
-        <th>Cantidades</th>
+        <th>Nombre del Menu y Cantidades</th>
         <th>Tamaño del Menu</th>
         <th>Estado del Pedido</th>
         <th>Fecha de Realizacion del Pedido</th>
@@ -55,6 +54,7 @@
         <th>Numero de la Tarjeta</th>
         <th>Cantidad a Pagar</th>
         <th>Total a Pagar</th>
+        <th>Cambio</th>
         <th>Acciones</th>
       </tr>
         </thead>
@@ -68,8 +68,7 @@
               <th>Correo del Encargado</th>
               <th>Numero Telefonico</th>
               <th>Nombre del Cliente</th>
-              <th>Nombre del Menu</th>
-              <th>Cantidades</th>
+              <th>Nombre del Menu y Cantidades</th>
               <th>Tamaño del Menu</th>
               <th>Estado del Pedido</th>
               <th>Fecha de Realizacion del Pedido</th>
@@ -79,20 +78,38 @@
               <th>Numero de la Tarjeta</th>
               <th>Cantidad a Pagar</th>
               <th>Total a Pagar</th>
+              <th>Cambio</th>
               <th>Acciones</th>
                       </tr>
         </tfoot>
         
         <tbody>
-            {% for e in esta %}
+            {% for f in fact %}
         <tr>
-        <td>{{e.id_estado}}</td>
-        <td>{{e.descripcion_pedido}}</td>
+        <td>{{f.id_factura}}</td>
+        <td>{{f.codigo_cai}}</td>
+        <td>{{f.numero_factura}}</td>
+        <td>{{f.nombre_encargado}}</td>
+        <td>{{f.apellido_encargado}}</td>
+        <td>{{f.correo_encargado}}</td>
+        <td>{{f.telefono_encargado}}</td>
+        <td>{{f.nombre_cliente}}</td>
+        <td>{{f.menu_cantidades}}</td>
+        <td>{{f.tamaño_menu}}</td>
+        <td>{{f.estado_pedido}}</td>
+        <td>{{f.fecha_realizacion_pedido}}</td>
+        <td>{{f.descuento}}</td>
+        <td>{{f.isv}}</td>
+        <td>{{f.metodo_pago}}</td>
+        <td>{{f.numero_tarjeta}}</td>
+        <td>{{f.cantidad_pagar}}</td>
+        <td>{{f.total_pagar}}</td>
+        <td>{{f.cambio}}</td>
         <td><!-- Button trigger modal -->
 			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarmodalpedido-{{forloop.counter}}">
-				Editar
+				EDITAR
 			  </button>
-            <a href="/eliminarestadopedido/{{e.id_estado}}" class="btn btn-primary">Eliminar</a>
+            <a href="/factura_pdf/{{f.id_factura}}" class="btn btn-primary">Ver Factura PDF</a>
         </td>
         
         
@@ -138,22 +155,19 @@
          <h1 class="modal-title fs-5" id="exampleModalLabel">Nueva Factura</h1>
          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
        </div>
+
        <div class="modal-body">
       
-        <form id="factura-form">
-
-
-          
-
-          <div class="mb-3">
-            <label for="fecha" class="form-label">Fecha</label>
-            <input type="date" class="form-control" id="fecha" name="fecha">
-          </div>
+        <form id="factura-form" action="{% url 'agregarfactura' %}" method="POST">
+          {% csrf_token %}
+          <label for="">ID Factura</label>
+          <input type="text" name="id_factura" id="id_factura">
+      
 
           <br>
           <div class="mb-3">
             <label for="cliente" class="form-label">Codigo CAI</label>
-            <select class="form-control" name="" id="">
+            <select class="form-control" name="codigo_cai" id="codigo_cai">
                <option value="" selected>Selecciona un CAI</option>
                {% for s in sar %}
                <option value="{{s.codigo_sar}}">{{s.codigo_sar}}</option>
@@ -163,19 +177,19 @@
     
           <br>
            <label for="">Numero de Factura</label>
-            <input type="text" class="form-control" name="" id="">
+            <input type="text" class="form-control" name="numero_factura" id="numero_factura">
 
             <br>
         {% if request.session %}
 
          <label for="">Nombre del Encargado</label>
-         <input class="form-control" value="{{ request.session.nombre }}" readonly>
+         <input name="nombre_encargado" class="form-control" value="{{ request.session.nombre }}" readonly>
          <label for="">Apellido del Encargado</label>
-         <input class="form-control" value="{{ request.session.apellido }}" readonly>
+         <input name="apellido_encargado" class="form-control" value="{{ request.session.apellido }}" readonly>
          <label for="">Correo Electronico</label>
-         <input class="form-control" value="{{ request.session.email }}" readonly>
+         <input name="correo_encargado" class="form-control" value="{{ request.session.email }}" readonly>
          <label for="">Telefono</label>
-         <input class="form-control" value="{{ request.session.telefono }}" readonly>
+         <input name="telefono_encargado" class="form-control" value="{{ request.session.telefono }}" readonly>
 
          {% endif %}
            <!-- Aquí agregas los campos necesarios para la factura, como el nombre del cliente, fecha, etc. -->
@@ -183,7 +197,7 @@
             <br>
            <div class="mb-3">
              <label for="cliente" class="form-label">Nombre del Cliente</label>
-             <select class="form-control" name="" id="cliente-select">
+             <select class="form-control" name="nombre_cliente" id="cliente-select">
                 <option value="" selected>Consumidor Final</option>
                 {% for u in user %}
                 <option value="{{u.nombre}}">{{u.nombre}}</option>
@@ -194,54 +208,48 @@
 
             <div class="mb-3">
               <label for="menu" class="form-label">Nombre del Menú</label>
-              <textarea class="form-control" type="text" name="menu" id="menu-input" readonly></textarea>
+              <textarea class="form-control" type="text" name="menu_cantidades" id="menu-input" readonly></textarea>
           </div>
           
-          <div class="mb-3">
-              <label for="cantidades" class="form-label">Cantidades</label>
-              <input class="form-control" type="text" name="cantidades" id="cantidades-input" readonly>
-          </div>
+
           
           <div class="mb-3">
               <label for="detalle" class="form-label">Tamaño del Menú</label>
-              <input class="form-control" type="text" name="detalle" id="detalle-input" readonly>
+              <input class="form-control" type="text" name="tamaño_menu" id="detalle-input" readonly>
           </div>
           
           <div class="mb-3">
-              <label for="estado" class="form-label">Estado del Pedido</label>
-              <input class="form-control" type="text" name="estado" id="estado-input" readonly>
+              <label for="estado_pedido" class="form-label">Estado del Pedido</label>
+              <input class="form-control" type="text" name="estado_pedido" id="estado-input" readonly>
           </div>
           
           <div class="mb-3">
-              <label for="fecha" class="form-label">Fecha de Realización del Pedido</label>
-              <input class="form-control" type="text" name="fecha" id="fecha-input" readonly>
+              <label for="fecha_realizacion_pedido" class="form-label">Fecha de Realización del Pedido</label>
+              <input class="form-control" type="text" name="fecha_realizacion_pedido" id="fecha-input" readonly>
           </div>
             
 
-            <div class="mb-3">
-              <label for="cliente" class="form-label">Descuento</label>
-              <select class="form-control" name="" id="">
-                 <option value="" selected>0%</option>
-                 <option value="" >5%</option>
-                 <option value="" >10%</option>
-             
-              </select>
-            </div>
- 
-
-
-            <div class="mb-3">
-                <label for="cliente" class="form-label">ISV</label>
-                <select class="form-control" name="" id="">
-                   <option value="" selected>15%</option>
-                   <option value="" >18%</option>               
-                </select>
-              </div>
+          <div class="mb-3">
+            <label for="descuento" class="form-label">Descuento</label>
+            <select class="form-control" name="descuento" id="descuento">
+              <option value="0" selected>0%</option>
+              <option value="0.05">5%</option>
+              <option value="0.10">10%</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="isv" class="form-label">ISV</label>
+            <select class="form-control" name="isv" id="isv">
+              <option value="0.15" selected>15%</option>
+              <option value="0.18">18%</option>
+            </select>
+          </div>
    
 
               <div class="mb-3">
                 <label for="metodo-pago" class="form-label">Método de Pago</label>
-                <select class="form-control" name="metodo-pago" id="metodo-pago">
+                <select class="form-control" name="metodo_pago" id="metodo-pago">
                     <option value="" selected disabled>Selecciona un Metodo de Pago</option>
                     {% for m in meto %}
                         {% if m.forma_pago != "Mixto" %}
@@ -254,7 +262,7 @@
             </div>
             <div class="mb-3" id="input-tarjeta" hidden>
                 <label for="tarjeta" class="form-label">Tarjeta</label>
-                <input type="text" class="form-control" id="tarjeta" name="tarjeta">
+                <input type="text" class="form-control" id="tarjeta" name="numero_tarjeta">
             </div>
             <div class="mb-3" id="input-efectivo" hidden>
                 <label for="efectivo" class="form-label">Efectivo</label>
@@ -270,7 +278,7 @@
 
 
             <label for="cantidad-a-pagar">Cantidad a pagar:</label>
-            <input id="cantidad-a-pagar" class="form-control" type="text" name="cantidad-a-pagar">
+            <input id="cantidad-a-pagar" class="form-control" type="text" name="cantidad_pagar">
 <!-- Este es el contenedor de la grilla de selección de menú -->
 <div id="menu-grid-container">
   <h2>Seleccione un menú:</h2>
@@ -289,7 +297,7 @@
 
            <br>
            <label class="form-label" for="total-a-pagar">Total a pagar:</label>
-           <input id="total-a-pagar" class="form-control" type="text" >
+           <input name="total_pagar" id="total-a-pagar" class="form-control" type="text" >
            <button class="btn btn-danger" id="reset-total-button" type="button">Resetear cuenta</button>
            <br>
 
@@ -308,6 +316,8 @@
 
 
         <script>
+
+
 
 
 $(document).ready(function() {
@@ -360,197 +370,99 @@ const select = document.getElementById('metodo-pago');
         }
     });
 
+    
 
-    $(document).ready(function() {
-  // Obtener los campos de cantidad a pagar, total a pagar y cambio
-  var $cantidadAPagar = $('#cantidad-a-pagar');
-  var $totalAPagar = $('#total-a-pagar');
-  var $cambio = $('#cambio');
-  
-  // Escuchar el evento "input" del campo de cantidad a pagar
-  $cantidadAPagar.on('input', function() {
-    // Obtener la cantidad a pagar y el total a pagar
-    var cantidadAPagar = parseFloat($cantidadAPagar.val());
-    var totalAPagar = parseFloat($totalAPagar.val());
-    
-    // Calcular el cambio
-    var cambio = cantidadAPagar - totalAPagar;
-    
-    // Actualizar el campo de cambio
-    $cambio.val(cambio.toFixed(2) + "LPS");
-  });
-  
-  // Resetear la cuenta
-  $('#reset-total-button').on('click', function() {
-    $cantidadAPagar.val('');
-    $totalAPagar.val('');
-    $cambio.val('');
+// Obtener elementos del DOM
+const gridItems = document.querySelectorAll('.grid-item');
+const selectedMenusList = document.getElementById('selected-menus-list');
+const totalAPagarInput = document.getElementById('total-a-pagar');
+const cantidadAPagarInput = document.getElementById('cantidad-a-pagar');
+const cambioInput = document.getElementById('cambio');
+const resetTotalButton = document.getElementById('reset-total-button');
+
+// Variables globales
+let selectedMenus = []; // Lista de menús seleccionados
+let totalAPagar = 0; // Total a pagar
+
+// Agregar evento de escucha a los elementos de la grilla
+gridItems.forEach(item => {
+  item.addEventListener('click', e => {
+    const nombreMenu = e.currentTarget.dataset.menu;
+    const precioMenu = Number(e.currentTarget.dataset.precio);
+    const menuSeleccionado = { nombre: nombreMenu, precio: precioMenu };
+    selectedMenus.push(menuSeleccionado);
+    actualizarListaMenusSeleccionados();
+    actualizarTotalAPagar();
   });
 });
 
-    
-    $(document).ready(function() {
-  // Lista de menús seleccionados
-  var selectedMenus = [];
-
-
-
-
-
-  // Función para actualizar el input de "Total a pagar"
-  function updateSelectedMenusInput() {
-    var total = 0;
-    for (var i = 0; i < selectedMenus.length; i++) {
-      total += parseInt(selectedMenus[i].precio) * selectedMenus[i].cantidad;
-    }
-    $("#total-a-pagar").val(total + "LPS");
-  }
-
-  function addSelectedMenu(menu) {
-  // Buscar el menú en la lista de seleccionados
-  var selectedMenu = selectedMenus.find(function(m) {
-    return m.nombre === menu.nombre;
+// Actualizar la lista de menús seleccionados
+function actualizarListaMenusSeleccionados() {
+  selectedMenusList.innerHTML = '';
+  selectedMenus.forEach(menu => {
+    const li = document.createElement('li');
+    li.innerText = `${menu.nombre} - LPS. ${menu.precio.toFixed(2)}`;
+    selectedMenusList.appendChild(li);
   });
-
-  if (selectedMenu) {
-    // Incrementar la cantidad del menú seleccionado y actualizar el elemento de lista
-    selectedMenu.cantidad++;
-    $("#selected-menus-list li[data-nombre='" + menu.nombre + "']").text(selectedMenu.nombre + " x" + selectedMenu.cantidad);
-  } else {
-    // Agregar el menú a la lista con cantidad inicial de 1
-    selectedMenu = {
-      nombre: menu.nombre,
-      precio: menu.precio,
-      cantidad: 1
-    };
-    selectedMenus.push(selectedMenu);
-
-    // Crear un nuevo elemento de lista con el nombre y el precio del menú
-    var $newListItem = $("<li></li>")
-      .text(selectedMenu.nombre + " x" + selectedMenu.cantidad)
-      .attr("data-nombre", selectedMenu.nombre)
-      .attr("data-precio", selectedMenu.precio);
-
-    // Agregar el nuevo elemento a la lista de menús seleccionados
-    $("#selected-menus-list").append($newListItem);
-  }
-
-  // Actualizar el input de "Total a pagar"
-  updateSelectedMenusInput();
 }
   
 
-  // Función para quitar un menú de la lista de seleccionados
-  function removeSelectedMenu(menu) {
-    // Buscar el menú en la lista
-    for (var i = 0; i < selectedMenus.length; i++) {
-      if (selectedMenus[i].nombre === menu.nombre) {
-        // Decrementar la cantidad de selección y quitar el menú si la cantidad llega a 0
-        selectedMenus[i].cantidad--;
-        if (selectedMenus[i].cantidad === 0) {
-          selectedMenus.splice(i, 1);
 
-          // Buscar el elemento de lista correspondiente y quitarlo
-          $("#selected-menus-list li").each(function() {
-            if ($(this).text() === menu.nombre) {
-              $(this).remove();
-              return false;
-            }
-          });
-        }
-        break;
-      }
-    }
+function actualizarTotalAPagar() {
+  // Obtener el valor del descuento
+  const descuento = Number(document.getElementById('descuento').value);
 
-    // Actualizar el input de "Total a pagar"
-    updateSelectedMenusInput();
+  // Si no se ha seleccionado ningún descuento, establecer el valor en 0
+  if (isNaN(descuento)) {
+    descuento = 0;
   }
 
-  // Manejador de eventos para hacer clic en un menú
-  $(".grid-item").click(function() {
-    // Obtener el nombre y el precio del menú
-    var menuNombre = $(this).data("menu");
-    var menuPrecio = $(this).data("precio");
+  // Obtener el valor del ISV
+  let isv = Number(document.getElementById('isv').value);
 
-    // Agregar o quitar el menú según corresponda
-    addSelectedMenu({nombre: menuNombre, precio: menuPrecio});
-  });
-});
-
-
-
-$(document).ready(function() {
-  // Agregar un menú seleccionado
-  $("#menu-grid-container .grid-item").click(function() {
-    var menu = $(this).attr("data-menu");
-    var menuName = $(this).text();
-
-    // Realizar una solicitud AJAX para obtener los detalles del menú, incluyendo el precio
-    $.ajax({
-      url: "/obtener_detalles_menu",
-      data: { menu: menu },
-      success: function(response) {
-        var precio = response.precio;
-
-        // Agregar el menú seleccionado y su precio a la lista de menús
-        $("#selected-menus-list").append('<li data-menu="' + menu + '" data-precio="' + precio + '">' + menuName + ' (' + precio + 'LPS) <button class="remove-menu-btn">Eliminar</button></li>');
-        updateTotalPrice();
-      },
-      error: function() {
-        alert("Error al obtener los detalles del menú.");
-      }
-    });
-  });
-
-  // Eliminar un menú seleccionado
-  $("#selected-menus-list").on("click", ".remove-menu-btn", function() {
-    $(this).parent().remove();
-    updateTotalPrice();
-  });
-
-  // Reiniciar la lista de menús seleccionados y el precio total
-  $("#reset-total-button").click(function() {
-    $("#selected-menus-list").empty();
-    updateTotalPrice();
-  });
-
-  // Función para recalcular el precio total
-  function updateTotalPrice() {
-    var totalPrice = 0;
-    $("#selected-menus-list li").each(function() {
-      totalPrice += parseFloat($(this).data("precio"));
-    });
-    $("#total-a-pagar").val(totalPrice.toFixed(2) + "LPS");
+  // Si no se ha seleccionado ningún ISV, establecer el valor predeterminado en 0.15
+  if (isNaN(isv)) {
+    isv = 0.15;
   }
+
+  // Calcular el precio total sin descuento ni ISV
+  const precioTotalSinDescuentoNIsv = selectedMenus.reduce((total, menu) => total + menu.precio, 0);
+
+  // Calcular el precio con descuento
+  const precioConDescuento = precioTotalSinDescuentoNIsv * (1 - descuento / 100);
+
+  // Calcular el monto del ISV
+  const montoIsv = precioConDescuento * isv;
+
+  // Calcular el precio total a pagar
+  const precioTotalAPagar = precioConDescuento + montoIsv;
+
+  // Mostrar el precio total a pagar en el input correspondiente
+  totalAPagarInput.value = precioTotalAPagar.toFixed(2);
+
+  // Actualizar el cambio
+  actualizarCambio();
+}
+
+
+function actualizarCambio() {
+  const cantidadAPagar = Number(cantidadAPagarInput.value);
+  const totalAPagar = Number(totalAPagarInput.value);
+  const cambio = cantidadAPagar - totalAPagar;
+  cambioInput.value = cambio.toFixed(2);
+}
+
+
+
+
+// Agregar evento de escucha al botón de resetear la cuenta
+resetTotalButton.addEventListener('click', () => {
+  selectedMenus = [];
+  actualizarListaMenusSeleccionados();
+  actualizarTotalAPagar();
+  cantidadAPagarInput.value = '';
+  cambioInput.value = '';
 });
-
-    $(document).ready(function() {
-    // Esta función se ejecuta cuando la página ha sido completamente cargada
-
-    // Seleccionamos todos los elementos de la grilla
-    var gridItems = $(".grid-item");
-
-    // Agregamos un listener de click a cada elemento de la grilla
-    gridItems.click(function() {
-      // Cuando se hace click en un elemento de la grilla, lo agregamos a la lista de menús seleccionados
-      var selectedMenusList = $("#selected-menus-list");
-      var menuItem = $(this).data("menu");
-
-
-    });
-
-    // Agregamos un listener de submit al formulario
-    $("#factura-form").submit(function() {
-      // Antes de enviar el formulario, agregamos los menús seleccionados como campos ocultos
-      var selectedMenusList = $("#selected-menus-list");
-      selectedMenusList.find("li").each(function() {
-        var menuItem = $(this).data("menu");
-        $("#factura-form").append("<input type='hidden' name='menu[]' value='" + menuItem + "'>");
-      });
-    });
-  });
-
-
 
 
 

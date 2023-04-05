@@ -336,7 +336,7 @@
 			<div class="form-group">
 				<label for="">Nombre del Menu</label>
 				<select class="form-control" name="nombre_menu" id="nombre_menu">
-				  <option value="" selected>Selecciona un Menu</option>
+				  <option value="" selected disabled>Selecciona un Menu</option>
 				  {% for m in men %}    
 					<option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
 				  {% endfor %}
@@ -484,6 +484,11 @@ $(document).ready(function() {
     var nombreMenu = $('#nombre_menu option:selected').text();
     var cantidad = $('#cantidad').val(); // obtenemos la cantidad ingresada por el usuario
 
+	    // Verificar si se ha seleccionado una opción válida
+		if (nombreMenu === "Selecciona un Menu") {
+      alert('Selecciona un menú válido.');
+      return;
+    }
     // Verificar si ya se ha agregado el menú seleccionado
     if ($(`#menu-seleccionado [data-menu-nombre="${nombreMenu}"]`).length > 0) {
       // Si el menú ya está agregado, mostrar un mensaje de error y salir de la función

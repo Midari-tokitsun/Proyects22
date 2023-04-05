@@ -355,5 +355,32 @@ class productostabla(models.Model):
         db_table='productos'
 
 
+class factura_tabla(models.Model):
+    id_factura=models.CharField(primary_key=True,max_length=40)
+    codigo_cai=models.CharField(max_length=90)
+    numero_factura=models.CharField(max_length=90)
+    nombre_encargado=models.CharField(max_length=90)
+    apellido_encargado=models.CharField(max_length=90)
+    correo_encargado=models.CharField(max_length=90)
+    telefono_encargado=models.CharField(max_length=90)
+    nombre_cliente=models.CharField(max_length=90)
+    menu_cantidades=models.CharField(max_length=90)
+    tamaño_menu=models.CharField(max_length=90)
+    estado_pedido=models.CharField(max_length=90)
+    fecha_realizacion_pedido=models.DateField(null=True,blank=True)
+    descuento=models.CharField(max_length=90)
+    isv=models.CharField(max_length=90)
+    metodo_pago=models.CharField(max_length=90)
+    numero_tarjeta=models.CharField(max_length=90)
+    cantidad_pagar=models.CharField(max_length=90)
+    total_pagar=models.CharField(max_length=90)
+    cambio=models.CharField(max_length=50)
+
+    class Meta:
+        db_table='factura'
+
+
+
+
 class MyException(Exception):
     pass

@@ -338,9 +338,13 @@ urlpatterns = [
 #FActuracion TAbla
 
     path("facturacion/",views.facturaciontabla, name="facturacion"),
+    path("agregarfactura",views.agregarfactura, name="agregarfactura"),
+    path("factura_pdf/<int:id>",views.factura_pdf, name="factura_pdf"),
+
 
     path('obtener_detalles_pedido/', views.obtener_detalles_pedido, name='obtener_detalles_pedido'),
     path('obtener_detalles_menu/', views.obtener_detalles_menu, name='obtener_detalles_menu'),
+
 
 #FIN
 

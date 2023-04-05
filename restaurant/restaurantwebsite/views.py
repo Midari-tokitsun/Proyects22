@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla,historico_producto
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla,historico_producto,factura_tabla
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -2948,11 +2948,13 @@ def eliminarpedido(request,id):
 #VISTA DE FACTURACION
 
 def facturaciontabla(request):
+    fact=factura_tabla.objects.all()
     men=menutabla.objects.all()
     user=insertuser.objects.all()
     meto=metodo_pago_tabla.objects.all()
     sar=sar_tabla.objects.all()
     context={
+        'fact':fact,
         'men':men,
         'user':user,
         'meto':meto,
@@ -2990,3 +2992,119 @@ def obtener_detalles_menu(request):
     menu = get_object_or_404(menutabla, nombre_menu=menu_nombre)
     precio = menu.precio_menu
     return JsonResponse({'precio': str(precio)})
+
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter, A4
+from django.http import HttpResponse
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter, landscape
+
+
+def factura_pdf(request, id):
+    # Obtener los datos de la factura desde la base de datos
+    factura = factura_tabla.objects.get(id_factura=id)
+    
+    # Crear el objeto HttpResponse con el tipo de contenido PDF
+    response = HttpResponse(content_type='application/pdf')
+    
+    # Establecer el nombre del archivo PDF
+    response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
+    
+    # Crear el objeto canvas para generar el PDF
+    pdf_canvas = canvas.Canvas(response, pagesize=A4)
+    
+    # Definir el estilo de texto para el PDF
+    style = getSampleStyleSheet()['Normal']
+    
+    # Agregar encabezado
+    pdf_canvas.setFont("Helvetica-Bold", 18)
+    pdf_canvas.drawCentredString(5.25*inch, 10.5*inch, "Factura")
+
+    # Escribir los datos de la factura en el PDF
+    pdf_canvas.drawString(inch, 10 * inch, 'ID: {}'.format(factura.id_factura))
+    pdf_canvas.drawString(inch, 9.5 * inch, 'Codigo CAI: {}'.format(factura.codigo_cai))
+    pdf_canvas.drawString(inch, 9 * inch, 'Numero de Factura: {}'.format(factura.numero_factura))
+    pdf_canvas.drawString(inch, 8.5 * inch, 'Nombre del Encargado: {}'.format(factura.nombre_encargado))
+    pdf_canvas.drawString(inch, 8 * inch, 'Apellido del Encargado: {}'.format(factura.apellido_encargado))
+    pdf_canvas.drawString(inch, 7.5 * inch, 'Correo del Encargado: {}'.format(factura.correo_encargado))
+    pdf_canvas.drawString(inch, 7 * inch, 'Numero Telefonico: {}'.format(factura.telefono_encargado))
+    pdf_canvas.drawString(inch, 6.5 * inch, 'Nombre del Cliente: {}'.format(factura.nombre_cliente))
+    pdf_canvas.drawString(inch, 6 * inch, 'Nombre del Menu y Cantidades: {}'.format(factura.menu_cantidades))
+    pdf_canvas.drawString(inch, 5.5 * inch, 'Tamaño del Menu: {}'.format(factura.tamaño_menu))
+    pdf_canvas.drawString(inch, 5 * inch, 'Estado del Pedido: {}'.format(factura.estado_pedido))
+    pdf_canvas.drawString(inch, 4.5 * inch, 'Fecha de Realizacion del Pedido: {}'.format(factura.fecha_realizacion_pedido))
+    pdf_canvas.drawString(inch, 4 * inch, 'Descuentos: {}'.format(factura.descuento))
+    pdf_canvas.drawString(inch, 3.5 * inch, 'ISV: {}'.format(factura.isv))
+    pdf_canvas.drawString(inch, 3 * inch, 'Metodo de Pago: {}'.format(factura.metodo_pago))
+    pdf_canvas.drawString(inch, 2.5 * inch, 'Numero de la Tarjeta: {}'.format(factura.numero_tarjeta))
+    pdf_canvas.drawString(inch, 2 * inch, 'Cantidad a Pagar: {}'.format(factura.cantidad_pagar))
+    pdf_canvas.drawString(inch, 1.5 * inch, 'Total a Pagar: {}'.format(factura.total_pagar))
+    
+    # Finalizar el PDF y cerrar el objeto canvas
+    pdf_canvas.showPage()
+    pdf_canvas.save()
+    
+    # Devolver el objeto HttpResponse con el contenido PDF generado
+    return response
+
+
+
+def agregarfactura(request):
+    try:  
+        pass         
+        if request.method=='POST':
+            
+            id_factura=request.POST.get("id_factura")
+            codigo_cai=request.POST.get("codigo_cai")
+            numero_factura=request.POST.get("numero_factura")
+            nombre_encargado=request.POST.get("nombre_encargado")
+            apellido_encargado=request.POST.get("apellido_encargado")
+            correo_encargado=request.POST.get("correo_encargado")
+            telefono_encargado=request.POST.get("telefono_encargado")
+            nombre_cliente=request.POST.get("nombre_cliente")
+            menu_cantidades=request.POST.get("menu_cantidades")
+            tamaño_menu=request.POST.get("tamaño_menu")
+            estado_pedido=request.POST.get("estado_pedido")
+            fecha_realizacion_pedido=request.POST.get("fecha_realizacion_pedido")
+            descuento=request.POST.get("descuento")
+            isv=request.POST.get("isv")
+            metodo_pago=request.POST.get("metodo_pago")
+            numero_tarjeta=request.POST.get("numero_tarjeta")
+            cantidad_pagar=request.POST.get("cantidad_pagar")
+            total_pagar=request.POST.get("total_pagar")
+            cambio=request.POST.get("cambio")
+
+            factura_tabla.objects.create(
+            id_factura=id_factura,
+            codigo_cai=codigo_cai,
+            numero_factura=numero_factura,
+            nombre_encargado=nombre_encargado,
+            apellido_encargado=apellido_encargado,
+            correo_encargado=correo_encargado,
+            telefono_encargado=telefono_encargado,
+            nombre_cliente=nombre_cliente,
+            menu_cantidades=menu_cantidades,
+            tamaño_menu=tamaño_menu,
+            estado_pedido=estado_pedido,
+            fecha_realizacion_pedido=fecha_realizacion_pedido,
+            descuento=descuento,
+            isv=isv,
+            metodo_pago=metodo_pago,
+            numero_tarjeta=numero_tarjeta,
+            cantidad_pagar=cantidad_pagar,
+            total_pagar=total_pagar,
+            cambio=cambio,
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect('facturacion')
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+    return redirect('facturacion')
