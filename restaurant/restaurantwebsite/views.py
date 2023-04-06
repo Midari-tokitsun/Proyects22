@@ -2993,6 +2993,28 @@ def obtener_detalles_menu(request):
     precio = menu.precio_menu
     return JsonResponse({'precio': str(precio)})
 
+def obtener_precio_menu(menu_nombre):
+    menu = get_object_or_404(menutabla, nombre_menu=menu_nombre)
+    precio = menu.precio_menu
+    return precio
+
+def obtener_precio_total_menu(menu_nombre, cantidad_str):
+    # Obtener el precio unitario del menú
+    menu = get_object_or_404(menutabla, nombre_menu=menu_nombre)
+    precio_unitario = menu.precio_menu
+
+    # Extraer la cantidad del menú como un entero
+    cantidad_str = cantidad_str.strip('()')
+    cantidad_float = float(cantidad_str)
+    cantidad_formateada = f'({cantidad_float:.0f})'
+
+
+    # Calcular el precio total del menú
+    precio_total = float(precio_unitario) * float(cantidad_float)
+
+
+    return precio_total
+
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
@@ -3002,12 +3024,19 @@ from reportlab.lib.units import inch
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, landscape
-
-
+import re
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+import os
+from reportlab.lib.fonts import addMapping
 def factura_pdf(request, id):
     # Obtener los datos de la factura desde la base de datos
     factura = factura_tabla.objects.get(id_factura=id)
-    
+
+
+
+
+
     # Crear el objeto HttpResponse con el tipo de contenido PDF
     response = HttpResponse(content_type='application/pdf')
     
@@ -3019,30 +3048,111 @@ def factura_pdf(request, id):
     
     # Definir el estilo de texto para el PDF
     style = getSampleStyleSheet()['Normal']
-    
+
+    # Obtener la ruta absoluta del archivo de fuente
+    font_path = "C:/Users/USER/Downloads/Arial Unicode MS Font.ttf"
+
+    # Registrar la fuente DejaVu Sans en ReportLab
+    # Registrar la fuente
+    pdfmetrics.registerFont(TTFont('Arial Unicode MS Font', font_path))
+    # Mapear la fuente Arial Unicode MS a las fuentes predeterminadas
+    addMapping('Arial Unicode MS Font', 0, 0, 'Arial Unicode MS Font')
+            
     # Agregar encabezado
-    pdf_canvas.setFont("Helvetica-Bold", 18)
-    pdf_canvas.drawCentredString(5.25*inch, 10.5*inch, "Factura")
+    pdf_canvas.setFont("Arial Unicode MS Font", 11)
+    pdf_canvas.drawCentredString(3.8*inch, 11.5*inch, "Pizza Wave")
+
+    pdf_canvas.drawString(inch, 10.5*inch, "Calle Humuya Bloque 3 Frente de la UJCV")
+
+    pdf_canvas.line(inch, 9.8 * inch, 7.5*inch, 9.8 * inch)
+    
+
 
     # Escribir los datos de la factura en el PDF
-    pdf_canvas.drawString(inch, 10 * inch, 'ID: {}'.format(factura.id_factura))
     pdf_canvas.drawString(inch, 9.5 * inch, 'Codigo CAI: {}'.format(factura.codigo_cai))
     pdf_canvas.drawString(inch, 9 * inch, 'Numero de Factura: {}'.format(factura.numero_factura))
     pdf_canvas.drawString(inch, 8.5 * inch, 'Nombre del Encargado: {}'.format(factura.nombre_encargado))
     pdf_canvas.drawString(inch, 8 * inch, 'Apellido del Encargado: {}'.format(factura.apellido_encargado))
     pdf_canvas.drawString(inch, 7.5 * inch, 'Correo del Encargado: {}'.format(factura.correo_encargado))
     pdf_canvas.drawString(inch, 7 * inch, 'Numero Telefonico: {}'.format(factura.telefono_encargado))
+
+    pdf_canvas.line(inch, 6.8 * inch, 7.5*inch, 6.8 * inch)
+
     pdf_canvas.drawString(inch, 6.5 * inch, 'Nombre del Cliente: {}'.format(factura.nombre_cliente))
-    pdf_canvas.drawString(inch, 6 * inch, 'Nombre del Menu y Cantidades: {}'.format(factura.menu_cantidades))
-    pdf_canvas.drawString(inch, 5.5 * inch, 'Tamaño del Menu: {}'.format(factura.tamaño_menu))
-    pdf_canvas.drawString(inch, 5 * inch, 'Estado del Pedido: {}'.format(factura.estado_pedido))
-    pdf_canvas.drawString(inch, 4.5 * inch, 'Fecha de Realizacion del Pedido: {}'.format(factura.fecha_realizacion_pedido))
-    pdf_canvas.drawString(inch, 4 * inch, 'Descuentos: {}'.format(factura.descuento))
-    pdf_canvas.drawString(inch, 3.5 * inch, 'ISV: {}'.format(factura.isv))
-    pdf_canvas.drawString(inch, 3 * inch, 'Metodo de Pago: {}'.format(factura.metodo_pago))
-    pdf_canvas.drawString(inch, 2.5 * inch, 'Numero de la Tarjeta: {}'.format(factura.numero_tarjeta))
-    pdf_canvas.drawString(inch, 2 * inch, 'Cantidad a Pagar: {}'.format(factura.cantidad_pagar))
-    pdf_canvas.drawString(inch, 1.5 * inch, 'Total a Pagar: {}'.format(factura.total_pagar))
+        
+
+    # Convertir la cadena de menú y cantidades a una lista de cadenas codificadas en utf-8
+    menu_cantidades_codificadas = [linea.encode('utf-8') for linea in factura.menu_cantidades.strip().splitlines()]
+
+    # Decodificar cada cadena en la lista y guardar los resultados en una nueva lista de cadenas Unicode
+    menu_cantidades_unicode = [cadena.decode('utf-8') for cadena in menu_cantidades_codificadas]
+
+    # Separar las cantidades y los nombres del menú en listas diferentes
+    cantidades = [linea.split('x')[0] for linea in menu_cantidades_unicode]
+    nombres_menu = [linea.split('x')[1].strip() for linea in menu_cantidades_unicode]
+
+
+    # Obtener los precios de cada menú y guardarlos en una lista
+    precios_menu = [obtener_precio_menu(nombre) for nombre in nombres_menu]
+
+    # Obtener los precios totales de cada menú y guardarlos en una lista
+    precios_totales_menu = [float(cantidad.strip('()')) * float(precio) for cantidad, precio in zip(cantidades, precios_menu)]
+
+
+    # Escribir el encabezado de cantidad
+    pdf_canvas.drawString(inch, 6 * inch, 'Cantidad:')
+
+    # Escribir la cantidad, el nombre y el precio unitario de cada menú
+    y_position = 5.75 * inch
+    precio_total_factura = 0
+    for cantidad, nombre, precio_unitario in zip(cantidades, nombres_menu, precios_menu):
+        precio_total_menu = obtener_precio_total_menu(nombre, cantidad)
+
+        pdf_canvas.drawString(inch, y_position, cantidad)
+        pdf_canvas.drawString(3.8 * inch, y_position, nombre)
+        precio_unitario = float(precio_unitario) # convert to float
+        pdf_canvas.drawString(5.5*inch, y_position, '${:.2f}'.format(precio_unitario))
+        
+        pdf_canvas.drawString(7 * inch, y_position, f'${precio_total_menu:.2f}')
+        precio_total_factura += precio_total_menu
+
+
+
+        y_position -= 0.25 * inch
+
+        # Escribir el total de la factura
+    precio_total_factura_str = '\nTotal: ${:.2f}'.format(precio_total_factura)
+    pdf_canvas.drawString(6.5 * inch, y_position, precio_total_factura_str)
+
+
+
+    # Escribir el encabezado del nombre del menú
+    pdf_canvas.drawString(3.8*inch, 6 * inch, 'Nombre del Menú:')
+
+    # Escribir el encabezado del precio unitario
+    pdf_canvas.drawString(5.5*inch, 6 * inch, 'Precio:')
+
+
+
+
+
+
+
+
+        
+
+
+
+    pdf_canvas.drawString(inch, 4.5 * inch, 'Tamaño del Menu: {}'.format(factura.tamaño_menu))
+    pdf_canvas.drawString(inch, 4 * inch, 'Estado del Pedido: {}'.format(factura.estado_pedido))
+    pdf_canvas.drawString(inch, 3.5 * inch, 'Fecha de Realizacion del Pedido: {}'.format(factura.fecha_realizacion_pedido))
+    pdf_canvas.drawString(inch, 3 * inch, 'Descuentos: {}'.format(factura.descuento))
+    pdf_canvas.drawString(inch, 2.5 * inch, 'ISV: {}'.format(factura.isv))
+    pdf_canvas.drawString(inch, 2 * inch, 'Metodo de Pago: {}'.format(factura.metodo_pago))
+    pdf_canvas.drawString(inch, 1.5 * inch, 'Numero de la Tarjeta: {}'.format(factura.numero_tarjeta))
+    pdf_canvas.drawString(inch, 1 * inch, 'Cantidad a Pagar: {}'.format(factura.cantidad_pagar))
+    pdf_canvas.drawString(inch, 0.5 * inch, 'Total a Pagar: {}'.format(factura.total_pagar))
+    pdf_canvas.drawString(inch, 0.2 * inch, 'Cambio: {}'.format(factura.cambio))
     
     # Finalizar el PDF y cerrar el objeto canvas
     pdf_canvas.showPage()
