@@ -3033,10 +3033,6 @@ def factura_pdf(request, id):
     # Obtener los datos de la factura desde la base de datos
     factura = factura_tabla.objects.get(id_factura=id)
 
-
-
-
-
     # Crear el objeto HttpResponse con el tipo de contenido PDF
     response = HttpResponse(content_type='application/pdf')
     
@@ -3062,15 +3058,21 @@ def factura_pdf(request, id):
     pdf_canvas.setFont("Arial Unicode MS Font", 11)
     pdf_canvas.drawCentredString(3.8*inch, 11.5*inch, "Pizza Wave")
 
-    pdf_canvas.drawString(inch, 10.5*inch, "Calle Humuya Bloque 3 Frente de la UJCV")
+    pdf_canvas.drawCentredString(3.8*inch, 11*inch, "TEGUCIGALPA, FRANCISCO MORAZAN COL MIRAFLORES SUR")
 
-    pdf_canvas.line(inch, 9.8 * inch, 7.5*inch, 9.8 * inch)
+    pdf_canvas.drawCentredString(3.8*inch, 10.5*inch, " BOULEVARD SANTA CRISTINA, CALLE HUMUYA BLOQUE 3 FRENTE DE LA UJCV")
+
+
+    pdf_canvas.drawCentredString(3.8*inch, 10*inch, "FACTURA")
+    pdf_canvas.drawString(2.8*inch, 9.5 * inch, 'Numero de Factura: {}'.format(factura.numero_factura))
+
+
+    pdf_canvas.line(inch, 8.8 * inch, 7.5*inch, 8.8 * inch)
     
 
 
     # Escribir los datos de la factura en el PDF
-    pdf_canvas.drawString(inch, 9.5 * inch, 'Codigo CAI: {}'.format(factura.codigo_cai))
-    pdf_canvas.drawString(inch, 9 * inch, 'Numero de Factura: {}'.format(factura.numero_factura))
+    pdf_canvas.drawString(inch, 9 * inch, 'Codigo CAI: {}'.format(factura.codigo_cai))
     pdf_canvas.drawString(inch, 8.5 * inch, 'Nombre del Encargado: {}'.format(factura.nombre_encargado))
     pdf_canvas.drawString(inch, 8 * inch, 'Apellido del Encargado: {}'.format(factura.apellido_encargado))
     pdf_canvas.drawString(inch, 7.5 * inch, 'Correo del Encargado: {}'.format(factura.correo_encargado))
@@ -3111,9 +3113,9 @@ def factura_pdf(request, id):
         pdf_canvas.drawString(inch, y_position, cantidad)
         pdf_canvas.drawString(3.8 * inch, y_position, nombre)
         precio_unitario = float(precio_unitario) # convert to float
-        pdf_canvas.drawString(5.5*inch, y_position, '${:.2f}'.format(precio_unitario))
+        pdf_canvas.drawString(5.5*inch, y_position, 'LPS{:.2f}'.format(precio_unitario))
         
-        pdf_canvas.drawString(7 * inch, y_position, f'${precio_total_menu:.2f}')
+        pdf_canvas.drawString(7 * inch, y_position, f'LPS{precio_total_menu:.2f}')
         precio_total_factura += precio_total_menu
 
 
@@ -3121,7 +3123,7 @@ def factura_pdf(request, id):
         y_position -= 0.25 * inch
 
         # Escribir el total de la factura
-    precio_total_factura_str = '\nTotal: ${:.2f}'.format(precio_total_factura)
+    precio_total_factura_str = '\nSubTotal: LPS{:.2f}'.format(precio_total_factura)
     pdf_canvas.drawString(6.5 * inch, y_position, precio_total_factura_str)
 
 
@@ -3132,28 +3134,27 @@ def factura_pdf(request, id):
     # Escribir el encabezado del precio unitario
     pdf_canvas.drawString(5.5*inch, 6 * inch, 'Precio:')
 
+    pdf_canvas.drawString(inch, 1.5 * inch, 'Tamaño del Menu: {}'.format(factura.tamaño_menu))
 
+    pdf_canvas.drawString(inch, 1 * inch, 'Estado del Pedido: {}'.format(factura.estado_pedido))
 
+    pdf_canvas.drawString(inch, 6.2 * inch, 'Fecha de Realizacion del Pedido: {}'.format(factura.fecha_realizacion_pedido))
 
+    pdf_canvas.drawString(inch, 4.5 * inch, 'Descuentos: {}'.format(factura.descuento))
 
-
-
-
-        
-
-
-
-    pdf_canvas.drawString(inch, 4.5 * inch, 'Tamaño del Menu: {}'.format(factura.tamaño_menu))
-    pdf_canvas.drawString(inch, 4 * inch, 'Estado del Pedido: {}'.format(factura.estado_pedido))
-    pdf_canvas.drawString(inch, 3.5 * inch, 'Fecha de Realizacion del Pedido: {}'.format(factura.fecha_realizacion_pedido))
-    pdf_canvas.drawString(inch, 3 * inch, 'Descuentos: {}'.format(factura.descuento))
-    pdf_canvas.drawString(inch, 2.5 * inch, 'ISV: {}'.format(factura.isv))
-    pdf_canvas.drawString(inch, 2 * inch, 'Metodo de Pago: {}'.format(factura.metodo_pago))
-    pdf_canvas.drawString(inch, 1.5 * inch, 'Numero de la Tarjeta: {}'.format(factura.numero_tarjeta))
-    pdf_canvas.drawString(inch, 1 * inch, 'Cantidad a Pagar: {}'.format(factura.cantidad_pagar))
-    pdf_canvas.drawString(inch, 0.5 * inch, 'Total a Pagar: {}'.format(factura.total_pagar))
-    pdf_canvas.drawString(inch, 0.2 * inch, 'Cambio: {}'.format(factura.cambio))
+    pdf_canvas.drawString(inch, 5 * inch, 'ISV: {}'.format(factura.isv))
     
+    pdf_canvas.drawString(inch, 2 * inch, 'Metodo de Pago: {}'.format(factura.metodo_pago))
+    pdf_canvas.drawString(inch, 0.5 * inch, 'Numero de la Tarjeta: {}'.format(factura.numero_tarjeta))
+
+    pdf_canvas.drawString(inch, 3.6 * inch, 'Cantidad a Pagar:')
+    pdf_canvas.drawString(6.8 * inch,3.6 * inch, '{} LPS'.format(factura.cantidad_pagar))
+    pdf_canvas.drawString(inch, 4 * inch, 'Total a Pagar:')
+    pdf_canvas.drawString(6.8 * inch, 4 * inch, '{} LPS'.format(factura.total_pagar))
+    pdf_canvas.drawString(inch, 3 * inch, 'Cambio:')
+    pdf_canvas.drawString(6.8 * inch, 3 * inch, '{} LPS'.format(factura.cambio))
+
+
     # Finalizar el PDF y cerrar el objeto canvas
     pdf_canvas.showPage()
     pdf_canvas.save()
@@ -3161,6 +3162,8 @@ def factura_pdf(request, id):
     # Devolver el objeto HttpResponse con el contenido PDF generado
     return response
 
+
+from creditcard import CreditCard
 
 
 def agregarfactura(request):
@@ -3183,7 +3186,15 @@ def agregarfactura(request):
             descuento=request.POST.get("descuento")
             isv=request.POST.get("isv")
             metodo_pago=request.POST.get("metodo_pago")
+            
             numero_tarjeta=request.POST.get("numero_tarjeta")
+
+
+
+            # Enmascarar los números de la tarjeta excepto los últimos 4 dígitos
+            mascara = "*" * 12
+            numero_enmascarado = mascara + numero_tarjeta[-4:]
+
             cantidad_pagar=request.POST.get("cantidad_pagar")
             total_pagar=request.POST.get("total_pagar")
             cambio=request.POST.get("cambio")
@@ -3204,7 +3215,9 @@ def agregarfactura(request):
             descuento=descuento,
             isv=isv,
             metodo_pago=metodo_pago,
-            numero_tarjeta=numero_tarjeta,
+
+            numero_tarjeta=numero_enmascarado,
+            
             cantidad_pagar=cantidad_pagar,
             total_pagar=total_pagar,
             cambio=cambio,
