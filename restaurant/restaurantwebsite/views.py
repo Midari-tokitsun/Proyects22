@@ -2214,6 +2214,58 @@ def reservaciones(request):
 
     return render(request,"reservacion.html",context)
 
+
+
+from PIL import Image
+from reportlab.lib.utils import ImageReader
+
+
+
+def generar_pdf(request):
+    # Obtener la ruta de la imagen
+    ruta_imagen = 'C:/Users/USER/Desktop/restaurant/restaurantwebsite/static/images/restaurantfloorplant.JPG'
+    # Abrir la imagen y convertirla a formato RGB
+    imagen = Image.open(ruta_imagen).convert('RGB')
+    # Obtener las dimensiones de la imagen
+    ancho, alto = imagen.size
+    # Crear un objeto BytesIO para guardar el PDF generado
+    buffer = BytesIO()
+    # Crear un objeto canvas de reportlab
+    c = canvas.Canvas(buffer, pagesize=letter)
+    # Convertir la imagen a formato ImageReader de reportlab
+    imagen_reportlab = ImageReader(imagen)
+    # Agregar la imagen al canvas
+    c.drawImage(imagen_reportlab, 0, 0, width=ancho, height=alto)
+    # Dibujar las mesas
+    c.setFillColorRGB(1, 0, 0)  # Color rojo
+    c.setFontSize(12)  # Tamaño de fuente 12
+    c.setFont('Helvetica-Bold', 12)  # Fuente Helvetica negrita
+    # Lista de coordenadas de mesa (ejemplo)
+    mesas = request.session.get('mesas', []) # Obtener las coordenadas de las mesas de la sesión del usuario
+    # Dibujar cada mesa en el PDF
+    for mesa in mesas:
+        # Convertir las coordenadas a números flotantes
+        x, y = mesa
+        # Ajustar las coordenadas para que la mesa se muestre en la posición correcta
+        x = x * (ancho / 100)
+        y = (100 - y) * (alto / 100)
+        # Dibujar la mesa en el PDF
+        c.drawCentredString(x, y, 'Mesa')
+        c.circle(x, y, 10)
+    # Guardar el PDF y cerrar el canvas
+    c.save()
+    # Obtener el contenido del BytesIO
+    pdf = buffer.getvalue()
+    # Cerrar el buffer
+    buffer.close()
+    # Crear una respuesta HTTP con el PDF generado
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="reservaciones.pdf"'
+    response.write(pdf)
+
+    return response
+
+
 def agregarreservacion(request):
     try:  
         pass         
@@ -3217,7 +3269,7 @@ def agregarfactura(request):
             metodo_pago=metodo_pago,
 
             numero_tarjeta=numero_enmascarado,
-            
+
             cantidad_pagar=cantidad_pagar,
             total_pagar=total_pagar,
             cambio=cambio,

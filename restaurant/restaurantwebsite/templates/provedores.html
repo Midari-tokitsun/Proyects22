@@ -119,16 +119,16 @@
             <form id="myform" action="{% url 'agregarprovedor' %}" method="POST">
                 {% csrf_token %}
                 <label for="">ID</label>
-                <input class="form-control" type="text" name="id_provedor" id="id_provedor">
+                <input minlength="0" maxlength="10" class="form-control" type="text" name="id_provedor" id="id_provedor">
                 <br>
                 <label for="">Nombre</label>
-                <input class="form-control" type="text" name="nombre_provedor" id="nombre_provedor">
+                <input minlength="0" maxlength="20" class="form-control" type="text" name="nombre_provedor" id="nombre_provedor">
                 <br>
                 <label for="">Apellido</label>
-                <input class="form-control" type="text" name="apellido_provedor" id="apellido_provedor">
+                <input minlength="0" maxlength="20" class="form-control" type="text" name="apellido_provedor" id="apellido_provedor">
                 <br>
                 <label for="">Compañia</label>
-                <input class="form-control" type="text" name="compañia_provevdor" id="">
+                <input minlength="0" maxlength="15" class="form-control" type="text" name="compañia_provevdor" id="compañia_provevdor">
                 <br>
                 <label for="">Telefono</label>
                 <input class="form-control" type="text" name="telefono_provedor" id="telefono_provedor" minlength="8" maxlength="8">
@@ -207,13 +207,13 @@ $("#myform").validate({
     rules: {
         id_provedor: {
         noSpace:true,
-        required: true
+        required: true,
+        noSpaceafterletters:true
       },
       nombre_provedor: {
         noRepetidos:true,
         required: true, 
-        minlength: 3,
-        maxlength:18,
+
         lettersonly: true,
         noSpace:true,
       },
@@ -222,15 +222,13 @@ $("#myform").validate({
         noSpace:true,
         required: true,
         apellidocontrol: true,
-        minlength: 5,
-        maxlength: 20
+
       },
       compañia_provevdor: {
-        noRepetidos:true,
+        noConsecutiveTriples:true,
         noSpace:true,
         required: true,
-        minlength: 4,
-        maxlength: 16
+
       },
       email_provedor: {
         noRepetidos:true,
@@ -254,22 +252,19 @@ $("#myform").validate({
         nombre_provedor: {
         noRepetidos:"No Se permiten Letras Repetidas, Ni espacios repetidos",
 
-        minlength: "Debes ingresar como mínimo {3} letras.",
-        maxlength:"El Maximo de Letras de un nombre no debe ser mayor a {18}",
+   
         noSpace:"No se Permiten Espacios Aca",
       },
       apellido_provedor: {
         noRepetidos:"No Se permiten Letras Repetidas ,Ni espacios repetidos",
 
-        minlength: "Debes ingresar como mínimo 5 letras.",
-        maxlength: "No puedes ingresar más de 20 letras.",
+
         noSpace:"No se Permiten Espacios Aca NO HAGA ESO",
       },
       compañia_provevdor: {
         noRepetidos:"No Se permiten Letras Repetidas , Ni espacios repetidos",
 
-        minlength: "Debes ingresar como mínimo 4 caracteres.",
-        maxlength: "No puedes ingresar más de 16 caracteres.",
+
         noSpace:"No se Permiten Espacios Aca Ya se lo Dije",
       },
       email_provedor: {
@@ -366,6 +361,10 @@ $.validator.addMethod("apellidocontrol", function(value, element) {
 }, "");
 
 
+jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+        return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+    }, "No letras ni digitos despues de espacios por favor");
+    
 
 
 
@@ -378,6 +377,12 @@ $.validator.addMethod("emailcontrol", function(value, element) {
 
 
 
+$.validator.addMethod('noConsecutiveTriples', function(value, element) {
+  // Expresión regular que busca 3 caracteres iguales consecutivos
+  var regex = /([a-zA-Z0-9])\1\1/;
+  
+  return !regex.test(value);
+}, 'No se permiten caracteres consecutivos triples.');
 
 
 //regla para validar Los caracteres repetidos

@@ -325,13 +325,13 @@
                 {% csrf_token %}
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">ID del Producto</label>
-                <input name="id_producto" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Introduce un ID">
+                <input minlength="0" maxlength="10" name="id_producto" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Introduce un ID">
               </div>
        
 
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Nombre del Producto</label>
-                <input name="nombre_producto" type="text" class="form-control" id="nombre_producto" placeholder="Nombre del Producto">
+                <input minlength="0" maxlength="18" name="nombre_producto" type="text" class="form-control" id="nombre_producto" placeholder="Nombre del Producto">
               </div>
               
           
@@ -392,7 +392,7 @@
           <br>
 
           <label for="">Precio del Producto</label>
-          <input class="form-control" type="text" name="precio_producto" id="precio_producto">
+          <input class="form-control" min="0" type="number" name="precio_producto" id="precio_producto">
           <br>
 
         </div>
@@ -520,9 +520,14 @@ $("#Myform").validate({
     id_producto: {
       required: true,
       noSpace:true,
+      noSpaceafterletters:true,
     },
     nombre_producto: {
       required: true,
+      noSpace:true,
+      soloLetrasConEspacio:true,
+      noConsecutiveTriples:true,
+      minlength: 4,
     },
     id_categoria: {
       required: true,
@@ -547,6 +552,7 @@ $("#Myform").validate({
     },
     precio_producto: {
       required: true,
+      noSpaceafterletters:true
     },
 
   },
@@ -557,6 +563,7 @@ $("#Myform").validate({
     },
     nombre_producto: {
       required: "Ingresa el Nombre del Producto",
+      minlength: "Ingrese al menos 4 letras."
     },
     id_categoria: {
       required: "Debes seleccionar una Categoria",
@@ -605,6 +612,20 @@ $("#Myform").validate({
 	jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
     return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
 }, "No letras ni digitos despues de espacios por favor");
+
+$.validator.addMethod("soloLetrasConEspacio", function(value, element) {
+  return this.optional(element) || /^[a-zA-Z]+\s?[a-zA-Z]*$/.test(value);
+}, "Por favor ingrese solo letras y un espacio.");
+
+
+$.validator.addMethod('noConsecutiveTriples', function(value, element) {
+  // Expresión regular que busca 3 caracteres iguales consecutivos
+  var regex = /([a-zA-Z0-9])\1\1/;
+  
+  return !regex.test(value);
+}, 'No se permiten caracteres consecutivos triples.');
+
+
 
 
     </script>

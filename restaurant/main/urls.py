@@ -263,6 +263,7 @@ urlpatterns = [
    
     path('eliminarreservacion/<int:id>', views.eliminarreservacion , name="eliminarreservacion"),#pantalla principal del table
 
+    path('generar-pdf/', views.generar_pdf, name='generar_pdf'),
 
 # FIN DE LA VISTA de Reservaciones
 

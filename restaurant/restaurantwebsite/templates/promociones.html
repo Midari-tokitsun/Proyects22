@@ -325,7 +325,7 @@
 		  <label class="form-label" for="">
 			promocion ID
 		  </label>
-		  <input class="form-control" type="text" name="id_promocion" id="id_promocion" placeholder="Inserte ID de la Promocion">
+		  <input class="form-control" type="text" name="id_promocion" id="id_promocion" placeholder="Ingrese el ID de la Promocion">
 		</div>
 
 		<div class="mb-3">
@@ -333,7 +333,7 @@
 		  <label class="form-label" for="">
 			Nombre de la Promocion
 		 </label>
-		 <input class="form-control" type="text" name="nombre_promocion" id="nombre_promocion" placeholder="Inserte Nombre de la promocion">
+		 <input minlength="0" maxlength="20" class="form-control" type="text" name="nombre_promocion" id="nombre_promocion" placeholder="Ingrese el Nombre de la promocion">
 		</div>
 
 
@@ -461,11 +461,13 @@ $("#Myform").validate({
     id_promocion: {
       required: true,
 	  noSpace:true,
+	  noSpaceafterletters:true,
     },
     nombre_promocion: {
       required: true,
 	  espacioYMinimo:true,
-	  soloLetrasConEspacio: true
+	  soloLetrasConEspacio: true,
+	  noConsecutiveTriples:true,
     },
     menu_id: {
       required: true,
@@ -513,6 +515,15 @@ $("#Myform").validate({
 	
 	// Regla personalizada para validar el campo de Descripciion
 
+
+	$.validator.addMethod('noConsecutiveTriples', function(value, element) {
+  // Expresión regular que busca 3 caracteres iguales consecutivos
+  var regex = /([a-zA-Z0-9])\1\1/;
+  
+  return !regex.test(value);
+}, 'No se permiten caracteres consecutivos triples.');
+
+
 	jQuery.validator.addMethod("noSpace", function(value, element) { 
 		return value == '' || value.trim().length != 0;  
 	}, "No espacios Porfavor Eso no se Hace Aqui");
@@ -536,7 +547,10 @@ $.validator.addMethod("soloLetrasConEspacio", function(value, element) {
   return this.optional(element) || /^[a-zA-Z]+\s?[a-zA-Z]*$/.test(value);
 }, "Por favor ingrese solo letras y un espacio.");
 
-
+jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+        return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+    }, "No letras ni digitos despues de espacios por favor");
+    
 
         </script>
 

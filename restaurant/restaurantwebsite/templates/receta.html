@@ -384,7 +384,7 @@
 
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Nombre de la Receta</label>
-                <input name="nombre_receta" type="text" class="form-control noSpace sololetrasyconmayusculas" id="nombre_receta" placeholder="Nombre de la Receta" required>
+                <input minlength="0" maxlength="21" name="nombre_receta" type="text" class="form-control noSpace sololetrasyconmayusculas" id="nombre_receta" placeholder="Nombre de la Receta" required>
               </div>
 
 
@@ -407,13 +407,14 @@
 
               <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Descripcion de la Receta</label>
-                <textarea minlength="10" maxlength="250" placeholder="Breve Descripcion de l a Receta" name="descripcion_receta" class="form-control descripcioncontrol" id="descripcion_receta" rows="3" required></textarea>
+                <textarea minlength="10" maxlength="250" placeholder="Breve Descripcion de la Receta" name="descripcion_receta" class="form-control descripcioncontrol" id="descripcion_receta" rows="3" required></textarea>
               </div>
 
 
 			  <label for="exampleFormControlTextarea1" class="form-label">Nombre del Menu</label>
 
-              <select name="menu_id" class="form-select" aria-label="Default select example">
+              <select name="menu_id" id="menu_id" class="form-select" aria-label="Default select example">
+				<option value="" selected disabled>Seleccione el Menu</option>
                 {% for m in men %}
                 <option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
                 {% endfor %}
@@ -537,11 +538,11 @@ $(document).ready(function() {
 				id_receta: {
 				required: true,
 				noSpace: true,
+				noSpaceafterletters:true,
 			  },
 			  nombre_receta: {
 				required: true, 
-				minlength: 5,
-				maxlength:16,
+
 				noCaracteresRepetidos: true,
 		
 				noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
@@ -552,9 +553,6 @@ $(document).ready(function() {
 		
 			  porciones_receta: {
 				required: true,
-		
-				min:4,
-				max: 12,
 			  },
 		
 			
@@ -566,7 +564,12 @@ $(document).ready(function() {
         maxlength:250,
 
 			  },
+			  menu_id:{
+				required:true,
+				
 
+
+			  },
 
 
 		
@@ -585,8 +588,7 @@ $(document).ready(function() {
 			  nombre_receta: {
 				required:"Debes Ingresar Una Receta",
 				sololetrasyconmayusculas: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
-				minlength: "Debes ingresar al menos 5 caracteres.", 
-				maxlength: "No puedes ingresar más de 16 caracteres.",
+
 				noRepetidos: "No se permiten caracteres repetidos la Receta",
 		
 			  noespacios: "El Nombre de una Receta No Puede Contener Espacios"
@@ -608,6 +610,12 @@ $(document).ready(function() {
           max:" Las porciones Maximas deben ser menores de 12",
 
 			  },
+			  menu_id:{
+				required:"Debes Seleccionar el Menu Para la Receta",
+				
+
+
+			  }
 		
 			},
 		
@@ -639,6 +647,11 @@ $.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
 
 
 		
+jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+        return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+    }, "No letras ni digitos despues de espacios por favor");
+    
+
 		
 		// Regla personalizada para validar el campo de nombre_cargo
 		jQuery.validator.addMethod("noSpace", function(value, element) { 

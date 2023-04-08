@@ -311,39 +311,43 @@
             {% csrf_token %}
                     <!-- Name input -->
                     <div class="form-outline mb-4">
+                      <label class="form-label" for="name2">ID</label>
                         <input type="text" name="id_inventario" id="id_inventario" class="form-control" />
-                        <label class="form-label" for="name2">ID</label>
+                     
                     </div>
 
                     <!-- Email input -->
                     <div class="form-outline mb-4">
-
+                      <label class="form-label" for="producto">Producto</label>  
                     <select class="form-control" name="producto" id="producto">
                       <option value=""> Selecciona un Producto </option>
                       {% for p in pro %}
                     <option value="{{p.nombre_producto}}">{{p.nombre_producto}}</option>
                     {% endfor %}
                     </select>    
-                    <label class="form-label" for="producto">Producto</label>                  
+                  
                     </div>
 
                     <!-- password input -->
                     <div class="form-outline mb-4">
+                      <label class="form-label" for="cantidad_actual">Cantidad Actual</label>
                         <input type="number" name="cantidad_actual" id="cantidad_actual" class="form-control" />
-                        <label class="form-label" for="cantidad_actual">Cantidad Actual</label>
+
                     </div>
 
 
                     <!-- password input -->
                     <div class="form-outline mb-4">
+                      <label class="form-label" for="password2">Cantidad Minima</label>
                         <input type="number" name="cantidad_minima" id="cantidad_minima" class="form-control" />
-                        <label class="form-label" for="password2">Cantidad Minima</label>
+
                     </div>
 
                     <!-- password input -->
                     <div class="form-outline mb-4">
+                      <label class="form-label" for="cantidad_maxima">Cantidad Maxima</label>
                         <input type="number" name="cantidad_maxima" id="cantidad_maxima" class="form-control" />
-                        <label class="form-label" for="cantidad_maxima">Cantidad Maxima</label>
+
                     </div>
 
                     <!-- password input -->
@@ -479,6 +483,7 @@ $("#Myform").validate({
   rules: {
     id_inventario: {
       required: true,
+      noSpaceafterletters:true,
     },
     producto: {
       required: true,
@@ -502,8 +507,7 @@ $("#Myform").validate({
   },
   messages: {
     id_inventario: {
-      noSpace: "No se permiten espacios",
-      required: "Debes poner un ",
+      required: "Debes poner un ID",
     },
     producto: {
       required: " selecciona un",
@@ -532,6 +536,14 @@ $("#Myform").validate({
 
 	
 	// Regla personalizada para validar el campo de Descripciion
+
+
+  jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+        return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+    }, "No letras ni digitos despues de espacios por favor");
+    
+
+
 
 	jQuery.validator.addMethod("noSpace", function(value, element) { 
 		return value == '' || value.trim().length != 0;  

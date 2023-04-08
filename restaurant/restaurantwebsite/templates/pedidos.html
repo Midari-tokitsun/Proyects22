@@ -341,6 +341,7 @@
 					<option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
 				  {% endfor %}
 				</select>
+				<p id="menu-error" class="error-message"></p>
 			  </div>
 			
 			  <div class="form-group">
@@ -418,13 +419,9 @@
 			<br>
 
 			<label for="">Nombre del Menu</label>
-			<select class="form-control" name="nombre_menu[]" id="nombre_menu" multiple>
-				<option value="" selected >Selecciona un Menu</option>
-				{% for m in men %}    
-					<option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
-				{% endfor %}
-			</select>
+			<textarea class="form-control" name="nombre_menu" id="nombre_menu" value="{{p.nombre_menu}}" cols="30" rows="10">{{p.nombre_menu}}</textarea>
 			<br>
+
 
 
 
@@ -438,16 +435,9 @@
 			<br>
 
 			<label for="">Cantidades</label>
-			<select class="form-control" name="cantidades" id="cantidades">
-				<option value="{{p.cantidades}}">{{p.cantidades}}</option>
 
-			<option value="2">2</option>
-			<option value="4">4</option>
-			<option value="6">6</option>
-			<option value="8">8</option>
-			<option value="10">10</option>
-			
-		</select>
+		<textarea class="form-control" name="cantidades" id="cantidades" value="{{p.cantidades}}" cols="30" rows="10">{{p.cantidades}}</textarea>
+
 			<br>
 
 			<label for="">Estado del Pedido</label>
@@ -483,10 +473,12 @@ $(document).ready(function() {
   $('#agregar-menu').click(function() {
     var nombreMenu = $('#nombre_menu option:selected').text();
     var cantidad = $('#cantidad').val(); // obtenemos la cantidad ingresada por el usuario
+	const menuError = document.getElementById('menu-error');
+
 
 	    // Verificar si se ha seleccionado una opción válida
 		if (nombreMenu === "Selecciona un Menu") {
-      alert('Selecciona un menú válido.');
+		menuError.textContent = 'Debes Primero Seleccionar el Menu para Ingresar sus Cantidades.';
       return;
     }
     // Verificar si ya se ha agregado el menú seleccionado
@@ -550,6 +542,7 @@ $("#Myform").validate({
     id_pedido: {
       required: true,
 	  noSpace:true,
+	  noSpaceafterletters:true,
     },
     nombre_cliente: {
       required: true,

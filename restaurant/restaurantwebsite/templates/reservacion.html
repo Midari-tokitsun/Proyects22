@@ -48,6 +48,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
         
 
+
+
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@^1.20.0/dist/pdf-lib.min.js"></script>
+
         <body>
 
           <style>
@@ -289,10 +295,13 @@
 
 
 
-<div id="restaurante" > <img src="../static/images/restaurantfloorplant.JPG" alt=""></div>
+<div id="restaurante" > <img id="img-restaurant" src="../static/images/restaurantfloorplant.JPG" alt="">
+
 <div id="mesas">
 
 </div>
+</div>
+
 <div class="d-flex justify-content-center">
     <div class="col-auto">  
   <label for="num-mesas">Número de Reservaciones:</label>
@@ -313,11 +322,17 @@
 </div>
 </div>
 
+<button class="btn btn-danger" id="capturar-imagen">GENERAR CAPTURA</button>
+
+
+
 
 <!-- Button trigger modal de Agregar Modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#GuardarReservacionModal">
     Agregar Nueva Reservacion
   </button>
+
+
   
 
 <table id="myTable" class="display" cellspacing="0" width="100%">
@@ -459,7 +474,7 @@
 
   
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
           <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         </div>
       </form>
@@ -561,7 +576,7 @@
 
   
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
           <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         </div>
       </form>
@@ -575,7 +590,43 @@
 
 
 
+
   <script>
+$("#capturar-imagen").click(function() {
+  html2canvas(document.querySelector("#restaurante")).then(function(canvas) {
+
+    // Crear un nuevo canvas del mismo tamaño que el canvas original
+    var newCanvas = document.createElement("canvas");
+    newCanvas.width = canvas.width;
+    newCanvas.height = canvas.height;
+
+    // Dibujar la imagen original en el nuevo canvas
+    var context = newCanvas.getContext('2d');
+    context.drawImage(canvas, 0, 0);
+
+    // Dibujar el título encima de la imagen
+    var title = "PIzza Wave Reservaciones";
+    context.font = "bold 24px Script";
+    context.fillStyle = "#000";
+    context.fillText(title, 10, 30);
+
+    // Convertir el nuevo canvas a una URL de imagen
+    var imgURL = newCanvas.toDataURL("image/png");
+
+    // Crear un enlace de descarga
+    var link = document.createElement("a");
+    link.href = imgURL;
+    link.download = "restaurante.png";
+
+    // Agregar el enlace al documento y hacer clic en él
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+});
+
+
+
 
 
     $(document).ready(function() {
@@ -634,7 +685,8 @@
       $(".mesa").last().remove();
     });
     
-                  
+
+  
     
     
     $("#Myform").validate({
@@ -655,28 +707,12 @@
         fecha_reserva: {
             required: true,
             
-        },
-        fecha_llegada: {
-            required: true,
+            lessEqualThan: "#fecha_llegada" 
         },
 
         fecha_llegada: {
             required: true,
-            min: function() {
-                return $("#fecha_reserva").val();
-            },
-            max: function() {
-                return $("#fecha_inicio").val();
-            }
-        },
-        fecha_inicio: {
-            required: true,
-            min: function() {
-                return $("#fecha_reserva").val();
-            },
-            max: function() {
-                return $("#fecha_llegada").val();
-            }
+            greaterEqualThan: "#fecha_reserva" 
         },
         descripcion: {
             required: true,
@@ -723,11 +759,24 @@
 });
 
       
-      
-      
+// Agrega regla personalizada para validar que la fecha sea mayor o igual que otra fecha
+$.validator.addMethod('greaterEqualThan', function(value, element, param) {
+  var otherDate = $(param).val();
+  if (!value || !otherDate) {
+    return true;
+  }
+  return new Date(value) >= new Date(otherDate);
+}, 'La fecha de Llegada debe ser mayor o igual que la fecha de Reserva.');
 
+// Agrega regla personalizada para validar que la fecha sea menor o igual que otra fecha
+$.validator.addMethod('lessEqualThan', function(value, element, param) {
+  var otherDate = $(param).val();
+  if (!value || !otherDate) {
+    return true;
+  }
+  return new Date(value) <= new Date(otherDate);
+}, 'La fecha de Inicio debe ser menor o igual que la fecha de Llegada.');
 
-    
     
         jQuery.validator.addMethod("noSpace", function(value, element) { 
         return value == '' || value.trim().length != 0;  
