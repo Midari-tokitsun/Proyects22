@@ -3003,11 +3003,13 @@ def facturaciontabla(request):
     fact=factura_tabla.objects.all()
     men=menutabla.objects.all()
     user=insertuser.objects.all()
+    ped=pedidostabla.objects.all()
     meto=metodo_pago_tabla.objects.all()
     sar=sar_tabla.objects.all()
     context={
         'fact':fact,
         'men':men,
+        'ped':ped,
         'user':user,
         'meto':meto,
         'sar':sar,
@@ -3153,11 +3155,10 @@ def factura_pdf(request, id):
     precios_totales_menu = [float(cantidad.strip('()')) * float(precio) for cantidad, precio in zip(cantidades, precios_menu)]
 
 
-    # Escribir el encabezado de cantidad
-    pdf_canvas.drawString(inch, 6 * inch, 'Cantidad:')
+
 
     # Escribir la cantidad, el nombre y el precio unitario de cada menú
-    y_position = 5.75 * inch
+    y_position = 4.5 * inch
     precio_total_factura = 0
     for cantidad, nombre, precio_unitario in zip(cantidades, nombres_menu, precios_menu):
         precio_total_menu = obtener_precio_total_menu(nombre, cantidad)
@@ -3179,32 +3180,44 @@ def factura_pdf(request, id):
     pdf_canvas.drawString(6.5 * inch, y_position, precio_total_factura_str)
 
 
-
+    # Escribir el encabezado de cantidad
+    pdf_canvas.drawString(inch, 4.7 * inch, 'Cantidad:')
+    
     # Escribir el encabezado del nombre del menú
-    pdf_canvas.drawString(3.8*inch, 6 * inch, 'Nombre del Menú:')
+    pdf_canvas.drawString(3.8*inch, 4.7 * inch, 'Nombre del Menú:')
 
     # Escribir el encabezado del precio unitario
-    pdf_canvas.drawString(5.5*inch, 6 * inch, 'Precio:')
+    pdf_canvas.drawString(5.5*inch, 4.7 * inch, 'Precio:')
 
-    pdf_canvas.drawString(inch, 1.5 * inch, 'Tamaño del Menu: {}'.format(factura.tamaño_menu))
 
-    pdf_canvas.drawString(inch, 1 * inch, 'Estado del Pedido: {}'.format(factura.estado_pedido))
+
+
+
+    pdf_canvas.drawString(inch, 5.9 * inch, 'Tamaño del Menu: {}'.format(factura.tamaño_menu))
+
+    pdf_canvas.drawString(inch, 5.7 * inch, 'Estado del Pedido: {}'.format(factura.estado_pedido))
 
     pdf_canvas.drawString(inch, 6.2 * inch, 'Fecha de Realizacion del Pedido: {}'.format(factura.fecha_realizacion_pedido))
 
-    pdf_canvas.drawString(inch, 4.5 * inch, 'Descuentos: {}'.format(factura.descuento))
+    pdf_canvas.drawString(inch, 2.6 * inch, 'Descuentos:')
+    pdf_canvas.drawString(6.8 * inch, 2.6 * inch, ' {}'.format(factura.descuento))
 
-    pdf_canvas.drawString(inch, 5 * inch, 'ISV: {}'.format(factura.isv))
+    pdf_canvas.drawString(inch, 3 * inch, 'ISV:')
+    pdf_canvas.drawString(6.8 * inch, 3 * inch, ' {}'.format(factura.isv))
     
-    pdf_canvas.drawString(inch, 2 * inch, 'Metodo de Pago: {}'.format(factura.metodo_pago))
-    pdf_canvas.drawString(inch, 0.5 * inch, 'Numero de la Tarjeta: {}'.format(factura.numero_tarjeta))
 
-    pdf_canvas.drawString(inch, 3.6 * inch, 'Cantidad a Pagar:')
-    pdf_canvas.drawString(6.8 * inch,3.6 * inch, '{} LPS'.format(factura.cantidad_pagar))
-    pdf_canvas.drawString(inch, 4 * inch, 'Total a Pagar:')
-    pdf_canvas.drawString(6.8 * inch, 4 * inch, '{} LPS'.format(factura.total_pagar))
-    pdf_canvas.drawString(inch, 3 * inch, 'Cambio:')
-    pdf_canvas.drawString(6.8 * inch, 3 * inch, '{} LPS'.format(factura.cambio))
+    pdf_canvas.drawString(inch, 5.4 * inch, 'Metodo de Pago: {}'.format(factura.metodo_pago))
+    pdf_canvas.drawString(inch, 5.2 * inch, 'Numero de la Tarjeta: {}'.format(factura.numero_tarjeta))
+
+    pdf_canvas.line(inch, 5 * inch, 7.5*inch, 5 * inch)
+
+
+    pdf_canvas.drawString(inch, 1.9 * inch, 'Cantidad a Pagar:')
+    pdf_canvas.drawString(6.8 * inch,1.9 * inch, '{} LPS'.format(factura.cantidad_pagar))
+    pdf_canvas.drawString(inch, 2.3 * inch, 'Total a Pagar:')
+    pdf_canvas.drawString(6.8 * inch, 2.3 * inch, '{} LPS'.format(factura.total_pagar))
+    pdf_canvas.drawString(inch, 1.5 * inch, 'Cambio:')
+    pdf_canvas.drawString(6.8 * inch, 1.5 * inch, '{} LPS'.format(factura.cambio))
 
 
     # Finalizar el PDF y cerrar el objeto canvas
@@ -3251,6 +3264,17 @@ def agregarfactura(request):
             total_pagar=request.POST.get("total_pagar")
             cambio=request.POST.get("cambio")
 
+                    
+            # Obtener el último valor de consecutivo en la tabla de SAR
+            sar = sar_tabla.objects.latest('fecha_emision')
+            ultimo_consecutivo = int(sar.consecutivo)
+
+            # Incrementar el valor de consecutivo en 1 y actualizar en la tabla de SAR
+            nuevo_consecutivo = ultimo_consecutivo + 1
+            sar.consecutivo = str(nuevo_consecutivo)
+            sar.save()
+        
+        
             factura_tabla.objects.create(
             id_factura=id_factura,
             codigo_cai=codigo_cai,

@@ -66,7 +66,7 @@
           
             </style>
            
-          <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
+           <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
             <div class="container-fluid">
               <a class="navbar-brand" href="#">Pizza Wave</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,26 +130,29 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
               
-                <li class="nav-item">
-                <a class="nav-link" href="/pedidos">Realizar Pedidos</a>
-                </li>
-          
-          
-                
-            
-                <li class="nav-item">
-                  <a class="nav-link" href="/registrousuarios">Usuarios</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/registrousuarios">Usuarios</a>
+                      </li>
               
+                      
+
+
+                <li class="nav-item">
+                <a class="nav-link" href="/pedidos">Pedidos</a>
+                </li>
           
           
+                <li class="nav-item">
+                    <a class="nav-link" href="/facturacion">Factura</a>
+                  </li>
+                
+        
+
+
                 <li class="nav-item">
                   <a class="nav-link" href="/estadopedido">Estado Pedido</a>
                   </li>
             
-                  <li class="nav-item">
-                    <a class="nav-link" href="/detallepedido">Detalle Pedido</a>
-                    </li>
           
           
                     <li class="nav-item">
@@ -230,7 +233,15 @@
                     <a class="nav-link" href="/productos">Registros de Productos</a>
                     </li>
           
-          
+                    <li class="nav-item">
+                        <a class="nav-link" href="/historicoproducto">Registros Historicos de Productos</a>
+                        </li>
+
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/provedores">Registros de Proveedores</a>
+                        </li>
+              
           
               
                 </ul>
@@ -602,13 +613,13 @@ $("#capturar-imagen").click(function() {
 
     // Dibujar la imagen original en el nuevo canvas
     var context = newCanvas.getContext('2d');
-    context.drawImage(canvas, 0, 0);
+    context.drawImage(canvas, 0, 30);
 
     // Dibujar el título encima de la imagen
-    var title = "PIzza Wave Reservaciones";
-    context.font = "bold 24px Script";
+    var title = "Pizza Wave Reservaciones";
+    context.font = "24px Script";
     context.fillStyle = "#000";
-    context.fillText(title, 10, 30);
+    context.fillText(title, 12, 30);
 
     // Convertir el nuevo canvas a una URL de imagen
     var imgURL = newCanvas.toDataURL("image/png");
