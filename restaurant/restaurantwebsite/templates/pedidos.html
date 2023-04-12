@@ -495,7 +495,7 @@ $(document).ready(function() {
     // Verificar si ya se ha agregado el menú seleccionado
     if ($(`#menu-seleccionado [data-menu-nombre="${nombreMenu}"]`).length > 0) {
       // Si el menú ya está agregado, mostrar un mensaje de error y salir de la función
-      alert('Ya has seleccionado este menú.');
+	  menuError.textContent = 'Ya has Seleccionado este Menu Porfavor Selecciona otro';
       return;
     }
     

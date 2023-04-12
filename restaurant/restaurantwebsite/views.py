@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla,historico_producto,factura_tabla
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla,historico_producto,factura_tabla,impuesto_tabla
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -3006,6 +3006,7 @@ def facturaciontabla(request):
     ped=pedidostabla.objects.all()
     meto=metodo_pago_tabla.objects.all()
     sar=sar_tabla.objects.all()
+    imp=impuesto_tabla.objects.all()
     context={
         'fact':fact,
         'men':men,
@@ -3013,6 +3014,7 @@ def facturaciontabla(request):
         'user':user,
         'meto':meto,
         'sar':sar,
+        'imp':imp,
     }
     return render(request,"facturacion.html",context)
 
@@ -3107,6 +3109,10 @@ def factura_pdf(request, id):
     pdfmetrics.registerFont(TTFont('Arial Unicode MS Font', font_path))
     # Mapear la fuente Arial Unicode MS a las fuentes predeterminadas
     addMapping('Arial Unicode MS Font', 0, 0, 'Arial Unicode MS Font')
+
+        # Agregar el logo
+    logo_path = "C:/Users/USER/Desktop/restaurant/restaurantwebsite/static/images/pizzawavelogo.jpg"
+    pdf_canvas.drawImage(logo_path,3*inch, 10*inch , width=120, height=100)
             
     # Agregar encabezado
     pdf_canvas.setFont("Arial Unicode MS Font", 11)
@@ -3119,18 +3125,24 @@ def factura_pdf(request, id):
 
     pdf_canvas.drawCentredString(3.8*inch, 10*inch, "FACTURA")
     pdf_canvas.drawString(2.8*inch, 9.5 * inch, 'Numero de Factura: {}'.format(factura.numero_factura))
-
+    pdf_canvas.drawString(6*inch, 9.5 * inch, '/004-005-10-00050:')
 
     pdf_canvas.line(inch, 8.8 * inch, 7.5*inch, 8.8 * inch)
     
 
 
     # Escribir los datos de la factura en el PDF
-    pdf_canvas.drawString(inch, 9 * inch, 'Codigo CAI: {}'.format(factura.codigo_cai))
-    pdf_canvas.drawString(inch, 8.5 * inch, 'Nombre del Encargado: {}'.format(factura.nombre_encargado))
-    pdf_canvas.drawString(inch, 8 * inch, 'Apellido del Encargado: {}'.format(factura.apellido_encargado))
-    pdf_canvas.drawString(inch, 7.5 * inch, 'Correo del Encargado: {}'.format(factura.correo_encargado))
-    pdf_canvas.drawString(inch, 7 * inch, 'Numero Telefonico: {}'.format(factura.telefono_encargado))
+    pdf_canvas.drawString(inch, 8.5 * inch, 'Codigo CAI: {}'.format(factura.codigo_cai))
+    pdf_canvas.drawString(inch, 9 * inch, 'Nombre del Encargado: {}'.format(factura.nombre_encargado))
+    pdf_canvas.drawString(3.1*inch, 9 * inch, ' {}'.format(factura.apellido_encargado))
+    pdf_canvas.drawString(inch, 8 * inch, 'Numero Inicial: {}'.format(factura.numero_inicial))
+    pdf_canvas.drawString(3.8*inch, 8 * inch, 'Numero Final: {}'.format(factura.numero_final))
+
+
+    pdf_canvas.drawString(inch, 7.5 * inch, 'Fecha Inicial: {}'.format(factura.fecha_emision))
+    pdf_canvas.drawString(3.8*inch, 7.5 * inch, 'Fecha Final: {}'.format(factura.fecha_final))
+
+
 
     pdf_canvas.line(inch, 6.8 * inch, 7.5*inch, 6.8 * inch)
 
@@ -3203,7 +3215,8 @@ def factura_pdf(request, id):
     pdf_canvas.drawString(6.8 * inch, 2.6 * inch, ' {}'.format(factura.descuento))
 
     pdf_canvas.drawString(inch, 3 * inch, 'ISV:')
-    pdf_canvas.drawString(6.8 * inch, 3 * inch, ' {}'.format(factura.isv))
+    pdf_canvas.drawString(6.8 * inch, 3 * inch,' {}%'.format(float(factura.isv) * 100))
+
     
 
     pdf_canvas.drawString(inch, 5.4 * inch, 'Metodo de Pago: {}'.format(factura.metodo_pago))
@@ -3274,6 +3287,11 @@ def agregarfactura(request):
             sar.consecutivo = str(nuevo_consecutivo)
             sar.save()
         
+            fecha_emision=request.POST.get("fecha_emision")
+            fecha_final=request.POST.get("fecha_final")
+            numero_inicial=request.POST.get("numero_inicial")
+            numero_final=request.POST.get("numero_final")
+
         
             factura_tabla.objects.create(
             id_factura=id_factura,
@@ -3298,6 +3316,12 @@ def agregarfactura(request):
             total_pagar=total_pagar,
             cambio=cambio,
 
+            fecha_emision=fecha_emision,
+            fecha_final=fecha_final,
+            numero_inicial=numero_inicial,
+            numero_final=numero_final,
+
+
             )
             messages.success(request, 'Registro Agregado con Exito')
 
@@ -3307,3 +3331,100 @@ def agregarfactura(request):
         messages.error(request, 'Error: ya existe un registro con esa clave')
 
     return redirect('facturacion')
+
+
+def eliminarfactura(request,id):
+    fact=factura_tabla.objects.get(id_factura=id)
+    fact.delete()
+    messages.error(request, 'Registro Eliminado Con Exito!')
+
+    return redirect('facturacion')
+
+
+def obtener_datos_cai(request):
+    if request.method == 'GET':
+        cai_id = request.GET.get('cai_id', '')
+        print(cai_id)
+
+        if cai_id:
+            # Obtener los datos del CAI seleccionado
+            cai = get_object_or_404(sar_tabla, codigo_sar=cai_id)
+            print(cai)
+
+            # Crear un diccionario con los detalles del CAI
+            detalles_cai = {
+                'fecha_emision': cai.fecha_emision.strftime('%Y-%m-%d'),
+                'fecha_final': cai.fecha_final.strftime('%Y-%m-%d'),
+                'numero_inicial': cai.numero_inicial,
+                'numero_final': cai.numero_final,
+            }
+
+            return JsonResponse(detalles_cai)
+
+    return JsonResponse({})
+
+
+
+
+
+def impuestostabla(request):
+    imp=impuesto_tabla.objects.all()
+    context={
+        'imp':imp
+    }
+    return render(request,"impuesto.html",context)
+
+def agregarimpuesto(request):
+    try:
+        if request.method == 'POST':
+            id_impuesto = request.POST.get("id_impuesto")
+            impuesto = request.POST.get("impuesto")
+            impuesto_anterior = None  # Initialize to None
+            try:
+                # Buscar el registro anterior en impuesto_tabla
+                impuesto_anterior = impuesto_tabla.objects.filter(
+                    id_impuesto__lt=id_impuesto
+                ).latest('fecha_inicio')
+
+                # Actualizar la fecha final del registro anterior
+                impuesto_anterior.fecha_final = timezone.now()
+                impuesto_anterior.save()
+            except impuesto_tabla.DoesNotExist:
+                # No se encontró un registro anterior, no se actualiza nada
+                pass
+
+            # Crear un nuevo registro en impuesto_tabla con la fecha_inicio
+            # del nuevo registro y fecha_final igual a fecha_inicio del registro anterior
+            impuesto_tabla.objects.create(
+                id_impuesto=id_impuesto,
+                impuesto=impuesto,
+                fecha_inicio=timezone.now(),
+                fecha_final=None,  # La fecha final del registro reciente es None
+            )
+
+
+            messages.success(request, 'Registro Agregado con Exito')
+            return redirect('impuestostabla')
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+    return redirect('impuestostabla')
+
+def eliminarimpuesto(request,id):
+    imp=impuesto_tabla.objects.get(id_impuesto=id)
+    imp.delete()
+    messages.success(request, 'Registro Eliminado con Exito')
+    return redirect('impuestostabla')
+
+
+def editarimpuesto(request,id):
+    imp=impuesto_tabla.objects.get(id_impuesto=id)
+    id_impuesto=request.POST.get('id_impuesto')
+    impuesto=request.POST.get('impuesto')
+    imp.id_impuesto=id_impuesto
+    imp.impuesto=impuesto
+    imp.save()
+
+    messages.success(request, 'Registro Modificado con Exito')
+    return redirect('impuestostabla')
+

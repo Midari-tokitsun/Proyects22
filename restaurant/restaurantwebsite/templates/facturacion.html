@@ -338,9 +338,7 @@
         <td>{{f.total_pagar}}</td>
         <td>{{f.cambio}}</td>
         <td><!-- Button trigger modal -->
-			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarmodalpedido-{{forloop.counter}}">
-				EDITAR
-			  </button>
+          <a href="/eliminarfactura/{{f.id_factura}}" class="btn btn-danger">Eliminar</a>
             <a href="/factura_pdf/{{f.id_factura}}" class="btn btn-primary">Ver Factura PDF</a>
         </td>
         
@@ -372,6 +370,8 @@
               font-size: 15px;
               text-align: center;
             }
+
+            
           </style>
       
 <!-- Button trigger modal -->
@@ -397,19 +397,40 @@
       
 
           <br>
+  
+
           <div class="mb-3">
-            <label for="cliente" class="form-label">Codigo CAI</label>
-            <select class="form-control" name="codigo_cai" id="codigo_cai">
-               <option value="" selected>Selecciona un CAI</option>
-               {% for s in sar %}
-               <option value="{{s.codigo_sar}}">{{s.codigo_sar}}</option>
-               {% endfor %}             
-           </select>
-          </div>
+            <label for="codigo_cai_input" class="form-label">Codigo CAI</label>
+            {% for s in sar %}
+            <input type="text" class="form-control" name="codigo_cai" value="{{s.codigo_sar}}" id="codigo_cai" readonly>
+            {% endfor %}   
+         </div>
+         
+
+          <div class="mb-3">
+            <label for="fecha_emision" class="form-label">Fecha de Emisión</label>
+           
+            <input type="text" class="form-control" name="fecha_emision" value="" id="fecha_emision" readonly>
+            
+         </div>
+         <div class="mb-3">
+            <label for="fecha_final" class="form-label">Fecha Final</label>
+            <input type="text" class="form-control" name="fecha_final" id="fecha_final" readonly>
+         </div>
+         <div class="mb-3">
+            <label for="numero_inicial" class="form-label">Número Inicial</label>
+            <input type="text" class="form-control" name="numero_inicial" id="numero_inicial" readonly>
+         </div>
+         <div class="mb-3">
+            <label for="numero_final" class="form-label">Número Final</label>
+            <input type="text" class="form-control" name="numero_final" id="numero_final" readonly>
+         </div>
+
+
     
           <br>
            <label for="">Numero de Factura</label>
-            <input type="text" class="form-control" name="numero_factura" id="numero_factura">
+            <input readonly type="text" class="form-control" name="numero_factura" id="numero_factura">
 
             <br>
         {% if request.session %}
@@ -473,8 +494,9 @@
           <div class="mb-3">
             <label for="isv" class="form-label">ISV</label>
             <select class="form-control" name="isv" id="isv">
-              <option value="0.15" selected>15%</option>
-              <option value="0.18">18%</option>
+              {% for im in imp %}
+              <option value="{{ im.impuesto }}" selected>{{ im.impuesto }}</option>
+              {% endfor %}
             </select>
           </div>
    
@@ -529,13 +551,13 @@
 
            <br>
            <label class="form-label" for="total-a-pagar">Total a pagar:</label>
-           <input name="total_pagar" id="total-a-pagar" class="form-control" type="text" >
+           <input name="total_pagar" id="total-a-pagar" class="form-control" type="text" readonly>
            <button class="btn btn-danger" id="reset-total-button" type="button">Resetear cuenta</button>
            <br>
 
            <br>
            <label for="cambio">Cambio (Vuelto):</label>
-           <input id="cambio" class="form-control" type="text" name="cambio">
+           <input id="cambio" class="form-control" type="text" name="cambio" readonly>
       <br>
      
            <div class="modal-footer">
@@ -548,6 +570,28 @@
 
 
         <script>
+
+
+
+ 
+ $(document).ready(function() {
+    // Obtener el valor del código CAI
+    var cai_id = $('#codigo_cai').val();
+    // Hacer llamada AJAX al backend para obtener los detalles del CAI
+    $.ajax({
+        url: '/obtener_datos_cai/',
+        data: {'cai_id': cai_id},
+        dataType: 'json',
+        success: function(data) {
+            // Mostrar los detalles en los inputs correspondientes
+            $('#fecha_emision').val(data.fecha_emision);
+            $('#fecha_final').val(data.fecha_final);
+            $('#numero_inicial').val(data.numero_inicial);
+            $('#numero_final').val(data.numero_final);
+        }
+    });
+});
+
 
 
 
@@ -649,13 +693,11 @@ function actualizarTotalAPagar() {
     descuento = 0;
   }
 
-  // Obtener el valor del ISV
-  let isv = Number(document.getElementById('isv').value);
+  // Obtener el valor del impuesto seleccionado
+  const impuestoSeleccionado = Number(document.getElementById('isv').value);
 
-  // Si no se ha seleccionado ningún ISV, establecer el valor predeterminado en 0.15
-  if (isNaN(isv)) {
-    isv = 0.15;
-  }
+  // Actualizar el valor de isv con el impuesto seleccionado
+  isv = impuestoSeleccionado;
 
   // Calcular el precio total sin descuento ni ISV
   const precioTotalSinDescuentoNIsv = selectedMenus.reduce((total, menu) => total + menu.precio, 0);
@@ -675,6 +717,7 @@ function actualizarTotalAPagar() {
   // Actualizar el cambio
   actualizarCambio();
 }
+
 
 
 function actualizarCambio() {
@@ -721,9 +764,7 @@ resetTotalButton.addEventListener('click', () => {
         codigo_cai: {
             required: true,
         },
-        numero_factura: {
-            required: true,
-        },
+
 
         descuento: {
             required: true,
@@ -749,9 +790,7 @@ resetTotalButton.addEventListener('click', () => {
         codigo_cai: {
             required: "Debes Seleccionar El CODIGO CAI",
         },
-        numero_factura: {
-            required: "Debes Ingresar el Numero de Factura",
-        },
+
         descuento: {
             required: "Debes Un Descuento",
         },
@@ -769,6 +808,10 @@ resetTotalButton.addEventListener('click', () => {
 
     },
     submitHandler: function(form) {
+
+        // Asignar el valor al input de numero_factura
+        $("#numero_factura").val("004-005-10-00010");
+
           $("#mensaje-confirmacion").show();
           form.submit();
         }

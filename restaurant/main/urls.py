@@ -341,13 +341,25 @@ urlpatterns = [
     path("facturacion/",views.facturaciontabla, name="facturacion"),
     path("agregarfactura",views.agregarfactura, name="agregarfactura"),
     path("factura_pdf/<int:id>",views.factura_pdf, name="factura_pdf"),
+    path("eliminarfactura/<int:id>",views.eliminarfactura, name="eliminarfactura"),
 
 
     path('obtener_detalles_pedido/', views.obtener_detalles_pedido, name='obtener_detalles_pedido'),
     path('obtener_detalles_menu/', views.obtener_detalles_menu, name='obtener_detalles_menu'),
 
+    path('obtener_datos_cai/', views.obtener_datos_cai, name='obtener_datos_cai'),
+
+
 
 #FIN
+
+#impuestos editarimpuesto
+
+    path("impuesto/",views.impuestostabla, name="impuestostabla"),
+    path("agregarimpuesto",views.agregarimpuesto, name="agregarimpuesto"),
+    path("eliminarimpuesto/<int:id>",views.eliminarimpuesto, name="eliminarimpuesto"),
+    path("editarimpuesto/<int:id>",views.editarimpuesto, name="editarimpuesto"),
+
 
 
 ] 

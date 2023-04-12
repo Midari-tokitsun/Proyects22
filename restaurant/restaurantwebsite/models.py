@@ -375,9 +375,26 @@ class factura_tabla(models.Model):
     cantidad_pagar=models.CharField(max_length=90)
     total_pagar=models.CharField(max_length=90)
     cambio=models.CharField(max_length=50)
+    
+    fecha_emision=models.CharField(max_length=50)
+    fecha_final=models.CharField(max_length=50)
+    numero_inicial=models.CharField(max_length=50)
+    numero_final=models.CharField(max_length=50)
+
 
     class Meta:
         db_table='factura'
+
+
+
+class impuesto_tabla(models.Model):
+    id_impuesto=models.CharField(primary_key=True,max_length=40)
+    impuesto=models.CharField(max_length=50)
+    fecha_inicio = models.DateField(default=timezone.now)
+    fecha_final = models.DateField(null=True,blank=True)
+    class Meta:
+        db_table='impuesto'
+
 
 
 

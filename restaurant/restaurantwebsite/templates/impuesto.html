@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables CSS library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css"/>
+
+<link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+<script src="//code.jquery.com/jquery-3.5.1.js"></script>
+<!-- DataTables JS library -->
+<script type="text/javascript" src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<!-- DataTables JBootstrap -->
+<script type="text/javascript" src="//cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+    <title>Impuestos</title>
+</head>
+<body>
+    <style>
+
+        body{
+          background: url("{% static 'images/pizzab14.jpg' %}") center no-repeat;
+        background-size: cover;
+      
+        }
+      
+        </style>
+
+    <table id="mitabla" class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Impuesto</th>
+            <th scope="col">Fecha De Inicio</th>
+            <th scope="col">Fecha Final</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for im in imp %}
+          <tr>
+            <th scope="row">{{ im.id_impuesto }}</th>
+            <td>{{ im.impuesto }}</td>
+            <td>{{ im.fecha_inicio|date:"d/m/Y" }}</td>
+            <td>{{ im.fecha_final|date:"d/m/Y" }}</td>
+            <td>
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarimp-{{forloop.counter}}">
+                    Editar
+                  </button>
+
+                  <a href="/eliminarimpuesto/{{ im.id_impuesto }}" type="button" class="btn btn-danger">Eliminar</a>
+            </td>
+          </tr>
+            {% endfor %}          
+        </tbody>
+      </table>
+
+
+
+
+      <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarmodalimp">
+    Agregar
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="agregarmodalimp" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Impuesto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'agregarimpuesto' %}" method="POST">
+            {% csrf_token %}
+            <label class="label-control" for="">ID</label>
+            <input class="form-control" type="number" name="id_impuesto" id="id_impuesto">
+
+            <label class="label-control" for="">Impuesto</label>
+            <input class="form-control" type="text" name="impuesto" id="impuesto">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+
+
+
+  <!-- Modal Editar -->
+  {% for im in imp %}
+  <div class="modal fade" id="editarimp-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">EDITAR IMPUESTO</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="/editarimpuesto/{{ im.id_impuesto }}" method="POST">
+            {% csrf_token %}
+            <label class="label-control" for="">ID</label>
+            <input class="form-control" type="number" name="id_impuesto" value="{{ im.id_impuesto }}" id="id_impuesto">
+
+            <label class="label-control" for="">Impuesto</label>
+            <input class="form-control" type="text" name="impuesto" value="{{ im.impuesto }}" id="impuesto">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+  {% endfor %}  
+
+<script>
+
+    
+$(document).ready(function() {
+            $('#mitabla').DataTable({
+            "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            }
+            });
+            })
+
+</script>
+
+
+</body>
+</html>
