@@ -1636,9 +1636,11 @@ from datetime import datetime
 def menutablaregistros(request):
     ela=elaboracion.objects.all()
     men=menutabla.objects.all()
+    imp=impuesto_tabla.objects.all()
     context={
         'ela':ela,        
         'men':men,
+        'imp':imp,
     }
 
 
@@ -1655,6 +1657,7 @@ def agregarmenu(request):
             precio_menu=request.POST.get("precio_menu")
             descripcion_menu=request.POST.get("descripcion_menu")
             modo_elaboracion=request.POST.get("modo_elaboracion")
+            impuesto=request.POST.get("impuesto")
 
 
             if menutabla.objects.filter(Q(nombre_menu=nombre_menu)).exists():
@@ -1669,7 +1672,7 @@ def agregarmenu(request):
                 precio_menu=precio_menu,
                 descripcion_menu=descripcion_menu,
                 modo_elaboracion=modo_elaboracion,
-
+                impuesto=impuesto,
 
 
 
@@ -1708,6 +1711,7 @@ def editarmenutabla(request,id):
     precio_menu=request.POST.get('precio_menu')
     descripcion_menu=request.POST.get('descripcion_menu')
     modo_elaboracion=request.POST.get('modo_elaboracion')
+    impuesto=request.POST.get('impuesto')
 
     if his:
         his.fecha_final = datetime.now()
@@ -1718,6 +1722,7 @@ def editarmenutabla(request,id):
     men.precio_menu=precio_menu
     men.descripcion_menu=descripcion_menu
     men.modo_elaboracion=modo_elaboracion
+    men.impuesto=impuesto
 
     men.save()
 
@@ -3118,14 +3123,14 @@ def factura_pdf(request, id):
     pdf_canvas.setFont("Arial Unicode MS Font", 11)
     pdf_canvas.drawCentredString(3.8*inch, 11.5*inch, "Pizza Wave")
 
-    pdf_canvas.drawCentredString(3.8*inch, 11*inch, "TEGUCIGALPA, FRANCISCO MORAZAN COL MIRAFLORES SUR")
+    pdf_canvas.drawCentredString(3.8*inch, 9.8 * inch, "TEGUCIGALPA, FRANCISCO MORAZAN COL MIRAFLORES SUR")
 
-    pdf_canvas.drawCentredString(3.8*inch, 10.5*inch, " BOULEVARD SANTA CRISTINA, CALLE HUMUYA BLOQUE 3 FRENTE DE LA UJCV")
+    pdf_canvas.drawCentredString(3.9*inch, 9.5 * inch, " BOULEVARD SANTA CRISTINA, CALLE HUMUYA BLOQUE 3 FRENTE DE LA UJCV")
 
 
     pdf_canvas.drawCentredString(3.8*inch, 10*inch, "FACTURA")
-    pdf_canvas.drawString(2.8*inch, 9.5 * inch, 'Numero de Factura: {}'.format(factura.numero_factura))
-    pdf_canvas.drawString(6*inch, 9.5 * inch, '/004-005-10-00050:')
+    pdf_canvas.drawString(4.8*inch, 9 * inch, 'Numero de Factura: {}'.format(factura.numero_factura))
+
 
     pdf_canvas.line(inch, 8.8 * inch, 7.5*inch, 8.8 * inch)
     
@@ -3231,6 +3236,11 @@ def factura_pdf(request, id):
     pdf_canvas.drawString(6.8 * inch, 2.3 * inch, '{} LPS'.format(factura.total_pagar))
     pdf_canvas.drawString(inch, 1.5 * inch, 'Cambio:')
     pdf_canvas.drawString(6.8 * inch, 1.5 * inch, '{} LPS'.format(factura.cambio))
+
+    pdf_canvas.drawCentredString(3.8*inch, 1*inch, "GRACIAS POR SU COMPRA")
+    pdf_canvas.drawCentredString(3.8*inch, 0.8*inch, "RANGO AUTORIZADO")
+    pdf_canvas.drawCentredString(3*inch, 0.5 * inch, '{}'.format(factura.numero_factura))
+    pdf_canvas.drawCentredString(4.4*inch, 0.5 * inch, '/004-005-10-00050')
 
 
     # Finalizar el PDF y cerrar el objeto canvas

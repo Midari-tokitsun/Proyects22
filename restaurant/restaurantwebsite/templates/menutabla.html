@@ -337,13 +337,25 @@
 
 
               <div class="form-group">
-                <label class="input-group-text" for="inputGroupSelect01">ID-Elaboracion</label>
+                <label class="input-group-text" for="inputGroupSelect01">Modo de Elaboracion</label>
                 <select name="modo_elaboracion" class="form-select" id="inputGroupSelect01" required>
                     {% for e in ela %}
                   <option value="{{e.descripcion_elaboracion}}">{{e.descripcion_elaboracion}}</option>
                   {% endfor %}
                 </select>
               </div>
+			  <br>
+
+			  <div class="input-group mb-1">
+				<label class="input-group-text" for="inputGroupSelect01">Impuesto</label>
+				<select name="impuesto" class="form-select" id="impuesto">
+					<option value="">Selecciona un Impuesto</option>
+					{% for im in imp %}
+				  <option value="{{ im.impuesto }}">{{ im.impuesto }}</option>
+				  {% endfor %}
+				</select>
+			  </div>
+	
 
 
 
@@ -403,8 +415,9 @@
             <th scope="col">Nombre del Menu</th>
             <th scope="col">Precio</th>
             <th scope="col">descripcion_menu</th> 
-            <th scope="col">ID-Elaboracion</th>
-            <th scope="col">Acciones</th>
+            <th scope="col">Modo De Elaboracion</th>
+            <th scope="col">Impuesto</th>
+			<th scope="col">Acciones</th>
 
         </tr>
         </thead>
@@ -416,6 +429,7 @@
             <td>{{m.precio_menu}}</td>
             <td>{{m.descripcion_menu}}</td>
             <td>{{m.modo_elaboracion}}</td>
+			<td>{{m.impuesto}}</td>
             <td>
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditarModalMenu-{{forloop.counter}}">
@@ -483,10 +497,21 @@
 
 
           <div class="input-group mb-1">
-            <label class="input-group-text" for="inputGroupSelect01">ID-Elaboracion</label>
+            <label class="input-group-text" for="inputGroupSelect01">Modo de Elaboracion</label>
             <select name="modo_elaboracion" class="form-select" id="inputGroupSelect01">
                 {% for e in ela %}
               <option value="{{e.descripcion_elaboracion}}">{{e.descripcion_elaboracion}}</option>
+              {% endfor %}
+            </select>
+          </div>
+		  <br>
+
+
+          <div class="input-group mb-1">
+            <label class="input-group-text" for="inputGroupSelect01">Impuesto</label>
+            <select name="impuesto" class="form-select" id="impuesto">
+                {% for im in imp %}
+              <option value="{{ im.impuesto }}">{{ im.impuesto }}</option>
               {% endfor %}
             </select>
           </div>
@@ -569,8 +594,11 @@ $(document).ready(function() {
         modo_elaboracion:{
           required:true,
 
-        }
-		
+        },
+		impuesto:{
+          required:true,
+
+        },
 			},
 
 
@@ -605,6 +633,10 @@ $(document).ready(function() {
 			  descripcion_menu: {
 				required:"Debes Agregar Una Descripcion Al Menu Has Seleccionado",
         decripcioncontrol:"Minimo Escribe una Descripcion Breve y Resumida de 10 Letras sobre el Menu ",
+			  },
+
+			  impuesto: {
+				required:"Debes Seleccionar un Impuesto Para el Menu"
 			  },
 
 		

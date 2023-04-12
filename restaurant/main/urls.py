@@ -336,7 +336,7 @@ urlpatterns = [
 #FIN DE LA VISTA DE PEDIDOS
 
 
-#FActuracion TAbla
+#FActuracion TAbla 
 
     path("facturacion/",views.facturaciontabla, name="facturacion"),
     path("agregarfactura",views.agregarfactura, name="agregarfactura"),

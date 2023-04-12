@@ -192,6 +192,7 @@ class menutabla(models.Model):
     precio_menu = models.CharField(max_length=50)
     descripcion_menu = models.TextField()
     modo_elaboracion = models.CharField(max_length=30)
+    impuesto=models.CharField(max_length=50)
 
     class Meta:
         db_table = 'menu'

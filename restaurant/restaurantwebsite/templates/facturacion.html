@@ -433,7 +433,7 @@
             <input readonly type="text" class="form-control" name="numero_factura" id="numero_factura">
 
             <br>
-        {% if request.session %}
+
 
          <label for="">Nombre del Encargado</label>
          <input name="nombre_encargado" class="form-control" value="{{ request.session.nombre }}" readonly>
@@ -444,7 +444,7 @@
          <label for="">Telefono</label>
          <input name="telefono_encargado" class="form-control" value="{{ request.session.telefono }}" readonly>
 
-         {% endif %}
+
            <!-- Aquí agregas los campos necesarios para la factura, como el nombre del cliente, fecha, etc. -->
            <h1>Descripcion de la Factura</h1>
             <br>
