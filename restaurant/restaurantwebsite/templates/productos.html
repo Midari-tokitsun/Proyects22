@@ -345,7 +345,7 @@
 
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Nombre del Producto</label>
-                <input minlength="0" maxlength="18" name="nombre_producto" type="text" class="form-control" id="nombre_producto" placeholder="Nombre del Producto">
+                <input minlength="5" maxlength="18" name="nombre_producto" type="text" class="form-control" id="nombre_producto" placeholder="Nombre del Producto">
               </div>
               
           
@@ -541,7 +541,8 @@ $("#Myform").validate({
       noSpace:true,
       soloLetrasConEspacio:true,
       noConsecutiveTriples:true,
-      minlength: 4,
+      sololetrasyconmayusculas:true,
+      letrasYLongitud:true,
     },
     id_categoria: {
       required: true,
@@ -577,7 +578,7 @@ $("#Myform").validate({
     },
     nombre_producto: {
       required: "Ingresa el Nombre del Producto",
-      minlength: "Ingrese al menos 4 letras."
+      minlength: "Ingrese al menos 5 letras."
     },
     id_categoria: {
       required: "Debes seleccionar una Categoria",
@@ -614,6 +615,10 @@ $("#Myform").validate({
 
 	// Regla personalizada para validar el campo de Descripciion
 
+  $.validator.addMethod("letrasYLongitud", function(value, element) {
+  return /^[a-zA-Z]{5,}\s[a-zA-Z]{4,}$/.test(value);
+}, "La cadena debe tener al menos 5 letras antes del espacio y 4 letras después.");
+  
 	jQuery.validator.addMethod("noSpace", function(value, element) { 
 		return value == '' || value.trim().length != 0;  
 	}, "No espacios Porfavor Eso no se Hace Aqui");
@@ -639,7 +644,9 @@ $.validator.addMethod('noConsecutiveTriples', function(value, element) {
   return !regex.test(value);
 }, 'No se permiten caracteres consecutivos triples.');
 
-
+$.validator.addMethod("sololetrasyconmayusculas", function(value, element) {
+  return this.optional(element) || /^(?=.{4,})(?:(?:[A-Z][a-z]*|[a-z]*\s)[A-Za-z]*(\w)\1?(?!\1))+$/g.test(value);
+}, "Este campo solo puede contener letras y 1 espacio y debe comenzar con una letra mayúscula.");
 
 
     </script>

@@ -1978,11 +1978,13 @@ def agregarpromociones(request):
             nombre_promocion=request.POST.get("nombre_promocion")
             menu_id=request.POST.get("menu_id")           
             precio_oferta=request.POST.get("precio_oferta") 
+            fecha_final=request.POST.get("fecha_final") 
             descripcion=request.POST.get("descripcion")
 
 
             promocionestabla.objects.create(
                 precio_oferta=precio_oferta,
+                fecha_final=fecha_final,
                 id_promocion=id_promocion,
                 nombre_promocion=nombre_promocion,
                 menu_id=menu_id,
@@ -2011,11 +2013,13 @@ def editarpromocion(request,id):
     menu_id=request.POST.get('menu_id')
     precio_oferta=request.POST.get('precio_oferta')
     descripcion=request.POST.get('descripcion')
+    fecha_final=request.POST.get('fecha_final')
 
     promo.id_promocion=id_promocion
     promo.nombre_promocion=nombre_promocion
     promo.menu_id=menu_id
     promo.precio_oferta=precio_oferta
+    promo.fecha_final=fecha_final
     promo.descripcion=descripcion
 
     promo.save()
@@ -3116,8 +3120,8 @@ def factura_pdf(request, id):
     addMapping('Arial Unicode MS Font', 0, 0, 'Arial Unicode MS Font')
 
         # Agregar el logo
-    logo_path = "C:/Users/USER/Desktop/restaurant/restaurantwebsite/static/images/pizzawavelogo.jpg"
-    pdf_canvas.drawImage(logo_path,3*inch, 10*inch , width=120, height=100)
+    logo_path = "C:/Users/USER/Desktop/restaurant/restaurantwebsite/static/images/pizzawavelogo500.jpg"
+    pdf_canvas.drawImage(logo_path,2.9*inch, 9.9*inch , width=130, height=130)
             
     # Agregar encabezado
     pdf_canvas.setFont("Arial Unicode MS Font", 11)
@@ -3217,7 +3221,7 @@ def factura_pdf(request, id):
     pdf_canvas.drawString(inch, 6.2 * inch, 'Fecha de Realizacion del Pedido: {}'.format(factura.fecha_realizacion_pedido))
 
     pdf_canvas.drawString(inch, 2.6 * inch, 'Descuentos:')
-    pdf_canvas.drawString(6.8 * inch, 2.6 * inch, ' {}'.format(factura.descuento))
+    pdf_canvas.drawString(6.8 * inch, 2.6 * inch, ' {}%'.format(factura.descuento))
 
     pdf_canvas.drawString(inch, 3 * inch, 'ISV:')
     pdf_canvas.drawString(6.8 * inch, 3 * inch,' {}%'.format(float(factura.isv) * 100))

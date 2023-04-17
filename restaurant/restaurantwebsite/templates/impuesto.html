@@ -324,13 +324,13 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="{% url 'agregarimpuesto' %}" method="POST">
+          <form id="Myform" action="{% url 'agregarimpuesto' %}" method="POST">
             {% csrf_token %}
             <label class="label-control" for="">ID</label>
-            <input class="form-control" type="number" name="id_impuesto" id="id_impuesto">
+            <input min="0" class="form-control" type="number" name="id_impuesto" id="id_impuesto">
 
             <label class="label-control" for="">Impuesto</label>
-            <input class="form-control" type="text" name="impuesto" id="impuesto">
+            <input minlength="0" maxlength="4" class="form-control" type="text" name="impuesto" id="impuesto">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -381,6 +381,60 @@ $(document).ready(function() {
             }
             });
             })
+
+
+
+            $("#Myform").validate({
+    rules: {
+        id_impuesto: {
+            required: true,
+            noSpace:true,
+            noSpaceafterletters:true,
+        },
+        impuesto: {
+            required: true,
+            noSpace:true,
+            noSpaceafterletters:true,
+            decimal:true,
+        },
+
+
+
+
+    },
+    messages: {
+        id_impuesto: {
+            required: "Debes Poner un ID",
+        },
+        impuesto: {
+            required: "Debes ingresar un Impuesto",
+        },
+
+
+
+    },
+    submitHandler: function(form) {
+
+
+
+          $("#mensaje-confirmacion").show();
+          form.submit();
+        }
+});
+
+$.validator.addMethod("decimal", function(value, element) {
+  return this.optional(element) || /^0\.\d{2}$/.test(value);
+}, "El valor debe ser un decimal con dos decimales, empezando con 0. Ejemplo: 0.15 , 0.16 , 0.17 , 0.18");
+
+
+
+jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+        return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+    }, "No letras ni digitos despues de espacios por favor");
+
+jQuery.validator.addMethod("noSpace", function(value, element) { 
+		return value == '' || value.trim().length != 0;  
+	}, "No espacios Porfavor Eso no se Hace Aqui");
 
 </script>
 

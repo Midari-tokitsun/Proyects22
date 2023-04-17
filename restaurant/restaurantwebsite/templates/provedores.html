@@ -359,13 +359,13 @@
                 <input minlength="0" maxlength="10" class="form-control" type="text" name="id_provedor" id="id_provedor">
                 <br>
                 <label for="">Nombre</label>
-                <input minlength="0" maxlength="20" class="form-control" type="text" name="nombre_provedor" id="nombre_provedor">
+                <input minlength="3" maxlength="20" class="form-control" type="text" name="nombre_provedor" id="nombre_provedor">
                 <br>
                 <label for="">Apellido</label>
-                <input minlength="0" maxlength="20" class="form-control" type="text" name="apellido_provedor" id="apellido_provedor">
+                <input minlength="4" maxlength="20" class="form-control" type="text" name="apellido_provedor" id="apellido_provedor">
                 <br>
                 <label for="">Compañia</label>
-                <input minlength="0" maxlength="15" class="form-control" type="text" name="compañia_provevdor" id="compañia_provevdor">
+                <input minlength="4" maxlength="15" class="form-control" type="text" name="compañia_provevdor" id="compañia_provevdor">
                 <br>
                 <label for="">Telefono</label>
                 <input class="form-control" type="text" name="telefono_provedor" id="telefono_provedor" minlength="8" maxlength="8">
@@ -450,7 +450,7 @@ $("#myform").validate({
       nombre_provedor: {
         noRepetidos:true,
         required: true, 
-
+        noSpaceafterletters:true,
         lettersonly: true,
         noSpace:true,
       },
@@ -459,15 +459,19 @@ $("#myform").validate({
         noSpace:true,
         required: true,
         apellidocontrol: true,
+        noSpaceafterletters:true,
 
       },
       compañia_provevdor: {
         noConsecutiveTriples:true,
         noSpace:true,
         required: true,
+        noSpaceafterletters:true,
+        soloLetras:true,
 
       },
       email_provedor: {
+        noSpaceafterletters:true,
         noRepetidos:true,
         noSpace:true,
         required: true,
@@ -604,7 +608,9 @@ jQuery.validator.addMethod("noSpaceafterletters", function(value, element) {
     
 
 
-
+    $.validator.addMethod("soloLetras", function(value, element) {
+  return /^[a-zA-Z]+$/.test(value);
+}, "Por favor, ingrese solamente letras.");
 
 $.validator.addMethod("emailcontrol", function(value, element) {
   // Nueva validación de la regla de correo electrónico

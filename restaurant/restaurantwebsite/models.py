@@ -308,6 +308,8 @@ class promocionestabla(models.Model):
     nombre_promocion=models.CharField(max_length=50)
     menu_id=models.TextField()
     precio_oferta=models.CharField(max_length=50)
+    tiempo_inicio=models.DateField(blank=True,auto_now=True)
+    fecha_final=models.DateField(null=True,blank=True)
     descripcion=models.TextField()
 
     class Meta:

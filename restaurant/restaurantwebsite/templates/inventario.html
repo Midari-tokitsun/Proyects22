@@ -353,14 +353,14 @@
                     <!-- password input -->
                     <div class="form-outline mb-4">
                       <label class="form-label" for="password2">Cantidad Minima</label>
-                        <input type="number" name="cantidad_minima" id="cantidad_minima" class="form-control" />
+                        <input min="0" type="number" name="cantidad_minima" id="cantidad_minima" class="form-control" />
 
                     </div>
 
                     <!-- password input -->
                     <div class="form-outline mb-4">
                       <label class="form-label" for="cantidad_maxima">Cantidad Maxima</label>
-                        <input type="number" name="cantidad_maxima" id="cantidad_maxima" class="form-control" />
+                        <input min="0" type="number" name="cantidad_maxima" id="cantidad_maxima" class="form-control" />
 
                     </div>
 
@@ -506,6 +506,7 @@ $("#Myform").validate({
       required: true,
       greaterThanMin: true,
       lessThanOrEqualMax: true,
+
     },
     cantidad_minima: {
       required: true,
@@ -575,13 +576,17 @@ $("#Myform").validate({
 
 // Regla personalizada para validar que la cantidad mínima sea menor o igual que la cantidad actual
 $.validator.addMethod("lessThanOrEqualActual", function (value, element) {
-  return parseInt(value) <= parseInt($("#cantidad_actual").val());
+  return parseInt(value) <= parseInt($("#cantidad_actual").val()); 
 }, "La cantidad mínima debe ser menor o igual que la cantidad actual.");
 
 // Regla personalizada para validar que la cantidad actual sea mayor que la cantidad mínima pero no mayor que la cantidad máxima
 $.validator.addMethod("greaterThanMin", function (value, element) {
-  return parseInt(value) > parseInt($("#cantidad_minima").val()) && parseInt(value) <= parseInt($("#cantidad_maxima").val());
-}, "La cantidad actual debe ser mayor que la cantidad mínima pero no mayor que la cantidad máxima.");
+  var current = parseInt(value);
+  var min = parseInt($("#cantidad_minima").val());
+  var max = parseInt($("#cantidad_maxima").val());
+  return current >= min && current <= max || current <= min;
+}, "La cantidad actual debe ser mayor o igual que la cantidad mínima y menor o igual que la cantidad máxima.");
+
 
 // Regla personalizada para validar que la cantidad actual sea menor o igual que la cantidad máxima
 $.validator.addMethod("lessThanOrEqualMax", function (value, element) {
@@ -592,6 +597,7 @@ $.validator.addMethod("lessThanOrEqualMax", function (value, element) {
 $.validator.addMethod("greaterThanOrEqualActual", function (value, element) {
   return parseInt(value) >= parseInt($("#cantidad_actual").val());
 }, "La cantidad máxima debe ser mayor o igual que la cantidad actual.");
+
 
 
 

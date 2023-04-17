@@ -273,7 +273,8 @@
 		</div>
 		</nav>
 
-
+<br>
+<h1>CONTROL DE PROMOCIONES</h1>
 
     <table id="promociones" class="display" cellspacing="0" width="100%">
         <thead>
@@ -282,6 +283,8 @@
 			<th>Nombre de la Promocion</th>
 			<th>Nombre del Menu</th>
 			<th>Precio de oferta</th>
+			<th>Fecha de inicio de la Oferta</th>
+			<th>Fecha Final de la Oferta</th>
 			<th>Descripcion</th>
 			<th>ACCIONES</th>
         </tr>
@@ -292,6 +295,8 @@
                 <th>Nombre de la Promocion</th>
                 <th>Nombre del Menu</th>
                 <th>Precio de oferta</th>
+				<th>Fecha de inicio de la Oferta</th>
+				<th>Fecha Final de la Oferta</th>
 				<th>Descripcion</th>
 				<th>ACCIONES</th>
                 </tr>
@@ -304,7 +309,9 @@
 		<td>{{p.nombre_promocion}}</td>
         <td>{{p.menu_id}}</td>
         <td>{{p.precio_oferta}}</td>
-        <td>{{p.descripcion}}</td>
+        <td>{{p.tiempo_inicio|date:"d/m/Y"}}</td>
+        <td>{{p.fecha_final|date:"d/m/Y"}}</td>
+		<td>{{p.descripcion}}</td>
 		<td>
 					<!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Editarmodalpromociones-{{ forloop.counter }}">
@@ -341,7 +348,7 @@
 		  <label class="form-label" for="">
 			promocion ID
 		  </label>
-		  <input class="form-control" type="text" name="id_promocion" id="id_promocion" placeholder="Ingrese el ID de la Promocion">
+		  <input class="form-control" type="number" name="id_promocion" min="0" id="id_promocion" placeholder="Ingrese el ID de la Promocion">
 		</div>
 
 		<div class="mb-3">
@@ -366,8 +373,20 @@
 
 		<div class="mb-3">
 		 <label class="form-label" for="">Precio en oferta</label>
-		 <input class="form-control" type="number" name="precio_oferta" id="precio_oferta">
+		 <input min="0" class="form-control" type="number" name="precio_oferta" id="precio_oferta">
 		</div>
+
+		<div class="mb-3">
+		<label class="form-label" for="fecha_inicio">Fecha de inicio:</label>
+		<input class="form-control" type="date" id="fecha_inicio" value="{{p.tiempo_inicio}}" readonly>
+
+		</div>
+
+		<div class="mb-3">
+			<label class="form-label" for="">Fecha Final de la Oferta</label>
+			<input class="form-control" type="date" name="fecha_final" id="fecha_final">
+			<p id="error-fecha-final" class="error"></p>
+		   </div>
 
 		<div class="mb-3">
 		 <label class="form-label" for="">Descripcion</label>
@@ -431,6 +450,11 @@
 			   <label class="form-label" for="">Precio en oferta</label>
 			   <input class="form-control" value="{{p.precio_oferta}}" type="number" name="precio_oferta" id="">
 			  </div>
+
+			  <div class="mb-3">
+				<label class="form-label" for="">Fecha Final de la Oferta</label>
+				<input class="form-control" value="{{p.fecha_final|date:'Y-m-d'}}" type="date" name="fecha_final" id="fecha_final">
+			   </div>
 	  
 			  <div class="mb-3">
 			   <label class="form-label" for="">Descripcion</label>
@@ -467,6 +491,29 @@ $('#promociones').DataTable({
 
 
 
+// Obtener la fecha actual en milisegundos
+var fechaActual = Date.now();
+
+// Convertir la fecha en un objeto Date
+var fechaActualFormateada = new Date(fechaActual);
+var dia = fechaActualFormateada.getDate().toString().padStart(2, '0');
+var mes = (fechaActualFormateada.getMonth() + 1).toString().padStart(2, '0');
+var anio = fechaActualFormateada.getFullYear();
+
+// Asignar la fecha actual al input de fecha de inicio
+$('#fecha_inicio').val(anio + '-' + mes + '-' + dia);
+
+// Validar que la fecha final sea mayor o igual a la fecha de inicio
+$('#fecha_final').change(function() {
+   var fechaInicio = new Date($('#fecha_inicio').val());
+   var fechaFinal = new Date($(this).val());
+   if (fechaFinal < fechaInicio) {
+      $('#mensaje-error').text('La fecha final debe ser mayor o igual a la fecha de inicio');
+      $(this).val('');
+   } else {
+      $('#mensaje-error').text('');
+   }
+});
 
 
 
@@ -481,9 +528,10 @@ $("#Myform").validate({
     },
     nombre_promocion: {
       required: true,
-	  espacioYMinimo:true,
+	  letrasYLongitud:true,
 	  soloLetrasConEspacio: true,
 	  noConsecutiveTriples:true,
+	  noSpaceafterletters:true,
     },
     menu_id: {
       required: true,
@@ -494,6 +542,10 @@ $("#Myform").validate({
       required: true,
 
     },
+	fecha_final:{
+		required:true,
+
+	},
     descripcion: {
       required: true,
      
@@ -516,6 +568,11 @@ $("#Myform").validate({
       required: "Debes Ingresar el Precio de Oferta para el Menu",
         
     },
+	fecha_final: {
+      required: "Debes Seleccionar La Fecha Final de la Promocion",
+        
+    },
+	
     descripcion: {
       required: "Debes Ingresar una Breve Descripcion de la Promocion",
         
@@ -553,9 +610,9 @@ $("#Myform").validate({
     return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
 }, "No letras ni digitos despues de espacios por favor");
 
-$.validator.addMethod("espacioYMinimo", function(value, element) {
-    return this.optional(element) || /^\S{4,}\s\S+/.test(value);
-}, "Ingrese al menos 3 caracteres después del espacio.");
+$.validator.addMethod("letrasYLongitud", function(value, element) {
+  return /^[a-zA-Z]{5,}\s[a-zA-Z]{4,}$/.test(value);
+}, "La cadena debe tener al menos 5 letras antes del espacio y 4 letras después.");
 
 
 
@@ -563,10 +620,7 @@ $.validator.addMethod("soloLetrasConEspacio", function(value, element) {
   return this.optional(element) || /^[a-zA-Z]+\s?[a-zA-Z]*$/.test(value);
 }, "Por favor ingrese solo letras y un espacio.");
 
-jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
-        return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
-    }, "No letras ni digitos despues de espacios por favor");
-    
+
 
         </script>
 

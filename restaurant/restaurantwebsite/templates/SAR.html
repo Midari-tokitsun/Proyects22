@@ -559,6 +559,9 @@ $('#myTable').DataTable({
     },
     consecutivo: {
       required: true,
+      min: function() {
+        return parseInt($('#numero_inicial').val());
+    }
     },
     cod_sucursal: {
       required: true,
@@ -595,6 +598,8 @@ $('#myTable').DataTable({
     },
     consecutivo: {
       required: "Debes Ingresar el Consecutivo",
+      min:"el Consecutivo no debe ser menor al rango inicial",
+      
     },
     cod_sucursal: {
       required: "Debes Seleccionar el Codigo de la Sucursal",

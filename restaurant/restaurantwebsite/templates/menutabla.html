@@ -311,12 +311,12 @@
          
           <div class="form-group">
                 <label for="exampleFormControlInput1" class="form-label">ID del Menu</label>
-                <input name="id_menu" type="text" class="form-control" id="id_menu" placeholder="ID del Menu">
+                <input min="0" name="id_menu" type="number" class="form-control" id="id_menu" placeholder="ID del Menu">
               </div>
 
               <div class="form-group">
                 <label>Nombre del Menu</label>
-                <input name="nombre_menu" type="text" class="form-control noSpace sololetrasyconmayusculas" id="nombre_menu" placeholder="Nombre del menu" required>
+                <input name="nombre_menu" type="text" class="form-control " minlength="5" maxlength="16" id="nombre_menu" placeholder="Nombre del menu" required>
               </div>
 
 
@@ -342,6 +342,7 @@
               <div class="form-group">
                 <label class="input-group-text" for="inputGroupSelect01">Modo de Elaboracion</label>
                 <select name="modo_elaboracion" class="form-select" id="inputGroupSelect01" required>
+					<option value="">Selecciona el Modo de Elaboracion del Menu</option>
                     {% for e in ela %}
                   <option value="{{e.descripcion_elaboracion}}">{{e.descripcion_elaboracion}}</option>
                   {% endfor %}
@@ -414,7 +415,7 @@
     <table id="mytable" class="table table-dark table-hover ">
         <thead>
           <tr>
-            <th scope="col">ID_Menu</th>
+            <th scope="col">ID</th>
             <th scope="col">Nombre del Menu</th>
             <th scope="col">Precio</th>
             <th scope="col">descripcion_menu</th> 
@@ -563,13 +564,14 @@ $(document).ready(function() {
 				id_menu: {
 				required: true,
 				noSpace: true,
+				noSpaceafterletters:true,
 			  },
 			  nombre_menu: {
 				required: true, 
 				minlength: 5,
 				maxlength:30,
-        
-				
+				noSpaceafterletters:true,
+				letrasYLongitud:true,
 				noCaracteresRepetidos:true,
 				noSpace: true, // Nueva regla personalizada para evitar espacios en el campo
 				sololetrasyconmayusculas:true,
@@ -591,6 +593,7 @@ $(document).ready(function() {
 				required: true,
         decripcioncontrol:true,
         noSpace: true,
+		
 
 			  },
 
@@ -616,7 +619,7 @@ $(document).ready(function() {
 			  },
 			  nombre_menu: {
 				required:"Debes Ingresar Un Nombre al Menu",
-				sololetrasyconmayusculas: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula",
+				sololetrasyconmayusculas: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula y puede contener o no un espacio si es requerido",
 				minlength: "Debes ingresar al menos 5 caracteres.", 
 				maxlength: "No puedes ingresar más de 30 caracteres.",
 				noRepetidos: "No se permiten caracteres repetidos en el Nombre del Menu",
@@ -641,7 +644,9 @@ $(document).ready(function() {
 			  impuesto: {
 				required:"Debes Seleccionar un Impuesto Para el Menu"
 			  },
-
+			  modo_elaboracion: {
+				required:"Debes Seleccionar un Modo de Elaboracion Para el Menu"
+			  },
 		
 			},
 		
@@ -690,6 +695,14 @@ $.validator.addMethod("noCaracteresRepetidos", function (value, element) {
   return this.optional(element) || value.trim().length > 0;
 }, "Escribe una breve descripción del cargo. como Minimo 10 Letras");
 
+jQuery.validator.addMethod("noSpaceafterletters", function(value, element) { 
+        return this.optional(element) || /^[^\s]+\s*[^\s]*$/.test(value);
+    }, "No letras ni digitos despues de espacios por favor");
+    
+
+	$.validator.addMethod("letrasYLongitud", function(value, element) {
+  return /^[a-zA-Z]{5,}\s[a-zA-Z]{4,}$/.test(value);
+}, "La cadena debe tener al menos 5 letras antes del espacio y 4 letras después.");
 
 </script>
     
