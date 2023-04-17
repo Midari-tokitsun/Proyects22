@@ -360,6 +360,15 @@ urlpatterns = [
     path("eliminarimpuesto/<int:id>",views.eliminarimpuesto, name="eliminarimpuesto"),
     path("editarimpuesto/<int:id>",views.editarimpuesto, name="editarimpuesto"),
 
+#DESCUENTO TABLA
+
+    path("descuento/",views.descuentotabla, name="descuentotabla"),
+    path("agregardescuento",views.agregardescuento, name="agregardescuento"),
+    path("editardescuento/<int:id>",views.editardescuento, name="editardescuento"),
+    path("eliminardescuento/<int:id>",views.eliminardescuento, name="eliminardescuento"),
+
+
+
 
 
 ] 

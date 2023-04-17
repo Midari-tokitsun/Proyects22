@@ -398,7 +398,13 @@ class impuesto_tabla(models.Model):
     class Meta:
         db_table='impuesto'
 
-
+class descuento_tabla(models.Model):
+    id_descuento=models.CharField(primary_key=True,max_length=40) 
+    descuento=models.CharField(max_length=50)
+    fecha_inicio= models.DateField(default=timezone.now)
+    fecha_final= models.DateField(null=True,blank=True)
+    class Meta:
+        db_table='descuentos'
 
 
 

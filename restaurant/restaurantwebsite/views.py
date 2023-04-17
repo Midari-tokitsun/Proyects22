@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla,historico_producto,factura_tabla,impuesto_tabla
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla,historico_producto,factura_tabla,impuesto_tabla,descuento_tabla
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -3016,6 +3016,7 @@ def facturaciontabla(request):
     meto=metodo_pago_tabla.objects.all()
     sar=sar_tabla.objects.all()
     imp=impuesto_tabla.objects.all()
+    des=descuento_tabla.objects.all()
     context={
         'fact':fact,
         'men':men,
@@ -3024,6 +3025,7 @@ def facturaciontabla(request):
         'meto':meto,
         'sar':sar,
         'imp':imp,
+        'des':des,
     }
     return render(request,"facturacion.html",context)
 
@@ -3221,7 +3223,7 @@ def factura_pdf(request, id):
     pdf_canvas.drawString(inch, 6.2 * inch, 'Fecha de Realizacion del Pedido: {}'.format(factura.fecha_realizacion_pedido))
 
     pdf_canvas.drawString(inch, 2.6 * inch, 'Descuentos:')
-    pdf_canvas.drawString(6.8 * inch, 2.6 * inch, ' {}%'.format(factura.descuento))
+    pdf_canvas.drawString(6.8 * inch, 2.6 * inch, ' {}%'.format(float(factura.descuento)* 100))
 
     pdf_canvas.drawString(inch, 3 * inch, 'ISV:')
     pdf_canvas.drawString(6.8 * inch, 3 * inch,' {}%'.format(float(factura.isv) * 100))
@@ -3442,3 +3444,73 @@ def editarimpuesto(request,id):
     messages.success(request, 'Registro Modificado con Exito')
     return redirect('impuestostabla')
 
+#DESCUENTO TABLA
+def descuentotabla(request):
+    des=descuento_tabla.objects.all()
+    context={
+        'des':des,
+    }
+    return render(request,"descuento.html",context)
+
+def agregardescuento(request):
+    try:
+        if request.method == 'POST':
+            id_descuento = request.POST.get("id_descuento")
+            descuento = request.POST.get("descuento")
+            descuento_anterior = None  # Initialize to None
+            try:
+                # Buscar el registro anterior en descuento_tabla
+                descuento_anterior = descuento_tabla.objects.filter(
+                    id_descuento__lt=id_descuento
+                ).latest('fecha_inicio')
+
+                # Actualizar la fecha final del registro anterior
+                descuento_anterior.fecha_final = timezone.now()
+                descuento_anterior.save()
+            except descuento_tabla.DoesNotExist:
+                # No se encontró un registro anterior, no se actualiza nada
+                pass
+
+            # Crear un nuevo registro en descuento_tabla con la fecha_inicio
+            # del nuevo registro y fecha_final igual a fecha_inicio del registro anterior
+            descuento_tabla.objects.create(
+                id_descuento=id_descuento,
+                descuento=descuento,
+                fecha_inicio=timezone.now(),
+                fecha_final=None,  # La fecha final del registro reciente es None
+            )
+
+            # Actualizar la fecha final del último registro si su fecha final es None
+            ultimo_descuento = descuento_tabla.objects.filter(
+                fecha_final=None
+            ).exclude(
+                id_descuento=id_descuento
+            ).last()
+            if ultimo_descuento:
+                ultimo_descuento.fecha_final = timezone.now()
+                ultimo_descuento.save()
+
+            messages.success(request, 'Registro Agregado con Exito')
+            return redirect('descuentotabla')
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+    return redirect('descuentotabla')
+
+def editardescuento(request,id):
+    des=descuento_tabla.objects.get(id_descuento=id)
+    id_descuento=request.POST.get('id_descuento')
+    descuento=request.POST.get('descuento')
+    des.id_descuento=id_descuento
+    des.descuento=descuento
+    des.save()
+
+    messages.success(request, 'Registro Modificado con exito con Exito')
+    return redirect('descuentotabla')
+
+
+def eliminardescuento(request,id):
+    des=descuento_tabla.objects.get(id_descuento=id)
+    des.delete()
+    messages.success(request, 'Registro eliminado con exito con Exito')
+    return redirect('descuentotabla')

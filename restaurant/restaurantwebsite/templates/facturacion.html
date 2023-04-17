@@ -481,9 +481,9 @@
           <div class="mb-3">
             <label for="descuento" class="form-label">Descuento</label>
             <select class="form-control" name="descuento" id="descuento">
-              <option value="0" selected>0%</option>
-              <option value="0.05">5%</option>
-              <option value="0.10">10%</option>
+              {% for d in des %}
+              <option value="{{ d.descuento }}" selected>{{ d.descuento }}</option>
+              {% endfor %}
             </select>
           </div>
           
