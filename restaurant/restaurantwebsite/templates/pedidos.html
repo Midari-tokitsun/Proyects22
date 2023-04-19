@@ -283,6 +283,7 @@
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Nombre del Cliente</th>
+		  <th scope="col">DNI</th>
           <th scope="col">Nombre del Menu</th>
           <th scope="col">Cantidades</th>
           <th scope="col">Tamaño del Menu</th>
@@ -296,6 +297,7 @@
         <tr>
           <th scope="row">{{p.id_pedido}}</th>
           <td>{{p.nombre_cliente}}</td>
+          <td>{{p.dni_cliente}}</td>
           <td>{{p.nombre_menu}}</td>
           <td>{{p.cantidades}}</td>
 		  <th>{{p.tamaño_menu}}</th>
@@ -340,12 +342,14 @@
 			<label for="">Nombre del Cliente</label>
 			<select class="form-control" name="nombre_cliente" id="nombre_cliente">
 			<option value="" selected disabled>Selecciona un Cliente</option>
-			{% for u in user %}	
-			<option value="{{u.nombre}}">{{u.nombre}}</option>
+			{% for c in cli %}	
+			<option value="{{c.nombre}}">{{c.nombre}}</option>
 			{% endfor %}
 			</select>
 			<br>
 
+			<label for="">DNI del Cliente</label>
+			<input type="text" class="form-control" name="dni_cliente" id="dni_cliente" readonly>
 
 
 			<div class="form-group">
@@ -370,17 +374,12 @@
 				<ul></ul>
 				<input type="hidden" name="nombre_menu_hidden" id="nombre_menu_hidden">
 				<input type="hidden" name="cantidades_hidden" id="cantidades_hidden">
+							<!-- campo para guardar los tamaños de los menús -->
+			<input type="hidden" name="tamaños_hidden" id="tamaños_hidden">
 			  </div>
 			
 			
-			<label for="">Tamaño del Menu</label>
-			<select class="form-control" name="tamaño_menu" id="tamaño_menu" required>
-			<option value="" selected disabled>Selecciona un Tamaño del Menu</option>
-			<option value="Individual">Individual</option>
-			<option value="Parejas">Parejas</option>
-			<option value="Familiar">Familiar</option>
-			</select>
-			<br>
+
 
 
 
@@ -433,21 +432,18 @@
 			</select>
 			<br>
 
+
+			<label for="">DNI del Cliente</label>
+			<input type="text" class="form-control" name="dni_cliente" value="{{p.dni_cliente}}" id="dni_cliente" readonly>
+
 			<label for="">Nombre del Menu</label>
 			<textarea class="form-control" name="nombre_menu" id="nombre_menu" value="{{p.nombre_menu}}" cols="30" rows="10">{{p.nombre_menu}}</textarea>
 			<br>
 
-
-
-
 			<label for="">Tamaño del Menu</label>
-			<select class="form-control" name="tamaño_menu" id="tamaño_menu" required>
-			<option value="{{p.tamaño_menu}}" selected >{{p.tamaño_menu}}</option>
-			<option value="Individual">Individual</option>
-			<option value="Parejas">Parejas</option>
-			<option value="Familiar">Familiar</option>
-			</select>
-			<br>
+			<textarea class="form-control" name="tamaño_menu" id="" cols="30" rows="10">{{p.tamaño_menu}}</textarea>
+
+
 
 			<label for="">Cantidades</label>
 
@@ -488,26 +484,33 @@ $(document).ready(function() {
   $('#agregar-menu').click(function() {
     var nombreMenu = $('#nombre_menu option:selected').text();
     var cantidad = $('#cantidad').val(); // obtenemos la cantidad ingresada por el usuario
-	const menuError = document.getElementById('menu-error');
+    const menuError = document.getElementById('menu-error');
 
-
-	    // Verificar si se ha seleccionado una opción válida
-		if (nombreMenu === "Selecciona un Menu") {
-		menuError.textContent = 'Debes Primero Seleccionar el Menu para Ingresar sus Cantidades.';
+    // Verificar si se ha seleccionado una opción válida
+    if (nombreMenu === "Selecciona un Menu") {
+      menuError.textContent = 'Debes Primero Seleccionar el Menu para Ingresar sus Cantidades.';
       return;
     }
+
     // Verificar si ya se ha agregado el menú seleccionado
     if ($(`#menu-seleccionado [data-menu-nombre="${nombreMenu}"]`).length > 0) {
       // Si el menú ya está agregado, mostrar un mensaje de error y salir de la función
-	  menuError.textContent = 'Ya has Seleccionado este Menu Porfavor Selecciona otro';
+      menuError.textContent = 'Ya has Seleccionado este Menu Porfavor Selecciona otro';
       return;
     }
-    
+
     // Agregar el menú seleccionado al contenedor
     var menuHtml = `
       <div class="form-group" data-menu-nombre="${nombreMenu}">
         <label for="cantidad-${nombreMenu}">${nombreMenu}</label>
         <input type="number" class="form-control" name="cantidad[]" id="cantidad-${nombreMenu}" min="1" value="${cantidad}" required> <!-- agregar la cantidad ingresada por el usuario -->
+        <label for="tamaño-menu-${nombreMenu}">Tamaño del Menú:</label>
+        <select class="form-control tamaño-menu" name="tamaño_menu[]" id="tamaño-menu-${nombreMenu}" required>
+          <option value="">Selecciona un tamaño</option>
+          <option value="Individual">Individual</option>
+          <option value="Parejas">Parejas</option>
+          <option value="Familiar">Familiar</option>
+        </select>
       </div>
     `;
     $('#menu-seleccionado').append(menuHtml);
@@ -531,16 +534,39 @@ $(document).ready(function() {
     }
   });
 
-  // Modificar la función de guardar para guardar los datos de nombre_menu_hidden y cantidades
+  // Modificar la función de guardar para guardar los datos de nombre_menu_hidden, cantidades y tamaños
   $('#guardar').click(function() {
     var nombreMenu = $('#nombre_menu_hidden').val();
     var cantidades = $('#cantidades_hidden').val();
+	var tamanos = [];
+  $('.tamaño-menu').each(function() {
+    var tamañoMenu = $(this).val();
+    tamanos.push(tamañoMenu);
+  });
+  var tamañosStr = tamanos.join(',');
+  $('#tamaños_hidden').val(tamañosStr);
+    });
 
     // hacer algo con los datos
   });
+
+
+
+
+$("#nombre_cliente").change(function(){
+  var nombre_cliente = $(this).val();
+  $.ajax({
+    url: "/obtener_dni_cliente/",
+    type: "GET",
+    data: {"nombre_cliente": nombre_cliente},
+    success: function(response){
+      $("#dni_cliente").val(response.dni);
+    },
+    error: function(xhr, status, error){
+      console.log(error);
+    }
+  });
 });
-
-
 
 
 $(document).ready( function () {

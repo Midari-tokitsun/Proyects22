@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 
 
-from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla,historico_producto,factura_tabla,impuesto_tabla,descuento_tabla
+from restaurantwebsite.models import insertuser,cargo,documentoemp,departamento,puesto,sucursal,empleados,categoria,familia_producto,elaboracion,almacen,menutabla,recetatabla,detalle_pedido,estado_pedido,sar_tabla,metodo_pago_tabla,historico_menu,reservacionestabla,productostabla,inventariotabla,promocionestabla,provedorestabla,pedidostabla,historico_producto,factura_tabla,impuesto_tabla,descuento_tabla,cliente_tabla
 
 
 from django.contrib.auth import logout,login,authenticate
@@ -2876,16 +2876,25 @@ def pedidos(request):
     user=insertuser.objects.all()
     ped=pedidostabla.objects.all()
     men=menutabla.objects.all()
+    cli=cliente_tabla.objects.all()
     context={
         'ped':ped,
         'est':est,
 
         'user':user,
         'men':men,
+        'cli':cli,
     }
 
     return render(request, 'pedidos.html',context)
 
+def obtener_dni_cliente(request):
+    nombre_cliente = request.GET.get('nombre_cliente', None)
+    if nombre_cliente is not None:
+        cliente = cliente_tabla.objects.get(nombre=nombre_cliente)
+        return JsonResponse({"dni": cliente.dni})
+    else:
+        return JsonResponse({"dni": ""})
 
 def agregarpedido(request):
     try:
@@ -2904,10 +2913,15 @@ def agregarpedido(request):
             # Convertir la lista de cadenas en una sola cadena separada por comas y espacios
             nombre_cantidad_str = "\n".join(nombre_cantidad)
 
+            dni_cliente= request.POST.get("dni_cliente")
 
-
-            tamaño_menu = request.POST.get("tamaño_menu")
             estado_pedido = request.POST.get("estado_pedido")
+            
+            # Obtener los tamaños seleccionados
+            tamanos = request.POST.getlist("tamaño_menu[]")
+
+            # Crear una cadena de tamaños separada por comas
+            tamanos_str = "\n".join(tamanos)
 
             # Crear un nuevo registro en la base de datos
             pedidostabla.objects.create(
@@ -2915,8 +2929,9 @@ def agregarpedido(request):
                 nombre_cliente=nombre_cliente,
                 nombre_menu=nombre_cantidad_str,
                 cantidades=cantidades,
-                tamaño_menu=tamaño_menu,
+                tamaño_menu=tamanos_str,
                 estado_pedido=estado_pedido,
+                dni_cliente=dni_cliente,
             )
 
             messages.success(request, 'Registro Agregado con Exito')
@@ -2979,7 +2994,7 @@ def editarpedido(request,id):
     cantidades=request.POST.get("cantidades")
     tamaño_menu=request.POST.get("tamaño_menu")
     estado_pedido=request.POST.get("estado_pedido")
-
+    dni_cliente= request.POST.get("dni_cliente")
 
     ped.tamaño_menu=tamaño_menu
     ped.estado_pedido=estado_pedido
@@ -2989,7 +3004,7 @@ def editarpedido(request,id):
     ped.id_pedido=id_pedido
     ped.nombre_cliente=nombre_cliente
     ped.nombre_menu=nombre_menu
-
+    ped.dni_cliente=dni_cliente
 
     ped.save()
 
@@ -3033,26 +3048,54 @@ def facturaciontabla(request):
 from django.views.decorators.csrf import csrf_exempt
 
 def obtener_detalles_pedido(request):
-    if request.method == 'GET':
-        cliente_id = request.GET.get('cliente_id', '')
+    
+    cliente_id = request.GET.get('cliente_id', '')
+    
+    if cliente_id:
+        # Obtener el último pedido del cliente seleccionado
+        pedido = get_object_or_404(pedidostabla, nombre_cliente=cliente_id)
+
+            # Obtener el objeto cliente correspondiente al pedido
+
+
+
+
+        # Obtener el precio de cada elemento del pedido
+        elementos_pedido = pedido.nombre_menu.split('\n')
+        cantidades = []
+        precios = []
+        for elemento in elementos_pedido:
+            cantidad, nombre_menu = elemento.split('x')
+            cantidad = int(cantidad.strip('()'))
+            cantidades.append(cantidad)
+            precio_menu = float(menutabla.objects.get(nombre_menu=nombre_menu).precio_menu)
+            precios.append(precio_menu)
+
+        # Calcular el precio total y el impuesto acumulado
+        precio_total = sum([cantidad * precio for cantidad, precio in zip(cantidades, precios)])
+        total_a_pagar = precio_total
+        impuesto_acumulado = round(total_a_pagar * 0.13, 2)
+        total_a_pagar += impuesto_acumulado
+
+        # Crear un diccionario con los detalles del pedido
+        detalles_pedido = {
+            'menu_nombre': pedido.nombre_menu,
+            'cantidades': pedido.cantidades,
+            'tamaño_menu': pedido.tamaño_menu,
+            'estado_pedido': pedido.estado_pedido,
+            'fecha': pedido.fecha_pedido.strftime('%Y-%m-%d'),
+            'total_a_pagar': total_a_pagar,
+            'impuesto_acumulado': impuesto_acumulado,
+            'dni_cliente':pedido.dni_cliente,
+      
+        }
         
-        if cliente_id:
-            # Obtener el último pedido del cliente seleccionado
-            pedido = get_object_or_404(pedidostabla, nombre_cliente=cliente_id)
-            
-            # Crear un diccionario con los detalles del pedido
-            detalles_pedido = {
-                'menu_nombre': pedido.nombre_menu,
-                'cantidades': pedido.cantidades,
-                'tamaño_menu': pedido.tamaño_menu,
-                'estado_pedido': pedido.estado_pedido,
-                'fecha': pedido.fecha_pedido.strftime('%Y-%m-%d'),
-            }
-            
-            return JsonResponse(detalles_pedido)
-        
-        # Si no se proporcionó el parámetro `cliente_id`, devolver una respuesta vacía
+        return JsonResponse(detalles_pedido)
+    
+    # Si no se proporcionó el parámetro `cliente_id`, devolver una respuesta vacía
     return JsonResponse({})
+
+    
 @csrf_exempt
 def obtener_detalles_menu(request):
     menu_nombre = request.GET.get('menu', None)
@@ -3081,6 +3124,10 @@ def obtener_precio_total_menu(menu_nombre, cantidad_str):
 
 
     return precio_total
+
+
+
+
 
 
 from reportlab.pdfgen import canvas
@@ -3129,12 +3176,15 @@ def factura_pdf(request, id):
     pdf_canvas.setFont("Arial Unicode MS Font", 11)
     pdf_canvas.drawCentredString(3.8*inch, 11.5*inch, "Pizza Wave")
 
-    pdf_canvas.drawCentredString(3.8*inch, 9.8 * inch, "TEGUCIGALPA, FRANCISCO MORAZAN COL MIRAFLORES SUR")
+    pdf_canvas.drawCentredString(3.8*inch, 9.6 * inch, "TEGUCIGALPA, FRANCISCO MORAZAN COL MIRAFLORES SUR")
 
-    pdf_canvas.drawCentredString(3.9*inch, 9.5 * inch, " BOULEVARD SANTA CRISTINA, CALLE HUMUYA BLOQUE 3 FRENTE DE LA UJCV")
+    pdf_canvas.drawCentredString(3.9*inch, 9.3 * inch, " BOULEVARD SANTA CRISTINA, CALLE HUMUYA BLOQUE 3 FRENTE DE LA UJCV")
 
 
     pdf_canvas.drawCentredString(3.8*inch, 10*inch, "FACTURA")
+    pdf_canvas.drawCentredString(3.8*inch, 9.8*inch, "RTN: 0801901919170521")
+
+
     pdf_canvas.drawString(4.8*inch, 9 * inch, 'Numero de Factura: {}'.format(factura.numero_factura))
 
 
@@ -3158,7 +3208,8 @@ def factura_pdf(request, id):
     pdf_canvas.line(inch, 6.8 * inch, 7.5*inch, 6.8 * inch)
 
     pdf_canvas.drawString(inch, 6.5 * inch, 'Nombre del Cliente: {}'.format(factura.nombre_cliente))
-        
+    
+    pdf_canvas.drawString(4.7 * inch, 6.5 * inch, 'DNI del Cliente: {}'.format(factura.dni_cliente))
 
     # Convertir la cadena de menú y cantidades a una lista de cadenas codificadas en utf-8
     menu_cantidades_codificadas = [linea.encode('utf-8') for linea in factura.menu_cantidades.strip().splitlines()]
@@ -3199,9 +3250,10 @@ def factura_pdf(request, id):
         y_position -= 0.25 * inch
 
         # Escribir el total de la factura
-    precio_total_factura_str = '\nSubTotal: LPS{:.2f}'.format(precio_total_factura)
-    pdf_canvas.drawString(6.5 * inch, y_position, precio_total_factura_str)
 
+    precio_total_factura_str = 'LPS{:.2f}'.format(precio_total_factura)
+    pdf_canvas.drawString(7 * inch, y_position, precio_total_factura_str)
+    pdf_canvas.drawString(7 * inch, 4.7 * inch, 'SubTotal:')
 
     # Escribir el encabezado de cantidad
     pdf_canvas.drawString(inch, 4.7 * inch, 'Cantidad:')
@@ -3212,11 +3264,10 @@ def factura_pdf(request, id):
     # Escribir el encabezado del precio unitario
     pdf_canvas.drawString(5.5*inch, 4.7 * inch, 'Precio:')
 
+    # Escribir el eTamaño del Menu
+    pdf_canvas.drawString(1.8*inch,4.7 * inch, 'Tamaño del Menu:')
 
-
-
-
-    pdf_canvas.drawString(inch, 5.9 * inch, 'Tamaño del Menu: {}'.format(factura.tamaño_menu))
+    pdf_canvas.drawString(1.8*inch,4.5 * inch, '{}'.format(factura.tamaño_menu))
 
     pdf_canvas.drawString(inch, 5.7 * inch, 'Estado del Pedido: {}'.format(factura.estado_pedido))
 
@@ -3224,6 +3275,9 @@ def factura_pdf(request, id):
 
     pdf_canvas.drawString(inch, 2.6 * inch, 'Descuentos:')
     pdf_canvas.drawString(6.8 * inch, 2.6 * inch, ' {}%'.format(float(factura.descuento)* 100))
+
+    pdf_canvas.drawString(inch, 3.3 * inch, 'Impuesto:')
+    pdf_canvas.drawString(6.8 * inch, 3.3 * inch,' {}LPS'.format(factura.impuesto))
 
     pdf_canvas.drawString(inch, 3 * inch, 'ISV:')
     pdf_canvas.drawString(6.8 * inch, 3 * inch,' {}%'.format(float(factura.isv) * 100))
@@ -3280,6 +3334,7 @@ def agregarfactura(request):
             descuento=request.POST.get("descuento")
             isv=request.POST.get("isv")
             metodo_pago=request.POST.get("metodo_pago")
+            impuesto=request.POST.get("impuesto")
             
             numero_tarjeta=request.POST.get("numero_tarjeta")
 
@@ -3293,7 +3348,7 @@ def agregarfactura(request):
             total_pagar=request.POST.get("total_pagar")
             cambio=request.POST.get("cambio")
 
-                    
+            dni_cliente= request.POST.get("dni_cliente")    
             # Obtener el último valor de consecutivo en la tabla de SAR
             sar = sar_tabla.objects.latest('fecha_emision')
             ultimo_consecutivo = int(sar.consecutivo)
@@ -3336,8 +3391,8 @@ def agregarfactura(request):
             fecha_final=fecha_final,
             numero_inicial=numero_inicial,
             numero_final=numero_final,
-
-
+            dni_cliente=dni_cliente,
+            impuesto=impuesto,
             )
             messages.success(request, 'Registro Agregado con Exito')
 
@@ -3514,3 +3569,77 @@ def eliminardescuento(request,id):
     des.delete()
     messages.success(request, 'Registro eliminado con exito con Exito')
     return redirect('descuentotabla')
+
+#CLientes
+
+def clientetabla(request):
+    cli=cliente_tabla.objects.all()
+    context={
+        'cli':cli
+    }
+
+    return render(request,"cliente.html",context)
+
+
+def agregarcliente(request):
+    try:  
+        pass         
+        if request.method=='POST':
+     
+
+            id_cliente=request.POST.get("id_cliente")
+            nombre=request.POST.get("nombre")
+            apellido=request.POST.get("apellido")
+            dni=request.POST.get("dni")
+
+       
+            
+
+
+
+            cliente_tabla.objects.create(
+            id_cliente=id_cliente,
+            nombre=nombre,
+            apellido=apellido,
+            dni=dni,
+
+
+
+
+            )
+            messages.success(request, 'Registro Agregado con Exito')
+
+            return redirect('clientetabla')
+
+    except IntegrityError:    
+        messages.error(request, 'Error: ya existe un registro con esa clave')
+
+
+
+    return redirect('clientetabla')
+
+
+def editarcliente(request,id):
+    cli=cliente_tabla.objects.get(id_cliente=id)
+    id_cliente=request.POST.get('id_cliente')
+    nombre=request.POST.get('nombre')
+    apellido=request.POST.get('apellido')
+    dni=request.POST.get('dni')
+
+    cli.id_cliente=id_cliente
+    cli.nombre=nombre
+    cli.apellido=apellido
+    cli.dni=dni
+
+    cli.save()
+
+    messages.success(request, 'Registro Modificado con exito con Exito')
+    return redirect('clientetabla')
+
+
+
+def eliminarcliente(request,id):
+    cli=cliente_tabla.objects.get(id_cliente=id)
+    cli.delete()
+    messages.success(request, 'Registro Eliminado con Exito')
+    return redirect('clientetabla')

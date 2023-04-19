@@ -284,10 +284,12 @@
         <th>Nombre del Encargado</th>
         <th>Apellido del Encargado</th>
         <th>Nombre del Cliente</th>
+        <th>DNI del cliente</th>
         <th>Nombre del Menu y Cantidades</th>
         <th>Fecha de Realizacion del Pedido</th>
         <th>Descuentos</th>
         <th>ISV</th>
+        <th>Impuesto</th>
         <th>Metodo de Pago</th>
         <th>Numero de la Tarjeta</th>
         <th>Cantidad a Pagar</th>
@@ -303,10 +305,12 @@
               <th>Nombre del Encargado</th>
               <th>Apellido del Encargado</th>
               <th>Nombre del Cliente</th>
+              <th>DNI del cliente</th>
               <th>Nombre del Menu y Cantidades</th>
               <th>Fecha de Realizacion del Pedido</th>
               <th>Descuentos</th>
               <th>ISV</th>
+              <th>Impuesto</th>
               <th>Metodo de Pago</th>
               <th>Numero de la Tarjeta</th>
               <th>Cantidad a Pagar</th>
@@ -324,10 +328,12 @@
         <td>{{f.nombre_encargado}}</td>
         <td>{{f.apellido_encargado}}</td>
         <td>{{f.nombre_cliente}}</td>
+        <td>{{f.dni_cliente}}</td>
         <td>{{f.menu_cantidades}}</td>
         <td>{{f.fecha_realizacion_pedido}}</td>
         <td>{{f.descuento}}</td>
         <td>{{f.isv}}</td>
+        <td>{{f.impuesto}}</td>
         <td>{{f.metodo_pago}}</td>
         <td>{{f.numero_tarjeta}}</td>
         <td>{{f.cantidad_pagar}}</td>
@@ -455,8 +461,14 @@
            </div>
             <br>
 
+
             <div class="mb-3">
-              <label for="menu" class="form-label">Nombre del Menú</label>
+              <label for="dni_cliente" class="form-label">DNI Del Cliente</label>
+              <input class="form-control" type="text" name="dni_cliente" id="dni-input" readonly>
+          </div>
+
+            <div class="mb-3">
+              <label for="menu" class="form-label">Nombre del Menú y Cantidades</label>
               <textarea class="form-control" type="text" name="menu_cantidades" id="menu-input" readonly></textarea>
           </div>
           
@@ -464,7 +476,7 @@
           
           <div class="mb-3">
               <label for="detalle" class="form-label">Tamaño del Menú</label>
-              <input class="form-control" type="text" name="tamaño_menu" id="detalle-input" readonly>
+              <textarea class="form-control" type="text" name="tamaño_menu" id="detalle-input" readonly></textarea>
           </div>
           
           <div class="mb-3">
@@ -476,6 +488,9 @@
               <label for="fecha_realizacion_pedido" class="form-label">Fecha de Realización del Pedido</label>
               <input class="form-control" type="text" name="fecha_realizacion_pedido" id="fecha-input" readonly>
           </div>
+
+
+          
             
 
           <div class="mb-3">
@@ -525,32 +540,23 @@
                 <label for="efectivo" class="form-label">Efectivo</label>
                 <input type="text" class="form-control" id="efectivo-mixto" name="efectivo-mixto">
             </div>
-
+            
 
             <label for="cantidad-a-pagar">Cantidad a pagar:</label>
             <input id="cantidad-a-pagar" class="form-control" type="text" name="cantidad_pagar">
-<!-- Este es el contenedor de la grilla de selección de menú -->
-<div id="menu-grid-container">
-  <h2>Seleccione un menú:</h2>
-  <div class="grid-container">
-    {% for m in men %}
-    <div class="grid-item" data-menu="{{m.nombre_menu}}" data-precio="{{m.precio_menu}}">{{m.nombre_menu}} - {{m.precio_menu}}</div>
-    {% endfor %}
-  </div>
-</div>
 
-
-<div id="selected-menus-container">
-  <h2>Menús seleccionados:</h2>
-  <ul id="selected-menus-list"></ul>
-</div>
 
            <br>
-           <label class="form-label" for="total-a-pagar">Total a pagar:</label>
-           <input name="total_pagar" id="total-a-pagar" class="form-control" type="text" readonly>
-           <button class="btn btn-danger" id="reset-total-button" type="button">Resetear cuenta</button>
-           <br>
-
+           <div class="mb-3">
+            <label for="total-pagar" class="form-label">Total a pagar</label>
+            <input type="number" class="form-control" name="total_pagar" id="total_a_pagar" readonly>
+          </div>
+          
+          <div class="mb-3">
+            <label for="impuesto" class="form-label">Impuesto</label>
+            <input type="number" class="form-control" name="impuesto" id="impuesto_acumulado" readonly>
+          </div>
+          
            <br>
            <label for="cambio">Cambio (Vuelto):</label>
            <input id="cambio" class="form-control" type="text" name="cambio" readonly>
@@ -566,6 +572,8 @@
 
 
         <script>
+
+
 
 
 
@@ -608,8 +616,41 @@ $(document).ready(function() {
                     $('#menu-input').val(data.menu_nombre);
                     $('#cantidades-input').val(data.cantidades);
                     $('#detalle-input').val(data.tamaño_menu);
-                    $('#estado-input').val(data.estado_pedido);
+                    $('#estado-input').val('Terminado');
                     $('#fecha-input').val(data.fecha);
+
+                    // Actualizar el campo de entrada del RTN del cliente
+                  $('#dni-input').val(data.dni_cliente);
+                  // Asignar valor al total a pagar
+                  $('#total_a_pagar').val(data.total_a_pagar);
+                  $('#impuesto_acumulado').val(data.impuesto_acumulado);
+
+
+                   // Calcular el cambio
+               // Escuchar cambios en la cantidad a pagar
+               $('#cantidad-a-pagar').on('input', function() {
+                    var cantidad_pagar = parseFloat($(this).val());
+                    var total_a_pagar = parseFloat($('#total_a_pagar').val());
+
+                    // Validar si la cantidad a pagar es mayor o igual al total a pagar
+                    if (cantidad_pagar >= total_a_pagar) {
+                        // Habilitar el botón de envío del formulario
+                        $('#enviar-btn').prop('disabled', false);
+
+                        // Calcular y mostrar el cambio
+                        var cambio = cantidad_pagar - total_a_pagar;
+                        $('#cambio').val(cambio.toFixed(2));
+                    } else {
+                        // Deshabilitar el botón de envío del formulario
+                        $('#enviar-btn').prop('disabled', true);
+
+                        // Mostrar el cambio como NaN (no válido)
+                        $('#cambio').val('pague mas no sea pobre');
+                    }
+                });
+            
+          
+
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
@@ -644,96 +685,6 @@ const select = document.getElementById('metodo-pago');
 
     
 
-// Obtener elementos del DOM
-const gridItems = document.querySelectorAll('.grid-item');
-const selectedMenusList = document.getElementById('selected-menus-list');
-const totalAPagarInput = document.getElementById('total-a-pagar');
-const cantidadAPagarInput = document.getElementById('cantidad-a-pagar');
-const cambioInput = document.getElementById('cambio');
-const resetTotalButton = document.getElementById('reset-total-button');
-
-// Variables globales
-let selectedMenus = []; // Lista de menús seleccionados
-let totalAPagar = 0; // Total a pagar
-
-// Agregar evento de escucha a los elementos de la grilla
-gridItems.forEach(item => {
-  item.addEventListener('click', e => {
-    const nombreMenu = e.currentTarget.dataset.menu;
-    const precioMenu = Number(e.currentTarget.dataset.precio);
-    const menuSeleccionado = { nombre: nombreMenu, precio: precioMenu };
-    selectedMenus.push(menuSeleccionado);
-    actualizarListaMenusSeleccionados();
-    actualizarTotalAPagar();
-  });
-});
-
-// Actualizar la lista de menús seleccionados
-function actualizarListaMenusSeleccionados() {
-  selectedMenusList.innerHTML = '';
-  selectedMenus.forEach(menu => {
-    const li = document.createElement('li');
-    li.innerText = `${menu.nombre} - LPS. ${menu.precio.toFixed(2)}`;
-    selectedMenusList.appendChild(li);
-  });
-}
-  
-
-
-function actualizarTotalAPagar() {
-  // Obtener el valor del descuento
-  const descuento = Number(document.getElementById('descuento').value);
-
-  // Si no se ha seleccionado ningún descuento, establecer el valor en 0
-  if (isNaN(descuento)) {
-    descuento = 0;
-  }
-
-  // Obtener el valor del impuesto seleccionado
-  const impuestoSeleccionado = Number(document.getElementById('isv').value);
-
-  // Actualizar el valor de isv con el impuesto seleccionado
-  isv = impuestoSeleccionado;
-
-  // Calcular el precio total sin descuento ni ISV
-  const precioTotalSinDescuentoNIsv = selectedMenus.reduce((total, menu) => total + menu.precio, 0);
-
-  // Calcular el precio con descuento
-  const precioConDescuento = precioTotalSinDescuentoNIsv * (1 - descuento / 100);
-
-  // Calcular el monto del ISV
-  const montoIsv = precioConDescuento * isv;
-
-  // Calcular el precio total a pagar
-  const precioTotalAPagar = precioConDescuento + montoIsv;
-
-  // Mostrar el precio total a pagar en el input correspondiente
-  totalAPagarInput.value = precioTotalAPagar.toFixed(2);
-
-  // Actualizar el cambio
-  actualizarCambio();
-}
-
-
-
-function actualizarCambio() {
-  const cantidadAPagar = Number(cantidadAPagarInput.value);
-  const totalAPagar = Number(totalAPagarInput.value);
-  const cambio = cantidadAPagar - totalAPagar;
-  cambioInput.value = cambio.toFixed(2);
-}
-
-
-
-
-// Agregar evento de escucha al botón de resetear la cuenta
-resetTotalButton.addEventListener('click', () => {
-  selectedMenus = [];
-  actualizarListaMenusSeleccionados();
-  actualizarTotalAPagar();
-  cantidadAPagarInput.value = '';
-  cambioInput.value = '';
-});
 
 
 
@@ -745,7 +696,6 @@ resetTotalButton.addEventListener('click', () => {
             }
             });
             })
-
 
 
 
@@ -805,13 +755,17 @@ resetTotalButton.addEventListener('click', () => {
     },
     submitHandler: function(form) {
 
-      var numero_factura_actual = "004-005-10-00010";
-var componentes_factura = numero_factura_actual.split("-");
-var numero_orden = parseInt(componentes_factura[3]) + 1;
-var siguiente_numero_factura = componentes_factura[0] + "-" + componentes_factura[1] + "-" + componentes_factura[2] + "-" + ("00000" + numero_orden).slice(-5);
-$("#numero_factura").val(siguiente_numero_factura);
+      var last_invoice_number = localStorage.getItem("last_invoice_number") || "004-005-10-00013";
+  $("#numero_factura").val(last_invoice_number);
+
+      var componentes_factura = last_invoice_number.split("-");
+      var numero_orden = parseInt(componentes_factura[3]) + 1;
+      var siguiente_numero_factura = componentes_factura[0] + "-" + componentes_factura[1] + "-" + componentes_factura[2] + "-" + ("00000" + numero_orden).slice(-5);
+      $("#numero_factura").val(siguiente_numero_factura);
+      localStorage.setItem("last_invoice_number", siguiente_numero_factura);
 
 
+  
           $("#mensaje-confirmacion").show();
           form.submit();
         }

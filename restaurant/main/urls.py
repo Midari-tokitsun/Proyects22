@@ -331,6 +331,8 @@ urlpatterns = [
     path("editarpedido/<int:id>",views.editarpedido, name="editarpedido"),
     path("eliminarpedido/<int:id>",views.eliminarpedido, name="eliminarpedido"),
 
+    path('obtener_dni_cliente/', views.obtener_dni_cliente, name='obtener_dni_cliente'),
+
 
 
 #FIN DE LA VISTA DE PEDIDOS
@@ -347,11 +349,12 @@ urlpatterns = [
     path('obtener_detalles_pedido/', views.obtener_detalles_pedido, name='obtener_detalles_pedido'),
     path('obtener_detalles_menu/', views.obtener_detalles_menu, name='obtener_detalles_menu'),
 
+
     path('obtener_datos_cai/', views.obtener_datos_cai, name='obtener_datos_cai'),
 
 
 
-#FIN
+#FIN obtener_menu_cliente
 
 #impuestos editarimpuesto
 
@@ -367,6 +370,12 @@ urlpatterns = [
     path("editardescuento/<int:id>",views.editardescuento, name="editardescuento"),
     path("eliminardescuento/<int:id>",views.eliminardescuento, name="eliminardescuento"),
 
+#Clientes
+
+    path("cliente/",views.clientetabla, name="clientetabla"),
+    path("agregarcliente",views.agregarcliente, name="agregarcliente"),
+    path("editarcliente/<int:id>",views.editarcliente, name="editarcliente"),
+    path("eliminarcliente/<int:id>",views.eliminarcliente, name="eliminarcliente"),
 
 
 

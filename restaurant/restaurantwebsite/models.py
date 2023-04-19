@@ -336,6 +336,8 @@ class pedidostabla(models.Model):
     tamaño_menu=models.CharField(max_length=50)
     estado_pedido=models.CharField(max_length=50)
     fecha_pedido=models.DateField(blank=True,auto_now=True)
+    dni_cliente=models.CharField(max_length=50)
+
 
 
     class Meta:
@@ -383,7 +385,8 @@ class factura_tabla(models.Model):
     fecha_final=models.CharField(max_length=50)
     numero_inicial=models.CharField(max_length=50)
     numero_final=models.CharField(max_length=50)
-
+    dni_cliente=models.CharField(max_length=50)
+    impuesto=models.CharField(max_length=50)
 
     class Meta:
         db_table='factura'
@@ -406,7 +409,13 @@ class descuento_tabla(models.Model):
     class Meta:
         db_table='descuentos'
 
-
+class cliente_tabla(models.Model):
+    id_cliente=models.CharField(primary_key=True,max_length=40)
+    nombre=models.CharField(max_length=50)
+    apellido=models.CharField(max_length=50)
+    dni=models.CharField(max_length=50)
+    class Meta:
+        db_table='cliente'
 
 class MyException(Exception):
     pass
