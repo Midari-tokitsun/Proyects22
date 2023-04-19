@@ -3060,22 +3060,23 @@ def obtener_detalles_pedido(request):
 
 
 
-        # Obtener el precio de cada elemento del pedido
+        # Obtener el precio de cada elemento del pedido y su impuesto individual
         elementos_pedido = pedido.nombre_menu.split('\n')
         cantidades = []
         precios = []
+        impuestos_individuales = []
         for elemento in elementos_pedido:
             cantidad, nombre_menu = elemento.split('x')
             cantidad = int(cantidad.strip('()'))
+            menu = menutabla.objects.get(nombre_menu=nombre_menu)
             cantidades.append(cantidad)
-            precio_menu = float(menutabla.objects.get(nombre_menu=nombre_menu).precio_menu)
-            precios.append(precio_menu)
+            precios.append(float(menu.precio_menu))
+            impuestos_individuales.append(float(menu.impuesto))
 
-        # Calcular el precio total y el impuesto acumulado
+        # Calcular el precio total y el impuesto acumulado total
         precio_total = sum([cantidad * precio for cantidad, precio in zip(cantidades, precios)])
-        total_a_pagar = precio_total
-        impuesto_acumulado = round(total_a_pagar * 0.13, 2)
-        total_a_pagar += impuesto_acumulado
+        impuesto_acumulado_total = round(sum([cantidad * precio * impuesto for cantidad, precio, impuesto in zip(cantidades, precios, impuestos_individuales)]), 2)
+        total_a_pagar = precio_total + impuesto_acumulado_total
 
         # Crear un diccionario con los detalles del pedido
         detalles_pedido = {
@@ -3085,7 +3086,7 @@ def obtener_detalles_pedido(request):
             'estado_pedido': pedido.estado_pedido,
             'fecha': pedido.fecha_pedido.strftime('%Y-%m-%d'),
             'total_a_pagar': total_a_pagar,
-            'impuesto_acumulado': impuesto_acumulado,
+            'impuesto_acumulado': impuesto_acumulado_total,
             'dni_cliente':pedido.dni_cliente,
       
         }
@@ -3266,8 +3267,20 @@ def factura_pdf(request, id):
 
     # Escribir el eTamaño del Menu
     pdf_canvas.drawString(1.8*inch,4.7 * inch, 'Tamaño del Menu:')
+    # Convertir la cadena de tamaños de menú a una lista de cadenas codificadas en utf-8
+    tamanos_codificados = [t.encode('utf-8') for t in factura.tamaño_menu.strip().split()]
 
-    pdf_canvas.drawString(1.8*inch,4.5 * inch, '{}'.format(factura.tamaño_menu))
+    # Decodificar cada cadena en la lista y guardar los resultados en una nueva lista de cadenas Unicode
+    tamanos_unicode = [t.decode('utf-8') for t in tamanos_codificados]
+
+    # Escribir cada tamaño de menú en columnas
+    y_position = 4.5 * inch
+    for tamano in tamanos_unicode:
+        pdf_canvas.drawString(1.8*inch, y_position, tamano)
+        y_position -= 0.25 * inch
+
+
+
 
     pdf_canvas.drawString(inch, 5.7 * inch, 'Estado del Pedido: {}'.format(factura.estado_pedido))
 
@@ -3329,7 +3342,7 @@ def agregarfactura(request):
             nombre_cliente=request.POST.get("nombre_cliente")
             menu_cantidades=request.POST.get("menu_cantidades")
             tamaño_menu=request.POST.get("tamaño_menu")
-            estado_pedido=request.POST.get("estado_pedido")
+            estado_pedido = "Terminado"
             fecha_realizacion_pedido=request.POST.get("fecha_realizacion_pedido")
             descuento=request.POST.get("descuento")
             isv=request.POST.get("isv")
