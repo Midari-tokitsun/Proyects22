@@ -344,12 +344,7 @@
 			{% csrf_token %} 
 		<div class="modal-body">
 
-			<div class="mb-3">
-		  <label class="form-label" for="">
-			promocion ID
-		  </label>
-		  <input class="form-control" type="number" name="id_promocion" min="0" id="id_promocion" placeholder="Ingrese el ID de la Promocion">
-		</div>
+
 
 		<div class="mb-3">
 
@@ -521,11 +516,7 @@ $('#fecha_final').change(function() {
 
 $("#Myform").validate({
   rules: {
-    id_promocion: {
-      required: true,
-	  noSpace:true,
-	  noSpaceafterletters:true,
-    },
+
     nombre_promocion: {
       required: true,
 	  letrasYLongitud:true,

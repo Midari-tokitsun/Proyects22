@@ -335,9 +335,6 @@
 			{% csrf_token %}
 		<div class="modal-body">
 
-			<label for="">ID del Pedido</label>
-			<input class="form-control" type="text" name="id_pedido" id="id_pedido">
-			<br>
 
 			<label for="">Nombre del Cliente</label>
 			<select class="form-control" name="nombre_cliente" id="nombre_cliente">
@@ -385,7 +382,7 @@
 
 			<label for="">Estado del Pedido</label>
 			<select class="form-control" name="estado_pedido" id="estado_pedido">
-				<option value="" selected disabled>Selecciona El Detalle del Pedido</option>
+				<option value="En Ejecucion" selected >En Ejecucion</option>
 				{% for e in est %}
 			<option value="{{e.descripcion_pedido}}">{{e.descripcion_pedido}}</option>
 
@@ -580,11 +577,7 @@ $(document).ready( function () {
 
 $("#Myform").validate({
   rules: {
-    id_pedido: {
-      required: true,
-	  noSpace:true,
-	  noSpaceafterletters:true,
-    },
+
     nombre_cliente: {
       required: true,
     },

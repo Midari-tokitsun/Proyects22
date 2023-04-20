@@ -337,10 +337,7 @@
         <div class="modal-body">
             <form id="Myform" action="{% url 'agregarproductos' %}" method="POST">
                 {% csrf_token %}
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">ID del Producto</label>
-                <input minlength="0" maxlength="10" name="id_producto" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Introduce un ID">
-              </div>
+
        
 
               <div class="mb-3">
@@ -531,11 +528,7 @@ $(document).ready( function () {
 
 $("#Myform").validate({
   rules: {
-    id_producto: {
-      required: true,
-      noSpace:true,
-      noSpaceafterletters:true,
-    },
+
     nombre_producto: {
       required: true,
       noSpace:true,

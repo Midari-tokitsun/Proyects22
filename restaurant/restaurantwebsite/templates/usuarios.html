@@ -377,11 +377,6 @@
 					<div class="modal-body">
 	
 
-						<div class="form-group">
-							<label>ID</label>
-							<input placeholder="introduce Un ID" name="id_usuario" type="text" class="form-control noSpace" required>
-
-						</div>
 
                         <div class="form-group">
 							<label>Nombre</label> 
@@ -687,10 +682,7 @@ $(document).ready(function() {
 
   $("#myform").validate({
     rules: {
-      id_usuario: {
-        noSpace:true,
-        required: true
-      },
+ 
       nombre: {
         noRepetidos:true,
         required: true, 

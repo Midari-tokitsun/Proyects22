@@ -394,9 +394,7 @@
       
         <form id="Myform" action="{% url 'agregarfactura' %}" method="POST">
           {% csrf_token %}
-          <label for="">ID Factura</label>
-          <input  type="text" class="form-control" name="id_factura" id="id_factura">
-      
+
 
           <br>
   
@@ -703,10 +701,7 @@ const select = document.getElementById('metodo-pago');
 
             $("#Myform").validate({
     rules: {
-      id_factura: {
-            required: true,
-            noSpace:true,
-        },
+
         codigo_cai: {
             required: true,
         },

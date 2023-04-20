@@ -338,9 +338,7 @@
         <div class="modal-body">
             <form id="myform" action="{% url 'agregarcliente' %}" method="POST">
                 {% csrf_token %}
-                <label for="">ID</label>
-                <input minlength="0" maxlength="10" class="form-control" type="text" name="id_cliente" id="id_cliente">
-                <br>
+
                 <label for="">Nombre</label>
                 <input minlength="3" maxlength="20" class="form-control" type="text" name="nombre" id="nombre">
                 <br>

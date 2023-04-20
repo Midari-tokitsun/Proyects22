@@ -391,10 +391,7 @@
             {% csrf_token %}
 
 
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">ID-Receta</label>
-                <input  name="id_receta" type="text" class="form-control" id="id_receta" placeholder="ID RECETA" required>
-              </div>
+
 
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Nombre de la Receta</label>
@@ -549,11 +546,7 @@ $(document).ready(function() {
 
 		$("#myform").validate({
 			rules: {
-				id_receta: {
-				required: true,
-				noSpace: true,
-				noSpaceafterletters:true,
-			  },
+
 			  nombre_receta: {
 				required: true, 
 

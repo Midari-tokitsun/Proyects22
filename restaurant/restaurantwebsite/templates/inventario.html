@@ -324,11 +324,7 @@
           <form id="Myform" action="{% url 'agregarinventario' %}" method="POST">
             {% csrf_token %}
                     <!-- Name input -->
-                    <div class="form-outline mb-4">
-                      <label class="form-label" for="name2">ID</label>
-                        <input type="text" name="id_inventario" id="id_inventario" class="form-control" />
-                     
-                    </div>
+
 
                     <!-- Email input -->
                     <div class="form-outline mb-4">
@@ -495,10 +491,7 @@ $(document).ready( function () {
 
 $("#Myform").validate({
   rules: {
-    id_inventario: {
-      required: true,
-      noSpaceafterletters:true,
-    },
+
     producto: {
       required: true,
     },

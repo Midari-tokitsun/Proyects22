@@ -2213,10 +2213,12 @@ def reservaciones(request):
     res=reservacionestabla.objects.all()
     sucu=sucursal.objects.all()
     user=insertuser.objects.all()
+    cli=cliente_tabla.objects.all()
     context={
         'res':res,
         'sucu':sucu,
         'user':user,
+        'cli':cli,
     }
 
 
@@ -3278,7 +3280,6 @@ def factura_pdf(request, id):
     for tamano in tamanos_unicode:
         pdf_canvas.drawString(1.8*inch, y_position, tamano)
         y_position -= 0.25 * inch
-
 
 
 

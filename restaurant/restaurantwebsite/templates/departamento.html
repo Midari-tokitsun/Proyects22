@@ -370,10 +370,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
-						<div class="form-group">
-							<label>ID</label>
-							<input placeholder="Ingrese Un ID" type="number" id="id_departamento" name="id_departamento" class="form-control" required>
-						</div>
+
 						<div class="form-group">
 							<label>Departamento</label>
 							<input id="departamento" minlength="4" maxlength="30" type="text" pattern="^(?!.*(.)(\1\1))[A-Z][a-zA-Z]*$" placeholder="Ejemplo: Yoro,Copan,Francisco Morazan" name="departamento" class="form-control noSpace noRepetidos sololetrasyconmayusculas " required>
@@ -468,10 +465,7 @@ $('#mytable').DataTable({
 
 $("#myform").validate({
     rules: {
-		id_departamento: {
-        required: true,
-        noSpace: true,
-      },
+
       departamento: {
         required: true, 
         minlength: 4,

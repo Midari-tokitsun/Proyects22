@@ -358,10 +358,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
-						<div class="form-group">
-							<label>ID de la Familia</label>
-							<input placeholder="Ingrese un ID" name="id_familia_producto" type="text" class="form-control" required>
-						</div>
+
 						<div class="form-group">
 							<label>Nombre de la Familia</label>
 							<input pattern="^(?!.*([a-zA-Z])\1)[A-Za-z]+$" placeholder="EJEMPLO:Carnes y aves|Pescados y mariscos|Frutas y verduras frescas|Lácteos y productos frescos|Panadería y pastelería|" name="nombre_familia" type="text" class="form-control noSpace noRepetidos familiaProductos" required>
@@ -457,10 +454,7 @@ $('#mytable').DataTable({
 
   $("#Myform").validate({
       rules: {
-        id_familia_producto: {
-          required: true,
-          noSpace: true,
-        },
+
         nombre_familia: {
           required: true, 
           minlength: 4,

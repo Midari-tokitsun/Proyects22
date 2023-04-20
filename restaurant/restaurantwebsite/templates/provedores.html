@@ -355,9 +355,7 @@
         <div class="modal-body">
             <form id="myform" action="{% url 'agregarprovedor' %}" method="POST">
                 {% csrf_token %}
-                <label for="">ID</label>
-                <input minlength="0" maxlength="10" class="form-control" type="text" name="id_provedor" id="id_provedor">
-                <br>
+
                 <label for="">Nombre</label>
                 <input minlength="3" maxlength="20" class="form-control" type="text" name="nombre_provedor" id="nombre_provedor">
                 <br>
@@ -442,11 +440,7 @@ $('#mytable').DataTable({
 
 $("#myform").validate({
     rules: {
-        id_provedor: {
-        noSpace:true,
-        required: true,
-        noSpaceafterletters:true
-      },
+
       nombre_provedor: {
         noRepetidos:true,
         required: true, 

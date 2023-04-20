@@ -359,10 +359,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
-						<div class="form-group">
-							<label>ID Almacen</label>
-							<input name="id_almacen" type="number" class="form-control noSpace" required>
-						</div>
+
 						<div class="form-group">
 							<label>Tipo de almacen</label>
 							<input pattern="^(?!.*(.).*\1)[A-Z][a-zA-Z]+$" placeholder="El nombre del tipo de almacen debe ser Ejemplo:Carnes,Secos,Lacteos,Verduras" name="tipo_almacen"  name="tipo_almacen" type="text" class="form-control noSpace noRepetidos sololetrasyconmayusculas" required>
@@ -454,10 +451,7 @@ $('#mytable').DataTable({
 
 		$("#myform").validate({
 			rules: {
-				id_almacen: {
-				required: true,
-				noSpace: true,
-			  },
+
 			  tipo_almacen: {
 				required: true, 
 				minlength: 4,
