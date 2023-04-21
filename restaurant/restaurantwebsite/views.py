@@ -3206,7 +3206,8 @@ def factura_pdf(request, id):
     pdf_canvas.drawString(inch, 7.5 * inch, 'Fecha Inicial: {}'.format(factura.fecha_emision))
     pdf_canvas.drawString(3.8*inch, 7.5 * inch, 'Fecha Final: {}'.format(factura.fecha_final))
 
-
+    pdf_canvas.drawString(inch, 7 * inch, 'Correo: Administrador@PizzaWavehn.com')
+    pdf_canvas.drawString(4.5*inch, 7 * inch, 'Numero: 8844-6955 8772-2631')
 
     pdf_canvas.line(inch, 6.8 * inch, 7.5*inch, 6.8 * inch)
 

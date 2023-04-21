@@ -282,9 +282,7 @@
         <th>ID</th>
         <th>Numero de Factura</th>
         <th>Nombre del Encargado</th>
-        <th>Apellido del Encargado</th>
         <th>Nombre del Cliente</th>
-        <th>DNI del cliente</th>
         <th>Nombre del Menu y Cantidades</th>
         <th>Fecha de Realizacion del Pedido</th>
         <th>Descuentos</th>
@@ -303,9 +301,7 @@
               <th>ID</th>
               <th>Numero de Factura</th>
               <th>Nombre del Encargado</th>
-              <th>Apellido del Encargado</th>
               <th>Nombre del Cliente</th>
-              <th>DNI del cliente</th>
               <th>Nombre del Menu y Cantidades</th>
               <th>Fecha de Realizacion del Pedido</th>
               <th>Descuentos</th>
@@ -326,9 +322,7 @@
         <td>{{f.id_factura}}</td>
         <td>{{f.numero_factura}}</td>
         <td>{{f.nombre_encargado}}</td>
-        <td>{{f.apellido_encargado}}</td>
         <td>{{f.nombre_cliente}}</td>
-        <td>{{f.dni_cliente}}</td>
         <td>{{f.menu_cantidades}}</td>
         <td>{{f.fecha_realizacion_pedido}}</td>
         <td>{{f.descuento}}</td>
@@ -406,26 +400,29 @@
             {% endfor %}   
          </div>
          
-
-          <div class="mb-3">
+         <div class="row g-3">
+          <div class="col-md-4">
             <label for="fecha_emision" class="form-label">Fecha de Emisión</label>
            
             <input type="text" class="form-control" name="fecha_emision" value="" id="fecha_emision" readonly>
             
          </div>
-         <div class="mb-3">
+         <div class="col-md-4">
             <label for="fecha_final" class="form-label">Fecha Final</label>
             <input type="text" class="form-control" name="fecha_final" id="fecha_final" readonly>
          </div>
-         <div class="mb-3">
+        </div>
+
+        <div class="row g-3">
+         <div class="col-md-4">
             <label for="numero_inicial" class="form-label">Número Inicial</label>
             <input type="text" class="form-control" name="numero_inicial" id="numero_inicial" readonly>
          </div>
-         <div class="mb-3">
+         <div class="col-md-4">
             <label for="numero_final" class="form-label">Número Final</label>
             <input type="text" class="form-control" name="numero_final" id="numero_final" readonly>
          </div>
-
+        </div>
 
     
           <br>
@@ -434,21 +431,33 @@
 
             <br>
 
-
+          <div class="row g-3">
+          <div class="col-md-4">
          <label for="">Nombre del Encargado</label>
          <input name="nombre_encargado" class="form-control" value="{{ request.session.nombre }}" readonly>
+        </div>
+
+        <div class="col-md-4">
          <label for="">Apellido del Encargado</label>
          <input name="apellido_encargado" class="form-control" value="{{ request.session.apellido }}" readonly>
+        </div>
+        <div class="col-md-5">
          <label for="">Correo Electronico</label>
          <input name="correo_encargado" class="form-control" value="{{ request.session.email }}" readonly>
+        </div>
+        <div class="col-md-4">
          <label for="">Telefono</label>
          <input name="telefono_encargado" class="form-control" value="{{ request.session.telefono }}" readonly>
-
+        </div>
+        </div>
 
            <!-- Aquí agregas los campos necesarios para la factura, como el nombre del cliente, fecha,  -->
            <h1>Descripcion de la Factura</h1>
             <br>
-           <div class="mb-3">
+
+
+            <div class="row g-3">
+           <div class="col-md-4">
              <label for="cliente" class="form-label">Nombre del Cliente</label>
              <select class="form-control" name="nombre_cliente" id="cliente-select">
                 <option value="" selected>Consumidor Final</option>
@@ -460,38 +469,40 @@
             <br>
 
 
-            <div class="mb-3">
+            <div class="col-md-4">
               <label for="dni_cliente" class="form-label">DNI Del Cliente</label>
               <input class="form-control" type="text" name="dni_cliente" id="dni-input" readonly>
           </div>
+        </div>
 
-            <div class="mb-3">
+          <div class="row g-3">
+            <div class="col-md-4">
               <label for="menu" class="form-label">Nombre del Menú y Cantidades</label>
               <textarea class="form-control" type="text" name="menu_cantidades" id="menu-input" readonly></textarea>
           </div>
-          
 
-          
-          <div class="mb-3">
+          <div class="col-md-4">
               <label for="detalle" class="form-label">Tamaño del Menú</label>
               <textarea class="form-control" type="text" name="tamaño_menu" id="detalle-input" readonly></textarea>
           </div>
-          
-          <div class="mb-3">
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4">
               <label for="estado_pedido" class="form-label">Estado del Pedido</label>
               <input class="form-control" type="text" name="estado_pedido" id="estado-input" readonly>
           </div>
           
-          <div class="mb-3">
+          <div class="col-md-4">
               <label for="fecha_realizacion_pedido" class="form-label">Fecha de Realización del Pedido</label>
               <input class="form-control" type="text" name="fecha_realizacion_pedido" id="fecha-input" readonly>
           </div>
-
+        </div>
 
           
             
-
-          <div class="mb-3">
+        <div class="row g-3">
+          <div class="col-md-4">
             <label for="descuento" class="form-label">Descuento</label>
             <select class="form-control" name="descuento" id="descuento">
               {% for d in des %}
@@ -500,7 +511,7 @@
             </select>
           </div>
           
-          <div class="mb-3">
+          <div class="col-md-4">
             <label for="isv" class="form-label">ISV</label>
             <select class="form-control" name="isv" id="isv">
               {% for im in imp %}
@@ -508,7 +519,7 @@
               {% endfor %}
             </select>
           </div>
-   
+        </div>
 
               <div class="mb-3">
                 <label for="metodo-pago" class="form-label">Método de Pago</label>
@@ -545,19 +556,24 @@
 
 
            <br>
-           <div class="mb-3">
+           <div class="row g-3">
+           <div class="col-md-4">
             <label for="total-pagar" class="form-label">Total a pagar</label>
             <input type="number" class="form-control" name="total_pagar" id="total_a_pagar" readonly>
           </div>
           
-          <div class="mb-3">
+          <div class="col-md-4">
             <label for="impuesto" class="form-label">Impuesto</label>
             <input type="number" class="form-control" name="impuesto" id="impuesto_acumulado" readonly>
           </div>
-          
+        
+
            <br>
+           <div class="col-md-3">
            <label for="cambio">Cambio (Vuelto):</label>
            <input id="cambio" class="form-control" type="text" name="cambio" readonly>
+          </div>
+          </div>
       <br>
      
            <div class="modal-footer">
@@ -647,7 +663,30 @@ $(document).ready(function() {
                     }
                 });
             
-          
+                          // Escuchar cambios en el descuento
+                          $('#descuento').on('change', function() {
+                    var descuento = parseFloat($(this).val());
+                    var total_a_pagar = parseFloat($('#total_a_pagar').val());
+
+                    // Aplicar el descuento al total a pagar
+                    var total_con_descuento = total_a_pagar - (total_a_pagar * (descuento / 100));
+
+                    // Actualizar el campo de entrada del total a pagar
+                    $('#total_a_pagar').val(total_con_descuento.toFixed(2));
+                });
+            
+                // Escuchar cambios en el impuesto (ISV)
+$('#isv').on('change', function() {
+    var impuesto = parseFloat($(this).val());
+    var total_a_pagar = parseFloat($('#total_a_pagar').val());
+
+    // Calcular el total a pagar con el impuesto incluido
+    var total_con_impuesto = total_a_pagar + (total_a_pagar * (impuesto / 100));
+
+    // Actualizar el campo de entrada del total a pagar
+    $('#total_a_pagar').val(total_con_impuesto.toFixed(2));
+});
+
 
                 },
                 error: function(xhr, status, error) {
