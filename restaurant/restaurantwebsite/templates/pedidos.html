@@ -508,6 +508,8 @@ $(document).ready(function() {
           <option value="Parejas">Parejas</option>
           <option value="Familiar">Familiar</option>
         </select>
+		<button class="btn btn-danger btn-sm eliminar-menu" type="button">Eliminar</button> <!-- Agregar botón de eliminar -->
+
       </div>
     `;
     $('#menu-seleccionado').append(menuHtml);
@@ -544,7 +546,36 @@ $(document).ready(function() {
   $('#tamaños_hidden').val(tamañosStr);
     });
 
-    // hacer algo con los datos
+    $(document).on('click', '.eliminar-menu', function() {
+  var menuNombre = $(this).parent().data('menu-nombre');
+  var cantidad = $(this).parent().find('input').val();
+  var cantidades = $('#cantidades_hidden').val();
+
+  // Eliminar el menú del contenedor
+  $(this).parent().remove();
+
+  // Eliminar la cantidad y el nombre del menú eliminado del campo "CANTIDADES"
+  var menuCantidad = `(${cantidad})`;
+  var menuNombreCant = `${menuCantidad}${menuNombre}`;
+  var cantidadesArr = cantidades.split(',');
+  var index = cantidadesArr.indexOf(menuCantidad);
+  if (index !== -1) {
+    cantidadesArr.splice(index, 1);
+    var newCantidades = cantidadesArr.join(',');
+    $('#cantidades_hidden').val(newCantidades);
+  }
+
+  // Eliminar el nombre del menú eliminado del campo "nombre_menu_hidden"
+  var nombres = $('#nombre_menu_hidden').val();
+  var nombresArr = nombres.split(',');
+  var index = nombresArr.indexOf(menuNombre);
+  if (index !== -1) {
+    nombresArr.splice(index, 1);
+    var newNombres = nombresArr.join(',');
+    $('#nombre_menu_hidden').val(newNombres);
+  }
+});
+
   });
 
 

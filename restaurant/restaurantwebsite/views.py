@@ -3146,6 +3146,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 import os
 from reportlab.lib.fonts import addMapping
+
 def factura_pdf(request, id):
     # Obtener los datos de la factura desde la base de datos
     factura = factura_tabla.objects.get(id_factura=id)
@@ -3306,17 +3307,33 @@ def factura_pdf(request, id):
 
 
     pdf_canvas.drawString(inch, 1.9 * inch, 'Cantidad a Pagar:')
-    pdf_canvas.drawString(6.8 * inch,1.9 * inch, '{} LPS'.format(factura.cantidad_pagar))
+    pdf_canvas.drawString(6.8 * inch, 1.9 * inch, '{:,.2f} LPS'.format(float(factura.cantidad_pagar)))
     pdf_canvas.drawString(inch, 2.3 * inch, 'Total a Pagar:')
-    pdf_canvas.drawString(6.8 * inch, 2.3 * inch, '{} LPS'.format(factura.total_pagar))
+    pdf_canvas.drawString(6.8 * inch, 2.3 * inch, '{:,.2f} LPS'.format(float(factura.total_pagar)))
     pdf_canvas.drawString(inch, 1.5 * inch, 'Cambio:')
-    pdf_canvas.drawString(6.8 * inch, 1.5 * inch, '{} LPS'.format(factura.cambio))
+    pdf_canvas.drawString(6.8 * inch, 1.5 * inch, '{:,.2f} LPS'.format(float(factura.cambio)))
+
 
     pdf_canvas.drawCentredString(3.8*inch, 1*inch, "GRACIAS POR SU COMPRA")
     pdf_canvas.drawCentredString(3.8*inch, 0.8*inch, "RANGO AUTORIZADO")
     pdf_canvas.drawCentredString(3*inch, 0.5 * inch, '{}'.format(factura.numero_factura))
     pdf_canvas.drawCentredString(4.4*inch, 0.5 * inch, '/004-005-10-00050')
 
+        # Definir el número total de páginas y la ubicación del número de página
+    numero_pagina = 1
+    total_paginas = 1
+    x = 550
+    y = 15
+
+    # Generar contenido para cada página del PDF
+    for i in range(total_paginas):
+        # Agregar contenido a la página actual del PDF
+        # Agregar número de página a la página actual del PDF
+        pdf_canvas.drawString(x, y, f"Página {numero_pagina} de {total_paginas}")
+        numero_pagina += 1
+        # Si no es la última página, agregar una nueva página al PDF
+        if i < total_paginas - 1:    
+            pdf_canvas.showPage()
 
     # Finalizar el PDF y cerrar el objeto canvas
     pdf_canvas.showPage()
@@ -3379,6 +3396,12 @@ def agregarfactura(request):
             numero_final=request.POST.get("numero_final")
 
         
+            inventario = inventariotabla.objects.all()
+            for producto in inventario:
+                cantidad_actual = int(producto.cantidad_actual)
+                producto.cantidad_actual = str(cantidad_actual - 1)
+                producto.save()
+
             factura_tabla.objects.create(
             id_factura=id_factura,
             codigo_cai=codigo_cai,
