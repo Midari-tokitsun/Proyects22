@@ -326,10 +326,6 @@
         <div class="modal-body">
 
 
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">ID</label>
-                <input id="id_metodo_pago"  name="id_metodo_pago"  type="number" class="form-control"  placeholder="" >
-              </div>
 
 
 
@@ -443,11 +439,7 @@ $('#myTable').DataTable({
 $('#miformulario').validate({
 
   rules: {
-    id_metodo_pago: {
-      required: true,
-      noSpace: true,
-      noRepetidos:true,
-    },
+
     forma_pago: {
       required: true,
     },
@@ -457,10 +449,7 @@ $('#miformulario').validate({
     },
   },
   messages: {
-    id_metodo_pago: {
-      noSpace: "No se puede Espacios Estimado",
-      required: "Debes Poner un ID",
-    },
+
     forma_pago: {
       required: "Debes Seleccionar la Metodo de Pago",
     },

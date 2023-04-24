@@ -309,10 +309,7 @@
             {% csrf_token %}
         <div class="modal-body">
          
-          <div class="form-group">
-                <label for="exampleFormControlInput1" class="form-label">ID del Menu</label>
-                <input min="0" name="id_menu" type="number" class="form-control" id="id_menu" placeholder="ID del Menu">
-              </div>
+
 
               <div class="form-group">
                 <label>Nombre del Menu</label>
@@ -561,11 +558,7 @@ $(document).ready(function() {
 
 		$("#myform").validate({
 			rules: {
-				id_menu: {
-				required: true,
-				noSpace: true,
-				noSpaceafterletters:true,
-			  },
+
 			  nombre_menu: {
 				required: true, 
 				minlength: 5,
@@ -612,11 +605,7 @@ $(document).ready(function() {
 
 
 			messages: {
-				id_menu: {
-				noSpace:"Otra VEz CON LOS ESPACIOS PARA",
-				required: "Debes Poner un ID"
-		
-			  },
+
 			  nombre_menu: {
 				required:"Debes Ingresar Un Nombre al Menu",
 				sololetrasyconmayusculas: "Este campo solo puede contener letras y debe comenzar con una letra mayúscula y puede contener o no un espacio si es requerido",

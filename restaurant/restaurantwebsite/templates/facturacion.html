@@ -536,23 +536,23 @@
             </div>
             <div class="mb-3" id="input-tarjeta" hidden>
                 <label for="tarjeta" class="form-label">Tarjeta</label>
-                <input type="text" class="form-control" id="tarjeta" name="numero_tarjeta">
+                <input minlength="16" maxlength="16" type="number" class="form-control" id="tarjeta" min="0" name="numero_tarjeta">
             </div>
             <div class="mb-3" id="input-efectivo" hidden>
                 <label for="efectivo" class="form-label">Efectivo</label>
-                <input type="text" class="form-control" id="efectivo" name="efectivo">
+                <input type="number" class="form-control" id="efectivo" min="0" name="efectivo">
             </div>
             <div class="mb-3" id="input-mixto" hidden>
                 <label for="tarjeta" class="form-label">Tarjeta</label>
-                <input type="text" class="form-control" id="tarjeta-mixto" name="tarjeta-mixto">
+                <input minlength="16" maxlength="16"  type="number" class="form-control" id="tarjeta-mixto" min="0" name="numero_tarjeta">
                 <br>
                 <label for="efectivo" class="form-label">Efectivo</label>
-                <input type="text" class="form-control" id="efectivo-mixto" name="efectivo-mixto">
+                <input type="number" class="form-control" id="efectivo-mixto" min="0" name="efectivo">
             </div>
             
 
             <label for="cantidad-a-pagar">Cantidad a pagar:</label>
-            <input id="cantidad-a-pagar" class="form-control" type="text" name="cantidad_pagar">
+            <input id="cantidad-a-pagar" class="form-control" type="number" min="0" name="cantidad_pagar">
 
 
            <br>
@@ -760,6 +760,13 @@ const select = document.getElementById('metodo-pago');
         },
         cantidad_pagar: {
             required: true,
+            
+        },
+        numero_tarjeta:{
+          required:true,
+        },
+        efectivo:{
+          required:true
         },
 
     },
@@ -813,6 +820,9 @@ jQuery.validator.addMethod("noSpace", function(value, element) {
 	
 
 
+  $.validator.addMethod("solonumeros", function(value, element) {
+    return this.optional(element) || /^[1-9]\d*$/.test(value);
+}, "Por favor ingrese solo numeros.");
 
 
 

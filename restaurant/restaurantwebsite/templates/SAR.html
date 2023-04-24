@@ -338,10 +338,7 @@
 		
    
     
-    <div class="col-xs-2">
-        <label for="exampleFormControlTextarea1" class="form-label">ID SAR</label>
-    <input name="id_sar" id="id_sar" type="text" class="form-control" placeholder="Ingrese el ID">
-    </div>
+ 
     
     <div class="col-xs-4">
         <label for="exampleFormControlTextarea1" class="form-label">CODIGO CAI</label>
@@ -519,11 +516,7 @@ $('#myTable').DataTable({
 
   $("#Myform").validate({
   rules: {
-    id_sar: {
-      required: true,
-      noSpace: true,
-      noSpaceafterletters:true,
-    },
+
     codigo_sar: {
       required: true,
       caiValido:true,
@@ -568,10 +561,7 @@ $('#myTable').DataTable({
     },
   },
   messages: {
-    id_sar: {
-      noSpace: "No se puede Espacios Estimado",
-      required: "Debes Poner un ID",
-    },
+
     codigo_sar: {
       required: "Debes Escribir el Codigo CAI",
       
