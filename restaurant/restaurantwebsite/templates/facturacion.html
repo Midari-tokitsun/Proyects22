@@ -285,8 +285,7 @@
         <th>Nombre del Cliente</th>
         <th>Nombre del Menu y Cantidades</th>
         <th>Fecha de Realizacion del Pedido</th>
-        <th>Descuentos</th>
-        <th>ISV</th>
+        <th>Monto extra</th>
         <th>Impuesto</th>
         <th>Metodo de Pago</th>
         <th>Numero de la Tarjeta</th>
@@ -304,8 +303,7 @@
               <th>Nombre del Cliente</th>
               <th>Nombre del Menu y Cantidades</th>
               <th>Fecha de Realizacion del Pedido</th>
-              <th>Descuentos</th>
-              <th>ISV</th>
+              <th>Monto extra</th>
               <th>Impuesto</th>
               <th>Metodo de Pago</th>
               <th>Numero de la Tarjeta</th>
@@ -325,7 +323,6 @@
         <td>{{f.nombre_cliente}}</td>
         <td>{{f.menu_cantidades}}</td>
         <td>{{f.fecha_realizacion_pedido}}</td>
-        <td>{{f.descuento}}</td>
         <td>{{f.isv}}</td>
         <td>{{f.impuesto}}</td>
         <td>{{f.metodo_pago}}</td>
@@ -511,15 +508,7 @@
             </select>
           </div>
           
-          <div class="col-md-4">
-            <label for="isv" class="form-label">ISV</label>
-            <select class="form-control" name="isv" id="isv">
-              {% for im in imp %}
-              <option value="{{ im.impuesto }}" selected>{{ im.impuesto }}</option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
+   
 
               <div class="mb-3">
                 <label for="metodo-pago" class="form-label">Método de Pago</label>
@@ -537,22 +526,23 @@
             <div class="mb-3" id="input-tarjeta" hidden>
                 <label for="tarjeta" class="form-label">Tarjeta</label>
                 <input minlength="16" maxlength="16" type="number" class="form-control" id="tarjeta" min="0" name="numero_tarjeta">
+                <label for="">Cantidad a Pagar</label>
             </div>
             <div class="mb-3" id="input-efectivo" hidden>
                 <label for="efectivo" class="form-label">Efectivo</label>
-                <input type="number" class="form-control" id="efectivo" min="0" name="efectivo">
+ 
             </div>
             <div class="mb-3" id="input-mixto" hidden>
-                <label for="tarjeta" class="form-label">Tarjeta</label>
-                <input minlength="16" maxlength="16"  type="number" class="form-control" id="tarjeta-mixto" min="0" name="numero_tarjeta">
+
                 <br>
                 <label for="efectivo" class="form-label">Efectivo</label>
-                <input type="number" class="form-control" id="efectivo-mixto" min="0" name="efectivo">
+                <input type="number" class="form-control" id="efectivo-mixto" min="0" name="isv">
+                <label class="form-label" for="">Monto Tarjeta</label>
             </div>
             
-
-            <label for="cantidad-a-pagar">Cantidad a pagar:</label>
             <input id="cantidad-a-pagar" class="form-control" type="number" min="0" name="cantidad_pagar">
+            <br>
+            <p style="color: red ;" id="error-messages"></p>
 
 
            <br>
@@ -578,7 +568,7 @@
      
            <div class="modal-footer">
 
-            <button type="submit" class="btn btn-primary">GUARDAR</button>
+            <button id="enviar" type="submit" class="btn btn-primary">GUARDAR</button>
            </div>
            
          </form>
@@ -649,17 +639,18 @@ $(document).ready(function() {
                     // Validar si la cantidad a pagar es mayor o igual al total a pagar
                     if (cantidad_pagar >= total_a_pagar) {
                         // Habilitar el botón de envío del formulario
-                        $('#enviar-btn').prop('disabled', false);
+                        $('#enviar').prop('disabled', false);
 
                         // Calcular y mostrar el cambio
                         var cambio = cantidad_pagar - total_a_pagar;
                         $('#cambio').val(cambio.toFixed(2));
+                        $('#error-messages').text('');
                     } else {
                         // Deshabilitar el botón de envío del formulario
-                        $('#enviar-btn').prop('disabled', true);
+                        $('#enviar').prop('disabled', true);
 
                         // Mostrar el cambio como NaN (no válido)
-                        $('#cambio').val('pague mas no sea pobre');
+                        $('#error-messages').text('Efectivo introducido es Insuficiente y Debe ser mayor o igual al total a pagar');
                     }
                 });
             
@@ -688,6 +679,62 @@ $('#isv').on('change', function() {
 });
 
 
+// Escuchar cambios en la opción de pago
+$('#metodo-pago').on('change', function() {
+    var metodo_pago = $(this).val();
+    var total_a_pagar = parseFloat($('#total_a_pagar').val());
+
+    // Si el método de pago es tarjeta
+    if (metodo_pago === 'tarjeta') {
+        // Asignar el valor del total a pagar al campo de cantidad a pagar
+        $('#cantidad-a-pagar').val(total_a_pagar.toFixed(2));
+        // Limpiar el valor del campo de cambio
+        $('#cambio').val('0.00');
+    } else if (metodo_pago === 'efectivo-mixto') {
+        // Calcular y mostrar el cambio
+        var efectivo = parseFloat($('#efectivo-mixto').val());
+        var tarjeta = parseFloat($('#tarjeta-mixto').val());
+        var cantidad_pagar = total_a_pagar - tarjeta - efectivo;
+        var cambio = efectivo + tarjeta - total_a_pagar;
+        $('#cantidad-a-pagar').val(cantidad_pagar.toFixed(2));
+        $('#cambio').val(cambio.toFixed(2));
+    } else {
+        // Limpiar los campos de tarjeta y cantidad a pagar
+        $('#tarjeta-mixto').val('');
+        $('#cantidad-a-pagar').val('');
+        // Limpiar el valor del campo de cambio
+        $('#cambio').val('');
+    }
+});
+
+// Escuchar cambios en el efectivo ingresado en el input
+$('#efectivo-mixto').on('input', function() {
+  var efectivo = parseFloat($(this).val());
+  var total_a_pagar = parseFloat($('#total_a_pagar').val());
+
+  // Calcular la cantidad restante para completar el total a pagar
+  var cantidad_restante = total_a_pagar - efectivo;
+
+  // Si la cantidad restante es mayor a cero, asignarla al input cantidad-a-pagar
+  if (cantidad_restante > 0) {
+    $('#cantidad-a-pagar').val(cantidad_restante.toFixed(2));
+    $('#error-messages').text('');
+    $('#enviar').prop('disabled', false);
+
+  } else {
+    // Si la cantidad restante es menor o igual a cero, asignar cero al input cantidad-a-pagar
+    $('#error-messages').text('Efectivo debe ser Menor al total a pagar ');
+    $('#enviar').prop('disabled', true);
+    $('#cantidad-a-pagar').val('0.00');
+  }
+
+  // Calcular y mostrar el cambio en el input de cambio
+  var cambio = efectivo - total_a_pagar;
+  $('#cambio').val('0.00');
+});
+
+
+
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
@@ -696,27 +743,36 @@ $('#isv').on('change', function() {
         });
     });
 
+    
+
 const select = document.getElementById('metodo-pago');
     const inputTarjeta = document.getElementById('input-tarjeta');
     const inputEfectivo = document.getElementById('input-efectivo');
+    const inputCantidad = document.getElementById('cantidad-a-pagar');
     const inputMixto = document.getElementById('input-mixto');
+    
     select.addEventListener('change', (event) => {
         if (event.target.value === 'tarjeta') {
             inputTarjeta.hidden = false;
             inputEfectivo.hidden = true;
             inputMixto.hidden = true;
+           
+            inputCantidad.readOnly = true;
         } else if (event.target.value === 'efectivo') {
             inputEfectivo.hidden = false;
             inputTarjeta.hidden = true;
             inputMixto.hidden = true;
+            inputCantidad.readOnly = false;
         } else if (event.target.value === 'mixto') {
             inputMixto.hidden = false;
             inputEfectivo.hidden = true;
-            inputTarjeta.hidden = true;
+            inputTarjeta.hidden = false;
+            inputCantidad.readOnly = true;
         } else {
             inputEfectivo.hidden = true;
             inputTarjeta.hidden = true;
             inputMixto.hidden = true;
+            inputCantidad.readOnly = true;
         }
     });
 
@@ -796,14 +852,6 @@ const select = document.getElementById('metodo-pago');
     },
     submitHandler: function(form) {
 
-      var last_invoice_number = localStorage.getItem("last_invoice_number") || "004-005-10-00013";
-  $("#numero_factura").val(last_invoice_number);
-
-      var componentes_factura = last_invoice_number.split("-");
-      var numero_orden = parseInt(componentes_factura[3]) + 1;
-      var siguiente_numero_factura = componentes_factura[0] + "-" + componentes_factura[1] + "-" + componentes_factura[2] + "-" + ("00000" + numero_orden).slice(-5);
-      $("#numero_factura").val(siguiente_numero_factura);
-      localStorage.setItem("last_invoice_number", siguiente_numero_factura);
 
 
   

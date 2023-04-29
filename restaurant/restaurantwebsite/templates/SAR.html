@@ -412,7 +412,7 @@
           <h5 class="modal-title" id="exampleModalLabel">Editar SAR</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="/editarsar/{{s.id_sar}}" method="POST">
+        <form onsubmit="return validar();" action="/editarsar/{{s.id_sar}}" method="POST">
             {% csrf_token %}
         
         <div class="modal-body">
@@ -421,12 +421,12 @@
     
             <div class="col-xs-2">
                 <label for="exampleFormControlTextarea1" class="form-label">ID SAR</label>
-            <input name="id_sar" value="{{s.id_sar}}" type="text" class="form-control" placeholder="Title">
+            <input id="id_sar" name="id_sar" value="{{s.id_sar}}" type="text" class="form-control" placeholder="Title">
             </div>
             
             <div class="col-xs-4">
                 <label for="exampleFormControlTextarea1" class="form-label">CODIGO CAI</label>
-            <input name="codigo_sar" value="{{s.codigo_sar}}" type="text" class="form-control" placeholder="First Name">
+            <input id="codigo_sar" name="codigo_sar" value="{{s.codigo_sar}}" type="text" class="form-control" placeholder="First Name">
             </div>
             
         
@@ -434,7 +434,7 @@
             <div class="col-xs-4">
               <label for="fecha-emision" class="form-label">Fecha de Emisión</label>
 
-              <input value="{{ s.fecha_emision|date:'Y-m-d' }}" name="fecha_emision" type="date" class="form-control">
+              <input id="fecha_emision" value="{{ s.fecha_emision|date:'Y-m-d' }}" name="fecha_emision" type="date" class="form-control">
 
             </div>
 
@@ -445,7 +445,7 @@
             <label for="exampleFormControlTextarea1" class="form-label">Fecha Final</label>
              
 
-            <input value="{{ s.fecha_final|date:'Y-m-d' }}" name="fecha_final" type="date" class="form-control">
+            <input value="{{ s.fecha_final|date:'Y-m-d' }}" name="fecha_final" id="fecha_final" type="date" class="form-control">
 
 
         
@@ -454,18 +454,18 @@
 
         <div class="col-xs-4">
           <label for="exampleFormControlTextarea1" class="form-label">Numero Inicial</label>
-      <input name="numero_inicial" value="{{s.numero_inicial}}" type="number" class="form-control" placeholder="Numero Inicial">
+      <input name="numero_inicial" value="{{s.numero_inicial}}" type="number" id="numero_inicial" class="form-control" placeholder="Numero Inicial">
       </div>
       
     
       <div class="col-xs-4">
         <label for="exampleFormControlTextarea1" class="form-label">Numero Final</label>
-    <input name="numero_final" value="{{s.numero_final}}" type="number" class="form-control" placeholder="Numero Final">
+    <input name="numero_final" value="{{s.numero_final}}" type="number" id="numero_final" class="form-control" placeholder="Numero Final">
     </div>
     
     <div class="col-xs-4">
       <label for="exampleFormControlTextarea1" class="form-label">Consecutivo</label>
-    <input name="consecutivo" value="{{s.consecutivo}}" type="number" class="form-control" placeholder="Consecutivo">
+    <input name="consecutivo" value="{{s.consecutivo}}" type="number" id="consecutivo" class="form-control" placeholder="Consecutivo">
     </div>
     
     <label for="">Selecciona una Sucursal</label>
@@ -487,7 +487,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Editar</button>
+          <button type="submit" id="btnGuardarCambios" class="btn btn-primary" >Editar</button>
         </div>
       </div>
       </form>
@@ -508,6 +508,30 @@ $('#myTable').DataTable({
 }
 });
 });
+
+  function validar() {
+      var numeroInicial = $("#numero_inicial").val();
+      var numeroFinal = $("#numero_final").val();
+      var consecutivo = $("#consecutivo").val();
+
+      if (consecutivo >= numeroFinal) {
+          alert("El consecutivo no puede ser mayor o igual que el número final.");
+          return false;
+      }
+      
+
+
+      return true;
+  }
+
+  $(document).ready(function() {
+      $("#btnGuardarCambios").click(function() {
+          if (validar()) {
+            return true;
+          }
+      });
+  });
+
 
 
 
@@ -554,7 +578,10 @@ $('#myTable').DataTable({
       required: true,
       min: function() {
         return parseInt($('#numero_inicial').val());
-    }
+    },
+    max: function() {
+    return parseInt($('#numero_final').val());
+  }
     },
     cod_sucursal: {
       required: true,
@@ -589,7 +616,7 @@ $('#myTable').DataTable({
     consecutivo: {
       required: "Debes Ingresar el Consecutivo",
       min:"el Consecutivo no debe ser menor al rango inicial",
-      
+      max:"el consecutivo no debe ser mayor al rango Final"
     },
     cod_sucursal: {
       required: "Debes Seleccionar el Codigo de la Sucursal",

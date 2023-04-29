@@ -282,7 +282,6 @@
             <th>Nombre del Producto</th>
             <th>Categoria</th>
             <th>Almacen</th>
-            <th>Inventario</th>
             <th>Familia</th>
             <th>Menu</th>
             <th>Provedor</th>
@@ -297,7 +296,6 @@
             <td>{{ p.nombre_producto }}</td>
             <td>{{ p.id_categoria }}</td>
             <td>{{ p.almacen_id }}</td>
-            <td>{{ p.inventario_id }}</td>
             <td>{{ p.familia_id }}</td>
             <td>{{ p.menu_id }}</td>
             <td>{{ p.provedor_id }}</td>
@@ -364,14 +362,6 @@
               </select>
               <br>
 
-              <label for="">Inventario</label>
-              <select class="form-select" aria-label="Default select example" name="inventario_id" id="inventario_id">
-                <option value="" selected>Selecciona un Inventario</option>
-                {% for i in inv %}
-                <option value="{{ i.producto }}">{{ i.producto }}</option>
-                {% endfor %}
-              </select>
-              <br>
 
               <label for="">Familia</label>
               <select class="form-select" aria-label="Default select example" name="familia_id" id="familia_id">

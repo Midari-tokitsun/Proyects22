@@ -2553,9 +2553,11 @@ def eliminarmetododepago(request,id):
 def inventario(request):
     inv=inventariotabla.objects.all()
     pro=productostabla.objects.all()
+    men=menutabla.objects.all()
     context={
         'inv':inv,
         'pro':pro,
+        'men':men,
     }
 
 
@@ -2576,6 +2578,7 @@ def agregarinventario(request):
             cantidad_minima=request.POST.get("cantidad_minima")
             cantidad_maxima=request.POST.get("cantidad_maxima")
             unidad_de_medida=request.POST.get("unidad_de_medida")
+            menu_id=request.POST.get("menu_id")
             
 
 
@@ -2587,7 +2590,7 @@ def agregarinventario(request):
             cantidad_minima=cantidad_minima,
             cantidad_maxima=cantidad_maxima,
             unidad_de_medida=unidad_de_medida,
-
+            menu_id=menu_id,
 
             )
             messages.success(request, 'Registro Agregado con Exito')
@@ -2612,6 +2615,7 @@ def editarinventario(request,id):
     cantidad_minima=request.POST.get('cantidad_minima')
     cantidad_maxima=request.POST.get('cantidad_maxima')
     unidad_de_medida=request.POST.get('unidad_de_medida')
+    menu_id=request.POST.get("menu_id")
 
     inv.id_inventario=id_inventario
     inv.producto=producto
@@ -2619,7 +2623,7 @@ def editarinventario(request,id):
     inv.cantidad_minima=cantidad_minima
     inv.cantidad_maxima=cantidad_maxima
     inv.unidad_de_medida=unidad_de_medida
-
+    inv.menu_id=menu_id
     inv.save()
 
     messages.success(request, 'Registro Modificado con Exito')
@@ -2772,7 +2776,6 @@ def agregarproductos(request):
             nombre_producto=request.POST.get("nombre_producto")
             id_categoria=request.POST.get("id_categoria")
             almacen_id=request.POST.get("almacen_id")
-            inventario_id=request.POST.get("inventario_id")
             familia_id=request.POST.get("familia_id")
             menu_id=request.POST.get("menu_id")
             provedor_id=request.POST.get("provedor_id")            
@@ -2784,7 +2787,6 @@ def agregarproductos(request):
             nombre_producto=nombre_producto,
             id_categoria=id_categoria,
             almacen_id=almacen_id,
-            inventario_id=inventario_id,
             familia_id=familia_id,
             menu_id=menu_id,
             provedor_id=provedor_id,
@@ -2820,7 +2822,6 @@ def editarproducto(request,id):
     nombre_producto=request.POST.get('nombre_producto')
     id_categoria=request.POST.get('id_categoria')
     almacen_id=request.POST.get('almacen_id')
-    inventario_id=request.POST.get('inventario_id')
     familia_id=request.POST.get('familia_id')
     menu_id=request.POST.get('menu_id')
     provedor_id=request.POST.get('provedor_id')
@@ -2837,7 +2838,6 @@ def editarproducto(request,id):
     pro.nombre_producto=nombre_producto
     pro.id_categoria=id_categoria
     pro.almacen_id=almacen_id
-    pro.inventario_id=inventario_id
     pro.familia_id=familia_id
     pro.menu_id=menu_id
     pro.provedor_id=provedor_id
@@ -3293,10 +3293,12 @@ def factura_pdf(request, id):
     pdf_canvas.drawString(6.8 * inch, 2.6 * inch, ' {}%'.format(float(factura.descuento)* 100))
 
     pdf_canvas.drawString(inch, 3.3 * inch, 'Impuesto:')
-    pdf_canvas.drawString(6.8 * inch, 3.3 * inch,' {}LPS'.format(factura.impuesto))
+    pdf_canvas.drawString(6.8 * inch, 3.3 * inch,' {:,.2f}LPS'.format(float(factura.impuesto)))
 
-    pdf_canvas.drawString(inch, 3 * inch, 'ISV:')
-    pdf_canvas.drawString(6.8 * inch, 3 * inch,' {}%'.format(float(factura.isv) * 100))
+
+    pdf_canvas.drawString(inch, 3 * inch, 'Monto Extra:')
+    pdf_canvas.drawString(6.8 * inch, 3 * inch,' {:,.2f} LPS '.format(float(factura.isv)))
+
 
     
 
@@ -3317,7 +3319,7 @@ def factura_pdf(request, id):
     pdf_canvas.drawCentredString(3.8*inch, 1*inch, "GRACIAS POR SU COMPRA")
     pdf_canvas.drawCentredString(3.8*inch, 0.8*inch, "RANGO AUTORIZADO")
     pdf_canvas.drawCentredString(3*inch, 0.5 * inch, '{}'.format(factura.numero_factura))
-    pdf_canvas.drawCentredString(4.4*inch, 0.5 * inch, '/004-005-10-00050')
+    pdf_canvas.drawCentredString(4.4*inch, 0.5 * inch, '/004-005-10-00500')
 
         # Definir el número total de páginas y la ubicación del número de página
     numero_pagina = 1
@@ -3359,12 +3361,53 @@ def agregarfactura(request):
             correo_encargado=request.POST.get("correo_encargado")
             telefono_encargado=request.POST.get("telefono_encargado")
             nombre_cliente=request.POST.get("nombre_cliente")
+            
+            
+            
             menu_cantidades=request.POST.get("menu_cantidades")
+
+
+            # Separamos las líneas de texto
+            menu_cantidades_list = menu_cantidades.splitlines()
+
+            # Iteramos sobre cada línea
+            for menu_cantidad in menu_cantidades_list:
+                # Obtenemos el nombre del menú
+                menu_nombre = menu_cantidad.split("x")[1].strip()
+
+                # Obtenemos el inventario correspondiente al menú
+                inventario = inventariotabla.objects.filter(menu_id=menu_nombre).first()
+
+                if inventario:
+                    # Restamos 1 a la cantidad actual del inventario
+                    inventario.cantidad_actual = str(int(inventario.cantidad_actual) - 1)
+                    inventario.save()
+
+
+                    
+
+
+
+
+
+            
             tamaño_menu=request.POST.get("tamaño_menu")
             estado_pedido = "Terminado"
             fecha_realizacion_pedido=request.POST.get("fecha_realizacion_pedido")
             descuento=request.POST.get("descuento")
-            isv=request.POST.get("isv")
+            
+            
+            
+            
+            #Monto Acumulado de Mixto
+            isv = float(request.POST.get("isv")) if request.POST.get("isv") else 0
+
+            
+            
+            
+            
+            
+            
             metodo_pago=request.POST.get("metodo_pago")
             impuesto=request.POST.get("impuesto")
             
@@ -3382,25 +3425,34 @@ def agregarfactura(request):
 
             dni_cliente= request.POST.get("dni_cliente")    
             # Obtener el último valor de consecutivo en la tabla de SAR
-            sar = sar_tabla.objects.latest('fecha_emision')
-            ultimo_consecutivo = int(sar.consecutivo)
+            sar = sar_tabla.objects.first()
+            if sar is not None:
+                consecutivo_actual = int(sar.consecutivo)
+                
+                # actualizar el valor del consecutivo en la tabla sar_tabla
+                sar.consecutivo = str(consecutivo_actual + 1)
+                sar.save()
+                
+                # generar el número de factura con el valor actual del consecutivo
+                numero_factura = f'004-005-10-{consecutivo_actual+1:05}'
 
-            # Incrementar el valor de consecutivo en 1 y actualizar en la tabla de SAR
-            nuevo_consecutivo = ultimo_consecutivo + 1
-            sar.consecutivo = str(nuevo_consecutivo)
-            sar.save()
-        
             fecha_emision=request.POST.get("fecha_emision")
             fecha_final=request.POST.get("fecha_final")
             numero_inicial=request.POST.get("numero_inicial")
             numero_final=request.POST.get("numero_final")
 
-        
-            inventario = inventariotabla.objects.all()
-            for producto in inventario:
-                cantidad_actual = int(producto.cantidad_actual)
-                producto.cantidad_actual = str(cantidad_actual - 1)
-                producto.save()
+
+            pedido = pedidostabla.objects.filter(nombre_cliente=nombre_cliente).latest('fecha_pedido')
+
+            pedido.estado_pedido="Terminado"
+            pedido.save()
+
+
+
+
+
+
+
 
             factura_tabla.objects.create(
             id_factura=id_factura,
@@ -3434,12 +3486,16 @@ def agregarfactura(request):
             )
             messages.success(request, 'Registro Agregado con Exito')
 
+
             return redirect('facturacion')
 
     except IntegrityError:    
         messages.error(request, 'Error: ya existe un registro con esa clave')
 
     return redirect('facturacion')
+
+
+
 
 
 def eliminarfactura(request,id):

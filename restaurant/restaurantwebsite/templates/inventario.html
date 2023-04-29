@@ -280,6 +280,7 @@
             <th>Cantidad Minima</th>
             <th>Cantidad Maxima</th>
             <th>Unidad de Medida</th>
+            <th>Menu</th>
             <th>ACCIONES</th>
         </tr>
         </thead>
@@ -292,6 +293,7 @@
             <td>{{i.cantidad_minima}}</td>
             <td>{{i.cantidad_maxima}}</td>
             <td>{{i.unidad_de_medida}}</td>
+            <td>{{i.menu_id}}</td>
             <td>
                 
   <!-- Button trigger modal -->
@@ -373,7 +375,15 @@
                     </div>
 
 
-
+                    <label for="">Menu</label>
+                    <select class="form-select" aria-label="Default select example" name="menu_id" id="menu_id">
+                      <option value="" selected>Selecciona un Menu</option>
+                      {% for m in men %}
+                      
+                      <option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
+                      {% endfor %}
+                  </select>
+                  <br>
 
 
 
@@ -457,7 +467,15 @@
                         </div>
     
     
-    
+                        <label for="">Menu</label>
+                        <select class="form-select" aria-label="Default select example" name="menu_id" id="menu_id">
+                          <option value="" selected>Selecciona un Menu</option>
+                          {% for m in men %}
+                          
+                          <option value="{{m.nombre_menu}}">{{m.nombre_menu}}</option>
+                          {% endfor %}
+                      </select>
+                      <br>
     
 
 

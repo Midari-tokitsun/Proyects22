@@ -299,6 +299,7 @@ class inventariotabla(models.Model):
     cantidad_minima=models.CharField(max_length=50)
     cantidad_maxima=models.CharField(max_length=50)
     unidad_de_medida=models.CharField(max_length=50)
+    menu_id=models.CharField(max_length=50)
 
     class Meta:
         db_table='inventario'
@@ -332,8 +333,8 @@ class pedidostabla(models.Model):
     id_pedido=models.CharField(primary_key=True,max_length=40)
     nombre_cliente=models.CharField(max_length=50)
     nombre_menu=models.TextField()
-    cantidades=models.CharField(max_length=30)
-    tamaño_menu=models.CharField(max_length=50)
+    cantidades=models.CharField(max_length=250)
+    tamaño_menu=models.CharField(max_length=250)
     estado_pedido=models.CharField(max_length=50)
     fecha_pedido=models.DateField(blank=True,auto_now=True)
     dni_cliente=models.CharField(max_length=50)
@@ -350,7 +351,6 @@ class productostabla(models.Model):
     nombre_producto=models.CharField(max_length=50)
     id_categoria=models.CharField(max_length=50)
     almacen_id=models.CharField(max_length=50)
-    inventario_id=models.CharField(max_length=50)
     familia_id=models.CharField(max_length=50)
     menu_id=models.CharField(max_length=50)
     provedor_id=models.CharField(max_length=50)
