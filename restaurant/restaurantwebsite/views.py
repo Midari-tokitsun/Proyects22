@@ -3245,9 +3245,9 @@ def factura_pdf(request, id):
         pdf_canvas.drawString(inch, y_position, cantidad)
         pdf_canvas.drawString(3.8 * inch, y_position, nombre)
         precio_unitario = float(precio_unitario) # convert to float
-        pdf_canvas.drawString(5.5*inch, y_position, 'LPS{:.2f}'.format(precio_unitario))
+        pdf_canvas.drawString(5.5*inch, y_position, '{:.2f}LPS'.format(precio_unitario))
         
-        pdf_canvas.drawString(7 * inch, y_position, f'LPS{precio_total_menu:.2f}')
+        pdf_canvas.drawString(7 * inch, y_position, f'{precio_total_menu:.2f}LPS')
         precio_total_factura += precio_total_menu
 
 
@@ -3256,7 +3256,7 @@ def factura_pdf(request, id):
 
         # Escribir el total de la factura
 
-    precio_total_factura_str = 'LPS{:.2f}'.format(precio_total_factura)
+    precio_total_factura_str = '{:.2f}LPS'.format(precio_total_factura)
     pdf_canvas.drawString(7 * inch, y_position, precio_total_factura_str)
     pdf_canvas.drawString(7 * inch, 4.7 * inch, 'SubTotal:')
 
