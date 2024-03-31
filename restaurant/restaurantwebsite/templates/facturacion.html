@@ -276,6 +276,12 @@
 <br>
 <h1>CONTROL DE FACTURA</h1>
 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarfacturamodal">
+  Agregar Factura
+</button>
+ 
+
     <table id="mitabla" class="container" cellspacing="0" width="100%">
         <thead>
         <tr>
@@ -367,11 +373,7 @@
             
           </style>
       
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarfacturamodal">
-    Agregar Factura
- </button>
-   
+
  <!-- Modal -->
  <div class="modal fade" id="agregarfacturamodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
    <div class="modal-dialog modal-lg">
@@ -459,7 +461,9 @@
              <select class="form-control" name="nombre_cliente" id="cliente-select">
                 <option value="" selected>Consumidor Final</option>
                 {% for p in ped %}
+                {% if p.estado_pedido == 'En Ejecucion' %}
                 <option value="{{p.nombre_cliente}}">{{p.nombre_cliente}}</option>
+            {% endif %}
                 {% endfor %}             
             </select>
            </div>
@@ -540,7 +544,9 @@
                 <label class="form-label" for="">Monto Tarjeta</label>
             </div>
             
-            <input id="cantidad-a-pagar" class="form-control" type="number" min="0" name="cantidad_pagar">
+
+            
+            <input id="cantidad-a-pagar" class="form-control" type="number" min="0" name="cantidad_pagar" hidden>
             <br>
             <p style="color: red ;" id="error-messages"></p>
 
@@ -757,17 +763,28 @@ const select = document.getElementById('metodo-pago');
             inputEfectivo.hidden = true;
             inputMixto.hidden = true;
            
-            inputCantidad.readOnly = true;
+
+            inputCantidad.hidden = false; //nuevo
+            inputCantidad.readOnly = true; //nuevo
+
+
         } else if (event.target.value === 'efectivo') {
             inputEfectivo.hidden = false;
             inputTarjeta.hidden = true;
             inputMixto.hidden = true;
-            inputCantidad.readOnly = false;
+
+
+            inputCantidad.readOnly = false; //nuevo
+            inputCantidad.hidden = false; //nuevo
+
         } else if (event.target.value === 'mixto') {
             inputMixto.hidden = false;
             inputEfectivo.hidden = true;
             inputTarjeta.hidden = false;
-            inputCantidad.readOnly = true;
+
+
+            inputCantidad.readOnly = true; //nuevo
+            inputCantidad.hidden = false;  //nuevo
         } else {
             inputEfectivo.hidden = true;
             inputTarjeta.hidden = true;

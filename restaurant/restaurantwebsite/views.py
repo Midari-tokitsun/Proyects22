@@ -3055,7 +3055,7 @@ def obtener_detalles_pedido(request):
     
     if cliente_id:
         # Obtener el último pedido del cliente seleccionado
-        pedido = get_object_or_404(pedidostabla, nombre_cliente=cliente_id)
+        pedido = pedidostabla.objects.filter(nombre_cliente=cliente_id, estado_pedido='En Ejecucion').order_by('-fecha_pedido').first()
 
             # Obtener el objeto cliente correspondiente al pedido
 
@@ -3155,25 +3155,24 @@ def factura_pdf(request, id):
     response = HttpResponse(content_type='application/pdf')
     
     # Establecer el nombre del archivo PDF
-    response['Content-Disposition'] = 'attachment; filename="factura.pdf"'
+    pdf_filename = f"factura_{factura.nombre_cliente}.pdf"
+    response['Content-Disposition'] = f'attachment; filename="{pdf_filename}"'
+    
     
     # Crear el objeto canvas para generar el PDF
     pdf_canvas = canvas.Canvas(response, pagesize=A4)
     
-    # Definir el estilo de texto para el PDF
-    style = getSampleStyleSheet()['Normal']
 
     # Obtener la ruta absoluta del archivo de fuente
-    font_path = "C:/Users/USER/Downloads/Arial Unicode MS Font.ttf"
+    font_path = "C:/Users/Usuario2024/Desktop/restaurant/restaurantwebsite/static/Arial Unicode MS Font.ttf"
 
-    # Registrar la fuente DejaVu Sans en ReportLab
     # Registrar la fuente
     pdfmetrics.registerFont(TTFont('Arial Unicode MS Font', font_path))
     # Mapear la fuente Arial Unicode MS a las fuentes predeterminadas
     addMapping('Arial Unicode MS Font', 0, 0, 'Arial Unicode MS Font')
 
         # Agregar el logo
-    logo_path = "C:/Users/USER/Desktop/restaurant/restaurantwebsite/static/images/pizzawavelogo500.jpg"
+    logo_path = "https://previews.123rf.com/images/katedemianov/katedemianov1709/katedemianov170900247/86633003-pizza-vector-logo-en-un-estilo-de-dibujos-animados-una-rebanada-de-pizza-caliente-con-champi%C3%B1ones.jpg"
     pdf_canvas.drawImage(logo_path,2.9*inch, 9.9*inch , width=130, height=130)
             
     # Agregar encabezado
@@ -3199,7 +3198,7 @@ def factura_pdf(request, id):
     # Escribir los datos de la factura en el PDF
     pdf_canvas.drawString(inch, 8.5 * inch, 'Codigo CAI: {}'.format(factura.codigo_cai))
     pdf_canvas.drawString(inch, 9 * inch, 'Nombre del Encargado: {}'.format(factura.nombre_encargado))
-    pdf_canvas.drawString(3.1*inch, 9 * inch, ' {}'.format(factura.apellido_encargado))
+    pdf_canvas.drawString(3.8*inch, 9 * inch, ' {}'.format(factura.apellido_encargado))
     pdf_canvas.drawString(inch, 8 * inch, 'Numero Inicial: {}'.format(factura.numero_inicial))
     pdf_canvas.drawString(3.8*inch, 8 * inch, 'Numero Final: {}'.format(factura.numero_final))
 
@@ -3442,7 +3441,8 @@ def agregarfactura(request):
             numero_final=request.POST.get("numero_final")
 
 
-            pedido = pedidostabla.objects.filter(nombre_cliente=nombre_cliente).latest('fecha_pedido')
+            """pedido = pedidostabla.objects.filter(nombre_cliente=nombre_cliente).latest('fecha_pedido')"""
+            pedido = pedidostabla.objects.filter(nombre_cliente=nombre_cliente, estado_pedido='En Ejecucion').order_by('-fecha_pedido').first()
 
             pedido.estado_pedido="Terminado"
             pedido.save()

@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sql_restaurant',
+        'NAME': 'pizzeriadb',
         'USER':'root',
         'PASSWORD':'',
         'HOST':'localhost',
