@@ -138,6 +138,40 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),
 
 ]
 
+import os
+
+# Obtén la ruta del directorio base del proyecto
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'errores/error.log'),  # Cambia la extensión del archivo a .log
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
+# settings.py
+
+# Configuración básica de correo electrónico
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Backend para enviar correos electrónicos usando SMTP
+EMAIL_HOST = 'smtp.gmail.com'  # Servidor SMTP para enviar correos electrónicos
+EMAIL_PORT = 587  # Puerto del servidor SMTP
+EMAIL_USE_TLS = True  # Usar TLS (Transport Layer Security) para conexiones seguras con el servidor SMTP
+EMAIL_HOST_USER = 'dh407572@gmail.com'  # Dirección de correo electrónico desde la que se enviarán los correos electrónicos
+EMAIL_HOST_PASSWORD = 'idon yqck csqm drxu'  # Contraseña de la cuenta de correo electrónico
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

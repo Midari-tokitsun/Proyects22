@@ -41,9 +41,9 @@ class insertuser(models.Model):
     intentos = models.IntegerField(default=0) # Agregar el campo attempts como un entero con valor por defecto 0
     bloqueado = models.BooleanField(default=False) # Agregar el campo block como un booleano con valor por defecto False
 
+    password_reset_token = models.CharField(max_length=255, blank=True, null=True)  # Campo para el token de restablecimiento de contraseña
 
-
-
+    roles = models.CharField(max_length=120) # ROLES DE USUARIO 2024
 
 
 

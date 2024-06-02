@@ -28,241 +28,29 @@
 
   </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Pizza Wave</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-    <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="/usuario">Inicio</a>
+{% include 'Navbar.html' %}
+
+
+<br>
+{% if messages %}
+<div class="alert alert-danger position-relative" style="font-size: 1.5em;">
+  <ul class="list-unstyled mb-0">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+      {{ message }}
     </li>
-  
-  
-    {% if request.session.username %}
-  
-    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-    <ul class="navbar-nav">
-      <li class="nav-item dropdown">
-    
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Vista Empleados
-    </a>
-    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-    <li class="nav-item">
-      <a class="nav-link" href="/cargoregister">Registros de Cargos del Empleado</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-link" href="/empleado">Registro de Empleados</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-link" href="/tipodocumentoemp">Registro de Tipo De Documento</a>
-    </li>
-
-
-    <li class="nav-item">
-      <a class="nav-link" href="/departamentohome">Registro de Departamento</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link" href="/puestos">Control de Puestos</a>
-    </li>
-
-    <li class="nav-item">
-      <a class="nav-link" href="/sucursal">Control de sucursal</a>
-    </li>
-
-    </ul>
-  
-    </li>
-    </ul>
-  </div>
-    
-  
-  
-    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-    <ul class="navbar-nav">
-      <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      Vista Usuarios
-      </a>
-      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-    
-          <li class="nav-item">
-              <a class="nav-link" href="/registrousuarios">Usuarios</a>
-            </li>
-    
-            
-
-
-      <li class="nav-item">
-      <a class="nav-link" href="/pedidos">Pedidos</a>
-      </li>
-
-
-      <li class="nav-item">
-          <a class="nav-link" href="/facturacion">Factura</a>
-        </li>
-      
-
-        <li class="nav-item">
-          <a class="nav-link" href="/impuesto">Impuestos</a>
-        </li>
-
-
-      <li class="nav-item">
-        <a class="nav-link" href="/estadopedido">Estado Pedido</a>
-        </li>
-  
-
-
-          <li class="nav-item">
-            <a class="nav-link" href="/reservaciones">Registros de Reservaciones</a>
-            </li>
-
-
-
-          <li class="nav-item">
-            <a class="nav-link" href="/promociones">Registros de Promociones</a>
-            </li>
-
-            
-
-
-
-          <li class="nav-item">
-            <a class="nav-link" href="/metodopago">Metodo de Pago</a>
-            </li>
-
-
-
-            <li class="nav-item">
-              <a class="nav-link" href="/sartabla">SAR</a>
-              </li>
-
-    
-      </ul>
-      </li>
-    </ul>
-    </div>
-
-
-
-    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-      <ul class="navbar-nav">
-      <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Vista productos
-      </a>
-      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-    
-        <li class="nav-item">
-        <a class="nav-link" href="/categoria">Registros de categoria</a>
-        </li>
-    
-        <li class="nav-item">
-        <a class="nav-link" href="/almacen">Registros del almacen </a>
-        </li>
-
-        <li class="nav-item">
-        <a class="nav-link" href="/familiaproducto">Registros de familia producto</a>
-        </li>
-
-        <li class="nav-item">
-        <a class="nav-link" href="/menutabla">Registros del Menu</a>
-        </li>
-
-
-        <li class="nav-item">
-          <a class="nav-link" href="/historicomenutabla">Registros Historicos del Menu</a>
-          </li>
-
-        <li class="nav-item">
-        <a class="nav-link" href="/elaboracion">Registros de Elaboracion</a>
-        </li>
-
-
-        <li class="nav-item">
-        <a class="nav-link" href="/recetatablaregistros">Registros de Receta</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="/inventario">Registros de inventario</a>
-          </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="/productos">Registros de Productos</a>
-          </li>
-
-          <li class="nav-item">
-              <a class="nav-link" href="/historicoproducto">Registros Historicos de Productos</a>
-              </li>
-
-          
-          <li class="nav-item">
-              <a class="nav-link" href="/provedores">Registros de Proveedores</a>
-              </li>
-    
-
-    
-      </ul>
-      </li>
-      </ul>
-      </div>
-    
-  
-  
-  
-  
-    <li class="nav-item">
-    <a class="nav-link" href="/signout">Cerrar Sesion</a>
-    </li>
-  
-  
-  
-   
-    {% else %}
-    
-    <li class="nav-item">
-    <a class="nav-link" href="/login_user">Iniciar Sesion</a>
-    </li>
-     
-  
-       <li class="nav-item">
-    <a class="nav-link" href="/signup">Registrarse</a>
-    </li>
-  
-  
-    
-    {% endif %}
-    
-    
-  
-  
-  
-    
-  
-       <li class="nav-item">
-    <a class="nav-link" href="/menu">Menu</a>
-    </li>
-  
-    
-  
-    <div class="collapse navbar-collapse" id="navbarNav">
-    <li class="nav-item">
-      <a class="nav-link desactivated">{{request.session.username}}</a>
-    </li>
-    </div>
-  
-  
-    </ul>
-    </div>
-  </div>
-  </nav>
+    {% endfor %}
+  </ul>
+  <script>
+    setTimeout(function() {
+      document.querySelector('.alert').classList.add('fade');
+      setTimeout(function() {
+        document.querySelector('.alert').style.display = 'none';
+      }, 3500); 
+    }, 4000); 
+  </script>
+</div>
+{% endif %}
 
 <br>
 
@@ -412,7 +200,7 @@
           <h5 class="modal-title" id="exampleModalLabel">Editar SAR</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form onsubmit="return validar();" action="/editarsar/{{s.id_sar}}" method="POST">
+        <form class="edit-form" action="/editarsar/{{s.id_sar}}" method="POST">
             {% csrf_token %}
         
         <div class="modal-body">
@@ -421,20 +209,20 @@
     
             <div class="col-xs-2">
                 <label for="exampleFormControlTextarea1" class="form-label">ID SAR</label>
-            <input id="id_sar" name="id_sar" value="{{s.id_sar}}" type="text" class="form-control" placeholder="Title">
+            <input id="id_sar1" name="id_sar" value="{{s.id_sar}}" type="text" class="form-control" placeholder="Title">
             </div>
             
             <div class="col-xs-4">
                 <label for="exampleFormControlTextarea1" class="form-label">CODIGO CAI</label>
-            <input id="codigo_sar" name="codigo_sar" value="{{s.codigo_sar}}" type="text" class="form-control" placeholder="First Name">
+            <input id="codigo_sar1" name="codigo_sar" value="{{s.codigo_sar}}" type="text" class="form-control" placeholder="First Name">
             </div>
             
         
     
             <div class="col-xs-4">
-              <label for="fecha-emision" class="form-label">Fecha de Emisión</label>
+              <label for="fecha-emision1" class="form-label">Fecha de Emisión</label>
 
-              <input id="fecha_emision" value="{{ s.fecha_emision|date:'Y-m-d' }}" name="fecha_emision" type="date" class="form-control">
+              <input id="fecha_emision1" value="{{ s.fecha_emision|date:'Y-m-d' }}" name="fecha_emision" type="date" class="form-control">
 
             </div>
 
@@ -445,7 +233,7 @@
             <label for="exampleFormControlTextarea1" class="form-label">Fecha Final</label>
              
 
-            <input value="{{ s.fecha_final|date:'Y-m-d' }}" name="fecha_final" id="fecha_final" type="date" class="form-control">
+            <input value="{{ s.fecha_final|date:'Y-m-d' }}" name="fecha_final" id="fecha_final1" type="date" class="form-control">
 
 
         
@@ -454,22 +242,22 @@
 
         <div class="col-xs-4">
           <label for="exampleFormControlTextarea1" class="form-label">Numero Inicial</label>
-      <input name="numero_inicial" value="{{s.numero_inicial}}" type="number" id="numero_inicial" class="form-control" placeholder="Numero Inicial">
+      <input name="numero_inicial" value="{{s.numero_inicial}}" type="number" id="numero_inicial1" class="form-control" placeholder="Numero Inicial">
       </div>
       
     
       <div class="col-xs-4">
         <label for="exampleFormControlTextarea1" class="form-label">Numero Final</label>
-    <input name="numero_final" value="{{s.numero_final}}" type="number" id="numero_final" class="form-control" placeholder="Numero Final">
+    <input name="numero_final" value="{{s.numero_final}}" type="number" id="numero_final1" class="form-control" placeholder="Numero Final">
     </div>
     
     <div class="col-xs-4">
       <label for="exampleFormControlTextarea1" class="form-label">Consecutivo</label>
-    <input name="consecutivo" value="{{s.consecutivo}}" type="number" id="consecutivo" class="form-control" placeholder="Consecutivo">
+    <input name="consecutivo" value="{{s.consecutivo}}" type="number" id="consecutivo1" class="form-control" placeholder="Consecutivo">
     </div>
     
     <label for="">Selecciona una Sucursal</label>
-    <select name="cod_sucursal" class="form-control" id="cod_sucursal">
+    <select name="cod_sucursal" class="form-control" id="cod_sucursal1">
     <option value="{{s.cod_sucursal}}">{{s.cod_sucursal}}</option>
       {% for s in sucu %}
       <option value="{{s.id_sucursal}}">{{s.direccion_sucursal}}</option>
@@ -481,7 +269,7 @@
         
         <div class="mb-3">
           <label for="exampleFormControlTextarea1" class="form-label">DESCRIPCION</label>
-          <textarea minlength="10" maxlength="250" name="descripcion" class="form-control" id="exampleFormControlTextarea1" rows="3">{{s.descripcion}}</textarea>
+          <textarea minlength="10" maxlength="250" name="descripcion" class="form-control" id="descripcion1" rows="3">{{s.descripcion}}</textarea>
         </div>
         
         </div>
@@ -508,35 +296,6 @@ $('#myTable').DataTable({
 }
 });
 });
-
-  function validar() {
-      var numeroInicial = $("#numero_inicial").val();
-      var numeroFinal = $("#numero_final").val();
-      var consecutivo = $("#consecutivo").val();
-
-      if (consecutivo >= numeroFinal) {
-          alert("El consecutivo no puede ser mayor o igual que el número final.");
-          return false;
-      }
-      
-
-
-      return true;
-  }
-
-  $(document).ready(function() {
-      $("#btnGuardarCambios").click(function() {
-          if (validar()) {
-            return true;
-          }
-      });
-  });
-
-
-
-
-
-
 
   $("#Myform").validate({
   rules: {
@@ -678,7 +437,105 @@ jQuery.validator.addMethod("noSpaceafterletters", function(value, element) {
     }, "No letras ni digitos despues de espacios por favor");
     
 
+// Como Validar un Formulario Modal de Editar
+$(document).ready(function() {
+	$(".edit-form").each(function() {
+	  $(this).validate({
+      rules: {
 
+codigo_sar: {
+  required: true,
+  caiValido:true,
+},
+fecha_emision: {
+  lessThan: '#fecha_final1',
+  required: true,
+  date: true
+
+},
+fecha_final: {
+  required: true,
+  date: true,
+   
+greaterEqualThan: '#fecha_emision1',
+lessEqualThan: new Date()
+
+},
+descripcion: {
+  required: true,
+},
+numero_inicial: {
+  required: true,
+  max: function() {
+    return parseInt($('#numero_final1').val());
+}
+},
+numero_final: {
+  required: true,
+  min: function() {
+    return parseInt($('#numero_inicial1').val());
+}
+},
+consecutivo: {
+  required: true,
+  min: function() {
+    return parseInt($('#numero_inicial1').val());
+},
+max: function() {
+return parseInt($('#numero_final1').val());
+}
+},
+cod_sucursal: {
+  required: true,
+},
+},
+messages: {
+
+codigo_sar: {
+  required: "Debes Escribir el Codigo CAI",
+  
+},
+fecha_emision: {
+  required: "Debes Seleccionar la fecha de emision",
+},
+fecha_final: {
+  required: "Debes Seleccionar la Fecha Final",
+  min:"La fecha final no debe ser Menor a la Fecha de Emision",
+  max: "La fecha de final debe ser mayor o igual a la fecha de emisión"
+  
+},
+descripcion: {
+  required: "Debes Escribir una Descripcion",
+},
+numero_inicial: {
+  required: "Debes Ingresar el Numero Inicial",
+  max:"El rango inicial no debe ser mayor al rango final"
+},
+numero_final: {
+  required: "Debes Ingresar el Numero Final",
+  min:"el rango final no debe ser menor al rango inicial",
+},
+consecutivo: {
+  required: "Debes Ingresar el Consecutivo",
+  min:"el Consecutivo no debe ser menor al rango inicial",
+  max:"el consecutivo no debe ser mayor al rango Final"
+},
+cod_sucursal: {
+  required: "Debes Seleccionar el Codigo de la Sucursal",
+},
+},
+	  });
+	});
+  
+	$("#btnGuardarCambios").on("click", function() {
+	  var formId = $(this).data("formid");
+	  var form = $("#form-" + formId);
+  
+	  if (form.valid()) {
+		form.submit();
+	  }
+	});
+  });
 
 
   </script>

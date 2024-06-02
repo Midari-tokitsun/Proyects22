@@ -377,8 +377,22 @@ urlpatterns = [
     path("editarcliente/<int:id>",views.editarcliente, name="editarcliente"),
     path("eliminarcliente/<int:id>",views.eliminarcliente, name="eliminarcliente"),
 
+#PARTE DE USUARIOS PARTE 2 CONFIGURACIONES A SU PERFIL
+    path('vermiperfil/<int:id>', views.vermiperfil, name='vermiperfil'),
+    path("ActualizarMiPerfil/<int:id>",views.ActualizarMiPerfil, name="ActualizarMiPerfil"),
 
+#PARTE DE USUARIOS PARTE 2 CONFIGURACIONES A SU Contraseña
+    path('cambiarcontrasena/<int:id>', views.cambiarcontrasena, name='cambiarcontrasena'),
+    path("cambiar_contrasena/<int:id>",views.cambiar_contrasena, name="cambiar_contrasena"),
 
+#PARTE DE USUARIOS PARTE 2 CONFIGURACIONES A SU Contraseña
+    path('password-reset/', views.request_password_reset, name='password_reset_request'),
+    path('password-reset/<str:token>/', views.reset_password, name='reset_password'),
+
+    path('reset_password_email.html/', views.request_password_reset, name='request_password_reset'),
+
+    
+    path('exportar-excel/', views.export_to_excel, name='exportar_excel'),
 
 ] 
 

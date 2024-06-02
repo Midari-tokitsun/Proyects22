@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import ListView
-from django.core.paginator import Paginator
+
 
 from django.db.models import Q
 
@@ -141,6 +141,7 @@ def registrarusuarioenellogin(request):
                     email=email,
                     password=hashed_password,
                     telefono=telefono,
+                    roles="Cliente", #CUANDO YA SE AGREGAN ROLES DE USUARIO SI ESQUE LO PIDE 2024
                     )
                     messages.success(request, "USUARIO REGISTRADO CON EXITO!!!!")
                     return redirect("signup")
@@ -239,6 +240,8 @@ def registrarentablausuario(request):
             apellido=request.POST.get("apellido")
             telefono=request.POST.get("telefono")
 
+            roles=request.POST.get("roles")
+
         # Encriptar la contraseña
             hashed_password = encriptar_password(password)
 
@@ -256,7 +259,7 @@ def registrarentablausuario(request):
                 estado=estado,
                 apellido=apellido,
                 telefono=telefono,
-
+                roles=roles,
         )
 
         messages.success(request, 'Registro Agregado con Exito')
@@ -294,6 +297,8 @@ def actualizarusuario(request,id):
     email=request.POST.get('email')
     telefono=request.POST.get('telefono')
 
+    roles=request.POST.get('roles') 
+
     user.apellido=apellido
     user.estado=estado
     
@@ -304,6 +309,8 @@ def actualizarusuario(request,id):
     user.nombre=nombre
     user.email=email
     user.telefono=telefono
+
+    user.roles=roles
 
     user.save()
   
@@ -390,12 +397,24 @@ def login_user(request):
                 # Usuario y contraseña válidos
                 #ponemos Esto para agarrar los datos del
                 #usuario Logeado y extraer los datos
+                
+
+                #LO NUEVOOO OJO 2024
+                request.session['id_usuario'] = user.id_usuario
+                request.session['estado'] = user.estado
+                request.session['fecha_creacion'] = user.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S')
+                request.session['fecha_modificacion'] = user.fecha_modificacion.strftime('%Y-%m-%d %H:%M:%S')
+                #LO NUEVOOO OJO 2024
+                
                 request.session['username'] = user.username
                 request.session['password'] = user.password
                 request.session['nombre'] = user.nombre
                 request.session['apellido'] = user.apellido
                 request.session['email'] = user.email
                 request.session['telefono'] = user.telefono
+                #LO NUEVOOO OJO 2024
+                request.session['roles'] = user.roles
+                #LO NUEVOOO OJO 2024
                 
                 user.intentos = 0 # Resetear attempts si inicia sesión correctamente
                 user.bloqueado = False # Desbloquear la cuenta si inicia sesión correctamente
@@ -729,19 +748,27 @@ def editarempleado(request , id):
 
 # ver Editar,eliminar,añadir,enlistar y Buscar ----------------VISTA de Cargos
 
+import logging
+from django.http import HttpResponseForbidden
+
 def cargoregister(request):
+        # Verificar si el usuario tiene el rol de administrador
+    if request.session['roles'] != 'Administrador':
 
+        # Si el usuario no es un administrador, retornar una respuesta de prohibido
+        return HttpResponseForbidden("No tienes acceso a esta página.")
+    try:
+        car = cargo.objects.all()
+        context = {
+            'car': car
+        }
+        return render(request, "cargoregister.html", context)
+    except Exception as e:
+        # Registra la excepción
+        logging.error("Error en la vista 'cargoregister': %s", str(e))
+        # Puedes manejar el error de alguna manera, como redirigir a una página de error o mostrar un mensaje al usuario
+        # return HttpResponse("Ocurrió un error. Por favor, inténtalo de nuevo más tarde.")
 
-
-    car=cargo.objects.all()
-
-
-    context={
-        'car':car
-    }
-
-    
-    return render(request,"cargoregister.html",context) 
 
 
 def añadircargo(request):
@@ -790,10 +817,9 @@ def añadircargo(request):
         messages.success(request, 'Registro Agregado con Exito')
         return redirect('cargoregister')
 
-    except IntegrityError:    
-        messages.error(request, 'Error: ya existe un registro con esa clave')
+    except Exception as e:  
+        logging.error("Error en la vista 'añadircargo': %s", str(e))
 
-        return redirect('cargoregister')
 
 
 
@@ -1067,41 +1093,7 @@ def actualizardepartamentos(request , id ):
 def puestohome(request):
     puestos=puesto.objects.all()
 
-
     
-    paginator = Paginator(puestos,2)
-    page=request.GET.get('page')
-    puestos=paginator.get_page(page)
-
-
-    if request.method == 'GET' :
-        query = request.GET.get('buscarpuest')
-
-
- 
-
-
-        if query:
-            puestos = puesto.objects.filter(
-            Q(puesto_id__icontains=query) |
-            Q(puesto__icontains=query) |
-            Q(descripcion__icontains=query) ).distinct
-
-            print("LO ENCONTRE Y TE ENLISTOS SUS REFERENCIAS!!")
-        
-         
-        else:
-            puestos=puesto.objects.all()
-
-
-         
-
-
-            
-
-            query = request.GET.get('buscarpuest')
-            print("Retornando a Todos los registros")
-
     context={
         'puestos':puestos
 
@@ -3737,3 +3729,202 @@ def eliminarcliente(request,id):
     cli.delete()
     messages.success(request, 'Registro Eliminado con Exito')
     return redirect('clientetabla')
+
+
+#Ver mi perfil PRUEBA
+def vermiperfil(request,id):
+
+
+    # Obtener el perfil del usuario actual
+  
+    user= insertuser.objects.get(id_usuario=id)
+    id=request.POST.get('id_usuario')
+
+
+    context = {
+        'perfil_usuario': user
+    }
+    messages.success(request, 'Perfil Cargado con Éxito')
+    return render(request, 'vermiperfil.html', context)
+
+
+def ActualizarMiPerfil(request,id):
+
+    user=insertuser.objects.get(id_usuario=id)
+    id_usuario=request.POST.get('id_usuario')
+    username=request.POST.get('username')
+    password=request.POST.get('password')
+    nombre=request.POST.get('nombre')
+    apellido=request.POST.get('apellido')
+    estado=request.POST.get('estado')
+    email=request.POST.get('email')
+    telefono=request.POST.get('telefono')
+    fecha_creacion=request.POST.get('fecha_creacion')
+
+    user.id_usuario=id_usuario
+    user.username=username
+    user.password=password
+    user.nombre=nombre
+    user.apellido=apellido
+    user.estado=estado
+    user.email=email
+    user.telefono=telefono
+    user.fecha_modificacion=datetime.now
+    user.fecha_creacion=fecha_creacion
+
+
+    user.save()
+  
+    messages.success(request, 'Perfil Modificado con Exito')
+    return redirect("home")
+
+
+
+#Cambiar contraseña
+def cambiarcontrasena(request,id):
+
+
+    # Obtener el perfil del usuario actual
+  
+    user= insertuser.objects.get(id_usuario=id)
+    id=request.POST.get('id_usuario')
+
+
+    context = {
+        'perfil_usuario': user
+    }
+    messages.success(request, 'Perfil y contraseña Cargado con Éxito')
+    return render(request, 'cambiarcontrasena.html', context)
+
+from datetime import datetime  # Importa la clase datetime
+
+def cambiar_contrasena(request, id):
+    user = insertuser.objects.get(id_usuario=id)
+    if request.method == 'POST':
+        user = insertuser.objects.get(id_usuario=id)
+        contrasena_actual = request.POST.get('password')
+        nueva_contrasena = request.POST.get('nueva_contrasena')
+        confirm_nueva_contrasena = request.POST.get('confirm_nueva_contrasena')
+
+        if not verificar_password(contrasena_actual, user.password):
+            messages.error(request, 'La contraseña actual es incorrecta.')
+
+            #Deapuracion
+            print("Datos del Usuario",user.username,user.nombre,user.apellido)
+            print("CONTRASEÑA ACTUAL del USUARIO:",user.password)
+            #Deapuracion
+
+            return render(request, 'cambiarcontrasena.html', {'perfil_usuario': user, 'contrasena_actual': contrasena_actual, 'nueva_contrasena': nueva_contrasena, 'confirm_nueva_contrasena': confirm_nueva_contrasena})
+            #return redirect('cambiar_contrasena:', id=id)
+
+        if nueva_contrasena != confirm_nueva_contrasena:
+            messages.error(request, 'Las contraseñas nuevas no coinciden.')
+
+            #Deapuracion
+            print(nueva_contrasena)
+            print(confirm_nueva_contrasena)
+            #Deapuracion
+
+            return render(request, 'cambiarcontrasena.html', {'perfil_usuario': user, 'contrasena_actual': contrasena_actual, 'nueva_contrasena': nueva_contrasena, 'confirm_nueva_contrasena': confirm_nueva_contrasena})
+
+            #return redirect('cambiar_contrasena', id=id)
+
+        user.password = encriptar_password(nueva_contrasena)
+  
+        user.save()
+
+        messages.success(request, 'Contraseña modificada con éxito.')
+        return redirect('home')
+
+    context = {'perfil_usuario': user}
+    return render(request, 'cambiarcontrasena.html', context)
+
+from django.conf import settings
+from django.core.mail import send_mail
+from django.contrib import messages
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+import hashlib
+import datetime
+
+def generate_reset_password_token(user):
+    timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    hash_input = f"{user.username}{user.email}{timestamp}"
+    token = hashlib.sha256(hash_input.encode()).hexdigest()
+    return token
+
+
+
+
+def request_password_reset(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        user = insertuser.objects.filter(email=email).first()
+        if user:
+            # Generar token de recuperación de contraseña
+            token = generate_reset_password_token(user)
+            print(user.username, user.nombre, user.apellido)
+            # Enviar correo electrónico con el enlace de restablecimiento de contraseña
+            
+            # Construir el enlace de restablecimiento de contraseña
+            reset_link = request.build_absolute_uri(f'/password-reset/{token}/')
+
+
+            subject = 'Solicitud de restablecimiento de contraseña'
+            html_message = render_to_string('reset_password_email.html/', {
+                'reset_link': reset_link,
+            })
+
+            plain_message = strip_tags(html_message)  # Eliminar etiquetas HTML del mensaje
+            from_email = settings.EMAIL_HOST_USER  # Correo electrónico desde el que se enviará el mensaje
+            to_email = user.email
+            send_mail(subject, plain_message, from_email, [to_email], html_message=html_message)
+
+            
+            # Actualizar el TOKEN
+            user.password_reset_token = token
+            user.save()
+            messages.success(request, 'se ha mandado un mensaje a tu correo Electronico.')
+            return render(request, 'request_password_reset.html')
+        else:
+            messages.success(request, 'Lo siento no se encuentra usuario.')
+    return render(request, 'request_password_reset.html')
+
+
+def reset_password(request, token):
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        if password == confirm_password:
+            user = insertuser.objects.filter(password_reset_token=token).first()
+            if user:
+                # Actualizar la contraseña del usuario
+                user.password = encriptar_password(password)
+                user.save()
+                messages.success(request, 'se ha Cambiado tu Contraseña.')
+                return render(request, 'reset_password.html')
+        if password != confirm_password:
+            messages.success(request, 'La contraseñas no coinciden')
+    return render(request, 'reset_password.html')
+
+import openpyxl
+def export_to_excel(request):
+    registros = factura_tabla.objects.all() # Obtiene todos los registros de tu modelo
+    
+    # Crear un nuevo libro de Excel
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    
+    # Agregar encabezados de columna
+    ws.append(['ID', 'Numero de Factura', 'Nombre del Encargado', 'Nombre del Cliente', 'Nombre del Menu y Cantidades', 'Fecha de Realizacion del Pedido', 'Monto extra', 'Impuesto', 'Metodo de Pago', 'Numero de la Tarjeta', 'Cantidad a Pagar', 'Total a Pagar', 'Cambio'])
+    
+    # Agregar datos de registros
+    for registro in registros:
+        ws.append([registro.id_factura, registro.numero_factura, registro.nombre_encargado, registro.nombre_cliente, registro.menu_cantidades, registro.fecha_realizacion_pedido, registro.isv, registro.impuesto, registro.metodo_pago, registro.numero_tarjeta, registro.cantidad_pagar, registro.total_pagar, registro.cambio])
+    
+    # Guardar el libro de Excel en un HttpResponse
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="registros.xlsx"'
+    wb.save(response)
+    return response

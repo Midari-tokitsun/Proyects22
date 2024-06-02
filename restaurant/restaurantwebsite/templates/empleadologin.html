@@ -7,204 +7,221 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'css/empleadostyle.css' %}">
-    <title>Login Page</title>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+   
+    <title>Iniciar Sesion</title>
 </head>
 <body>
 
+  <style>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Pizza Wave</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/usuario">Inicio</a>
-        </li>
+
+
+
+body{
+
+
+background: url("../static/images/pizza6.jpg")  ;
+  background-repeat: no-repeat;
+
+
+}
+
+.container {
+  display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 10vh;
   
-  
-        {% if request.session.username %}
-  
-        <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item dropdown">
-        
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Vista Empleados
-        </a>
-        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-        <li class="nav-item">
-          <a class="nav-link" href="/cargoregister">Registros de Cargos del Empleado</a>
-        </li>
-      
-        <li class="nav-item">
-          <a class="nav-link" href="/empleado">Registro de Empleados</a>
-        </li>
-      
-        <li class="nav-item">
-          <a class="nav-link" href="/tipodocumentoemp">Registro de Tipo De Documento</a>
-        </li>
+}
 
+.screen {		
+	background: url("{% static '/images/pizza1.jpg' %}");		
+	position: relative;	
+	height: 600px;
+	width: 360px;	
+	box-shadow: 0px 0px 24px #5C5696;
+}
 
-        <li class="nav-item">
-          <a class="nav-link" href="/departamentohome">Registro de Departamento</a>
-        </li>
+.screen__content {
+	z-index: 1;
+	position: relative;	
+	height: 100%;
+}
 
-        <li class="nav-item">
-          <a class="nav-link" href="/puestos">Control de Puestos</a>
-        </li>
+.screen__background {		
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 0;
+	-webkit-clip-path: inset(0 0 0 0);
+	clip-path: inset(0 0 0 0);	
+}
 
-        <li class="nav-item">
-          <a class="nav-link" href="/sucursal">Control de sucursal</a>
-        </li>
+.screen__background__shape {
+	transform: rotate(45deg);
+	position: absolute;
+}
 
-        </ul>
-  
-      </li>
-      </ul>
-    </div>
-      
-  
-  
-        <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Vista Usuarios
-          </a>
-          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-      
-            <li class="nav-item">
-            <a class="nav-link" href="/pedidos">Realizar Pedidos</a>
-            </li>
-    
-            <li class="nav-item">
-              <a class="nav-link" href="/registrousuarios">Usuarios</a>
-            </li>
-      
-      
-          </ul>
-          </li>
-        </ul>
-        </div>
+.screen__background__shape1 {
+	height: 520px;
+	width: 520px;
+	background: url("../static/images/usericon.jpg");	
+	top: -50px;
+	right: 120px;	
+	border-radius: 0 72px 0 0;
+}
 
+.screen__background__shape2 {
+	height: 220px;
+	width: 220px;
+	background: linear-gradient(270deg, #ff0000, #0d00ff);	
+	top: -172px;
+	right: 0;	
+	border-radius: 32px;
+}
 
+.screen__background__shape3 {
+	height: 540px;
+	width: 190px;
+	background: linear-gradient(270deg, #ff0000, #0d00ff);
+	top: -24px;
+	right: 0;	
+	border-radius: 32px;
+}
 
-        <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-          <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Vista productos
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-        
-              <li class="nav-item">
-              <a class="nav-link" href="/categoria">Registros de categoria</a>
-              </li>
-      
-              <li class="nav-item">
-                <a class="nav-link" href="/almacen">Registros del almacen </a>
-              </li>
+.screen__background__shape4 {
+	height: 400px;
+	width: 200px;
+	background: linear-gradient(270deg, #ff0000, #0d00ff);	
+	top: 420px;
+	right: 50px;	
+	border-radius: 60px;
+}
 
-              <li class="nav-item">
-                <a class="nav-link" href="/familiaproducto">Registros de familia producto</a>
-              </li>
+.login {
+	width: 320px;
+	padding: 30px;
+	padding-top: 156px;
+}
 
-              <li class="nav-item">
-                <a class="nav-link" href="/menutabla">Registros del Menu</a>
-              </li>
+.login__field {
+	padding: 20px 0px;	
+	position: relative;	
+}
 
-              <li class="nav-item">
-                <a class="nav-link" href="/elaboracion">Registros de Elaboracion</a>
-              </li>
+.login__icon {
+	position: absolute;
+	top: 30px;
+	color: #0d00ff;
+}
 
+.login__input {
+	border: none;
+	border-bottom: 2px solid #ffffff;
 
-              <li class="nav-item">
-                <a class="nav-link" href="/recetatablaregistros">Registros de Receta</a>
-              </li>
-        
-            </ul>
-            </li>
-          </ul>
-          </div>
-      
-  
-  
-  
-  
-        <li class="nav-item">
-        <a class="nav-link" href="/signout">Cerrar Sesion</a>
-        </li>
-  
-  
-  
+	padding: 10px;
+	padding-left: 24px;
+	font-weight: 700;
+	width: 75%;
+	transition: .2s;
+}
+
+.login__input:active,
+.login__input:focus,
+.login__input:hover {
+	outline: none;
+	border-bottom-color: #1206fd;
+}
+
+.login__submit {
+	background: #fff;
+	font-size: 14px;
+	margin-top: 30px;
+	padding: 16px 20px;
+	border-radius: 26px;
+	border: 1px solid #D4D3E8;
+	text-transform: uppercase;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	color: #4C489D;
+	box-shadow: 0px 2px 2px #5C5696;
+	cursor: pointer;
+	transition: .2s;
+}
+
+.login__submit:active,
+.login__submit:focus,
+.login__submit:hover {
+	border-color: #6A679E;
+	outline: none;
+}
+
+.button__icon {
+	font-size: 24px;
+	margin-left: auto;
+	color: #7875B5;
+}
+
+.social-login {	
+	position: absolute;
+	height: 140px;
+	width: 160px;
+	text-align: center;
+	bottom: 0px;
+	right: 0px;
+	color: #fff;
+}
+
+.social-icons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.social-login__icon {
+	padding: 20px 10px;
+	color: #fff;
+	text-decoration: none;	
+	text-shadow: 0px 0px 8px #7875B5;
+}
+
+.social-login__icon:hover {
+	transform: scale(1.5);	
+}
+
+  </style>
    
-        {% else %}
-        
-        <li class="nav-item">
-        <a class="nav-link" href="/login_user">Iniciar Sesion</a>
-        </li>
-         
-  
-             <li class="nav-item">
-        <a class="nav-link" href="/signup">Registrarse</a>
-        </li>
-  
-  
-        
-        {% endif %}
-        
-        
-  
-  
-  
-      
-  
-             <li class="nav-item">
-        <a class="nav-link" href="/menu">Menu</a>
-        </li>
-  
-        
-  
-        <div class="collapse navbar-collapse" id="navbarNav">
-        <li class="nav-item">
-          <a class="nav-link desactivated">{{request.session.username}}</a>
-        </li>
+        {% include 'Navbar.html' %}
+
+
+        <br>
+        {% if messages %}
+        <div class="alert alert-danger position-relative" style="font-size: 1.5em;">
+          <ul class="list-unstyled mb-0">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+              {{ message }}
+            </li>
+            {% endfor %}
+          </ul>
+          <script>
+            setTimeout(function() {
+              document.querySelector('.alert').classList.add('fade');
+              setTimeout(function() {
+                document.querySelector('.alert').style.display = 'none';
+              }, 3500); 
+            }, 4000); 
+          </script>
         </div>
+        {% endif %}
   
-  
-      </ul>
-      </div>
-    </div>
-    </nav>
-
-
-
-
-
-
-    {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}
-        <script>
-        setTimeout(function() {
-          $('.messages').fadeOut('slow');
-        }, 3000);
-        </script>
-      </li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-
-
-
-    
-
-
 
     <div class="container">
         <div class="screen">
@@ -213,25 +230,29 @@
                   {% csrf_token %}
                     <div class="login__field">
                         <i class="login__icon fas fa-user"></i>
-                        <input type="text"  name="username" class="login__input" placeholder="User name / Email">
+                        <input type="text"  name="username" class="login__input" placeholder="Nombre de Usuario">
                     </div>
                     <div class="login__field">
                         <i class="login__icon fas fa-lock"></i>
-                        <input name="password" type="password" class="login__input" placeholder="Password">
+                        <input name="password" type="password" class="login__input" placeholder="Contraseña">
                     </div>
                     <button type="submit" class="button login__submit">
-                        <span class="button__text">Log In Now</span>
+                        <span class="button__text">Ingresar</span>
                         <i class="button__icon fas fa-chevron-right"></i>
                     </button>				
                 </form>
                 <div class="social-login">
                     <h3></h3>
                     <div class="form-label">
-                      <a href="/signup" style="text-align: center ;"> No Tienes Cuenta Dame click </a
-                        <a href="#" class="social-login__icon fab fa-instagram"></a>
-                        <a href="#" class="social-login__icon fab fa-facebook"></a>
-                        <a href="#" class="social-login__icon fab fa-twitter"></a>
+                      <a class="btn btn-primary" href="/signup" style="text-align: center ;"> Registrarse </a>
                     </div>
+
+
+                    <div class="form-label">
+                      <a href="/password-reset" style="text-align: center ;" class="btn btn-danger"> Olvidaste tu Contraseña?¿ </a>
+                    </div>
+
+
                 </div>
             </div>
             <div class="screen__background">

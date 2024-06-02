@@ -1,0 +1,282 @@
+<!-- vermiperfil.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/localization/messages_es.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+
+    <title>Cambiar Contraseña</title>
+</head>
+<body>
+  <style>
+    body {
+  
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        
+        background: url("https://images.alphacoders.com/276/276653.jpg");
+        background-repeat: no-repeat;	
+        background-size: 100%;
+        
+        
+    }
+    .login-container {
+        max-width: 900px;
+        max-height: 800px;
+        padding: 10px;
+        margin-left: 20%;
+        margin-top: 5%;
+        background: url("https://t3.ftcdn.net/jpg/05/53/79/60/360_F_553796090_XHrE6R9jwmBJUMo9HKl41hyHJ5gqt9oz.jpg");
+        background-repeat: no-repeat;	
+        background-size: 70px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        align-items: center;
+        
+    }
+    .login-container h1 {
+        margin-bottom: 50px;
+        align-items: center;
+    }
+</style>
+
+  {% include 'Navbar.html' %}
+
+  <div class="login-container">
+ 
+ 
+ 
+ <h1 style="margin-left: 80px;">Cambio de Contraseña</h1>
+  {% if messages %}
+  <div class="alert alert-danger position-relative" style="font-size: 1.5em;">
+    <ul class="list-unstyled mb-0">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+        {{ message }}
+      </li>
+      {% endfor %}
+    </ul>
+    <script>
+      setTimeout(function() {
+        document.querySelector('.alert').classList.add('fade');
+        setTimeout(function() {
+          document.querySelector('.alert').style.display = 'none';
+        }, 3500); 
+      }, 4000); 
+    </script>
+  </div>
+  {% endif %}
+
+
+
+    <style>
+        #password-strength {
+          font-weight: bold;
+        }
+        
+        .weak {
+          color: red;
+        }
+        
+        .medium {
+          color: orange;
+        }
+        
+        .strong {
+          color: green;
+        }
+        </style>
+
+
+    <form action="/cambiar_contrasena/{{ request.session.id_usuario }}" method="POST" id="myform">
+        {% csrf_token %}
+        <div hidden>
+            <label for="id_usuario">ID de Usuario:</label>
+            <input type="text" class="form-control" id="id_usuario" name="id_usuario" value="{{ request.session.id_usuario }}" readonly>
+        </div>
+
+        <div hidden>
+            <label for="username">Nombre de Usuario:</label>
+            <input type="text" class="form-control" id="username" name="username" value="{{ request.session.username }}" >
+        </div>
+
+
+
+        <div>
+            <label for="password">Contraseña Actual:</label>
+            <input type="text" class="form-control" id="password" name="password" value="{{ contrasena_actual }}">
+        </div>
+<br>
+        <div>
+            <label for="password">Contraseña Nueva:</label>
+            <input type="text" class="form-control" id="nueva_contrasena" name="nueva_contrasena"  value="{{ nueva_contrasena }}">
+
+            <span id="password-strength"></span>
+        </div>
+        <br>
+        <div>
+            <label for="password">Confirmar Contraseña:</label>
+            <input type="text" class="form-control" id="confirm_nueva_contrasena" name="confirm_nueva_contrasena" value="{{ confirm_nueva_contrasena }}">
+        </div>
+        <br>
+        <div hidden>
+            <label for="nombre">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ request.session.nombre }}" >
+        </div>
+        <div hidden>
+            <label for="apellido">Apellido:</label>
+            <input type="text" class="form-control" id="apellido" name="apellido" value="{{ request.session.apellido }}" >
+        </div>
+
+        <div hidden>
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ request.session.email }}" >
+        </div>
+
+        <div hidden>
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" class="form-control" id="telefono" name="telefono" value="{{ request.session.telefono }}" >
+        </div>
+
+        <div hidden>
+            <label for="estado">Estado de Cuenta:</label>
+            <input type="text" class="form-control" id="estado" name="estado" value="{{ request.session.estado }}" readonly>
+        </div>
+
+        <div hidden>
+            <label for="fecha_creacion">Fecha de Creación:</label>
+            <input type="text" class="form-control" id="fecha_creacion" value="{{ request.session.fecha_creacion }}" readonly>
+        </div>
+
+        <div hidden>
+            <label for="fecha_modificacion">Fecha de Modificación:</label>
+            <input type="text" class="form-control" id="fecha_modificacion" name="fecha_modificacion" value="{{ request.session.fecha_modificacion }}" readonly>
+        </div>
+        <a class="btn btn-danger" href="/usuario">Regresar</a>
+
+		<input type="submit" class="btn btn-info" value="Cambiar">
+
+    </form>
+    
+
+
+    <script>
+
+
+
+
+        $(document).ready(function() {
+          $("#myform").validate({
+            rules: {
+              password: {
+                required: true,
+
+                noSpace: true
+              },
+              nueva_contrasena: {
+                required: true,
+                minlength: 8,
+                maxlength: 16,
+                noSpace: true
+              },
+              confirm_nueva_contrasena: {
+                required: true,
+                minlength: 8,
+                maxlength: 16,
+                equalTo: "#nueva_contrasena",
+                noSpace: true
+              }
+            },
+            messages: {
+              password: {
+                required: "La contraseña actual es requerida.",
+
+                noSpace: "La contraseña actual no puede contener espacios."
+              },
+              nueva_contrasena: {
+                required: "La nueva contraseña es requerida.",
+                minlength: "La nueva contraseña debe tener al menos 8 caracteres.",
+                maxlength: "La nueva contraseña no puede tener más de 16 caracteres.",
+                noSpace: "La nueva contraseña no puede contener espacios."
+              },
+              confirm_nueva_contrasena: {
+                required: "Confirma tu nueva contraseña.",
+                minlength: "La contraseña de confirmación debe tener al menos 8 caracteres.",
+                maxlength: "La contraseña de confirmación no puede tener más de 16 caracteres.",
+                equalTo: "Las contraseñas no coinciden.",
+                noSpace: "La contraseña de confirmación no puede contener espacios."
+              }
+
+              
+            }
+               
+
+    
+            
+          });
+        
+          // Agregar método personalizado para evitar espacios en blanco
+          $.validator.addMethod("noSpace", function(value, element) {
+            return value.indexOf(" ") < 0 && value != "";
+          }, "No se permiten espacios en blanco.");
+
+
+          
+        });
+
+  $('#nueva_contrasena').keyup(function() {
+    var password = $(this).val();
+    var strength = 0;
+
+    // Validar la longitud de la contraseña
+    if (password.length < 8) {
+      $('#password-strength').removeClass().addClass('weak').text('Débil');
+      return;
+    }
+
+    // Validar la presencia de caracteres especiales
+    if (password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)) {
+      strength += 1;
+    }
+
+    // Validar la presencia de letras minúsculas y mayúsculas
+    if (password.match(/[a-z]/) && password.match(/[A-Z]/)) {
+      strength += 1;
+    }
+
+    // Validar la presencia de números
+    if (password.match(/\d+/)) {
+      strength += 1;
+    }
+
+    // Validar la fortaleza de la contraseña
+    if (strength == 0) {
+      $('#password-strength').removeClass().addClass('weak').text('Débil');
+    } else if (strength == 1) {
+      $('#password-strength').removeClass().addClass('medium').text('Media');
+    } else {
+      $('#password-strength').removeClass().addClass('strong').text('Fuerte');
+    }
+});
+        </script>
+
+
+</body>
+</html>
